@@ -124,56 +124,8 @@ namespace Sextant
 																					where TNavPageModel : class, IBasePageModel
 																					where TInitalPageModel : class, IBasePageModel
 		{
-			RegisterNavigationPage<TNavPageModel>(() => GetPageAsNewInstance<TInitalPageModel>() as IBasePage<IBasePageModel>, null, null);
+			RegisterNavigationPage<TNavPageModel>(() => GetPageAsNewInstance<TInitalPageModel>(), null, null);
 		}
-
-		public virtual IBasePage<TPageModel> GetPageAsNewInstance<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBasePageModel
-        {
-            var pageModelType = typeof(TPageModel);
-            var pageType = GetPageType(pageModelType);
-
-            IBasePage<TPageModel> page;
-            Func<object> pageCreationFunc;
-            _pageCreation.TryGetValue(pageModelType, out pageCreationFunc);
-
-            // first check if we have a registered PageCreation method for this pageModelType
-            if (pageCreationFunc != null)
-            {
-                page = pageCreationFunc() as IBasePage<TPageModel>;
-            }
-            else
-            {
-                // if not check if it failed because there was no registered PageType
-                // we cannot check this earlier because for NavgationPages we allow PageModels of the NavigationPage not having a custom NavigationPage type
-                // in this case we register a default creation method, but we won't register a pageType
-                // !!!!!!!!! Not sure if this is the correct way to do it
-                if (pageType == null)
-                {
-                    throw new NoPageForPageModelRegisteredException("No PageType Registered for PageModel type: " + pageModelType);
-                }
-                page = Locator.Current.GetService(pageType) as IBasePage<TPageModel>;
-
-                if (page == null)
-                {
-                    throw new NoPageForPageModelRegisteredException("PageType not registered in IOC: " + pageType);
-                }
-            }
-
-            if (setPageModel != null)
-            {
-                SetPageModel(page, setPageModel);
-            }
-            else
-            {
-                Func<object> pageModelCreationFunc;
-                if (_pageModelCreation.TryGetValue(pageModelType, out pageModelCreationFunc))
-                    SetPageModel(page, pageModelCreationFunc() as TPageModel);
-                else
-                    SetPageModel(page, Locator.Current.GetService<TPageModel>());
-            }
-
-            return page;
-        }
 
 		public virtual void RegisterNavigationPage<TNavPageModel>(Func<IBasePage<IBasePageModel>> initialPage = null,
 														   Func<TNavPageModel> createNavModel = null,
@@ -231,8 +183,57 @@ namespace Sextant
 				_pageCreation.Add(typeof(TNavPageModel), createNavWithPage);
 		}
 
+		public virtual IBasePage<TPageModel> GetPageAsNewInstance<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBasePageModel
+        {
+			var pageModelType = typeof(TPageModel);
+			var pageType = GetPageType(pageModelType);
 
-		public IBasePage<IBasePageModel> GetPageAsNewInstance(Type pageModelType)
+			IBasePage<TPageModel> page;
+			Func<object> pageCreationFunc;
+			_pageCreation.TryGetValue(pageModelType, out pageCreationFunc);
+
+			// first check if we have a registered PageCreation method for this pageModelType
+			if (pageCreationFunc != null)
+			{
+			    page = pageCreationFunc() as IBasePage<TPageModel>;
+			}
+			else
+			{
+			    // if not check if it failed because there was no registered PageType
+			    // we cannot check this earlier because for NavgationPages we allow PageModels of the NavigationPage not having a custom NavigationPage type
+			    // in this case we register a default creation method, but we won't register a pageType
+			    // !!!!!!!!! Not sure if this is the correct way to do it
+			    if (pageType == null)
+			    {
+			        throw new NoPageForPageModelRegisteredException("No PageType Registered for PageModel type: " + pageModelType);
+			    }
+			    page = Locator.Current.GetService(pageType) as IBasePage<TPageModel>;
+
+			    if (page == null)
+			    {
+			        throw new NoPageForPageModelRegisteredException("PageType not registered in IOC: " + pageType);
+			    }
+			}
+
+			if (setPageModel != null)
+			{
+			    SetPageModel(page, setPageModel);
+			}
+			else
+			{
+			    Func<object> pageModelCreationFunc;
+			    if (_pageModelCreation.TryGetValue(pageModelType, out pageModelCreationFunc))
+			        SetPageModel(page, pageModelCreationFunc() as TPageModel);
+			    else
+			        SetPageModel(page, Locator.Current.GetService<TPageModel>());
+			}
+
+			return page;
+
+			throw new NotImplementedException();
+        }
+
+        public IBasePage<IBasePageModel> GetPageAsNewInstance(Type pageModelType)
         {
             var pageType = GetPageType(pageModelType);
             IBasePage<IBasePageModel> page;
@@ -251,9 +252,7 @@ namespace Sextant
                 SetPageModel(page, Locator.Current.GetService(pageModelType) as IBasePageModel);
 
             return page;
-        }
-
-		      
+        }      
 
 		internal void AddToWeakCacheIfNotExists<TPageModel>(IBasePage<TPageModel> page, TPageModel pageModel) where TPageModel : class, IBasePageModel
 		{

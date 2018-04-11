@@ -165,7 +165,6 @@ namespace Sextant
 		/// </summary>
 		/// <returns>The pages to root async.</returns>
 		/// <param name="currentPageModel">Current page model.</param>
-		/// <param name="clearCache">If set to <c>true</c> clear cache.</param>
 		/// <param name="animated">If set to <c>true</c> animated.</param>
 		/// <typeparam name="TCurrentPageModel">The 1st type parameter.</typeparam>
 		public static Task<bool> PopPagesToRootAsync<TCurrentPageModel>(this TCurrentPageModel currentPageModel, bool animated = true) where TCurrentPageModel : class, IBasePageModel
@@ -183,7 +182,6 @@ namespace Sextant
 		/// Sets the new root and resets based on PageModel
 		/// </summary>
 		/// <param name="currentPageModel">Current page model.</param>
-		/// <param name="clearCache">Clear cache.</param>
 		public static Task<bool> SetNewRootAndResetAsync<TNewRootPageModel>(this IBasePageModel currentPageModel) where TNewRootPageModel : class, IBasePageModel
 		{
 			return SextantCore.CurrentFactory.SetNewRootAndResetAsync<TNewRootPageModel>();
