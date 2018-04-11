@@ -14,7 +14,7 @@ namespace Sextant
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
 		public static TPageModel GetPageModel<TPageModel>(this IBasePage<TPageModel> page) where TPageModel : class, IBasePageModel
 		{
-			return XamvvmCore.CurrentFactory.GetPageModel(page);
+			return SextantCore.CurrentFactory.GetPageModel(page);
 		}
 
 		/// <summary>
@@ -26,7 +26,7 @@ namespace Sextant
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
 		public static IBasePage<TPageModel> SetPageModel<TPageModel>(this IBasePage<TPageModel> page, TPageModel newPageModel) where TPageModel : class, IBasePageModel
 		{
-			XamvvmCore.CurrentFactory.SetPageModel(page, newPageModel);
+			SextantCore.CurrentFactory.SetPageModel(page, newPageModel);
 
 			return page;
 		}
@@ -56,7 +56,7 @@ namespace Sextant
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
 		public static IBasePage<TPageModel> GetPageAsNewInstance<TPageModel>(this IBasePage<IBasePageModel> currentPage, TPageModel setPageModel = null) where TPageModel : class, IBasePageModel
 		{
-			return XamvvmCore.CurrentFactory.GetPageAsNewInstance(setPageModel);
+			return SextantCore.CurrentFactory.GetPageAsNewInstance(setPageModel);
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Sextant
 		/// <param name="pageModelType">Page model type.</param>
 		public static IBasePage<IBasePageModel> GetPageAsNewInstance(this IBasePage<IBasePageModel> currentPage, Type pageModelType)
 		{
-			return XamvvmCore.CurrentFactory.GetPageAsNewInstance(pageModelType);
+			return SextantCore.CurrentFactory.GetPageAsNewInstance(pageModelType);
 		}
 	}
 }

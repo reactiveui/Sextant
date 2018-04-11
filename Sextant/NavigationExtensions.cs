@@ -20,14 +20,14 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 2nd type parameter.</typeparam>        
         public static Task<bool> PushPageAsync<TCurrentPageModel, TPageModel>(this TCurrentPageModel currentPageModel, IBasePage<TPageModel> pageToPush, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TCurrentPageModel : class, IBasePageModel where TPageModel : class, IBasePageModel
         {
-            var currentPage = XamvvmCore.CurrentFactory.GetPageByModel(currentPageModel);
+            var currentPage = SextantCore.CurrentFactory.GetPageByModel(currentPageModel);
 
             if (currentPage != null)
             {
                 if (executeOnPageModel != null)
                     pageToPush.ExecuteOnPageModel(executeOnPageModel);
 
-                return XamvvmCore.CurrentFactory.PushPageAsync(currentPage, pageToPush, animated);
+                return SextantCore.CurrentFactory.PushPageAsync(currentPage, pageToPush, animated);
             }
 
             return Task.FromResult(false);
@@ -43,16 +43,16 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
         public static Task<bool> PushPageAsNewInstanceAsync<TPageModel>(this IBasePageModel currentPageModel, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TPageModel : class, IBasePageModel
         {
-            var currentPage = XamvvmCore.CurrentFactory.GetPageByModel(currentPageModel);
+            var currentPage = SextantCore.CurrentFactory.GetPageByModel(currentPageModel);
 
             if (currentPage != null)
             {
-                var pageToPush = XamvvmCore.CurrentFactory.GetPageAsNewInstance<TPageModel>();
+                var pageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TPageModel>();
 
                 if (executeOnPageModel != null)
                     pageToPush.ExecuteOnPageModel(executeOnPageModel);
 
-                return XamvvmCore.CurrentFactory.PushPageAsync(currentPage, pageToPush, animated);
+                return SextantCore.CurrentFactory.PushPageAsync(currentPage, pageToPush, animated);
             }
 
             return Task.FromResult(false);
@@ -68,16 +68,16 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
         public static Task<bool> PushModalPageAsNewInstanceAsync<TPageModel>(this IBasePageModel currentPageModel, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TPageModel : class, IBasePageModel
         {
-            var currentPage = XamvvmCore.CurrentFactory.GetPageByModel(currentPageModel);
+            var currentPage = SextantCore.CurrentFactory.GetPageByModel(currentPageModel);
 
             if (currentPage != null)
             {
-                var pageToPush = XamvvmCore.CurrentFactory.GetPageAsNewInstance<TPageModel>();
+                var pageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TPageModel>();
 
                 if (executeOnPageModel != null)
                     pageToPush.ExecuteOnPageModel(executeOnPageModel);
 
-                return XamvvmCore.CurrentFactory.PushModalPageAsync(currentPage, pageToPush, animated);
+                return SextantCore.CurrentFactory.PushModalPageAsync(currentPage, pageToPush, animated);
             }
 
             return Task.FromResult(false);
@@ -95,14 +95,14 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 2nd type parameter.</typeparam>
         public static Task<bool> PushModalPageAsync<TCurrentPageModel, TPageModel>(this TCurrentPageModel currentPageModel, IBasePage<TPageModel> pageToPush, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TCurrentPageModel : class, IBasePageModel where TPageModel : class, IBasePageModel
         {
-            var currentPage = XamvvmCore.CurrentFactory.GetPageByModel(currentPageModel);
+            var currentPage = SextantCore.CurrentFactory.GetPageByModel(currentPageModel);
 
             if (currentPage != null)
             {
                 if (executeOnPageModel != null)
                     pageToPush.ExecuteOnPageModel(executeOnPageModel);
 
-                return XamvvmCore.CurrentFactory.PushModalPageAsync(currentPage, pageToPush, animated);
+                return SextantCore.CurrentFactory.PushModalPageAsync(currentPage, pageToPush, animated);
             }
 
             return Task.FromResult(false);
@@ -117,10 +117,10 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
         public static Task<bool> PopPageAsync<TPageModel>(this TPageModel pageModel, bool animated = true) where TPageModel : class, IBasePageModel
         {
-            var page = XamvvmCore.CurrentFactory.GetPageByModel(pageModel);
+            var page = SextantCore.CurrentFactory.GetPageByModel(pageModel);
 
             if (page != null)
-                return XamvvmCore.CurrentFactory.PopPageAsync(page, animated);
+                return SextantCore.CurrentFactory.PopPageAsync(page, animated);
 
             return Task.FromResult(false);
         }
@@ -134,10 +134,10 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
         public static Task<bool> PopModalPageAsync<TPageModel>(this TPageModel pageModel, bool animated = true) where TPageModel : class, IBasePageModel
         {
-            var page = XamvvmCore.CurrentFactory.GetPageByModel(pageModel);
+            var page = SextantCore.CurrentFactory.GetPageByModel(pageModel);
 
             if (page != null)
-                return XamvvmCore.CurrentFactory.PopModalPageAsync(page, animated);
+                return SextantCore.CurrentFactory.PopModalPageAsync(page, animated);
 
             return Task.FromResult(false);
         }
@@ -152,10 +152,10 @@ namespace Sextant
         /// <typeparam name="TPageModel">The 2nd type parameter.</typeparam>
         public static Task<bool> RemovePageAsync<TCurrentPageModel, TPageModel>(this TCurrentPageModel currentPageModel, IBasePage<TPageModel> pageToRemove) where TCurrentPageModel : class, IBasePageModel where TPageModel : class, IBasePageModel
         {
-            var currentPage = XamvvmCore.CurrentFactory.GetPageByModel(currentPageModel);
+            var currentPage = SextantCore.CurrentFactory.GetPageByModel(currentPageModel);
 
             if (currentPage != null)
-                return XamvvmCore.CurrentFactory.RemovePageAsync(currentPage, pageToRemove);
+                return SextantCore.CurrentFactory.RemovePageAsync(currentPage, pageToRemove);
 
             return Task.FromResult(false);
         }
@@ -170,10 +170,10 @@ namespace Sextant
         /// <typeparam name="TCurrentPageModel">The 1st type parameter.</typeparam>
         public static Task<bool> PopPagesToRootAsync<TCurrentPageModel>(this TCurrentPageModel currentPageModel, bool animated = true) where TCurrentPageModel : class, IBasePageModel
         {
-            var currentPage = XamvvmCore.CurrentFactory.GetPageByModel(currentPageModel);
+            var currentPage = SextantCore.CurrentFactory.GetPageByModel(currentPageModel);
 
             if (currentPage != null)
-                return XamvvmCore.CurrentFactory.PopPagesToRootAsync(currentPage, animated);
+                return SextantCore.CurrentFactory.PopPagesToRootAsync(currentPage, animated);
 
             return Task.FromResult(false);
         }
@@ -186,7 +186,7 @@ namespace Sextant
         /// <param name="clearCache">Clear cache.</param>
         public static Task<bool> SetNewRootAndResetAsync<TNewRootPageModel>(this IBasePageModel currentPageModel) where TNewRootPageModel : class, IBasePageModel
         {
-            return XamvvmCore.CurrentFactory.SetNewRootAndResetAsync<TNewRootPageModel>();
+            return SextantCore.CurrentFactory.SetNewRootAndResetAsync<TNewRootPageModel>();
         }
 
     }

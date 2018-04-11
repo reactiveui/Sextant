@@ -4,7 +4,7 @@ namespace Sextant
 	/// <summary>
 	/// Page factory.
 	/// </summary>
-	public static class XamvvmCore
+	public static class SextantCore
 	{
 		static IBaseFactory current;
 
