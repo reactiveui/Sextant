@@ -44,7 +44,6 @@ Task("Build")
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildPackages")
-    .IsDependentOn("Restore-NuGet-Packages")
 	.IsDependentOn("Build")
     .Does(() =>
     {
@@ -58,12 +57,11 @@ Task("BuildPackages")
             }
         };
 
-        MSBuild("./Sextant.PCL/Sextant.PCL.csproj", new MSBuildSettings().SetConfiguration("Release"));
-        NuGetPack("./Sextant.PCL/Sextant.PCL.csproj", nuGetPackSettings);
+        NuGetPack("./Sextant.PCL/Sextant.PCL.nuspec", nuGetPackSettings);
     });
 
 // TASK TARGETS
-Task("Default").IsDependentOn("Build");
+Task("Default").IsDependentOn("BuildPackages");
 
 // EXECUTION
 RunTarget(target);
