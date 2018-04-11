@@ -1,6 +1,6 @@
 ﻿namespace Sextant
 {
-    public interface IBasePage<TPageModel> where TPageModel : class, IBasePageModel
+    public interface IBasePage<out TPageModel> where TPageModel : class, IBasePageModel
     {
     }
 }
