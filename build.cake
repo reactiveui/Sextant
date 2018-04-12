@@ -72,7 +72,7 @@ Task("Build")
     });
 
 //////////////////////////////////////////////////////////////////////
-// Packages
+// Build Packages
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildPackages")
@@ -92,13 +92,17 @@ Task("BuildPackages")
         NuGetPack("./Sextant.PCL/Sextant.PCL.nuspec", nuGetPackSettings);
     });
 
+//////////////////////////////////////////////////////////////////////
+// Publish Packages
+//////////////////////////////////////////////////////////////////////
+
 Task("PublishRelease")
     .IsDependentOn("BuildPackages")
-    .WithCriteria(() => !local)
-    .WithCriteria(() => !isPullRequest)
-    .WithCriteria(() => isRepository)
-    .WithCriteria(() => isReleaseBranch)
-    .WithCriteria(() => isTagged)
+    // .WithCriteria(() => !local)
+    // .WithCriteria(() => !isPullRequest)
+    // .WithCriteria(() => isRepository)
+    // .WithCriteria(() => isReleaseBranch)
+    // .WithCriteria(() => isTagged)
     .Does (() =>
     {
         var username = EnvironmentVariable("GITHUB_USERNAME");
@@ -117,7 +121,7 @@ Task("PublishRelease")
         foreach(var package in packageWhitelist)
         {
             // only push the package which was created during this build run.
-            var packagePath = artifactDirectory + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
+            var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
 
             GitReleaseManagerAddAssets(username, token, githubOwner, githubRepository, majorMinorPatch, packagePath);
         }
@@ -126,7 +130,9 @@ Task("PublishRelease")
     });
 
 // TASK TARGETS
-Task("Default").IsDependentOn("BuildPackages");
+Task("Default")
+    .IsDependentOn("BuildPackages")
+    .IsDependentOn("PublishRelease");
 
 // EXECUTION
 RunTarget(target);
