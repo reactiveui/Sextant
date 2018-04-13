@@ -108,11 +108,36 @@ Task("BuildPackages")
         NuGetPack("./Sextant.PCL/Sextant.PCL.nuspec", nuGetPackSettings);
     });
 
+
+//////////////////////////////////////////////////////////////////////
+// Update AppVeyor Build Number
+//////////////////////////////////////////////////////////////////////
+Task("UpdateAppVeyorBuildNumber")
+    .IsDependentOn("BuildPackages")
+    .WithCriteria(() => isRunningOnAppVeyor)
+    .Does(() =>
+{
+    AppVeyor.UpdateBuildVersion(buildVersion);
+
+}).ReportError(exception =>
+{  
+    // When a build starts, the initial identifier is an auto-incremented value supplied by AppVeyor. 
+    // As part of the build script, this version in AppVeyor is changed to be the version obtained from
+    // GitVersion. This identifier is purely cosmetic and is used by the core team to correlate a build
+    // with the pull-request. In some circumstances, such as restarting a failed/cancelled build the
+    // identifier in AppVeyor will be already updated and default behaviour is to throw an
+    // exception/cancel the build when in fact it is safe to swallow.
+    // See https://github.com/reactiveui/ReactiveUI/issues/1262
+
+    Warning("Build with version {0} already exists.", buildVersion);
+});
+
 //////////////////////////////////////////////////////////////////////
 // Publish Packages
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateRelease")
+    .IsDependentOn("UpdateAppVeyorBuildNumber")
     .IsDependentOn("BuildPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
@@ -140,7 +165,7 @@ Task("CreateRelease")
     });
 
 Task("PublishPackages")
-    .IsDependentOn("CreateRelease")
+    .IsDependentOn("BuildPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
