@@ -168,15 +168,9 @@ Task("PublishPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isDevelopBranch || isReleaseBranch)
+    .WithCriteria(() => isTagged)
     .Does (() =>
     {
-        if (isReleaseBranch && !isTagged)
-        {
-            Information("Packages will not be published as this release has not been tagged.");
-            return;
-        }
-
         if (string.IsNullOrEmpty(apiKey))
         {
             throw new Exception("The NUGET_APIKEY environment variable is not defined.");
