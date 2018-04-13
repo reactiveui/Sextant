@@ -25,7 +25,6 @@ var local = BuildSystem.IsLocalBuild;
 var isRunningOnAppVeyor = AppVeyor.IsRunningOnAppVeyor;
 var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
 var isRepository = StringComparer.OrdinalIgnoreCase.Equals("giusepe/sextant", AppVeyor.Environment.Repository.Name);
-
 var isDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", AppVeyor.Environment.Repository.Branch);
 var isReleaseBranch = StringComparer.OrdinalIgnoreCase.Equals("master", AppVeyor.Environment.Repository.Branch);
 var isTagged = AppVeyor.Environment.Repository.Tag.IsTag;
@@ -185,7 +184,7 @@ Task("PublishRelease")
     .WithCriteria(() => isReleaseBranch)
     .WithCriteria(() => isTagged)
     .Does (() =>
-    {    
+    {
         if (string.IsNullOrEmpty(username))
         {
             throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
