@@ -139,7 +139,7 @@ Task("CreateRelease")
     });
 
 Task("PublishPackages")
-    .IsDependentOn("CreateRelease")
+    .IsDependentOn("BuildPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
