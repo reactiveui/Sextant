@@ -22,10 +22,9 @@ var artifactsDir  = Directory("./artifacts/");
 var rootAbsoluteDir = MakeAbsolute(Directory("./")).FullPath;
 
 var local = BuildSystem.IsLocalBuild;
-
 var isRunningOnAppVeyor = AppVeyor.IsRunningOnAppVeyor;
 var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
-//var isRepository = StringComparer.OrdinalIgnoreCase.Equals("reactiveui/reactiveui", AppVeyor.Environment.Repository.Name);
+var isRepository = StringComparer.OrdinalIgnoreCase.Equals("giusepe/sextant", AppVeyor.Environment.Repository.Name);
 
 var isDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", AppVeyor.Environment.Repository.Branch);
 var isReleaseBranch = StringComparer.OrdinalIgnoreCase.Equals("master", AppVeyor.Environment.Repository.Branch);
@@ -44,6 +43,15 @@ var nugetVersion = gitVersion.NuGetVersion;
 var buildVersion = gitVersion.FullBuildMetaData;
 
 var packageWhitelist = new[] { "Sextant.PCL" };
+
+
+// Resolve the API keys.
+var apiKey = EnvironmentVariable("NUGET_APIKEY");
+var source = EnvironmentVariable("NUGET_SOURCE");
+
+var username = EnvironmentVariable("GITHUB_USERNAME");
+var token = EnvironmentVariable("GITHUB_TOKEN");
+
 
 //////////////////////////////////////////////////////////////////////
 // Build
@@ -81,12 +89,20 @@ Task("BuildPackages")
     {
         var nuGetPackSettings = new NuGetPackSettings
         {
-            OutputDirectory = rootAbsoluteDir + @"\artifacts\",
+            Authors = new [] {"Giusepe Casagrande"},
+            Owners = new [] {"giusepe"},
+            ProjectUrl = new Uri("https://github.com/giusepe/Sextant"),
+            LicenseUrl = new Uri("https://github.com/giusepe/Sextant/blob/master/LICENSE"),
+            RequireLicenseAcceptance = false,
+            Version = nugetVersion,
+            Tags = new [] {"mvvm", "reactiveui", "Rx", "Reactive Extensions", "Observable", "xamarin", "android", "ios", "forms", "monodroid", "monotouch", "xamarin.android", "xamarin.ios", "xamarin.forms"},
+            ReleaseNotes = new [] { string.Format("{0}/releases", githubUrl) },
+            Symbols = false,
+            Verbosity = NuGetVerbosity.Detailed,
+            OutputDirectory = artifactsDir,
+            BasePath = "./Sextant.PCL",
             IncludeReferencedProjects = true,
-            Properties = new Dictionary<string, string>
-            {
-                { "Configuration", "Release" }
-            }
+            Properties = new Dictionary<string, string> {{ "Configuration", "Release" }}
         };
 
         NuGetPack("./Sextant.PCL/Sextant.PCL.nuspec", nuGetPackSettings);
@@ -96,22 +112,86 @@ Task("BuildPackages")
 // Publish Packages
 //////////////////////////////////////////////////////////////////////
 
-Task("PublishRelease")
+Task("PublishPackages")
     .IsDependentOn("BuildPackages")
-    // .WithCriteria(() => !local)
-    // .WithCriteria(() => !isPullRequest)
-    // .WithCriteria(() => isRepository)
-    // .WithCriteria(() => isReleaseBranch)
-    // .WithCriteria(() => isTagged)
+    .WithCriteria(() => !local)
+    .WithCriteria(() => !isPullRequest)
+    .WithCriteria(() => isRepository)
+    .WithCriteria(() => isDevelopBranch || isReleaseBranch)
     .Does (() =>
     {
-        var username = EnvironmentVariable("GITHUB_USERNAME");
+        if (isReleaseBranch && !isTagged)
+        {
+            Information("Packages will not be published as this release has not been tagged.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            throw new Exception("The NUGET_APIKEY environment variable is not defined.");
+        }
+
+        if (string.IsNullOrEmpty(source))
+        {
+            throw new Exception("The NUGET_SOURCE environment variable is not defined.");
+        }
+
+        // only push whitelisted packages.
+        foreach(var package in packageWhitelist)
+        {
+            // only push the package which was created during this build run.
+            var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
+
+            // Push the package.
+            NuGetPush(packagePath, new NuGetPushSettings {
+                Source = source,
+                ApiKey = apiKey
+            });
+        }
+    });
+
+Task("CreateRelease")
+    .IsDependentOn("BuildPackages")
+    .WithCriteria(() => !local)
+    .WithCriteria(() => !isPullRequest)
+    .WithCriteria(() => isRepository)
+    .WithCriteria(() => isReleaseBranch)
+    .WithCriteria(() => !isTagged)
+    .Does (() =>
+    {
         if (string.IsNullOrEmpty(username))
         {
             throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
         }
 
-        var token = EnvironmentVariable("GITHUB_TOKEN");
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
+        }
+
+        GitReleaseManagerCreate(username, token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings {
+            Milestone         = majorMinorPatch,
+            Name              = majorMinorPatch,
+            Prerelease        = true,
+            TargetCommitish   = "master"
+        });
+    });
+
+Task("PublishRelease")
+    .IsDependentOn("BuildPackages")
+    .WithCriteria(() => !local)
+    .WithCriteria(() => !isPullRequest)
+    .WithCriteria(() => isRepository)
+    .WithCriteria(() => isReleaseBranch)
+    .WithCriteria(() => isTagged)
+    .Does (() =>
+    {
+        
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
+        }
+
         if (string.IsNullOrEmpty(token))
         {
             throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
@@ -131,7 +211,8 @@ Task("PublishRelease")
 
 // TASK TARGETS
 Task("Default")
-    .IsDependentOn("BuildPackages")
+    .IsDependentOn("PublishPackages")
+    .IsDependentOn("CreateRelease")
     .IsDependentOn("PublishRelease");
 
 // EXECUTION
