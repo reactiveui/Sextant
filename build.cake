@@ -181,30 +181,43 @@ Task("PublishRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isReleaseBranch)
-    .WithCriteria(() => isTagged)
+    // .WithCriteria(() => isReleaseBranch)
+    // .WithCriteria(() => isTagged)
     .Does (() =>
     {
-        if (string.IsNullOrEmpty(username))
+        if (isReleaseBranch &&  isTagged)
         {
-            throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
+            if (string.IsNullOrEmpty(username))
+            {
+                throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
+            }
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
+            }
+
+            // only push whitelisted packages.
+            foreach(var package in packageWhitelist)
+            {
+                // only push the package which was created during this build run.
+                var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
+
+                GitReleaseManagerAddAssets(username, token, githubOwner, githubRepository, majorMinorPatch, packagePath);
+            }
+
+            GitReleaseManagerClose(username, token, githubOwner, githubRepository, majorMinorPatch);
         }
 
-        if (string.IsNullOrEmpty(token))
+        if (!isReleaseBranch)
         {
-            throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
+            System.Console.WriteLine("=======> Not a release branch!");
         }
 
-        // only push whitelisted packages.
-        foreach(var package in packageWhitelist)
+        if (!isTagged)
         {
-            // only push the package which was created during this build run.
-            var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
-
-            GitReleaseManagerAddAssets(username, token, githubOwner, githubRepository, majorMinorPatch, packagePath);
+            System.Console.WriteLine("=======> Not tagged!");
         }
-
-        GitReleaseManagerClose(username, token, githubOwner, githubRepository, majorMinorPatch);
     });
 
 // TASK TARGETS
