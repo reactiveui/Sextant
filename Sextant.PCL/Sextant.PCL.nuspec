@@ -1,18 +1,10 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>Sextant</id>
-    <version>0.0.1</version>
-    <title>Sextant</title>
-    <authors>Giusepe Casagrande</authors>
-    <owners>Giusepe Casagrande</owners>
-    <licenseUrl>https://github.com/giusepe/Sextant/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/giusepe/Sextant</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <id>Sextant.PCL</id>
+    <version>$version$</version>
     <description>A ReactiveUI navigation library for Xamarin.Forms</description>
-    <releaseNotes>Initial version.</releaseNotes>
-    <copyright>Copyright 2018</copyright>
-    <tags>Xamarin Xamarin.Forms ReactiveUI Rx Navigation</tags>
+    <language>en-us</language>
   <dependencies>
 		<dependency id="Xamarin.Forms" version="2.5.0.91635" />
   </dependencies>
