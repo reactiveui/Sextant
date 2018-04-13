@@ -206,8 +206,7 @@ Task("PublishRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    // .WithCriteria(() => isReleaseBranch)
-    // .WithCriteria(() => isTagged)
+    .WithCriteria(() => isTagged)
     .Does (() =>
     {
         if (isReleaseBranch &&  isTagged)
@@ -232,16 +231,6 @@ Task("PublishRelease")
             }
 
             GitReleaseManagerClose(username, token, githubOwner, githubRepository, majorMinorPatch);
-        }
-
-        if (!isReleaseBranch)
-        {
-            System.Console.WriteLine("=======> Not a release branch!");
-        }
-
-        if (!isTagged)
-        {
-            System.Console.WriteLine("=======> Not tagged!");
         }
     });
 
