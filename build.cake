@@ -112,8 +112,35 @@ Task("BuildPackages")
 // Publish Packages
 //////////////////////////////////////////////////////////////////////
 
-Task("PublishPackages")
+Task("CreateRelease")
     .IsDependentOn("BuildPackages")
+    .WithCriteria(() => !local)
+    .WithCriteria(() => !isPullRequest)
+    .WithCriteria(() => isRepository)
+    .WithCriteria(() => isReleaseBranch)
+    .WithCriteria(() => !isTagged)
+    .Does (() =>
+    {
+        if (string.IsNullOrEmpty(username))
+        {
+            throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
+        }
+
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
+        }
+
+        GitReleaseManagerCreate(username, token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings {
+            Milestone         = majorMinorPatch,
+            Name              = majorMinorPatch,
+            Prerelease        = true,
+            TargetCommitish   = "master"
+        });
+    });
+
+Task("PublishPackages")
+    .IsDependentOn("CreateRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
@@ -150,33 +177,6 @@ Task("PublishPackages")
         }
     });
 
-Task("CreateRelease")
-    .IsDependentOn("BuildPackages")
-    .WithCriteria(() => !local)
-    .WithCriteria(() => !isPullRequest)
-    .WithCriteria(() => isRepository)
-    .WithCriteria(() => isReleaseBranch)
-    .WithCriteria(() => !isTagged)
-    .Does (() =>
-    {
-        if (string.IsNullOrEmpty(username))
-        {
-            throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
-        }
-
-        if (string.IsNullOrEmpty(token))
-        {
-            throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
-        }
-
-        GitReleaseManagerCreate(username, token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings {
-            Milestone         = majorMinorPatch,
-            Name              = majorMinorPatch,
-            Prerelease        = true,
-            TargetCommitish   = "master"
-        });
-    });
-
 Task("PublishRelease")
     .IsDependentOn("BuildPackages")
     .WithCriteria(() => !local)
@@ -185,8 +185,7 @@ Task("PublishRelease")
     .WithCriteria(() => isReleaseBranch)
     .WithCriteria(() => isTagged)
     .Does (() =>
-    {
-        
+    {    
         if (string.IsNullOrEmpty(username))
         {
             throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
@@ -211,7 +210,6 @@ Task("PublishRelease")
 
 // TASK TARGETS
 Task("Default")
-    .IsDependentOn("PublishPackages")
     .IsDependentOn("CreateRelease")
     .IsDependentOn("PublishRelease");
 
