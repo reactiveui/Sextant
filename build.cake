@@ -141,7 +141,6 @@ Task("CreateRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isReleaseBranch)
     .WithCriteria(() => isTagged)
     .Does (() =>
     {
@@ -168,7 +167,7 @@ Task("PublishPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isDevelopBranch || isReleaseBranch || isTagged)
+    .WithCriteria(() => isDevelopBranch || isTagged)
     .Does (() =>
     {
         if (string.IsNullOrEmpty(apiKey))
@@ -201,31 +200,29 @@ Task("PublishRelease")
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
     .WithCriteria(() => isTagged)
+
     .Does (() =>
     {
-        if (isReleaseBranch &&  isTagged)
+        if (string.IsNullOrEmpty(username))
         {
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
-            }
-
-            if (string.IsNullOrEmpty(token))
-            {
-                throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
-            }
-
-            // only push whitelisted packages.
-            foreach(var package in packageWhitelist)
-            {
-                // only push the package which was created during this build run.
-                var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
-
-                GitReleaseManagerAddAssets(username, token, githubOwner, githubRepository, majorMinorPatch, packagePath);
-            }
-
-            GitReleaseManagerClose(username, token, githubOwner, githubRepository, majorMinorPatch);
+            throw new Exception("The GITHUB_USERNAME environment variable is not defined.");
         }
+
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
+        }
+
+        // only push whitelisted packages.
+        foreach(var package in packageWhitelist)
+        {
+            // only push the package which was created during this build run.
+            var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
+
+            GitReleaseManagerAddAssets(username, token, githubOwner, githubRepository, majorMinorPatch, packagePath);
+        }
+
+        GitReleaseManagerClose(username, token, githubOwner, githubRepository, majorMinorPatch);
     });
 
 // TASK TARGETS
