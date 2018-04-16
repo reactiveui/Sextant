@@ -43,7 +43,7 @@ var informationalVersion = gitVersion.InformationalVersion;
 var nugetVersion = gitVersion.NuGetVersion;
 var buildVersion = gitVersion.FullBuildMetaData;
 
-var packageWhitelist = new[] { "Sextant.PCL" };
+var packageWhitelist = new[] { "Sextant.PCL", "Sextant" };
 
 
 // Resolve the API keys.
@@ -60,7 +60,7 @@ Action<string, string> Package = (nuspec, basePath) =>
 
     Information("Packaging {0} using {1} as the BasePath.", nuspec, basePath);
 
-    NuGetPack($"{basePath}/{nuspec}", new NuGetPackSettings 
+    NuGetPack($"{basePath}/{nuspec}", new NuGetPackSettings
     {
         Authors = new [] {"Giusepe Casagrande"},
         Owners = new [] {"giusepe"},
@@ -120,8 +120,7 @@ Task("BuildPackages")
         // Build the .Net Standard for the cool kids
         MSBuild("./Sextant/Sextant.csproj",
         new MSBuildSettings()
-            .WithTarget("build;pack")
-            // .WithProperty("AndroidSdkDirectory", androidHome.Quote())
+            .WithTarget("pack")
             .WithProperty("PackageOutputPath",  MakeAbsolute(Directory(artifactsDir)).ToString().Quote())
             .WithProperty("TreatWarningsAsErrors", treatWarningsAsErrors.ToString())
             .SetConfiguration("Release")
