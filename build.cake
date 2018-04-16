@@ -45,14 +45,12 @@ var buildVersion = gitVersion.FullBuildMetaData;
 
 var packageWhitelist = new[] { "Sextant.PCL", "Sextant" };
 
-
 // Resolve the API keys.
 var apiKey = EnvironmentVariable("NUGET_APIKEY");
 var source = EnvironmentVariable("NUGET_SOURCE");
 
 var username = EnvironmentVariable("GITHUB_USERNAME");
 var token = EnvironmentVariable("GITHUB_TOKEN");
-
 
 Action<string, string> Package = (nuspec, basePath) =>
 {
@@ -62,20 +60,23 @@ Action<string, string> Package = (nuspec, basePath) =>
 
     NuGetPack($"{basePath}/{nuspec}", new NuGetPackSettings
     {
-        Authors = new [] {"Giusepe Casagrande"},
-        Owners = new [] {"giusepe"},
+        Authors = new [] { "Giusepe Casagrande" },
+        Owners = new [] { "giusepe" },
         ProjectUrl = new Uri("https://github.com/giusepe/Sextant"),
         LicenseUrl = new Uri("https://github.com/giusepe/Sextant/blob/master/LICENSE"),
         RequireLicenseAcceptance = false,
         Version = nugetVersion,
-        Tags = new [] {"mvvm", "reactiveui", "Rx", "Reactive Extensions", "Observable", "xamarin", "android", "ios", "forms", "monodroid", "monotouch", "xamarin.android", "xamarin.ios", "xamarin.forms"},
+        Tags = new [] { "mvvm", "reactiveui", "Rx", "Reactive Extensions", "Observable", "xamarin", "android", "ios", "forms", "monodroid", "monotouch", "xamarin.android", "xamarin.ios", "xamarin.forms" },
         ReleaseNotes = new [] { string.Format("{0}/releases", githubUrl) },
         Symbols = false,
         Verbosity = NuGetVerbosity.Detailed,
         OutputDirectory = artifactsDir,
         BasePath = basePath,
         IncludeReferencedProjects = true,
-        Properties = new Dictionary<string, string> {{ "Configuration", "Release" }}
+        Properties = new Dictionary<string, string>
+        {
+            { "Configuration", "Release" }
+        }
     });
 };
 
@@ -101,9 +102,7 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
     {
-        MSBuild("Sextant.sln", settings =>
-            settings.SetConfiguration("Release"));
-
+        MSBuild("Sextant.sln", settings => settings.SetConfiguration("Release"));
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -140,21 +139,22 @@ Task("UpdateAppVeyorBuildNumber")
     .IsDependentOn("BuildPackages")
     .WithCriteria(() => isRunningOnAppVeyor)
     .Does(() =>
-{
-    AppVeyor.UpdateBuildVersion(buildVersion);
+    {
+        AppVeyor.UpdateBuildVersion(buildVersion);
 
-}).ReportError(exception =>
-{  
-    // When a build starts, the initial identifier is an auto-incremented value supplied by AppVeyor. 
-    // As part of the build script, this version in AppVeyor is changed to be the version obtained from
-    // GitVersion. This identifier is purely cosmetic and is used by the core team to correlate a build
-    // with the pull-request. In some circumstances, such as restarting a failed/cancelled build the
-    // identifier in AppVeyor will be already updated and default behaviour is to throw an
-    // exception/cancel the build when in fact it is safe to swallow.
-    // See https://github.com/reactiveui/ReactiveUI/issues/1262
+    })
+    .ReportError(exception =>
+    {
+        // When a build starts, the initial identifier is an auto-incremented value supplied by AppVeyor. 
+        // As part of the build script, this version in AppVeyor is changed to be the version obtained from
+        // GitVersion. This identifier is purely cosmetic and is used by the core team to correlate a build
+        // with the pull-request. In some circumstances, such as restarting a failed/cancelled build the
+        // identifier in AppVeyor will be already updated and default behaviour is to throw an
+        // exception/cancel the build when in fact it is safe to swallow.
+        // See https://github.com/reactiveui/ReactiveUI/issues/1262
 
-    Warning("Build with version {0} already exists.", buildVersion);
-});
+        Warning("Build with version {0} already exists.", buildVersion);
+    });
 
 //////////////////////////////////////////////////////////////////////
 // Publish Packages
@@ -166,8 +166,9 @@ Task("CreateRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isTagged)
-    .Does (() =>
+    .WithCriteria(() => isReleaseBranch)
+    .WithCriteria(() => !isTagged)
+    .Does(() =>
     {
         if (string.IsNullOrEmpty(username))
         {
@@ -179,11 +180,12 @@ Task("CreateRelease")
             throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
         }
 
-        GitReleaseManagerCreate(username, token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings {
-            Milestone         = majorMinorPatch,
-            Name              = majorMinorPatch,
-            Prerelease        = true,
-            TargetCommitish   = "master"
+        GitReleaseManagerCreate(username, token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings
+        {
+            Milestone = majorMinorPatch,
+            Name = majorMinorPatch,
+            Prerelease = true,
+            TargetCommitish = "master"
         });
     });
 
@@ -192,8 +194,8 @@ Task("PublishPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isDevelopBranch || isTagged)
-    .Does (() =>
+    .WithCriteria(() => isDevelopBranch || (isReleaseBranch && isTagged))
+    .Does(() =>
     {
         if (string.IsNullOrEmpty(apiKey))
         {
@@ -212,7 +214,8 @@ Task("PublishPackages")
             var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
 
             // Push the package.
-            NuGetPush(packagePath, new NuGetPushSettings {
+            NuGetPush(packagePath, new NuGetPushSettings
+            {
                 Source = source,
                 ApiKey = apiKey
             });
@@ -224,8 +227,8 @@ Task("PublishRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
+    .WithCriteria(() => isReleaseBranch)
     .WithCriteria(() => isTagged)
-
     .Does (() =>
     {
         if (string.IsNullOrEmpty(username))
