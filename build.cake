@@ -17,6 +17,8 @@ var configuration = Argument("configuration", "Release");
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
 
+var treatWarningsAsErrors = false;
+
 // Define directories.
 var artifactsDir  = Directory("./artifacts/");
 var rootAbsoluteDir = MakeAbsolute(Directory("./")).FullPath;
@@ -50,6 +52,32 @@ var source = EnvironmentVariable("NUGET_SOURCE");
 
 var username = EnvironmentVariable("GITHUB_USERNAME");
 var token = EnvironmentVariable("GITHUB_TOKEN");
+
+
+Action<string, string> Package = (nuspec, basePath) =>
+{
+    CreateDirectory(artifactsDir);
+
+    Information("Packaging {0} using {1} as the BasePath.", nuspec, basePath);
+
+    NuGetPack($"{basePath}/{nuspec}", new NuGetPackSettings 
+    {
+        Authors = new [] {"Giusepe Casagrande"},
+        Owners = new [] {"giusepe"},
+        ProjectUrl = new Uri("https://github.com/giusepe/Sextant"),
+        LicenseUrl = new Uri("https://github.com/giusepe/Sextant/blob/master/LICENSE"),
+        RequireLicenseAcceptance = false,
+        Version = nugetVersion,
+        Tags = new [] {"mvvm", "reactiveui", "Rx", "Reactive Extensions", "Observable", "xamarin", "android", "ios", "forms", "monodroid", "monotouch", "xamarin.android", "xamarin.ios", "xamarin.forms"},
+        ReleaseNotes = new [] { string.Format("{0}/releases", githubUrl) },
+        Symbols = false,
+        Verbosity = NuGetVerbosity.Detailed,
+        OutputDirectory = artifactsDir,
+        BasePath = basePath,
+        IncludeReferencedProjects = true,
+        Properties = new Dictionary<string, string> {{ "Configuration", "Release" }}
+    });
+};
 
 
 //////////////////////////////////////////////////////////////////////
@@ -86,25 +114,23 @@ Task("BuildPackages")
 	.IsDependentOn("Build")
     .Does(() =>
     {
-        var nuGetPackSettings = new NuGetPackSettings
-        {
-            Authors = new [] {"Giusepe Casagrande"},
-            Owners = new [] {"giusepe"},
-            ProjectUrl = new Uri("https://github.com/giusepe/Sextant"),
-            LicenseUrl = new Uri("https://github.com/giusepe/Sextant/blob/master/LICENSE"),
-            RequireLicenseAcceptance = false,
-            Version = nugetVersion,
-            Tags = new [] {"mvvm", "reactiveui", "Rx", "Reactive Extensions", "Observable", "xamarin", "android", "ios", "forms", "monodroid", "monotouch", "xamarin.android", "xamarin.ios", "xamarin.forms"},
-            ReleaseNotes = new [] { string.Format("{0}/releases", githubUrl) },
-            Symbols = false,
-            Verbosity = NuGetVerbosity.Detailed,
-            OutputDirectory = artifactsDir,
-            BasePath = "./Sextant.PCL",
-            IncludeReferencedProjects = true,
-            Properties = new Dictionary<string, string> {{ "Configuration", "Release" }}
-        };
+        // Build the PCL version for legacy projects
+        Package("Sextant.PCL.nuspec", "./Sextant.PCL");
 
-        NuGetPack("./Sextant.PCL/Sextant.PCL.nuspec", nuGetPackSettings);
+        // Build the .Net Standard for the cool kids
+        MSBuild("./Sextant/Sextant.csproj",
+        new MSBuildSettings()
+            .WithTarget("build;pack")
+            // .WithProperty("AndroidSdkDirectory", androidHome.Quote())
+            .WithProperty("PackageOutputPath",  MakeAbsolute(Directory(artifactsDir)).ToString().Quote())
+            .WithProperty("TreatWarningsAsErrors", treatWarningsAsErrors.ToString())
+            .SetConfiguration("Release")
+            // Due to https://github.com/NuGet/Home/issues/4790 and https://github.com/NuGet/Home/issues/4337 we
+            // have to pass a version explicitly
+            .WithProperty("Version", nugetVersion.ToString())
+            .WithProperty("InformationalVersion", informationalVersion)
+            .SetVerbosity(Verbosity.Minimal)
+            .SetNodeReuse(false));
     });
 
 
