@@ -117,7 +117,7 @@ Task("CreateRelease")
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
     .WithCriteria(() => isReleaseBranch)
-    .WithCriteria(() => !isTagged)
+    .WithCriteria(() => isTagged)
     .Does (() =>
     {
         if (string.IsNullOrEmpty(username))
@@ -143,7 +143,7 @@ Task("PublishPackages")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    .WithCriteria(() => isDevelopBranch || isReleaseBranch)
+    .WithCriteria(() => isDevelopBranch || isReleaseBranch || isTagged)
     .Does (() =>
     {
         if (isReleaseBranch && !isTagged)
@@ -181,8 +181,7 @@ Task("PublishRelease")
     .WithCriteria(() => !local)
     .WithCriteria(() => !isPullRequest)
     .WithCriteria(() => isRepository)
-    // .WithCriteria(() => isReleaseBranch)
-    // .WithCriteria(() => isTagged)
+    .WithCriteria(() => isTagged)
     .Does (() =>
     {
         if (isReleaseBranch &&  isTagged)
