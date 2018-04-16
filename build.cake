@@ -144,8 +144,8 @@ Task("UpdateAppVeyorBuildNumber")
     AppVeyor.UpdateBuildVersion(buildVersion);
 
 }).ReportError(exception =>
-{  
-    // When a build starts, the initial identifier is an auto-incremented value supplied by AppVeyor. 
+{
+    // When a build starts, the initial identifier is an auto-incremented value supplied by AppVeyor.
     // As part of the build script, this version in AppVeyor is changed to be the version obtained from
     // GitVersion. This identifier is purely cosmetic and is used by the core team to correlate a build
     // with the pull-request. In some circumstances, such as restarting a failed/cancelled build the
