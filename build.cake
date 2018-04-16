@@ -212,7 +212,8 @@ Task("PublishPackages")
             var packagePath = artifactsDir + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
 
             // Push the package.
-            NuGetPush(packagePath, new NuGetPushSettings {
+            NuGetPush(packagePath, new NuGetPushSettings
+            {
                 Source = source,
                 ApiKey = apiKey
             });
