@@ -47,7 +47,7 @@ namespace Sextant
 
 			if (currentPage != null)
 			{
-				var pageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TPageModel>();
+				var pageToPush = SextantCore.CurrentFactory.GetPage<TPageModel>();
 
 				if (executeOnPageModel != null)
 					pageToPush.ExecuteOnPageModel(executeOnPageModel);
@@ -72,7 +72,7 @@ namespace Sextant
 
 			if (currentPage != null)
 			{
-				var pageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TPageModel>();
+				var pageToPush = SextantCore.CurrentFactory.GetPage<TPageModel>();
 
 				if (executeOnPageModel != null)
 					pageToPush.ExecuteOnPageModel(executeOnPageModel);
@@ -193,8 +193,8 @@ namespace Sextant
 
 			if (currentPage != null)
 			{
-				var pageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TViewModel>();
-				var navigationPageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TPageNavigationModel>();
+				var pageToPush = SextantCore.CurrentFactory.GetPage<TViewModel>();
+				var navigationPageToPush = SextantCore.CurrentFactory.GetPage<TPageNavigationModel>();
 
 				if (executeOnPageModel != null)
 					pageToPush.ExecuteOnPageModel(executeOnPageModel);
@@ -211,8 +211,8 @@ namespace Sextant
 
 			if (currentPage != null)
 			{
-				var pageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TViewModel>();
-				var navigationPageToPush = SextantCore.CurrentFactory.GetPageAsNewInstance<TPageNavigationModel>();
+				var pageToPush = SextantCore.CurrentFactory.GetPage<TViewModel>();
+				var navigationPageToPush = SextantCore.CurrentFactory.GetPage<TPageNavigationModel>();
 
 				if (executeOnPageModel != null)
 					pageToPush.ExecuteOnPageModel(executeOnPageModel);

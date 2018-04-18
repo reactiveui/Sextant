@@ -56,7 +56,7 @@ namespace Sextant
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
 		public static IBasePage<TPageModel> GetPageAsNewInstance<TPageModel>(this IBasePage<IBasePageModel> currentPage, TPageModel setPageModel = null) where TPageModel : class, IBasePageModel
 		{
-			return SextantCore.CurrentFactory.GetPageAsNewInstance(setPageModel);
+			return SextantCore.CurrentFactory.GetPage(setPageModel);
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Sextant
 		/// <param name="pageModelType">Page model type.</param>
 		public static IBasePage<IBasePageModel> GetPageAsNewInstance(this IBasePage<IBasePageModel> currentPage, Type pageModelType)
 		{
-			return SextantCore.CurrentFactory.GetPageAsNewInstance(pageModelType);
+			return SextantCore.CurrentFactory.GetPage(pageModelType);
 		}
 	}
 }

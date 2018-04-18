@@ -7,8 +7,8 @@ namespace Sextant
     {
         IBaseLogger Logger { get; set; }
 
-        IBasePage<TPageModel> GetPageAsNewInstance<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBasePageModel;
-        IBasePage<IBasePageModel> GetPageAsNewInstance(Type pageModelType);
+        IBasePage<TPageModel> GetPage<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBasePageModel;
+        IBasePage<IBasePageModel> GetPage(Type pageModelType);
         IBasePage<TPageModel> GetPageByModel<TPageModel>(TPageModel pageModel) where TPageModel : class, IBasePageModel;
         TPageModel GetPageModel<TPageModel>(IBasePage<TPageModel> page) where TPageModel : class, IBasePageModel;
         Task<bool> InsertPageBeforeAsync<TPageModel, TBeforePageModel>(IBasePage<TPageModel> pageToInsert, IBasePage<TBeforePageModel> beforePage)
