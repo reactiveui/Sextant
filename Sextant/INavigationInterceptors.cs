@@ -2,7 +2,7 @@
 namespace Sextant
 {
 	/// <summary>
-    /// IBasePage / IBasePageModel navigation events.
+    /// IBaseNavigationPage / IBaseNavigationPageModel navigation events.
     /// </summary>
     public interface INavigationInterceptors : INavigationRemovingFromCache, INavigationCanPush, INavigationPushed,
         INavigationCanPop, INavigationPopped, INavigationCanInsert, INavigationInserted, INavigationCanRemove, INavigationRemoved

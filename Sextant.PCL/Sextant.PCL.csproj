@@ -29,53 +29,59 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\Sextant\NavigationExtensions.cs">
-      <Link>NavigationExtensions.cs</Link>
+    <Compile Include="..\Sextant\Logger\BaseLogger.cs">
+      <Link>Logger\BaseLogger.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\SextantCore.cs">
-      <Link>SextantCore.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\PageExtensions.cs">
-      <Link>PageExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\Factory.cs">
-      <Link>Factory.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\IBaseFactory.cs">
-      <Link>IBaseFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\IBasePageModel.cs">
-      <Link>IBasePageModel.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\NoPageForPageModelRegisteredException.cs">
-      <Link>NoPageForPageModelRegisteredException.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\SextantException.cs">
-      <Link>SextantException.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\IPageVisibilityChange.cs">
-      <Link>IPageVisibilityChange.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\BaseLogger.cs">
-      <Link>BaseLogger.cs</Link>
+    <Compile Include="..\Sextant\Logger\IBaseLogger.cs">
+      <Link>Logger\IBaseLogger.cs</Link>
     </Compile>
     <Compile Include="..\Sextant\BaseNavigationPage.cs">
       <Link>BaseNavigationPage.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\IBaseLogger.cs">
-      <Link>IBaseLogger.cs</Link>
+    <Compile Include="..\Sextant\IBaseNavigationPage.cs">
+      <Link>IBaseNavigationPage.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\IBasePage.cs">
-      <Link>IBasePage.cs</Link>
+    <Compile Include="..\Sextant\IBaseNavigationPageModel.cs">
+      <Link>IBaseNavigationPageModel.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\INavigationInterceptors.cs">
-      <Link>INavigationInterceptors.cs</Link>
+    <Compile Include="..\Sextant\IBaseView.cs">
+      <Link>IBaseView.cs</Link>
     </Compile>
     <Compile Include="..\Sextant\IBaseViewModel.cs">
       <Link>IBaseViewModel.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\IBaseView.cs">
-      <Link>IBaseView.cs</Link>
+    <Compile Include="..\Sextant\INavigationInterceptors.cs">
+      <Link>INavigationInterceptors.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\IPageVisibilityChange.cs">
+      <Link>IPageVisibilityChange.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\ISextantNavigationService.cs">
+      <Link>ISextantNavigationService.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\ISextantNavigationServiceBase.cs">
+      <Link>ISextantNavigationServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\NavigationExtensions.cs">
+      <Link>NavigationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\NoPageForPageModelRegisteredException.cs">
+      <Link>NoPageForPageModelRegisteredException.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\PageExtensions.cs">
+      <Link>PageExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\SextantCore.cs">
+      <Link>SextantCore.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\SextantException.cs">
+      <Link>SextantException.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\SextantNavigationServiceBase.cs">
+      <Link>SextantNavigationServiceBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\XamarinFormsSextantNavigationService.cs">
+      <Link>XamarinFormsSextantNavigationService.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -91,10 +97,6 @@
     <Reference Include="Splat">
       <HintPath>..\packages\Splat.1.6.2\lib\Portable-net45+win+wpa81+wp80\Splat.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <Content Include="Sextant.PCL.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.5.1.444934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.5.1.444934\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />

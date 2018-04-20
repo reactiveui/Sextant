@@ -3,7 +3,14 @@
     <TargetFramework>netstandard1.3</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
     <PackageReference Include="Splat" Version="2.0.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logger\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="IBaseFactory.cs" />
+    <Compile Remove="INavigationFactory.cs" />
   </ItemGroup>
 </Project>
