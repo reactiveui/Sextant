@@ -7,6 +7,8 @@ namespace Sextant
         IBaseLogger Logger { get; set; }
 
         IBaseNavigationPage<TPageModel> GetPage<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBaseNavigationPageModel;
+        // for when you are trying to get a regular page as a navigation we should throw a error helping
+		//IBaseNavigationPage<TPageModel> GetNavigationPage<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBaseNavigationPageModel;
         IBaseNavigationPage<IBaseNavigationPageModel> GetPage(Type pageModelType);
         IBaseNavigationPage<TPageModel> GetPageByModel<TPageModel>(TPageModel pageModel) where TPageModel : class, IBaseNavigationPageModel;
         TPageModel GetPageModel<TPageModel>(IBaseNavigationPage<TPageModel> page) where TPageModel : class, IBaseNavigationPageModel;

@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace Sextant
 {
-    public class SextantNavigationServiceBase : ISextantNavigationServiceBase
+    public abstract class SextantNavigationServiceBase : ISextantNavigationServiceBase
     {
         IBaseLogger logger;
         public IBaseLogger Logger
@@ -205,8 +205,6 @@ namespace Sextant
             }
 
             return page;
-
-            throw new NotImplementedException();
         }
 
         public IBaseNavigationPage<IBaseNavigationPageModel> GetPage(Type pageModelType)
@@ -230,7 +228,7 @@ namespace Sextant
             return page;
         }
 
-        internal void AddToWeakCacheIfNotExists<TPageModel>(IBaseNavigationPage<TPageModel> page, TPageModel pageModel) where TPageModel : class, IBaseNavigationPageModel
+        protected void AddToWeakCacheIfNotExists<TPageModel>(IBaseNavigationPage<TPageModel> page, TPageModel pageModel) where TPageModel : class, IBaseNavigationPageModel
         {
             if (pageModel == null)
                 return;
