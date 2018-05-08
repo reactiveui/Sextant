@@ -66,9 +66,9 @@ namespace Sextant
 		/// <returns>The page as new instance.</returns>
 		/// <param name="currentPage">Current page.</param>
 		/// <param name="pageModelType">Page model type.</param>
-		public static IBaseNavigationPage<IBaseNavigationPageModel> GetPageAsNewInstance(this IBaseNavigationPage<IBaseNavigationPageModel> currentPage, Type pageModelType)
-		{
-			return SextantCore.Instance.GetPage(pageModelType);
-		}
+		//public static IBaseNavigationPage<IBaseNavigationPageModel> GetPageAsNewInstance(this IBaseNavigationPage<IBaseNavigationPageModel> currentPage, Type pageModelType)
+		//{
+		//	return SextantCore.Instance.GetPage(pageModelType);
+		//}
 	}
 }

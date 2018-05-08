@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Splat" Version="2.0.0" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
+    <PackageReference Include="Xamarin.Forms" Version="3.0.0.446417" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logger\" />

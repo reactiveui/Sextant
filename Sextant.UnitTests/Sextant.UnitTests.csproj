@@ -10,9 +10,9 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="Xamarin.Forms.Mocks" Version="2.5.0.4" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="Xamarin.Forms" Version="3.0.0.446417" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />

@@ -4,19 +4,20 @@ namespace Sextant
 {
     public interface ISextantNavigationServiceBase
     {
-        IBaseLogger Logger { get; set; }
+		IBaseLogger Logger { get; set; }
 
         IBaseNavigationPage<TPageModel> GetPage<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBaseNavigationPageModel;
-        // for when you are trying to get a regular page as a navigation we should throw a error helping
-		//IBaseNavigationPage<TPageModel> GetNavigationPage<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBaseNavigationPageModel;
-        IBaseNavigationPage<IBaseNavigationPageModel> GetPage(Type pageModelType);
+		IBaseNavigationPage<TNavigationViewModel> GetNavigationPage<TNavigationViewModel>(TNavigationViewModel setPageModel = null) where TNavigationViewModel : class, IBaseNavigationPageModel;
         IBaseNavigationPage<TPageModel> GetPageByModel<TPageModel>(TPageModel pageModel) where TPageModel : class, IBaseNavigationPageModel;
-        TPageModel GetPageModel<TPageModel>(IBaseNavigationPage<TPageModel> page) where TPageModel : class, IBaseNavigationPageModel;
-        void RegisterNavigationPage<TNavPageModel, TInitalPageModel>()
-            where TNavPageModel : class, IBaseNavigationPageModel
-            where TInitalPageModel : class, IBaseNavigationPageModel;
-        void RegisterNavigationPage<TNavPageModel>(Func<IBaseNavigationPage<IBaseNavigationPageModel>> initialPage = null, Func<TNavPageModel> createNavModel = null, Func<IBaseNavigationPage<IBaseNavigationPageModel>, IBaseNavigationPage<TNavPageModel>> createNav = null) where TNavPageModel : class, IBaseNavigationPageModel;
-        void RegisterPage<TPageModel>(Func<TPageModel> createPageModel = null, Func<IBaseNavigationPage<TPageModel>> createPage = null) where TPageModel : class, IBaseNavigationPageModel;
+        TPageModel GetPageModel<TPageModel>(IBaseNavigationPage<TPageModel> page) where TPageModel : class, IBaseNavigationPageModel;      
+		void RegisterPage<TPage, TPageModel, TNavigationPage, TNavigationPageModel>()
+			where TPage : class, IBaseNavigationPage<TPageModel>, new()
+			where TPageModel : class, IBaseNavigationPageModel, new()
+			where TNavigationPage : class, IBaseNavigationPage<TNavigationPageModel>, new()
+			where TNavigationPageModel : class, IBaseNavigationPageModel, new();
+        void RegisterPage<TPage, TPageModel>(Func<TPageModel> createPageModel = null)
+			where TPage : class, IBaseNavigationPage<TPageModel>, new()
+			where TPageModel : class, IBaseNavigationPageModel, new();
         void SetPageModel<TPageModel>(IBaseNavigationPage<TPageModel> page, TPageModel newPageModel) where TPageModel : class, IBaseNavigationPageModel;
     }
 }

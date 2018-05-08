@@ -233,7 +233,7 @@ namespace Sextant
                 formsPage.Disappearing += OnPageDisappearing;
             }
 
-            AddToWeakCacheIfNotExists(page, newPageModel);
+            //AddToWeakCacheIfNotExists(page, newPageModel);
         }
     }
 }
