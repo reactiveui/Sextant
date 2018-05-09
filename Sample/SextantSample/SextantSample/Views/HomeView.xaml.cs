@@ -2,6 +2,7 @@
 using ReactiveUI.XamForms;
 using Sextant;
 using SextantSample.ViewModels;
+using System.Reactive.Disposables;
 
 namespace SextantSample.Views
 {
@@ -11,7 +12,11 @@ namespace SextantSample.Views
         {
             InitializeComponent();
 
-			this.BindCommand(ViewModel, x => x.OpenModal, x => x.FirstModalButton);
+			this.WhenActivated(disposables =>
+            {
+				this.BindCommand(ViewModel, x => x.OpenModal, x => x.FirstModalButton).DisposeWith(disposables);
+            });
+
         }
     }
 }

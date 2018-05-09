@@ -232,8 +232,6 @@ namespace Sextant
                 formsPage.Appearing += OnPageAppearing;
                 formsPage.Disappearing += OnPageDisappearing;
             }
-
-            //AddToWeakCacheIfNotExists(page, newPageModel);
         }
     }
 }
