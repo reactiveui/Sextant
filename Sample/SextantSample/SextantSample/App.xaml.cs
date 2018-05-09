@@ -1,4 +1,8 @@
 using System;
+using Sextant;
+using SextantSample.ViewModels;
+using SextantSample.Views;
+using Splat;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +15,17 @@ namespace SextantSample
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+
+			var navigationService = new XamarinFormsSextantNavigationService(this, false)
+            {
+                Logger = new BaseLogger()
+            };
+
+			SextantCore.SetCurrentFactory(navigationService);
+
+			navigationService.RegisterPage<HomeView, HomeViewModel, HomeNavigationView, HomeNavigationViewModel>();
+
+			MainPage = SextantCore.Instance.GetNavigationPage<HomeNavigationViewModel>() as NavigationPage;
         }
 
         protected override void OnStart()

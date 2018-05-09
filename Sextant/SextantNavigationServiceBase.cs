@@ -201,23 +201,23 @@ namespace Sextant
 		public virtual IBaseNavigationPage<TNavigationViewModel> GetNavigationPage<TNavigationViewModel>(TNavigationViewModel setPageModel = null) where TNavigationViewModel : class, IBaseNavigationPageModel
         {
 			var navigationElement = _navigationDeck.FirstOrDefault(p => p.NavigationViewModelType == typeof(TNavigationViewModel));
-			IBaseNavigationPage<TNavigationViewModel> page;
+			IBaseNavigationPage<TNavigationViewModel> navigationPage;
 
-			page = Locator.Current.GetService(navigationElement.ViewType) as IBaseNavigationPage<TNavigationViewModel>;
-            if (page == null)
+			navigationPage = Locator.Current.GetService(navigationElement.NavigationViewType) as IBaseNavigationPage<TNavigationViewModel>;
+            if (navigationPage == null)
             {
                 throw new NoPageForPageModelRegisteredException("View not registered in IOC: " + navigationElement.ViewType.Name);
             }
 
-			var pageModel = Locator.Current.GetService(navigationElement.ViewModelType) as TNavigationViewModel;
+			var navigationPageModel = Locator.Current.GetService(navigationElement.NavigationViewModelType) as TNavigationViewModel;
             if (setPageModel != null)
             {
                 throw new NoPageForPageModelRegisteredException("ViewModel not registered in IOC: " + navigationElement.ViewModelType.Name);
             }
 
-            SetPageModel(page, setPageModel);
+            SetPageModel(navigationPage, setPageModel);
 
-            return page;
+            return navigationPage;
         }
 
 		//public IBaseNavigationPage<IBaseNavigationPageModel> GetPage(Type pageModelType)
