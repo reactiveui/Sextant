@@ -25,6 +25,7 @@ namespace SextantSample
 
 			navigationService.RegisterPage<HomeView, HomeViewModel, HomeNavigationView, HomeNavigationViewModel>();
 			navigationService.RegisterPage<FirstModalView, FirstModalViewModel, FirstModalNavigationView, FirstModalNavigationViewModel>();
+			navigationService.RegisterPage<SecondModalView, SecondModalViewModel, SecondModalNavigationView, SecondModalNavigationViewModel>();
 
 			MainPage = SextantCore.Instance.GetNavigationPage<HomeNavigationViewModel>() as NavigationPage;
         }

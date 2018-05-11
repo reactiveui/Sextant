@@ -9,8 +9,9 @@ namespace SextantSample.Views
     {
 		public FirstModalView()
         {
-            InitializeComponent();
+			InitializeComponent();
 			this.BindCommand(ViewModel, x => x.OpenModal, x => x.OpenSecondModal);
+			this.BindCommand(ViewModel, x => x.PopModal, x => x.PopModal);
         }
     }
 }

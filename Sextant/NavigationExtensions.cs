@@ -3,9 +3,6 @@ using System.Threading.Tasks;
 
 namespace Sextant
 {
-	/// <summary>
-	/// Navigation extensions.
-	/// </summary>
 	public static class NavigationExtensions
 	{
 		public static Task<bool> PushPageAsync<TCurrentPageModel, TPageModel>(this TCurrentPageModel currentPageModel, IBaseNavigationPage<TPageModel> pageToPush, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TCurrentPageModel : class, IBaseNavigationPageModel where TPageModel : class, IBaseNavigationPageModel
@@ -22,7 +19,7 @@ namespace Sextant
 
 			return Task.FromResult(false);
 		}
-              
+
 		public static Task<bool> PushPageAsync<TPageModel>(this IBaseNavigationPageModel currentPageModel, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TPageModel : class, IBaseNavigationPageModel
 		{
 			var currentPage = SextantCore.Instance.GetPageByModel(currentPageModel);
@@ -39,7 +36,7 @@ namespace Sextant
 
 			return Task.FromResult(false);
 		}
-        
+
 		public static Task<bool> PushModalPageAsync<TPageModel>(this IBaseNavigationPageModel currentPageModel, Action<TPageModel> executeOnPageModel = null, bool animated = true) where TPageModel : class, IBaseNavigationPageModel
 		{
 			var currentPage = SextantCore.Instance.GetPageByModel(currentPageModel);
@@ -143,12 +140,7 @@ namespace Sextant
 
 			if (currentPage != null)
 			{
-				var pageToPush = SextantCore.Instance.GetPage<TViewModel>();
 				var navigationPageToPush = SextantCore.Instance.GetNavigationPage<TPageNavigationModel>();
-
-				if (executeOnPageModel != null)
-					pageToPush.ExecuteOnPageModel(executeOnPageModel);
-
 				return SextantCore.Instance.PushModalPageAsync(currentPage, navigationPageToPush, animated);
 			}
 

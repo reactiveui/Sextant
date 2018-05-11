@@ -7,7 +7,7 @@ namespace Sextant
 		IBaseLogger Logger { get; set; }
 
         IBaseNavigationPage<TPageModel> GetPage<TPageModel>(TPageModel setPageModel = null) where TPageModel : class, IBaseNavigationPageModel;
-		IBaseNavigationPage<TNavigationViewModel> GetNavigationPage<TNavigationViewModel>(TNavigationViewModel setPageModel = null) where TNavigationViewModel : class, IBaseNavigationPageModel;
+		IBaseNavigationPage<TNavigationViewModel> GetNavigationPage<TNavigationViewModel>(Action<IBaseViewModel> executeOnPageModel = null, TNavigationViewModel setPageModel = null) where TNavigationViewModel : class, IBaseNavigationPageModel;
         IBaseNavigationPage<TPageModel> GetPageByModel<TPageModel>(TPageModel pageModel) where TPageModel : class, IBaseNavigationPageModel;
         TPageModel GetPageModel<TPageModel>(IBaseNavigationPage<TPageModel> page) where TPageModel : class, IBaseNavigationPageModel;      
 		void RegisterPage<TPage, TPageModel, TNavigationPage, TNavigationPageModel>()
