@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Splat;
-using Xamarin.Forms;
 
 namespace Sextant
 {
@@ -28,62 +26,9 @@ namespace Sextant
 
 		readonly IList<NavigationElement> _navigationDeck = new List<NavigationElement>();
 
-		public SextantNavigationServiceBase(Application appInstance,
-											bool automaticAssembliesDiscovery = true,
-											params Assembly[] additionalPagesAssemblies)
+		public SextantNavigationServiceBase()
 		{
-			if (automaticAssembliesDiscovery)
-			{
-				var pagesAssemblies = additionalPagesAssemblies.ToList();
-				pagesAssemblies.Add(appInstance.GetType().GetTypeInfo().Assembly);
-				//AutomaticPageRegister(pagesAssemblies);
-			}
 		}
-
-		//private void AutomaticPageRegister(List<Assembly> pagesAssemblies)
-		//{
-		//    foreach (var assembly in pagesAssemblies.Distinct())
-		//    {
-		//        foreach (var pageTypeInfo in assembly.DefinedTypes.Where(t => t.IsClass && !t.IsAbstract
-		//             && t.ImplementedInterfaces != null && !t.IsGenericTypeDefinition))
-		//        {
-		//            var found = pageTypeInfo.ImplementedInterfaces.FirstOrDefault(t => t.IsConstructedGenericType &&
-		//                t.GetGenericTypeDefinition() == typeof(IBaseNavigationPage<>));
-
-		//            if (found != default(Type))
-		//            {
-		//                var pageType = pageTypeInfo.AsType();
-		//                var pageModelType = found.GenericTypeArguments.First();
-
-		//                if (!_navigationPageModelTypes.ContainsKey(pageModelType))
-		//                {
-		//                    _navigationPageModelTypes.Add(pageModelType, pageType);
-		//                }
-		//                else
-		//                {
-		//                    var oldPageType = _navigationPageModelTypes[pageModelType];
-
-		//                    if (pageTypeInfo.IsSubclassOf(oldPageType))
-		//                    {
-		//                        _navigationPageModelTypes.Remove(pageModelType);
-		//                        _navigationPageModelTypes.Add(pageModelType, pageType);
-		//                    }
-		//                }
-		//            }
-
-		//            var foundView = pageTypeInfo.ImplementedInterfaces.FirstOrDefault(t => t.IsConstructedGenericType &&
-		//                t.GetGenericTypeDefinition() == typeof(IBaseView<>));
-
-		//            if (foundView != default(Type))
-		//            {
-		//                var viewType = pageTypeInfo.AsType();
-		//                var viewModelType = foundView.GenericTypeArguments.First();
-
-		//                SetViewModelType(pageTypeInfo, viewType, viewModelType);
-		//            }
-		//        }
-		//    }
-		//}
 
 		public virtual void RegisterPage<TPage, TPageModel>(Func<TPageModel> createPageModel = null)
 			where TPageModel : class, IBaseNavigationPageModel, new()
@@ -107,8 +52,16 @@ namespace Sextant
 			var navCreation = new Func<IBaseNavigationPage<IBaseNavigationPageModel>, IBaseNavigationPage<TNavigationPageModel>>(
 				(page) => Activator.CreateInstance(typeof(TNavigationPage), page) as IBaseNavigationPage<TNavigationPageModel>);
 
-			Locator.CurrentMutable.Register(() => new TPage(), typeof(TPage));
+			var createView = new Func<IBaseNavigationPageModel, IBaseNavigationPage<TPageModel>>((vm) =>
+			{
+				var v = Activator.CreateInstance(typeof(TPage)) as IBaseNavigationPage<TPageModel>;
+				v.SetPageModel(vm);
+				return v;
+			});         
+
 			Locator.CurrentMutable.Register(() => new TPageModel(), typeof(TPageModel));
+			Locator.CurrentMutable.Register(() => createView(Locator.Current.GetService<TPageModel>()), typeof(TPage));
+
 			Locator.CurrentMutable.Register(() => navCreation(Locator.Current.GetService<TPage>()), typeof(TNavigationPage));
 			Locator.CurrentMutable.Register(() => new TNavigationPageModel(), typeof(TNavigationPageModel));
 		}
@@ -164,14 +117,6 @@ namespace Sextant
 			var navigationElement = _navigationDeck.FirstOrDefault(p => p.NavigationViewModelType == typeof(TNavigationViewModel));
 			IBaseNavigationPage<TNavigationViewModel> navigationPage;
             
-			var viewModel = Locator.Current.GetService(navigationElement.ViewModelType) as IBaseNavigationPageModel;
-            var view = Locator.Current.GetService(navigationElement.ViewType) as IBaseNavigationPage<IBaseNavigationPageModel>;
-
-            if (viewModel == null || view == null)
-                throw new Exception("No Navigation Creation func: " + navigationElement.NavigationViewModelType.Name);
-
-            SetPageModel(view, viewModel);                  
-
 			navigationPage = GetView<TNavigationViewModel>(navigationElement.NavigationViewType);         
 
 			if (setNavigationPageModel != null)
@@ -187,10 +132,10 @@ namespace Sextant
 			return navigationPage;
 		}
 
-		public virtual IBaseNavigationPage<TPageModel> GetPageByModel<TPageModel>(TPageModel pageModel)
-			where TPageModel : class, IBaseNavigationPageModel
+		public virtual IBaseNavigationPage<TPageModel> GetPageByModel<TPageModel>(Type pageModelType)
 		{
-			var page = Locator.Current.GetService<TPageModel>();
+			var element = _navigationDeck.FirstOrDefault(pt => pt.ViewModelType == pageModelType);
+			var page = Locator.Current.GetService(element.ViewType);
 			return page as IBaseNavigationPage<TPageModel>;
 		}
 

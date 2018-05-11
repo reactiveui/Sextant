@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -8,7 +9,61 @@ namespace Sextant
     public class XamarinFormsSextantNavigationService : SextantNavigationServiceBase, ISextantNavigationService
     {
         public XamarinFormsSextantNavigationService(Application appInstance, bool automaticAssembliesDiscovery = true, params Assembly[] additionalPagesAssemblies)
-            : base(appInstance, automaticAssembliesDiscovery, additionalPagesAssemblies) { }
+            : base()
+		{
+            if (automaticAssembliesDiscovery)
+            {
+                var pagesAssemblies = additionalPagesAssemblies.ToList();
+                pagesAssemblies.Add(appInstance.GetType().GetTypeInfo().Assembly);
+                //AutomaticPageRegister(pagesAssemblies);
+            }
+        }
+
+		//private void AutomaticPageRegister(List<Assembly> pagesAssemblies)
+        //{
+        //    foreach (var assembly in pagesAssemblies.Distinct())
+        //    {
+        //        foreach (var pageTypeInfo in assembly.DefinedTypes.Where(t => t.IsClass && !t.IsAbstract
+        //             && t.ImplementedInterfaces != null && !t.IsGenericTypeDefinition))
+        //        {
+        //            var found = pageTypeInfo.ImplementedInterfaces.FirstOrDefault(t => t.IsConstructedGenericType &&
+        //                t.GetGenericTypeDefinition() == typeof(IBaseNavigationPage<>));
+
+        //            if (found != default(Type))
+        //            {
+        //                var pageType = pageTypeInfo.AsType();
+        //                var pageModelType = found.GenericTypeArguments.First();
+
+        //                if (!_navigationPageModelTypes.ContainsKey(pageModelType))
+        //                {
+        //                    _navigationPageModelTypes.Add(pageModelType, pageType);
+        //                }
+        //                else
+        //                {
+        //                    var oldPageType = _navigationPageModelTypes[pageModelType];
+
+        //                    if (pageTypeInfo.IsSubclassOf(oldPageType))
+        //                    {
+        //                        _navigationPageModelTypes.Remove(pageModelType);
+        //                        _navigationPageModelTypes.Add(pageModelType, pageType);
+        //                    }
+        //                }
+        //            }
+
+        //            var foundView = pageTypeInfo.ImplementedInterfaces.FirstOrDefault(t => t.IsConstructedGenericType &&
+        //                t.GetGenericTypeDefinition() == typeof(IBaseView<>));
+
+        //            if (foundView != default(Type))
+        //            {
+        //                var viewType = pageTypeInfo.AsType();
+        //                var viewModelType = foundView.GenericTypeArguments.First();
+
+        //                SetViewModelType(pageTypeInfo, viewType, viewModelType);
+        //            }
+        //        }
+        //    }
+        //}
+
 
         public void OnPageAppearing(object sender, EventArgs e)
         {
