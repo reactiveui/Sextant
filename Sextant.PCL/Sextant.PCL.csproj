@@ -84,6 +84,9 @@
     <Compile Include="..\Sextant\XamarinFormsSextantNavigationService.cs">
       <Link>XamarinFormsSextantNavigationService.cs</Link>
     </Compile>
+    <Compile Include="..\Sextant\NavigationElement.cs">
+      <Link>NavigationElement.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Splat">

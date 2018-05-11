@@ -67,6 +67,31 @@ namespace Sextant
 			Locator.CurrentMutable.RegisterLazySingleton(() => new TNavigationPageModel(), typeof(TNavigationPageModel));
 		}
 
+		public virtual void RegisterPage<TPageModel, TNavigationPage, TNavigationPageModel>(Func<IBaseNavigationPage<TPageModel>> viewCreationFunc)
+            where TPageModel : class, IBaseNavigationPageModel, new()
+            where TNavigationPage : class, IBaseNavigationPage<TNavigationPageModel>, new()
+            where TNavigationPageModel : class, IBaseNavigationPageModel, new()
+        {
+            _navigationDeck.Add(new NavigationElement(null, typeof(TPageModel), typeof(TNavigationPage), typeof(TNavigationPageModel)));
+
+
+            var navCreation = new Func<IBaseNavigationPage<IBaseNavigationPageModel>, IBaseNavigationPage<TNavigationPageModel>>(
+                (page) => Activator.CreateInstance(typeof(TNavigationPage), page) as IBaseNavigationPage<TNavigationPageModel>);
+
+            var createView = new Func<IBaseNavigationPageModel, IBaseNavigationPage<TPageModel>>((vm) =>
+            {
+				var v = viewCreationFunc() as IBaseNavigationPage<TPageModel>;
+                v.SetPageModel(vm);
+                return v;
+            });
+
+            Locator.CurrentMutable.RegisterLazySingleton(() => new TPageModel(), typeof(TPageModel));
+			Locator.CurrentMutable.RegisterLazySingleton(() => createView(Locator.Current.GetService<TPageModel>()), typeof(IBaseNavigationPage<TPageModel>));
+
+			Locator.CurrentMutable.RegisterLazySingleton(() => navCreation(Locator.Current.GetService<IBaseNavigationPage<TPageModel>>()), typeof(TNavigationPage));
+            Locator.CurrentMutable.RegisterLazySingleton(() => new TNavigationPageModel(), typeof(TNavigationPageModel));
+        }
+
 		public virtual IBaseNavigationPage<TPageModel> GetPage<TPageModel>(TPageModel setPageModel = null)
 			where TPageModel : class, IBaseNavigationPageModel
 		{
@@ -108,8 +133,6 @@ namespace Sextant
 				var navigationPageModel = GetViewModel<TNavigationViewModel>(navigationElement.NavigationViewModelType);            
 				SetPageModel(navigationPage, navigationPageModel);
 			}
-
-
 
 			return navigationPage;
 		}
