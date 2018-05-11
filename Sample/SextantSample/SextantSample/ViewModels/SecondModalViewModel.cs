@@ -24,7 +24,7 @@ namespace SextantSample.ViewModels
 		{
 			PushPage = ReactiveCommand
                 .CreateFromTask(() =>
-                    this.PushModalPageAsync<FirstModalNavigationViewModel, FirstModalViewModel>(),
+	                this.PushPageAsync<RedViewModel>(),
                     outputScheduler: RxApp.MainThreadScheduler);
 
 			PopModal = ReactiveCommand

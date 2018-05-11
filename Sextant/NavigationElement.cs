@@ -52,7 +52,7 @@ namespace Sextant
         }
 
         public NavigationElement(Type viewType, Type viewModelType, Func<object> viewModelCreationFunc = null)
-            : this(null, null, viewType, viewModelType, viewModelCreationFunc)
+			: this(viewType, viewModelType, null, null, viewModelCreationFunc)
         {
         }
     }
