@@ -141,8 +141,8 @@ namespace Sextant
 			where TPageModel : class, IBaseNavigationPageModel
 		{
 			var element = _navigationDeck.FirstOrDefault(pt => pt.ViewModelType == pageModel.GetType());
-			var page = Locator.Current.GetService(element.ViewType);
-			return page as IBaseNavigationPage<TPageModel>;
+			var page = GetView<TPageModel>(element.ViewType);
+			return page;
 		}
 
 		public virtual TPageModel GetPageModel<TPageModel>(IBaseNavigationPage<TPageModel> page)
