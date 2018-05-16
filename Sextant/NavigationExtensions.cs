@@ -123,7 +123,7 @@ namespace Sextant
 			if (currentPage != null)
 			{
 				var pageToPush = SextantCore.Instance.GetPage<TViewModel>();
-				var navigationPageToPush = SextantCore.Instance.GetPage<TPageNavigationModel>();
+				var navigationPageToPush = SextantCore.Instance.GetNavigationPage<TPageNavigationModel>();
 
 				if (executeOnPageModel != null)
 					pageToPush.ExecuteOnPageModel(executeOnPageModel);

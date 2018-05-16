@@ -170,7 +170,10 @@ namespace Sextant
 
         private static IBaseNavigationPage<TPageModel> GetView<TPageModel>(Type viewType) where TPageModel : class, IBaseNavigationPageModel
         {
-            IBaseNavigationPage<TPageModel> page = Locator.Current.GetService(viewType) as IBaseNavigationPage<TPageModel>;
+            //When the viewType is null then we may have a custom view resolver applied, so need to get the service by the generic type
+            IBaseNavigationPage<TPageModel> page = viewType != null
+                ? Locator.Current.GetService(viewType) as IBaseNavigationPage<TPageModel>
+                : Locator.Current.GetService<IBaseNavigationPage<TPageModel>>();
             if (page == null)
             {
                 throw new NoPageForPageModelRegisteredException("View not registered in IOC: " + viewType.Name);

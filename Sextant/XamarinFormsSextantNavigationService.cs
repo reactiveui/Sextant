@@ -256,7 +256,23 @@ namespace Sextant
 
         public Task<bool> SetNewRootAndResetAsync<TPageModelOfNewRoot>() where TPageModelOfNewRoot : class, IBaseNavigationPageModel
         {
-            Application.Current.MainPage = (Page)GetPage<TPageModelOfNewRoot>();
+            //TODO: Find a better way to distinguish between navigation page VMs and page VMs instead of the below try/catch block
+
+            Page page = null;
+            try
+            {
+                page = (Page)GetPage<TPageModelOfNewRoot>();
+            }
+            catch (NullReferenceException)
+            {
+                page = (Page)GetNavigationPage<TPageModelOfNewRoot>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            Application.Current.MainPage = page;
 
             return Task.FromResult(true);
         }
