@@ -9,50 +9,56 @@ namespace Sextant
         public Type NavigationViewType
         {
             get;
-            set;
+            private set;
         }
 
         public Type NavigationViewModelType
         {
             get;
-            set;
+            private set;
         }
 
         public Type ViewType
         {
             get;
-            set;
+            private set;
         }
 
         public Type ViewModelType
         {
             get;
-            set;
+            private set;
         }
 
         public Func<object> ViewCreationFunc
         {
             get;
-            set;
+            private set;
         }
 
         public Func<object> ViewModelCreationFunc
         {
             get;
-            set;
+            private set;
         }
 
-		public NavigationElement(Type viewType, Type viewModelType, Type navigationViewType, Type navigationViewModelType, Func<object> viewModelCreationFunc = null)
+		public NavigationElement(Type viewType, Type viewModelType, Type navigationViewType, Type navigationViewModelType, Func<object> viewModelCreationFunc = null, Func<object> viewCreationFunc = null)
         {
             NavigationViewType = navigationViewType;
             NavigationViewModelType = navigationViewModelType;
             ViewType = viewType;
             ViewModelType = viewModelType;
             ViewModelCreationFunc = viewModelCreationFunc;
+            ViewCreationFunc = viewCreationFunc;
         }
 
         public NavigationElement(Type viewType, Type viewModelType, Func<object> viewModelCreationFunc = null)
-			: this(viewType, viewModelType, null, null, viewModelCreationFunc)
+			: this(viewType, viewModelType, null, null, viewModelCreationFunc, null)
+        {
+        }
+
+        public NavigationElement(Type viewModelType, Type navigationViewType, Type navigationViewModelType, Func<object> viewCreationFunc = null)
+            : this(null, viewModelType, navigationViewType, navigationViewModelType, null, viewCreationFunc)
         {
         }
     }

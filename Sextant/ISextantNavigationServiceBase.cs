@@ -15,6 +15,11 @@ namespace Sextant
 			where TPageModel : class, IBaseNavigationPageModel, new()
 			where TNavigationPage : class, IBaseNavigationPage<TNavigationPageModel>, new()
 			where TNavigationPageModel : class, IBaseNavigationPageModel, new();
+        void RegisterPage<TPage, TPageModel, TNavigationPage, TNavigationPageModel>(Func<IBaseNavigationPage<TPageModel>> viewCreationFunc)
+            where TPage : class, IBaseNavigationPage<TPageModel>
+            where TPageModel : class, IBaseNavigationPageModel, new()
+            where TNavigationPage : class, IBaseNavigationPage<TNavigationPageModel>, new()
+            where TNavigationPageModel : class, IBaseNavigationPageModel, new();
         void RegisterPage<TPage, TPageModel>(Func<TPageModel> createPageModel = null)
 			where TPage : class, IBaseNavigationPage<TPageModel>, new()
 			where TPageModel : class, IBaseNavigationPageModel, new();
