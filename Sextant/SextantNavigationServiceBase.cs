@@ -176,7 +176,7 @@ namespace Sextant
                 : Locator.Current.GetService<IBaseNavigationPage<TPageModel>>();
             if (page == null)
             {
-                throw new NoPageForPageModelRegisteredException("View not registered in IOC: " + viewType.Name);
+                throw new NoPageForPageModelRegisteredException($"View for ViewModel '{typeof(TPageModel)}' not registered in IOC");
             }
 
             return page;
