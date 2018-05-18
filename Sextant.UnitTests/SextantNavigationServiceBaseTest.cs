@@ -19,7 +19,7 @@ namespace Sextant.UnitTests
 		{
 			MockForms.Init();
 			var app = new App();
-			m_navigationService = new MockedSextantNavigationService(Application.Current, false)
+			m_navigationService = new MockedSextantNavigationService()
 			{
 				Logger = new BaseLogger()
 			};
@@ -39,25 +39,14 @@ namespace Sextant.UnitTests
 
 			vm.Setup(x => x.VoidConctructorMethod()).Callback(() => i++);
 
-			m_navigationService.RegisterPage(() => new FirstViewModel(), () => new FirstView());
-			//m_navigationService.RegisterPage(() => vm.Object, () => new SecondView());
-			m_navigationService.RegisterPage(() => new SecondViewModel(), () => new SecondView());
-			//var a = new SecondViewModel();
-			//m_navigationService.RegisterPage(() => a, () => new SecondView());
-
-			m_navigationService.RegisterNavigationPage(() => SextantCore.Instance.GetPage<FirstViewModel>(),
-													   () => new FirstNavigationViewModel(),
-													   page => new FirstNavigationView(page as Page));
-
-			m_navigationService.RegisterNavigationPage(() => SextantCore.Instance.GetPage<SecondViewModel>(),
-													   () => new SecondNavigationViewModel(),
-													   page => new SecondNavigationView(page as Page));
+			m_navigationService.RegisterPage<FirstView, FirstViewModel, FirstNavigationView, FirstNavigationViewModel>();
+			m_navigationService.RegisterPage<SecondView, SecondViewModel, SecondNavigationView, SecondNavigationViewModel>();
 
 
 			Application.Current.MainPage = SextantCore.Instance.GetPage<FirstNavigationViewModel>() as NavigationPage;
 			var firstvm = Application.Current.MainPage.BindingContext as FirstNavigationViewModel;
 
-			await firstvm.PushModalPageAsNewInstanceAsync<SecondNavigationViewModel, SecondViewModel>();
+			await firstvm.PushModalPageAsync<SecondNavigationViewModel, SecondViewModel>();
 
 			vm.Verify(x => x.VoidConctructorMethod(), Times.Once);
 			Assert.AreEqual(1, i);

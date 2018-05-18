@@ -16,7 +16,7 @@ namespace SextantSample
             InitializeComponent();
 
 
-			var navigationService = new XamarinFormsSextantNavigationService(this, false)
+			var navigationService = new XamarinFormsSextantNavigationService(this)
             {
                 Logger = new BaseLogger()
             };

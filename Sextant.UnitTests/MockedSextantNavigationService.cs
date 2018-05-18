@@ -7,9 +7,6 @@ namespace Sextant.UnitTests
 {
     public class MockedSextantNavigationService : SextantNavigationServiceBase, ISextantNavigationService
     {
-        public MockedSextantNavigationService(Application appInstance, bool automaticAssembliesDiscovery = true, params Assembly[] additionalPagesAssemblies)
-            : base(appInstance, automaticAssembliesDiscovery, additionalPagesAssemblies) { }
-
         public void OnPageAppearing(object sender, EventArgs e)
         {
             throw new NotImplementedException();
@@ -110,8 +107,6 @@ namespace Sextant.UnitTests
                 formsPage.Appearing += OnPageAppearing;
                 formsPage.Disappearing += OnPageDisappearing;
             }
-
-            AddToWeakCacheIfNotExists(page, newPageModel);
         }
     }
 }

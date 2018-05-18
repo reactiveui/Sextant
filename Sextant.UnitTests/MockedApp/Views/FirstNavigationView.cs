@@ -6,6 +6,10 @@ namespace Sextant.UnitTests.MockedApp.Views
 {
     public class FirstNavigationView : NavigationPage, IBaseNavigationPage<FirstNavigationViewModel>
     {
+        public FirstNavigationView()
+        {
+        }
+
         public FirstNavigationView(Page page) : base(page)
         {
         }
