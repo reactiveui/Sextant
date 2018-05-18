@@ -116,9 +116,9 @@ namespace Sextant
 			return SextantCore.Instance.SetNewRootAndResetAsync<TNewRootPageModel>();
 		}
 
-		public static Task<bool> PushPageAsync<TPageNavigationModel, TViewModel>(this IBaseNavigationPageModel currenTViewModel, Action<TViewModel> executeOnPageModel = null, bool animated = true) where TViewModel : class, IBaseNavigationPageModel where TPageNavigationModel : class, IBaseNavigationPageModel
+		public static Task<bool> PushPageAsync<TPageNavigationModel, TViewModel>(this IBaseNavigationPageModel currentViewModel, Action<TViewModel> executeOnPageModel = null, bool animated = true) where TViewModel : class, IBaseNavigationPageModel where TPageNavigationModel : class, IBaseNavigationPageModel
 		{
-			var currentPage = SextantCore.Instance.GetPageByModel(currenTViewModel);
+			var currentPage = SextantCore.Instance.GetPageByModel(currentViewModel);
 
 			if (currentPage != null)
 			{
@@ -134,14 +134,19 @@ namespace Sextant
 			return Task.FromResult(false);
 		}
 
-		public static Task<bool> PushModalPageAsync<TPageNavigationModel, TViewModel>(this IBaseNavigationPageModel currenTViewModel, Action<TViewModel> executeOnPageModel = null, bool animated = true) where TViewModel : class, IBaseNavigationPageModel where TPageNavigationModel : class, IBaseNavigationPageModel
+		public static Task<bool> PushModalPageAsync<TPageNavigationModel, TViewModel>(this IBaseNavigationPageModel currentViewModel, Action<TViewModel> executeOnPageModel = null, bool animated = true) where TViewModel : class, IBaseNavigationPageModel where TPageNavigationModel : class, IBaseNavigationPageModel
 		{
-			var currentPage = SextantCore.Instance.GetPageByModel(currenTViewModel);
+			var currentPage = SextantCore.Instance.GetPageByModel(currentViewModel);
 
 			if (currentPage != null)
 			{
-				var navigationPageToPush = SextantCore.Instance.GetNavigationPage<TPageNavigationModel>();
-				return SextantCore.Instance.PushModalPageAsync(currentPage, navigationPageToPush, animated);
+                var pageToPush = SextantCore.Instance.GetPage<TViewModel>();
+                var navigationPageToPush = SextantCore.Instance.GetNavigationPage<TPageNavigationModel>();
+
+                if (executeOnPageModel != null)
+                    pageToPush.ExecuteOnPageModel(executeOnPageModel);
+
+                return SextantCore.Instance.PushModalPageAsync(currentPage, navigationPageToPush, animated);
 			}
 
 			return Task.FromResult(false);
