@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant", "Sextant\Sextant.csproj", "{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant", "Sextant\Sextant.csproj", "{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant.PCL", "Sextant.PCL\Sextant.PCL.csproj", "{CAF70A2C-D4E5-4F21-B2D0-43ADF31B026F}"
 EndProject
@@ -14,9 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.iOS", "Sample
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.Android", "Sample\SextantSample\SextantSample.Android\SextantSample.Android.csproj", "{4A684BB2-2CB4-4B04-8541-FF0FA677DD49}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SextantSample", "Sample\SextantSample\SextantSample\SextantSample.csproj", "{4FC79E4E-CD14-4A37-A150-CB6F0E2B99D0}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.UnitTests", "Sextant.UnitTests\Sextant.UnitTests.csproj", "{DE3AE158-7878-4C7B-941B-E08474F2CAAF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample", "Sample\SextantSample\SextantSample\SextantSample.csproj", "{4FC79E4E-CD14-4A37-A150-CB6F0E2B99D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,26 +151,6 @@ Global
 		{4FC79E4E-CD14-4A37-A150-CB6F0E2B99D0}.Release|iPhone.Build.0 = Release|Any CPU
 		{4FC79E4E-CD14-4A37-A150-CB6F0E2B99D0}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{4FC79E4E-CD14-4A37-A150-CB6F0E2B99D0}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.AppStore|iPhone.Build.0 = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Release|iPhone.Build.0 = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{DE3AE158-7878-4C7B-941B-E08474F2CAAF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
