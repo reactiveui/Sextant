@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Sextant
 {
 	/// <summary>
@@ -12,9 +13,9 @@ namespace Sextant
 		/// <returns>The page model.</returns>
 		/// <param name="page">Page.</param>
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
-		public static TPageModel GetPageModel<TPageModel>(this IBasePage<TPageModel> page) where TPageModel : class, IBasePageModel
+		public static TPageModel GetPageModel<TPageModel>(this IBaseNavigationPage<TPageModel> page) where TPageModel : class, IBaseNavigationPageModel
 		{
-			return SextantCore.CurrentFactory.GetPageModel(page);
+			return SextantCore.Instance.GetPageModel(page);
 		}
 
 		/// <summary>
@@ -24,9 +25,9 @@ namespace Sextant
 		/// <param name="page">Page.</param>
 		/// <param name="newPageModel">New page model.</param>
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
-		public static IBasePage<TPageModel> SetPageModel<TPageModel>(this IBasePage<TPageModel> page, TPageModel newPageModel) where TPageModel : class, IBasePageModel
+		public static IBaseNavigationPage<TPageModel> SetPageModel<TPageModel>(this IBaseNavigationPage<TPageModel> page, TPageModel newPageModel) where TPageModel : class, IBaseNavigationPageModel
 		{
-			SextantCore.CurrentFactory.SetPageModel(page, newPageModel);
+			SextantCore.Instance.SetPageModel(page, newPageModel);
 
 			return page;
 		}
@@ -38,7 +39,7 @@ namespace Sextant
 		/// <param name="page">Page.</param>
 		/// <param name="action">Action.</param>
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
-		public static IBasePage<TPageModel> ExecuteOnPageModel<TPageModel>(this IBasePage<TPageModel> page, Action<TPageModel> action) where TPageModel : class, IBasePageModel
+		public static IBaseNavigationPage<TPageModel> ExecuteOnPageModel<TPageModel>(this IBaseNavigationPage<TPageModel> page, Action<TPageModel> action) where TPageModel : class, IBaseNavigationPageModel
 		{
 			var model = page.GetPageModel();
 			action?.Invoke(model);
@@ -54,20 +55,9 @@ namespace Sextant
 		/// <param name="setPageModel">Page model.</param>
 		/// <param name="currentPage">Current page.</param>
 		/// <typeparam name="TPageModel">The 1st type parameter.</typeparam>
-		public static IBasePage<TPageModel> GetPageAsNewInstance<TPageModel>(this IBasePage<IBasePageModel> currentPage, TPageModel setPageModel = null) where TPageModel : class, IBasePageModel
+		public static IBaseNavigationPage<TPageModel> GetPageAsNewInstance<TPageModel>(this IBaseNavigationPage<IBaseNavigationPageModel> currentPage, TPageModel setPageModel = null) where TPageModel : class, IBaseNavigationPageModel
 		{
-			return SextantCore.CurrentFactory.GetPageAsNewInstance(setPageModel);
-		}
-
-		/// <summary>
-		/// Gets the page as new instance.
-		/// </summary>
-		/// <returns>The page as new instance.</returns>
-		/// <param name="currentPage">Current page.</param>
-		/// <param name="pageModelType">Page model type.</param>
-		public static IBasePage<IBasePageModel> GetPageAsNewInstance(this IBasePage<IBasePageModel> currentPage, Type pageModelType)
-		{
-			return SextantCore.CurrentFactory.GetPageAsNewInstance(pageModelType);
+			return SextantCore.Instance.GetPage(setPageModel);
 		}
 	}
 }

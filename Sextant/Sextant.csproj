@@ -2,8 +2,20 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Sample Release|AnyCPU' ">
+    <IntermediateOutputPath>obj\Release\netstandard1.3</IntermediateOutputPath>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;RELEASE;NETSTANDARD1_3</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
     <PackageReference Include="Splat" Version="2.0.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logger\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="IBaseFactory.cs" />
+    <Compile Remove="INavigationFactory.cs" />
   </ItemGroup>
 </Project>
