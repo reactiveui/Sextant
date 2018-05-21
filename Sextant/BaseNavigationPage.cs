@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Sextant
 {
-	public class BaseNavigationPage<TPageModel> : NavigationPage, IBasePage<TPageModel> where TPageModel : class, IBasePageModel
+	public class BaseNavigationPage<TPageModel> : NavigationPage, IBaseNavigationPage<TPageModel> where TPageModel : class, IBaseNavigationPageModel
 	{
 		public BaseNavigationPage()
 		{

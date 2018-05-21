@@ -2,7 +2,7 @@
 
 namespace Sextant
 {
-    public interface IBasePageModel
+    public interface IBaseNavigationPageModel
     {
     }
 }
