@@ -58,18 +58,6 @@
     <Compile Include="..\Sextant\IBaseViewModel.cs">
       <Link>IBaseViewModel.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\INavigationInterceptors.cs">
-      <Link>INavigationInterceptors.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\IPageVisibilityChange.cs">
-      <Link>IPageVisibilityChange.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\ISextantNavigationService.cs">
-      <Link>ISextantNavigationService.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\ISextantNavigationServiceBase.cs">
-      <Link>ISextantNavigationServiceBase.cs</Link>
-    </Compile>
     <Compile Include="..\Sextant\NavigationExtensions.cs">
       <Link>NavigationExtensions.cs</Link>
     </Compile>
@@ -85,14 +73,11 @@
     <Compile Include="..\Sextant\SextantException.cs">
       <Link>SextantException.cs</Link>
     </Compile>
-    <Compile Include="..\Sextant\SextantNavigationServiceBase.cs">
-      <Link>SextantNavigationServiceBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Sextant\XamarinFormsSextantNavigationService.cs">
-      <Link>XamarinFormsSextantNavigationService.cs</Link>
-    </Compile>
     <Compile Include="..\Sextant\NavigationElement.cs">
       <Link>NavigationElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Sextant\INavigationService.cs">
+      <Link>INavigationService.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
