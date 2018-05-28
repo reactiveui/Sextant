@@ -32,7 +32,7 @@ namespace Sextant.Abstraction
         /// <param name="modalViewModel">The modal view model.</param>
         /// <param name="contract">The contract.</param>
         /// <returns></returns>
-        IObservable<Unit> PushModal(IModalViewModel modalViewModel, string contract);
+        IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract);
 
         /// <summary>
         /// Pushes the page onto the navigation stack.

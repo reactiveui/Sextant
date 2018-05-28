@@ -12,7 +12,7 @@ namespace Sextant.Abstraction
         /// <summary>
         /// Gets the modal navigation stack.
         /// </summary>
-        IObservable<IImmutableList<IModalViewModel>> ModalStack { get; }
+        IObservable<IImmutableList<IPageViewModel>> ModalStack { get; }
 
         /// <summary>
         /// Gets the page navigation stack.
@@ -25,7 +25,7 @@ namespace Sextant.Abstraction
         IView View { get; }
 
         /// <summary>
-        /// Pops the <see cref="IModalViewModel"/> off the stack.
+        /// Pops the <see cref="IPageViewModel"/> off the stack.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns></returns>
@@ -39,12 +39,12 @@ namespace Sextant.Abstraction
         IObservable<Unit> PopPage(bool animate = true);
 
         /// <summary>
-        /// Pushes the <see cref="IModalViewModel"/> onto the stack.
+        /// Pushes the <see cref="IPageViewModel"/> onto the stack.
         /// </summary>
         /// <param name="modal">The modal.</param>
         /// <param name="contract">The contract.</param>
         /// <returns></returns>
-        IObservable<Unit> PushModal(IModalViewModel modal, string contract = null);
+        IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
 
         /// <summary>
         /// Pushes the <see cref="IPageViewModel"/> onto the stack.

@@ -17,10 +17,16 @@ namespace SextantSample
         {
             InitializeComponent();
 
-			Locator.CurrentMutable.Register(CreateView<HomeView>, typeof(IViewFor<HomeViewModel>));
-			Locator.CurrentMutable.Register(CreateView<FirstModalView>, typeof(IViewFor<FirstModalViewModel>));
+			RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
+
+            Locator.CurrentMutable.Register(CreateView<HomeView>, typeof(IViewFor<HomeViewModel>));
+
+			Locator.CurrentMutable.Register(CreateView<FirstModalView>, typeof(IViewFor<FirstModalViewModel>));         
+			//Locator.CurrentMutable.Register(CreateView<FirstModalNavigationView>, typeof(IViewFor<FirstModalNavigationViewModel>));         
+
 			Locator.CurrentMutable.Register(CreateView<SecondModalView>, typeof(IViewFor<SecondModalViewModel>));
 			Locator.CurrentMutable.Register(CreateView<RedView>, typeof(IViewFor<RedViewModel>));
+
                      
 			var navigationView = new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, Locator.Current.GetService<IViewLocator>());         
 			var viewStackService = new ViewStackService(navigationView);

@@ -17,9 +17,6 @@
   <ItemGroup>
     <Folder Include="Views\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="System\" />
-    <Folder Include="System\Reactive\" />
-    <Folder Include="System\Reactive\Linq\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />

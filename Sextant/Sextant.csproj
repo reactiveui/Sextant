@@ -20,6 +20,7 @@
     <Compile Remove="INavigationInterceptors.cs" />
     <Compile Remove="ISextantNavigationService.cs" />
     <Compile Remove="Logger\BaseLogger.cs" />
+    <Compile Remove="Navigation\Abstraction\IModalViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Navigation\" />

@@ -14,14 +14,14 @@ namespace Sextant
     /// <seealso cref="Sextant.Navigation.IViewStackService" />
     public class ViewStackService : IViewStackService
     {
-        private BehaviorSubject<IImmutableList<IModalViewModel>> _modalStack;
+        private BehaviorSubject<IImmutableList<IPageViewModel>> _modalStack;
         private BehaviorSubject<IImmutableList<IPageViewModel>> _pageStack;
         private IView _view;
 
         /// <summary>
         /// Gets the modal navigation stack.
         /// </summary>
-        public IObservable<IImmutableList<IModalViewModel>> ModalStack => _modalStack;
+        public IObservable<IImmutableList<IPageViewModel>> ModalStack => _modalStack;
 
         /// <summary>
         /// Gets the page navigation stack.
@@ -40,7 +40,7 @@ namespace Sextant
         public ViewStackService(IView view)
         {
             _view = view;
-            _modalStack = new BehaviorSubject<IImmutableList<IModalViewModel>>(ImmutableList<IModalViewModel>.Empty);
+            _modalStack = new BehaviorSubject<IImmutableList<IPageViewModel>>(ImmutableList<IPageViewModel>.Empty);
             _pageStack = new BehaviorSubject<IImmutableList<IPageViewModel>>(ImmutableList<IPageViewModel>.Empty);
 
             // TODO: Make this SubscribeSafe();
@@ -48,7 +48,7 @@ namespace Sextant
         }
 
         /// <summary>
-        /// Pops the <see cref="IModalViewModel" /> off the stack.
+        /// Pops the <see cref="IPageViewModel" /> off the stack.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns></returns>
@@ -62,12 +62,12 @@ namespace Sextant
         public IObservable<Unit> PopPage(bool animate = true) => _view.PopPage(animate);
 
         /// <summary>
-        /// Pushes the <see cref="IModalViewModel" /> onto the stack.
+        /// Pushes the <see cref="IPageViewModel" /> onto the stack.
         /// </summary>
         /// <param name="modal">The modal.</param>
         /// <param name="contract">The contract.</param>
         /// <returns></returns>
-        public IObservable<Unit> PushModal(IModalViewModel modal, string contract = null)
+        public IObservable<Unit> PushModal(IPageViewModel modal, string contract = null)
         {
             if (modal == null)
             {

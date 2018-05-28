@@ -7,7 +7,7 @@ using Sextant.Abstraction;
 
 namespace SextantSample.ViewModels
 {
-	public class FirstModalViewModel : ViewModelBase, IModalViewModel
+	public class FirstModalViewModel : ViewModelBase, IPageViewModel
 	{
 		public ReactiveCommand<Unit, Unit> OpenModal
 		{
