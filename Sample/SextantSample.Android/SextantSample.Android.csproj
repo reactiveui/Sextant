@@ -67,7 +67,7 @@
     <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="27.0.2" />
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="27.0.2" />
     <PackageReference Include="ReactiveUI.XamForms">
-      <Version>8.0.0</Version>
+      <Version>8.2.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
