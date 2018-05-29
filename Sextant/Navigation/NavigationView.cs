@@ -76,12 +76,16 @@ namespace Sextant
 		/// <returns></returns>
 		public IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract)
 		{
+			//TODO: pass a NavVM to get the NavView          
+
 			return Observable
 				.Start(
 					() =>
 					{
 						var page = this.LocatePageFor(modalViewModel, contract);
 						this.SetPageTitle(page, modalViewModel.Id);
+				        
+				        //HACK: Is this the best way?
 						var nav = new NavigationView(this.mainScheduler, this.backgroundScheduler, viewLocator, page);
 
 						return nav;
