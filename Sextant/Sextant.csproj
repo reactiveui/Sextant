@@ -3,7 +3,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Sample Release|AnyCPU' ">
-    <IntermediateOutputPath>obj\Release\netstandard1.3</IntermediateOutputPath>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;RELEASE;NETSTANDARD1_3</DefineConstants>
   </PropertyGroup>
@@ -11,16 +10,6 @@
     <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="ReactiveUI" Version="8.2.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="IBaseFactory.cs" />
-    <Compile Remove="INavigationFactory.cs" />
-    <Compile Remove="XamarinFormsSextantNavigationService.cs" />
-    <Compile Remove="SextantNavigationServiceBase.cs" />
-    <Compile Remove="INavigationInterceptors.cs" />
-    <Compile Remove="ISextantNavigationService.cs" />
-    <Compile Remove="Logger\BaseLogger.cs" />
-    <Compile Remove="Navigation\Abstraction\IModalViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Navigation\" />
