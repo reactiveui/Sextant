@@ -110,14 +110,6 @@ namespace Sextant
 		/// <returns></returns>
 		public IObservable<Unit> PushPage(IPageViewModel pageViewModel, string contract, bool resetStack, bool animate)
 		{
-			// Ensure.ArgumentNotNull(pageViewModel, nameof(pageViewModel));
-
-			// If we don't have a root page yet, be sure we create one and assign one immediately because otherwise we'll get an exception.
-			// Otherwise, create it off the main thread to improve responsiveness and perceived performance.
-			var hasRoot = this.Navigation.NavigationStack.Count > 0;
-			var mainScheduler = hasRoot ? this.mainScheduler : CurrentThreadScheduler.Instance;
-			var backgroundScheduler = hasRoot ? this.backgroundScheduler : CurrentThreadScheduler.Instance;
-
 			return Observable
 				.Start(
 					() =>
@@ -126,8 +118,8 @@ namespace Sextant
 						this.SetPageTitle(page, pageViewModel.Id);
 						return page;
 					},
-					backgroundScheduler)
-				.ObserveOn(mainScheduler)
+				    CurrentThreadScheduler.Instance)
+				.ObserveOn(CurrentThreadScheduler.Instance)
 				.SelectMany(
 					page =>
 					{
@@ -144,8 +136,8 @@ namespace Sextant
 							{
 								// XF does not allow us to pop to a new root page. Instead, we need to inject the new root page and then pop to it.
 								this
-										.Navigation
-										.InsertPageBefore(page, this.Navigation.NavigationStack[0]);
+									.Navigation
+									.InsertPageBefore(page, this.Navigation.NavigationStack[0]);
 
 								return this
 									.Navigation
