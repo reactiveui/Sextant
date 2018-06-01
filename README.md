@@ -78,4 +78,4 @@ For example:
             outputScheduler: RxApp.MainThreadScheduler);
 ```
 
-For more examples, look inside the sample folder in the solution.
+For more examples, look inside the sample folder in the solution. 
