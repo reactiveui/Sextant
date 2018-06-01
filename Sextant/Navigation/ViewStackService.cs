@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -11,8 +12,8 @@ namespace Sextant
     /// Service implementation to handle navigation stack updates.
     /// Taken from https://kent-boogaart.com/blog/custom-routing-in-reactiveui
     /// </summary>
-    /// <seealso cref="SextantHelper.Navigation.IViewStackService" />
-    public class ViewStackService : IViewStackService
+    /// <seealso cref="IViewStackService" />
+    public sealed class ViewStackService : IViewStackService
     {
         private BehaviorSubject<IImmutableList<IPageViewModel>> _modalStack;
         private BehaviorSubject<IImmutableList<IPageViewModel>> _pageStack;
@@ -59,7 +60,7 @@ namespace Sextant
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns></returns>
-        public IObservable<Unit> PopPage(bool animate = true) => _view.PopPage(animate);
+        public IObservable<Unit> PopPage(bool animate = true) => _view.PopPage(animate).Do(_ => { PopStackAndTick(_pageStack); });
 
         /// <summary>
         /// Pushes the <see cref="IPageViewModel" /> onto the stack.
@@ -74,7 +75,10 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(modal));
             }
 
-            return _view.PushModal(modal, contract).Do(_ => AddToStackAndTick(_modalStack, modal, false));
+            return _view.PushModal(modal, contract).Do(_ =>
+            {
+                AddToStackAndTick(_modalStack, modal, false);
+            });
         }
 
         /// <summary>
@@ -92,8 +96,25 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(page));
             }
 
-            return _view.PushPage(page, contract, resetStack, animate).Do(_ => AddToStackAndTick(_pageStack, page, resetStack));
+            return _view.PushPage(page, contract, resetStack, animate).Do(_ =>
+            {
+                AddToStackAndTick(_pageStack, page, resetStack);
+            });
         }
+
+        /// <summary>
+        /// Returns the top page from the current navigation stack.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IObservable<IPageViewModel> TopPage() => _pageStack.FirstAsync().Select(x => x.Last());
+
+        /// <summary>
+        /// Returns the top modal from the current modal stack.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IObservable<IPageViewModel> TopModal() => _modalStack.FirstAsync().Select(x => x.Last());
 
         private static void AddToStackAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, T item, bool reset)
         {

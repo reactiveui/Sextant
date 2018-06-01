@@ -55,5 +55,17 @@ namespace Sextant.Abstraction
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns></returns>
         IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
+
+        /// <summary>
+        /// Returns the top page from the current navigation stack.
+        /// </summary>
+        /// <returns></returns>
+        IObservable<IPageViewModel> TopPage();
+
+        /// <summary>
+        /// Returns the top modal from the current modal stack.
+        /// </summary>
+        /// <returns></returns>
+        IObservable<IPageViewModel> TopModal();
     }
 }

@@ -2,15 +2,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant", "Sextant\Sextant.csproj", "{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant", "Sextant\Sextant.csproj", "{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{BEB94547-F374-4211-BBE6-3DA7CAB972BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample", "Sample\SextantSample\SextantSample.csproj", "{44FA03FD-7A52-41AD-9332-1B34FFDEE67B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SextantSample", "Sample\SextantSample\SextantSample.csproj", "{44FA03FD-7A52-41AD-9332-1B34FFDEE67B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.iOS", "Sample\SextantSample.iOS\SextantSample.iOS.csproj", "{A5BBADB1-F348-49CD-8264-59B5BE8E9F17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.Android", "Sample\SextantSample.Android\SextantSample.Android.csproj", "{4A684BB2-2CB4-4B04-8541-FF0FA677DD49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Tests", "Sextant.Tests\Sextant.Tests.csproj", "{DA6A30AC-CCA5-40BA-94A1-93E142E06515}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -150,6 +152,36 @@ Global
 		{4A684BB2-2CB4-4B04-8541-FF0FA677DD49}.Sample Release|iPhoneSimulator.ActiveCfg = Sample Release|Any CPU
 		{4A684BB2-2CB4-4B04-8541-FF0FA677DD49}.Sample Release|iPhoneSimulator.Build.0 = Sample Release|Any CPU
 		{4A684BB2-2CB4-4B04-8541-FF0FA677DD49}.Sample Release|iPhoneSimulator.Deploy.0 = Sample Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|iPhone.Build.0 = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Sample Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Sample Release|Any CPU.Build.0 = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Sample Release|iPhone.ActiveCfg = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Sample Release|iPhone.Build.0 = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Sample Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Sample Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
