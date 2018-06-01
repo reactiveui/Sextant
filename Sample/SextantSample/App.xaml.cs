@@ -11,27 +11,21 @@ using Xamarin.Forms.Xaml;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SextantSample
 {
-	public partial class App : Application
+    public partial class App : Application
     {
         public App()
         {
             InitializeComponent();
 
-			RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
+            RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
 
-            Locator.CurrentMutable.Register(CreateView<HomeView>, typeof(IViewFor<HomeViewModel>));         
-			Locator.CurrentMutable.Register(CreateView<FirstModalView>, typeof(IViewFor<FirstModalViewModel>));                 
-			Locator.CurrentMutable.Register(CreateView<SecondModalView>, typeof(IViewFor<SecondModalViewModel>));
-			Locator.CurrentMutable.Register(CreateView<RedView>, typeof(IViewFor<RedViewModel>));
+            SextantHelper.RegisterView<HomeView,HomeViewModel>();
+            SextantHelper.RegisterView<FirstModalView,FirstModalViewModel>();
+            SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
+            SextantHelper.RegisterView<RedView, RedViewModel>();
+            SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
 
-                     
-			var navigationView = new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, Locator.Current.GetService<IViewLocator>());         
-			var viewStackService = new ViewStackService(navigationView);
-
-			Locator.CurrentMutable.Register<IViewStackService>(() => viewStackService);
-            
-			MainPage = navigationView;         
-			navigationView.PushPage(new HomeViewModel(viewStackService), null, true, false).Subscribe();
+            MainPage = SextantHelper.Initialise<HomeViewModel>();
         }
 
         protected override void OnStart()
@@ -47,12 +41,6 @@ namespace SextantSample
         protected override void OnResume()
         {
             // Handle when your app resumes
-        }
-
-		protected T CreateView<T>()
-                where T : new()
-        {
-            return new T();
         }
     }
 }

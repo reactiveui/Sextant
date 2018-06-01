@@ -11,7 +11,7 @@ namespace Sextant
     /// Service implementation to handle navigation stack updates.
     /// Taken from https://kent-boogaart.com/blog/custom-routing-in-reactiveui
     /// </summary>
-    /// <seealso cref="Sextant.Navigation.IViewStackService" />
+    /// <seealso cref="SextantHelper.Navigation.IViewStackService" />
     public class ViewStackService : IViewStackService
     {
         private BehaviorSubject<IImmutableList<IPageViewModel>> _modalStack;

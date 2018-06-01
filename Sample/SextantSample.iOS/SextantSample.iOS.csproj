@@ -156,6 +156,18 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="SextantSample">
+      <HintPath>..\SextantSample\bin\Debug\netstandard2.0\SextantSample.dll</HintPath>
+    </Reference>
+    <Reference Include="SextantSample">
+      <HintPath>..\SextantSample\bin\Debug\netstandard2.0\SextantSample.dll</HintPath>
+    </Reference>
+    <Reference Include="SextantSample">
+      <HintPath>..\SextantSample\bin\Debug\netstandard2.0\SextantSample.dll</HintPath>
+    </Reference>
+    <Reference Include="SextantSample">
+      <HintPath>..\SextantSample\bin\Debug\netstandard2.0\SextantSample.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436" />

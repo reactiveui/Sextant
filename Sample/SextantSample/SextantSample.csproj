@@ -24,4 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Sextant\Sextant.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Views\FirstModalNavigationView.cs" />
+  </ItemGroup>
 </Project>

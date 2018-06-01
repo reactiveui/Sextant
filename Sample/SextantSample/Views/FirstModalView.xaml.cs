@@ -2,6 +2,7 @@
 using ReactiveUI.XamForms;
 using Sextant;
 using SextantSample.ViewModels;
+using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
