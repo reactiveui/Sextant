@@ -43,7 +43,7 @@ var informationalVersion = gitVersion.InformationalVersion;
 var nugetVersion = gitVersion.NuGetVersion;
 var buildVersion = gitVersion.FullBuildMetaData;
 
-var packageWhitelist = new[] { "Sextant.PCL", "Sextant" };
+var packageWhitelist = new[] { "Sextant" };
 
 
 // Resolve the API keys.
@@ -114,9 +114,6 @@ Task("BuildPackages")
 	.IsDependentOn("Build")
     .Does(() =>
     {
-        // Build the PCL version for legacy projects
-        Package("Sextant.PCL.nuspec", "./Sextant.PCL");
-
         // Build the .Net Standard for the cool kids
         MSBuild("./Sextant/Sextant.csproj",
         new MSBuildSettings()
