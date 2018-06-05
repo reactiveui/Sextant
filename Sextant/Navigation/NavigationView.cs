@@ -12,32 +12,32 @@ namespace Sextant
 {
     public class NavigationView : NavigationPage, IView
     {
-        private readonly IScheduler backgroundScheduler;
-        private readonly IScheduler mainScheduler;
-        private readonly IObservable<IPageViewModel> pagePopped;
-        private readonly IViewLocator viewLocator;
-        public IObservable<IPageViewModel> PagePopped => this.pagePopped;
+        private readonly IScheduler _backgroundScheduler;
+        private readonly IScheduler _mainScheduler;
+        private readonly IObservable<IPageViewModel> _pagePopped;
+        private readonly IViewLocator _viewLocator;
+        public IObservable<IPageViewModel> PagePopped => _pagePopped;
 
         public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator, Page rootPage) : base(rootPage)
         {
-            this.backgroundScheduler = backgroundScheduler;
-            this.mainScheduler = mainScheduler;
-            this.viewLocator = viewLocator;
+            _backgroundScheduler = backgroundScheduler;
+            _mainScheduler = mainScheduler;
+            _viewLocator = viewLocator;
 
-            this.pagePopped = Observable
-                .FromEventPattern<NavigationEventArgs>(x => this.Popped += x, x => this.Popped -= x)
+            _pagePopped = Observable
+                .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
                 .Select(ep => ep.EventArgs.Page.BindingContext as IPageViewModel)
                 .WhereNotNull();
         }
 
         public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator)
         {
-            this.backgroundScheduler = backgroundScheduler;
-            this.mainScheduler = mainScheduler;
-            this.viewLocator = viewLocator;
+            _backgroundScheduler = backgroundScheduler;
+            _mainScheduler = mainScheduler;
+            _viewLocator = viewLocator;
 
-            this.pagePopped = Observable
-                .FromEventPattern<NavigationEventArgs>(x => this.Popped += x, x => this.Popped -= x)
+            _pagePopped = Observable
+                .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
                 .Select(ep => ep.EventArgs.Page.BindingContext as IPageViewModel)
                 .WhereNotNull();
         }
@@ -47,13 +47,12 @@ namespace Sextant
         /// </summary>
         /// <returns></returns>
         public IObservable<Unit> PopModal() =>
-            this
-                .Navigation
+            Navigation
                 .PopModalAsync()
                 .ToObservable()
                 .ToSignal()
                 // XF completes the pop operation on a background thread :/
-                .ObserveOn(this.mainScheduler);
+                .ObserveOn(_mainScheduler);
 
         /// <summary>
         /// Pops the page.
@@ -61,13 +60,12 @@ namespace Sextant
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns></returns>
         public IObservable<Unit> PopPage(bool animate) =>
-            this
-                .Navigation
+            Navigation
                 .PopAsync(animate)
                 .ToObservable()
                 .ToSignal()
                 // XF completes the pop operation on a background thread :/
-                .ObserveOn(this.mainScheduler);
+                .ObserveOn(_mainScheduler);
 
         /// <summary>
         /// Pushes the modal.
@@ -81,10 +79,10 @@ namespace Sextant
                 .Start(
                     () =>
                     {
-                        var page = this.LocatePageFor(modalViewModel, contract);
-                        this.SetPageTitle(page, modalViewModel.Id);
+                        var page = LocatePageFor(modalViewModel, contract);
+                        SetPageTitle(page, modalViewModel.Id);
 
-                        var navigation = this.LocateNavigationFor(modalViewModel);
+                        var navigation = LocateNavigationFor(modalViewModel);
                         navigation.PushPage(modalViewModel, contract, true, false).Subscribe();
 
                         return navigation as NavigationPage;
@@ -93,21 +91,20 @@ namespace Sextant
                 .ObserveOn(CurrentThreadScheduler.Instance)
                 .SelectMany(
                     page =>
-                        this
-                            .Navigation
+                        Navigation
                             .PushModalAsync(page)
                             .ToObservable());
         }
 
         private IView LocateNavigationFor(IPageViewModel viewModel)
         {
-            var view = viewLocator.ResolveView(viewModel, "NavigationView");
+            var view = _viewLocator.ResolveView(viewModel, "NavigationView");
             var navigationPage = view as IView;
 
             if (navigationPage is null)
             {
                 Debug.WriteLine($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
-                navigationPage = new NavigationView(this.mainScheduler, this.backgroundScheduler, this.viewLocator);
+                navigationPage = new NavigationView(_mainScheduler, _backgroundScheduler, _viewLocator);
             }
 
             return navigationPage;
@@ -127,8 +124,8 @@ namespace Sextant
                 .Start(
                     () =>
                     {
-                        var page = this.LocatePageFor(pageViewModel, contract);
-                        this.SetPageTitle(page, pageViewModel.Id);
+                        var page = LocatePageFor(pageViewModel, contract);
+                        SetPageTitle(page, pageViewModel.Id);
                         return page;
                     },
                     CurrentThreadScheduler.Instance)
@@ -138,30 +135,26 @@ namespace Sextant
                     {
                         if (resetStack)
                         {
-                            if (this.Navigation.NavigationStack.Count == 0)
+                            if (Navigation.NavigationStack.Count == 0)
                             {
-                                return this
-                                    .Navigation
+                                return Navigation
                                     .PushAsync(page, false)
                                     .ToObservable();
                             }
                             else
                             {
                                 // XF does not allow us to pop to a new root page. Instead, we need to inject the new root page and then pop to it.
-                                this
-                                    .Navigation
-                                    .InsertPageBefore(page, this.Navigation.NavigationStack[0]);
+                                Navigation
+                                    .InsertPageBefore(page, Navigation.NavigationStack[0]);
 
-                                return this
-                                    .Navigation
+                                return Navigation
                                     .PopToRootAsync(false)
                                     .ToObservable();
                             }
                         }
                         else
                         {
-                            return this
-                                .Navigation
+                            return Navigation
                                 .PushAsync(page, animate)
                                 .ToObservable();
                         }
@@ -170,7 +163,7 @@ namespace Sextant
 
         private Page LocatePageFor(object viewModel, string contract)
         {
-            var view = viewLocator.ResolveView(viewModel, contract);
+            var view = _viewLocator.ResolveView(viewModel, contract);
             var viewFor = view as IViewFor;
             var page = view as Page;
 
