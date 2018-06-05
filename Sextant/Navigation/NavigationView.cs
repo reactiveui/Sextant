@@ -96,20 +96,6 @@ namespace Sextant
                             .ToObservable());
         }
 
-        private IView LocateNavigationFor(IPageViewModel viewModel)
-        {
-            var view = _viewLocator.ResolveView(viewModel, "NavigationView");
-            var navigationPage = view as IView;
-
-            if (navigationPage is null)
-            {
-                Debug.WriteLine($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
-                navigationPage = new NavigationView(_mainScheduler, _backgroundScheduler, _viewLocator);
-            }
-
-            return navigationPage;
-        }
-
         /// <summary>
         /// Pushes the page.
         /// </summary>
@@ -159,6 +145,20 @@ namespace Sextant
                                 .ToObservable();
                         }
                     });
+        }
+
+        private IView LocateNavigationFor(IPageViewModel viewModel)
+        {
+            var view = _viewLocator.ResolveView(viewModel, "NavigationView");
+            var navigationPage = view as IView;
+
+            if (navigationPage is null)
+            {
+                Debug.WriteLine($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
+                navigationPage = new NavigationView(_mainScheduler, _backgroundScheduler, _viewLocator);
+            }
+
+            return navigationPage;
         }
 
         private Page LocatePageFor(object viewModel, string contract)
