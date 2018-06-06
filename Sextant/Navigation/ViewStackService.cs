@@ -15,9 +15,9 @@ namespace Sextant
     /// <seealso cref="IViewStackService" />
     public sealed class ViewStackService : IViewStackService
     {
-        private BehaviorSubject<IImmutableList<IPageViewModel>> _modalStack;
-        private BehaviorSubject<IImmutableList<IPageViewModel>> _pageStack;
-        private IView _view;
+        private readonly BehaviorSubject<IImmutableList<IPageViewModel>> _modalStack;
+        private readonly BehaviorSubject<IImmutableList<IPageViewModel>> _pageStack;
+        private readonly IView _view;
 
         /// <summary>
         /// Gets the modal navigation stack.
@@ -45,7 +45,14 @@ namespace Sextant
             _pageStack = new BehaviorSubject<IImmutableList<IPageViewModel>>(ImmutableList<IPageViewModel>.Empty);
 
             // TODO: Make this SubscribeSafe();
-            this._view.PagePopped.Do(poppedPage => { var currentPageStack = _pageStack.Value; if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1]) { var removedPage = PopStackAndTick(_pageStack); } }).Subscribe();
+            this._view.PagePopped.Do(poppedPage =>
+            {
+                var currentPageStack = _pageStack.Value;
+                if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
+                {
+                    var removedPage = PopStackAndTick(_pageStack);
+                }
+            }).Subscribe();
         }
 
         /// <summary>
@@ -75,10 +82,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(modal));
             }
 
-            return _view.PushModal(modal, contract).Do(_ =>
-            {
-                AddToStackAndTick(_modalStack, modal, false);
-            });
+            return _view.PushModal(modal, contract).Do(_ => AddToStackAndTick(_modalStack, modal, false));
         }
 
         /// <summary>
@@ -96,18 +100,8 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(page));
             }
 
-            return _view.PushPage(page, contract, resetStack, animate).Do(_ =>
-            {
-                AddToStackAndTick(_pageStack, page, resetStack);
-            });
+            return _view.PushPage(page, contract, resetStack, animate).Do(_ => AddToStackAndTick(_pageStack, page, resetStack));
         }
-
-        /// <summary>
-        /// Returns the top page from the current navigation stack.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public IObservable<IPageViewModel> TopPage() => _pageStack.FirstAsync().Select(x => x.Last());
 
         /// <summary>
         /// Returns the top modal from the current modal stack.
@@ -115,6 +109,13 @@ namespace Sextant
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         public IObservable<IPageViewModel> TopModal() => _modalStack.FirstAsync().Select(x => x.Last());
+
+        /// <summary>
+        /// Returns the top page from the current navigation stack.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IObservable<IPageViewModel> TopPage() => _pageStack.FirstAsync().Select(x => x.Last());
 
         private static void AddToStackAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, T item, bool reset)
         {
