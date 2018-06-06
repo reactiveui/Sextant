@@ -1,19 +1,50 @@
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using Sextant.Abstraction;
 
 namespace Sextant.Tests.Navigation
 {
     internal static class ViewStackServiceFixtureExtensions
     {
-        public static ViewStackServiceFixture WithModalStack(this ViewStackServiceFixture viewStackServiceFixture)
+        public static IObservable<Unit> PopModal(this ViewStackServiceFixture viewStackServiceFixture, int pages = 1)
         {
-            viewStackServiceFixture.ViewStackService.PushModal(viewStackServiceFixture.ModalViewModel, viewStackServiceFixture.ModalViewModel.Id).Subscribe();
-            return viewStackServiceFixture;
+            for (var i = 0; i < pages; i++)
+            {
+                viewStackServiceFixture.ViewStackService.PopModal().Subscribe();
+            }
+
+            return Observable.Return(Unit.Default);
         }
 
-        public static ViewStackServiceFixture WithPageStack(this ViewStackServiceFixture viewStackServiceFixture)
+        public static IObservable<Unit> PopPage(this ViewStackServiceFixture viewStackServiceFixture, int pages = 1)
         {
-            viewStackServiceFixture.ViewStackService.PushPage(viewStackServiceFixture.PageViewModel, viewStackServiceFixture.PageViewModel.Id).Subscribe();
-            return viewStackServiceFixture;
+            for (var i = 0; i < pages; i++)
+            {
+                viewStackServiceFixture.ViewStackService.PopPage().Subscribe();
+            }
+
+            return Observable.Return(Unit.Default);
+        }
+
+        public static IObservable<Unit> PushModal(this ViewStackServiceFixture viewStackServiceFixture, IPageViewModel viewModel, string contract = null, int pages = 1)
+        {
+            for (var i = 0; i < pages; i++)
+            {
+                viewStackServiceFixture.ViewStackService.PushModal(viewModel).Subscribe();
+            }
+
+            return Observable.Return(Unit.Default);
+        }
+
+        public static IObservable<Unit> PushPage(this ViewStackServiceFixture viewStackServiceFixture, IPageViewModel viewModel, string contract = null, int pages = 1)
+        {
+            for (var i = 0; i < pages; i++)
+            {
+                viewStackServiceFixture.ViewStackService.PushPage(viewModel).Subscribe();
+            }
+
+            return Observable.Return(Unit.Default);
         }
     }
 }
