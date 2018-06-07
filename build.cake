@@ -62,6 +62,7 @@ Action<string, string> Package = (nuspec, basePath) =>
 
     NuGetPack($"{basePath}/{nuspec}", new NuGetPackSettings
     {
+        IconUrl = new Uri("https://github.com/giusepe/Sextant/blob/master/logo/logo.png"),
         Authors = new [] {"Giusepe Casagrande"},
         Owners = new [] {"giusepe"},
         ProjectUrl = new Uri("https://github.com/giusepe/Sextant"),
