@@ -1,4 +1,5 @@
-# Sextant
+<p align="left"><img src="logo/vertical.png" alt="Sextant" height="180px"></p>
+
 
 ## A ReactiveUI navigation library for Xamarin.Forms
 

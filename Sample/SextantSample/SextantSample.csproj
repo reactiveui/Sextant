@@ -13,6 +13,7 @@
     <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="ReactiveUI.XamForms" Version="8.2.1" />
+    <PackageReference Include="Genesis.Logging" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />

@@ -6,10 +6,14 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;RELEASE;NETSTANDARD1_3</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;LOGGING</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="2.5.1.527436" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="ReactiveUI" Version="8.2.1" />
+    <PackageReference Include="Genesis.Logging" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Navigation\" />

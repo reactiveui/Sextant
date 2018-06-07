@@ -11,6 +11,8 @@ namespace SextantSample.Views
         {
             InitializeComponent();
 			this.BindCommand(ViewModel, x => x.PopModal, x => x.PopModal);
+            this.BindCommand(ViewModel, x => x.PushPage, x => x.PushPage);
+            this.BindCommand(ViewModel, x => x.PopPage, x => x.PopPage);
         }
     }
 }
