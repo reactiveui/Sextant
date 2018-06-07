@@ -52,6 +52,7 @@ Param(
     [switch]$Experimental,
     [switch]$Mono,
     [switch]$SkipToolPackageRestore,
+    [switch]$SkipSettingVerification,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
     [string[]]$ScriptArgs
 )
