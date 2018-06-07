@@ -7,6 +7,9 @@
              x:Class="SextantSample.Views.HomeView"
              Title="Home">
     <ContentPage.Content>
-        <Button x:Name="FirstModalButton" Text="First Modal" />
+        <StackLayout>
+            <Button x:Name="FirstModalButton" Text="First Modal" />
+            <Button x:Name="PushPage" Text="Push Red Page" />
+        </StackLayout>
     </ContentPage.Content>
 </rxui:ReactiveContentPage>
