@@ -1,4 +1,5 @@
 using System;
+using Genesis.Logging;
 using ReactiveUI;
 using Sextant;
 using Sextant.Abstraction;
@@ -19,8 +20,8 @@ namespace SextantSample
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
 
-            SextantHelper.RegisterView<HomeView,HomeViewModel>();
-            SextantHelper.RegisterView<FirstModalView,FirstModalViewModel>();
+            SextantHelper.RegisterView<HomeView, HomeViewModel>();
+            SextantHelper.RegisterView<FirstModalView, FirstModalViewModel>();
             SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
             SextantHelper.RegisterView<RedView, RedViewModel>();
             SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();

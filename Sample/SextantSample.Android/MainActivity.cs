@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Genesis.Logging;
 
 namespace SextantSample.Droid
 {
@@ -14,6 +15,8 @@ namespace SextantSample.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            LoggerService.Current = new DefaultLoggerService();
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
