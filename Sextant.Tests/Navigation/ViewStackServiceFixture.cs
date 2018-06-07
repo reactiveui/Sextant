@@ -1,12 +1,7 @@
-using NSubstitute;
-using ReactiveUI;
-using Sextant;
-using System;
 using System.Reactive;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using NSubstitute;
 using Sextant.Abstraction;
-using Xamarin.Forms;
 
 namespace Sextant.Tests.Navigation
 {

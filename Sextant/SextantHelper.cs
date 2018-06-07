@@ -30,7 +30,7 @@ namespace Sextant
                 "NavigationView");
         }
 
-        public static NavigationPage Initialise<TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
+        public static NavigationView Initialise<TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
             where TViewModel : class, IPageViewModel
         {
             var bgScheduler = mainThreadScheduler ?? RxApp.TaskpoolScheduler;
