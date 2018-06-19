@@ -70,8 +70,73 @@ namespace Sextant.Tests.Navigation
             }
         }
 
+        public class ThePopPageMethod
+        {
+            [Fact]
+            public async Task Should_Pop_Page()
+            {
+                // Given
+                var fixture = new ViewStackServiceFixture();
+                fixture.PushModal(new PageViewModelMock()).Subscribe();
+
+                // When
+                fixture.ViewStackService.PopPage().Subscribe();
+                var result = await fixture.ViewStackService.PageStack.FirstAsync();
+
+                // Then
+                result.Should().BeEmpty();
+            }
+
+            [Fact]
+            public void Should_Receive_Pop_Page()
+            {
+                // Given
+                var fixture = new ViewStackServiceFixture();
+                fixture.PushModal(new PageViewModelMock()).Subscribe();
+
+                // When
+                fixture.ViewStackService.PopPage().Subscribe();
+
+                // Then
+                fixture.View.Received().PopPage();
+            }
+
+            [Fact]
+            public async Task Should_Return_Unit()
+            {
+                // Given
+                var fixture = new ViewStackServiceFixture();
+                fixture.PushPage(new PageViewModelMock()).Subscribe();
+
+                // When
+                var result = await fixture.ViewStackService.PopPage();
+
+                // Then
+                result.Should().BeOfType<Unit>();
+            }
+        }
+
         public class ThePushModalMethod
         {
+            [Theory]
+            [InlineData(1)]
+            [InlineData(3)]
+            [InlineData(5)]
+            public async Task Should_Push_And_Pop(int amount)
+            {
+                // Given
+                var fixture = new ViewStackServiceFixture();
+                fixture.PushModal(new PageViewModelMock(), "modal", amount).Subscribe();
+                fixture.ViewStackService.ModalStack.FirstAsync().Wait().Count.Should().Be(amount);
+                fixture.PopModal(amount).Subscribe();
+
+                // When
+                var result = await fixture.ViewStackService.ModalStack.FirstAsync();
+
+                // Then
+                result.Should().BeEmpty();
+            }
+
             [Fact]
             public async Task Should_Push_Modal()
             {
@@ -126,85 +191,6 @@ namespace Sextant.Tests.Navigation
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>();
-            }
-
-            [Theory]
-            [InlineData(1)]
-            [InlineData(3)]
-            [InlineData(5)]
-            public async Task Should_Push_And_Pop(int amount)
-            {
-                // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock(), "modal", amount).Subscribe();
-                fixture.ViewStackService.ModalStack.FirstAsync().Wait().Count.Should().Be(amount);
-                fixture.PopModal(amount).Subscribe();
-
-                // When
-                var result = await fixture.ViewStackService.ModalStack.FirstAsync();
-
-                // Then
-                result.Should().BeEmpty();
-            }
-        }
-
-        public class ThePopPageMethod
-        {
-            [Fact]
-            public async Task Should_Pop_Page()
-            {
-                // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
-
-                // When
-                fixture.ViewStackService.PopPage().Subscribe();
-                var result = await fixture.ViewStackService.PageStack.FirstAsync();
-
-                // Then
-                result.Should().BeEmpty();
-            }
-
-            [Fact]
-            public void Should_Receive_Pop_Page()
-            {
-                // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
-
-                // When
-                fixture.ViewStackService.PopPage().Subscribe();
-
-                // Then
-                fixture.View.Received().PopPage();
-            }
-
-            [Fact]
-            public async Task Should_Return_Unit()
-            {
-                // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushPage(new PageViewModelMock()).Subscribe();
-
-                // When
-                var result = await fixture.ViewStackService.PopPage();
-
-                // Then
-                result.Should().BeOfType<Unit>();
-            }
-
-            [Fact]
-            public async Task Should_Throw_If_Stack_Empty()
-            {
-                // Given
-                var fixture = new ViewStackServiceFixture();
-
-                // When
-                var result = await Record.ExceptionAsync(async () => await fixture.ViewStackService.PopPage());
-
-                // Then
-                result.Should().BeOfType<InvalidOperationException>();
-                result.Message.Should().Be("Stack is empty.");
             }
         }
 
@@ -266,24 +252,24 @@ namespace Sextant.Tests.Navigation
                 result.Should().BeOfType<ArgumentNullException>();
             }
 
-            [Theory]
-            [InlineData(1)]
-            [InlineData(3)]
-            [InlineData(5)]
-            public async Task Should_Push_And_Pop(int amount)
-            {
-                // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushPage(new PageViewModelMock(),"page", amount).Subscribe();
-                fixture.ViewStackService.PageStack.FirstAsync().Wait().Count.Should().Be(amount);
-                fixture.PopPage(amount).Subscribe();
+            //[Theory]
+            //[InlineData(1)]
+            //[InlineData(3)]
+            //[InlineData(5)]
+            //public async Task Should_Push_And_Pop(int amount)
+            //{
+            //    // Given
+            //    var fixture = new ViewStackServiceFixture();
+            //    fixture.PushPage(new PageViewModelMock(),"page", amount).Subscribe();
+            //    fixture.ViewStackService.PageStack.FirstAsync().Wait().Count.Should().Be(amount);
+            //    fixture.PopPage(amount).Subscribe();
 
-                // When
-                var result = await fixture.ViewStackService.PageStack.FirstAsync();
+            //    // When
+            //    var result = await fixture.ViewStackService.PageStack.FirstAsync();
 
-                // Then
-                fixture.ViewStackService.PageStack.FirstAsync().Wait().Should().BeEmpty();
-            }
+            //    // Then
+            //    fixture.ViewStackService.PageStack.FirstAsync().Wait().Should().BeEmpty();
+            //}
         }
 
         public class TheTopModalMethod

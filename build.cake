@@ -14,6 +14,11 @@ var configuration = Argument("configuration", "Release");
 #tool "GitLink"
 
 //////////////////////////////////////////////////////////////////////
+// ADDINS
+//////////////////////////////////////////////////////////////////////
+#addin nuget:?package=Cake.Incubator&version=2.0.1
+
+//////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
 
@@ -76,7 +81,7 @@ Action<string, string> Package = (nuspec, basePath) =>
         OutputDirectory = artifactsDir,
         BasePath = basePath,
         IncludeReferencedProjects = true,
-        Properties = new Dictionary<string, string> {{ "Configuration", "Release" }}
+        Properties = new Dictionary<string, string> {{ "Configuration", configuration }}
     });
 };
 
@@ -103,16 +108,27 @@ Task("Build")
     .Does(() =>
     {
         MSBuild("Sextant.sln", settings =>
-            settings.SetConfiguration("Release"));
+            settings.SetConfiguration(configuration)
+                    .UseToolVersion(MSBuildToolVersion.VS2017));
 
     });
+
+////////////////////////////////////////////////////////////////////// 
+// Test 
+////////////////////////////////////////////////////////////////////// 
+Task("Run-Unit-Tests") 
+    .IsDependentOn("Build") 
+    .Does(() => 
+    {
+        DotNetCoreTest("./Sextant.Tests/Sextant.Tests.csproj", new DotNetCoreTestSettings { Configuration = configuration, NoBuild = true }); 
+    }); 
 
 //////////////////////////////////////////////////////////////////////
 // Build Packages
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildPackages")
-	.IsDependentOn("Build")
+	.IsDependentOn("Run-Unit-Tests")
     .Does(() =>
     {
         // Build the .Net Standard for the cool kids
