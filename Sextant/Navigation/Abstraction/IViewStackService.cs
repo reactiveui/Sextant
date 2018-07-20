@@ -39,6 +39,13 @@ namespace Sextant.Abstraction
         IObservable<Unit> PopPage(bool animate = true);
 
         /// <summary>
+        /// Pops to root page.
+        /// </summary>
+        /// <returns>The to root page.</returns>
+        /// <param name="animate">If set to <c>true</c> animate.</param>
+        IObservable<Unit> PopToRootPage(bool animate = true);
+
+        /// <summary>
         /// Pushes the <see cref="IPageViewModel"/> onto the stack.
         /// </summary>
         /// <param name="modal">The modal.</param>
