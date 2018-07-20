@@ -68,6 +68,18 @@ namespace Sextant
                 .ObserveOn(_mainScheduler);
 
         /// <summary>
+        /// Pops to root page.
+        /// </summary>
+        /// <returns>The to root page.</returns>
+        /// <param name="animate">If set to <c>true</c> animate.</param>
+        public IObservable<Unit> PopToRootPage(bool animate) =>
+             Navigation
+                .PopToRootAsync(animate)
+                .ToObservable()
+                .ToSignal()
+                .ObserveOn(_mainScheduler);
+
+        /// <summary>
         /// Pushes the modal.
         /// </summary>
         /// <param name="modalViewModel">The modal view model.</param>
