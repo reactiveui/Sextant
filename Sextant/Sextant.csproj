@@ -1,6 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>Sextant</Title>
+    <Authors>Giusepe Casagrande</Authors>
+    <Company>giusepe</Company>
+    <Copyright>Copyright (c) 2018 giusepe</Copyright>
+    <PackageLicenseUrl>https://github.com/giusepe/Sextant/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/giusepe/Sextant</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/giusepe/Sextant</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/giusepe/Sextant/master/logo/logo.png</PackageIconUrl>
+    <PackageTags>mvvm reactiveui Rx Reactive Extensions Observable xamarin android ios forms monodroid monotouch xamarin.android xamarin.ios xamarin.forms</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Sample Release|AnyCPU' ">
     <Optimize>true</Optimize>
