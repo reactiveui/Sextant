@@ -1,6 +1,0 @@
-# Image
-image: Visual Studio 2017
-
-# Build script
-build_script:
-  - ps: .\build.ps1 -Target=Default -Verbosity Diagnostic

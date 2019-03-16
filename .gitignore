@@ -244,5 +244,8 @@ src/ReactiveUI.Events*/Events_*.cs
 # macOS
 .DS_Store
 
+# Code Rush
+.cr
+
 src/*.Tests/API/*.received.txt
 .idea/
