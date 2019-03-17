@@ -48,7 +48,7 @@ SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
 
 Set the initial page:
 ```csharp
-MainPage = SextantHelper.Initialise<HomeViewModel>();
+MainPage = SextantHelper.Initialize<HomeViewModel>();
 ```
 
 After that all you have to do is call one of the methods inside your ViewModels:
