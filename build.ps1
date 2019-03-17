@@ -5,14 +5,11 @@
 ##########################################################################
 
 <#
-
 .SYNOPSIS
 This is a Powershell script to bootstrap a Cake build.
-
 .DESCRIPTION
 This Powershell script will download NuGet if missing, restore NuGet tools (including Cake)
 and execute your Cake build script with the parameters you provide.
-
 .PARAMETER Script
 The build script to execute.
 .PARAMETER Target
@@ -33,10 +30,8 @@ Uses the Mono Compiler rather than the Roslyn script engine.
 Skips restoring of packages.
 .PARAMETER ScriptArgs
 Remaining arguments are added here.
-
 .LINK
 https://cakebuild.net
-
 #>
 
 [CmdletBinding()]
@@ -52,7 +47,6 @@ Param(
     [switch]$Experimental,
     [switch]$Mono,
     [switch]$SkipToolPackageRestore,
-    [switch]$SkipSettingVerification,
     [Parameter(Position=0,Mandatory=$false,ValueFromRemainingArguments=$true)]
     [string[]]$ScriptArgs
 )
@@ -159,8 +153,7 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
     if((!(Test-Path $PACKAGES_CONFIG_MD5)) -Or
       ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
         Write-Verbose -Message "Missing or changed package.config hash..."
-        Get-ChildItem -Exclude packages.config,nuget.exe,Cake.Bakery |
-        Remove-Item -Recurse
+        Remove-Item * -Recurse -Exclude packages.config,nuget.exe
     }
 
     Write-Verbose -Message "Restoring tools from NuGet..."
@@ -232,5 +225,6 @@ $cakeArguments += $ScriptArgs
 
 # Start Cake
 Write-Host "Running build script..."
+&$CAKE_EXE --bootstrap
 &$CAKE_EXE $cakeArguments
 exit $LASTEXITCODE

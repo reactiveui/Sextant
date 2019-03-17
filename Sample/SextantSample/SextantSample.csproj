@@ -2,15 +2,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Sample Release|AnyCPU' ">
-    <IntermediateOutputPath>obj\Release\netstandard2.0</IntermediateOutputPath>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.0.0.561731" />
+    <PackageReference Include="Xamarin.Forms" Version="3.5.*" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-    <PackageReference Include="ReactiveUI.XamForms" Version="8.5.1" />
+    <PackageReference Include="ReactiveUI.XamForms" Version="9.*" />
     <PackageReference Include="Genesis.Logging" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
@@ -21,9 +16,9 @@
     <EmbeddedResource Remove="MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sextant\Sextant.csproj" />
+    <Compile Remove="Views\FirstModalNavigationView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Views\FirstModalNavigationView.cs" />
+    <ProjectReference Include="..\..\src\Sextant\Sextant.csproj" />
   </ItemGroup>
 </Project>

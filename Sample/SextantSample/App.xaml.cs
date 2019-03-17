@@ -26,7 +26,7 @@ namespace SextantSample
             SextantHelper.RegisterView<RedView, RedViewModel>();
             SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
 
-            MainPage = SextantHelper.Initialise<HomeViewModel>();
+            MainPage = SextantHelper.Initialize<HomeViewModel>();
         }
 
         protected override void OnStart()
