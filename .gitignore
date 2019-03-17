@@ -9,7 +9,6 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-.vscode/
 
 # Build results
 [Dd]ebug/
@@ -239,10 +238,15 @@ tools/
 
 # ReactiveUI
 artifacts/
-src/ReactiveUI.Events*/Events_*.cs
 
 # macOS
 .DS_Store
 
 src/*.Tests/API/*.received.txt
 .idea/
+
+# Fody Weavers (for tests)
+src/Tools/
+
+# Local packages (for testing only)
+LocalPackages/

@@ -169,19 +169,24 @@
     <Reference Include="SextantSample">
       <HintPath>..\SextantSample\bin\Debug\netstandard2.0\SextantSample.dll</HintPath>
     </Reference>
-    <Reference Include="SextantSample">
-      <HintPath>..\SextantSample\bin\Debug\netstandard2.0\SextantSample.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="3.0.0.561731" />
-    <PackageReference Include="ReactiveUI.XamForms" Version="8.5.1" />
+    <PackageReference Include="ReactiveUI.XamForms" Version="9.*" />
     <PackageReference Include="Genesis.Ensure" Version="2.0.0" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Sextant\Sextant.csproj">
+      <Project>{d6b84899-4afc-4e6c-9c3f-005f21df5a52}</Project>
+      <Name>Sextant</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SextantSample\SextantSample.csproj">
       <Project>{44FA03FD-7A52-41AD-9332-1B34FFDEE67B}</Project>
+      <Name>SextantSample</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SextantSample\SextantSample.csproj">
+      <Project>{44fa03fd-7a52-41ad-9332-1b34ffdee67b}</Project>
       <Name>SextantSample</Name>
     </ProjectReference>
   </ItemGroup>
