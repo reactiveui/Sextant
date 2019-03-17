@@ -1,5 +1,22 @@
-<p align="left"><img src="logo/vertical.png" alt="Sextant" height="180px"></p>
+## Sextant
 
+
+[![NuGet Stats](https://img.shields.io/nuget/v/sextant.svg)](https://www.nuget.org/packages/sextant) [![Build Status](https://dev.azure.com/dotnet/ReactiveUI/_apis/build/status/Sextant-CI)](https://dev.azure.com/dotnet/ReactiveUI/_build/latest?definitionId=76) [![Code Coverage](https://codecov.io/gh/reactiveui/sextant/branch/master/graph/badge.svg)](https://codecov.io/gh/reactiveui/sextant)
+<br>
+<a href="https://www.nuget.org/packages/sextant">
+        <img src="https://img.shields.io/nuget/dt/sextant.svg">
+</a>
+<a href="#backers">
+        <img src="https://opencollective.com/reactiveui/backers/badge.svg">
+</a>
+<a href="#sponsors">
+        <img src="https://opencollective.com/reactiveui/sponsors/badge.svg">
+</a>
+<a href="https://reactiveui.net/slack">
+        <img src="https://img.shields.io/badge/chat-slack-blue.svg">
+</a>
+
+<p align="left"><img src="logo/vertical.png" alt="Sextant" height="180px"></p>
 
 ## A ReactiveUI navigation library for Xamarin.Forms
 
