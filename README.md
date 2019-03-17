@@ -1,6 +1,5 @@
 ## Sextant
 
-
 [![NuGet Stats](https://img.shields.io/nuget/v/sextant.svg)](https://www.nuget.org/packages/sextant) [![Build Status](https://dev.azure.com/dotnet/ReactiveUI/_apis/build/status/Sextant-CI)](https://dev.azure.com/dotnet/ReactiveUI/_build/latest?definitionId=76) [![Code Coverage](https://codecov.io/gh/reactiveui/sextant/branch/master/graph/badge.svg)](https://codecov.io/gh/reactiveui/sextant)
 <br>
 <a href="https://www.nuget.org/packages/sextant">
@@ -20,8 +19,7 @@
 
 ## A ReactiveUI navigation library for Xamarin.Forms
 
-Sextant was born from a fork of [Xamvvm](https://github.com/xamvvm/xamvvm) which is nice and simple MVVM Framework with a good navigation system.
-The problem is, I just wanted a simple navigation system to use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI) without all the things that come along an MVVM framework. Plus, I wanted to make it more "Reactive Friendly".
+Sextant was born from a fork of [Xamvvm](https://github.com/xamvvm/xamvvm) which is nice and simple MVVM Framework with a good navigation system. The problem is, I just wanted a simple navigation system to use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI) without all the things that come along an MVVM framework. Plus, I wanted to make it more "Reactive Friendly".
 
 Then a wild [Rodney Littles](https://github.com/rlittlesii) appears, and with him an implementation of this [AMAZING POST](https://kent-boogaart.com/blog/custom-routing-in-reactiveui) by [Kent](https://github.com/kentcb)
 
@@ -37,63 +35,63 @@ Install the nuget package on your Forms project and ViewModels project.
 
 Register the views:
 ```csharp
-            SextantHelper.RegisterView<HomeView,HomeViewModel>();
-            SextantHelper.RegisterView<FirstModalView,FirstModalViewModel>();
-            SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
-            SextantHelper.RegisterView<RedView, RedViewModel>();
+SextantHelper.RegisterView<HomeView,HomeViewModel>();
+SextantHelper.RegisterView<FirstModalView,FirstModalViewModel>();
+SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
+SextantHelper.RegisterView<RedView, RedViewModel>();
 ```
 
 (optional)If you need some especial configuration on the Navigation, like diferent colors, register a NavigationView for the VM:
 ```csharp
-            SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
+SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
 ```
 
 Set the initial page:
 ```csharp
-            MainPage = SextantHelper.Initialise<HomeViewModel>();
+MainPage = SextantHelper.Initialize<HomeViewModel>();
 ```
 
 After that all you have to do is call one of the methods inside your ViewModels:
 ```csharp
-        /// <summary>
-        /// Pops the <see cref="IPageViewModel"/> off the stack.
-        /// </summary>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns></returns>
-        IObservable<Unit> PopModal(bool animate = true);
+/// <summary>
+/// Pops the <see cref="IPageViewModel"/> off the stack.
+/// </summary>
+/// <param name="animate">if set to <c>true</c> [animate].</param>
+/// <returns></returns>
+IObservable<Unit> PopModal(bool animate = true);
 
-        /// <summary>
-        /// Pops the <see cref="IPageViewModel"/> off the stack.
-        /// </summary>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns></returns>
-        IObservable<Unit> PopPage(bool animate = true);
+/// <summary>
+/// Pops the <see cref="IPageViewModel"/> off the stack.
+/// </summary>
+/// <param name="animate">if set to <c>true</c> [animate].</param>
+/// <returns></returns>
+IObservable<Unit> PopPage(bool animate = true);
 
-        /// <summary>
-        /// Pushes the <see cref="IPageViewModel"/> onto the stack.
-        /// </summary>
-        /// <param name="modal">The modal.</param>
-        /// <param name="contract">The contract.</param>
-        /// <returns></returns>
-        IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
+/// <summary>
+/// Pushes the <see cref="IPageViewModel"/> onto the stack.
+/// </summary>
+/// <param name="modal">The modal.</param>
+/// <param name="contract">The contract.</param>
+/// <returns></returns>
+IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
 
-        /// <summary>
-        /// Pushes the <see cref="IPageViewModel"/> onto the stack.
-        /// </summary>
-        /// <param name="page">The page.</param>
-        /// <param name="contract">The contract.</param>
-        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns></returns>
-        IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
+/// <summary>
+/// Pushes the <see cref="IPageViewModel"/> onto the stack.
+/// </summary>
+/// <param name="page">The page.</param>
+/// <param name="contract">The contract.</param>
+/// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+/// <param name="animate">if set to <c>true</c> [animate].</param>
+/// <returns></returns>
+IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
 ```
 
 For example:
 ```csharp
-    OpenModal = ReactiveCommand
-        .CreateFromObservable(() =>
-            this.ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)),
-            outputScheduler: RxApp.MainThreadScheduler);
+OpenModal = ReactiveCommand
+    .CreateFromObservable(() =>
+        this.ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)),
+        outputScheduler: RxApp.MainThreadScheduler);
 ```
 
 For more examples, look inside the sample folder in the solution. 
