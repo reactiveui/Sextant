@@ -1,5 +1,5 @@
 ﻿using ReactiveUI;
-using Sextant.Abstraction;
+using Sextant;
 
 namespace SextantSample.ViewModels
 {

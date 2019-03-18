@@ -4,7 +4,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Sextant;
-using Sextant.Abstraction;
 
 namespace SextantSample.ViewModels
 {

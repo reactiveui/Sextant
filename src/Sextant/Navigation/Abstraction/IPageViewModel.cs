@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Sextant.Abstraction
+namespace Sextant
 {
     /// <summary>
     /// Interface that defines a view model for a page for the navigation stack.

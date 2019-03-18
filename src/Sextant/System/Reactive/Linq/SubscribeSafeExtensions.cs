@@ -16,7 +16,7 @@ namespace System.Reactive.Linq
     public static class SubscribeSafeExtensions
     {
         /// <summary>
-        /// Subscribes to a Observable and provides default debugging in the case of an exception.
+        /// Subscribes to an Observable and provides default debugging in the case of an exception.
         /// It will provide the caller information as part of the logging.
         /// </summary>
         /// <typeparam name="T">The type of item signaled as part of the observable.</typeparam>

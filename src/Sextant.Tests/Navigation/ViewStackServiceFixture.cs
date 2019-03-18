@@ -6,7 +6,6 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using NSubstitute;
-using Sextant.Abstraction;
 
 namespace Sextant.Tests.Navigation
 {

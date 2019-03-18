@@ -7,7 +7,7 @@ using System;
 using System.Collections.Immutable;
 using System.Reactive;
 
-namespace Sextant.Abstraction
+namespace Sextant
 {
     /// <summary>
     /// Interface that defines a methods to interact with the navigation stack.

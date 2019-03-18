@@ -6,7 +6,7 @@
 using System;
 using System.Reactive;
 
-namespace Sextant.Abstraction
+namespace Sextant
 {
     /// <summary>
     /// Defines a view that be add to a navigation or modal stack.
