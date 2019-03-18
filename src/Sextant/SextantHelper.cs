@@ -6,7 +6,6 @@
 using System;
 using System.Reactive.Concurrency;
 using ReactiveUI;
-using Sextant.Abstraction;
 using Splat;
 
 namespace Sextant

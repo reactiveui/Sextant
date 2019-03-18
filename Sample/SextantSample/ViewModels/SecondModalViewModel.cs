@@ -2,7 +2,7 @@
 using ReactiveUI;
 using System;
 using System.Diagnostics;
-using Sextant.Abstraction;
+using Sextant;
 
 namespace SextantSample.ViewModels
 {

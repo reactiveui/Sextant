@@ -2,7 +2,6 @@ using System;
 using Genesis.Logging;
 using ReactiveUI;
 using Sextant;
-using Sextant.Abstraction;
 using SextantSample.ViewModels;
 using SextantSample.Views;
 using Splat;

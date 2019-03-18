@@ -10,7 +10,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using ReactiveUI;
-using Sextant.Abstraction;
 using Xamarin.Forms;
 
 namespace Sextant

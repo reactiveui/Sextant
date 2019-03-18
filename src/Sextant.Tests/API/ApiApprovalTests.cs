@@ -13,7 +13,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using PublicApiGenerator;
-using Sextant.Abstraction;
 using Shouldly;
 using Splat;
 using Xunit;

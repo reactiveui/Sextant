@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
-using Sextant.Abstraction;
+using Sextant;
 
 namespace SextantSample.ViewModels
 {
@@ -40,7 +40,7 @@ namespace SextantSample.ViewModels
                 .CreateFromObservable(() =>
                     this.ViewStackService.PopPage(),
                     outputScheduler: RxApp.MainThreadScheduler);
-            
+
             PushPage = ReactiveCommand
                 .CreateFromObservable(() =>
                     this.ViewStackService.PushPage(new RedViewModel(ViewStackService)),
