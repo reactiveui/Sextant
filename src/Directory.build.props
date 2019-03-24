@@ -7,6 +7,7 @@
     <Authors>.NET Foundation and Contributors</Authors>
     <Owners>xpaulbettsx;ghuntley</Owners>
     <PackageTags>mvvm;reactiveui;Rx;Reactive Extensions;Observable;xamarin;xamarin ios;xamarin mac;android;monodroid;uwp;net461</PackageTags>
+    <Description>A ReactiveUI navigation library for Xamarin.Forms</Description>
     <PackageReleaseNotes>https://github.com/reactiveui/sextant/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/reactiveui/sextant</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
