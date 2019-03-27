@@ -1,15 +1,31 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;Xamarin.iOS10</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net461;uap10.0.16299</TargetFrameworks>
+    <AssemblyName>Sextant</AssemblyName>
+    <RootNamespace>Sextant</RootNamespace>
+    <PackageId>Sextant</PackageId>
   </PropertyGroup>
+  
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.5.*" />
+    <Compile Remove="Platforms\**\*.cs" />
+    <None Include="Platforms\**\*.cs" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     <PackageReference Include="ReactiveUI" Version="9.*" />
-    <PackageReference Include="Genesis.Logging" Version="3.0.0" />
+    <PackageReference Include="Genesis.Logging" Version="3.*" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Navigation\" />
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <Compile Include="Platforms\netstandard2.0\**\*.cs" />
+    <PackageReference Include="Xamarin.Forms" Version="3.5.*" />
   </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="Platforms\apple-common\**\*.cs" />
+    <Compile Include="Platforms\ios\**\*.cs" />
+    <Compile Include="Platforms\uikit-common\**\*.cs" />
+    <Compile Include="Platforms\xamarin-common\**\*.cs" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+
 </Project>

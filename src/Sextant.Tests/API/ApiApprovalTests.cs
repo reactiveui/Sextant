@@ -33,7 +33,7 @@ namespace Sextant.Tests
         [Fact]
         public void SextantProject()
         {
-            CheckApproval(typeof(IView).Assembly);
+            CheckApproval(typeof(IViewStackService).Assembly);
         }
 
         private static void CheckApproval(Assembly assembly, [CallerMemberName]string memberName = null, [CallerFilePath]string filePath = null)
