@@ -107,9 +107,8 @@ namespace Sextant
         /// <param name="modalViewModel">The modal view model.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>An observable which signals when the push is complete.</returns>
-        public IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract)
-        {
-            return Observable
+        public IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract) =>
+            Observable
                 .Start(
                     () =>
                     {
@@ -128,7 +127,6 @@ namespace Sextant
                         Navigation
                             .PushModalAsync(page)
                             .ToObservable());
-        }
 
         /// <summary>
         /// Pushes the page.
@@ -138,9 +136,12 @@ namespace Sextant
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable which signals when the push is complete.</returns>
-        public IObservable<Unit> PushPage(IPageViewModel pageViewModel, string contract, bool resetStack, bool animate)
-        {
-            return Observable
+        public IObservable<Unit> PushPage(
+            IPageViewModel pageViewModel,
+            string contract,
+            bool resetStack,
+            bool animate) =>
+            Observable
                 .Start(
                     () =>
                     {
@@ -157,9 +158,7 @@ namespace Sextant
                         {
                             if (Navigation.NavigationStack.Count == 0)
                             {
-                                return Navigation
-                                    .PushAsync(page, false)
-                                    .ToObservable();
+                                return Navigation.PushAsync(page, false).ToObservable();
                             }
 
                             // XF does not allow us to pop to a new root page. Instead, we need to inject the new root page and then pop to it.
@@ -175,7 +174,6 @@ namespace Sextant
                             .PushAsync(page, animate)
                             .ToObservable();
                     });
-        }
 
         private IView LocateNavigationFor(IPageViewModel viewModel)
         {
