@@ -8,7 +8,7 @@ using System.Reactive.Concurrency;
 using ReactiveUI;
 using Splat;
 
-namespace Sextant
+namespace Sextant.XamForms
 {
     /// <summary>
     /// A set of helper methods associated with the Sextant UI.

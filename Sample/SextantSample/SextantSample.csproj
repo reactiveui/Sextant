@@ -18,6 +18,7 @@
     <Compile Remove="Views\FirstModalNavigationView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Sextant.XamForms\Sextant.XamForms.csproj" />
     <ProjectReference Include="..\..\src\Sextant\Sextant.csproj" />
   </ItemGroup>
 </Project>
