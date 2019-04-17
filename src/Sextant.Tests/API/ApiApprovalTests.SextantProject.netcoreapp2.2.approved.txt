@@ -52,7 +52,7 @@ namespace Sextant
             where TView : ReactiveUI.IViewFor, new ()
             where TViewModel :  class, Sextant.IPageViewModel { }
     }
-    public sealed class ViewStackService : Sextant.IViewStackService, System.IDisposable
+    public sealed class ViewStackService : Sextant.IViewStackService, Splat.IEnableLogger, System.IDisposable
     {
         public ViewStackService(Sextant.IView view) { }
         public System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IPageViewModel>> ModalStack { get; }
