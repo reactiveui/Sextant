@@ -27,7 +27,7 @@ namespace Sextant
         System.IObservable<Sextant.IPageViewModel> TopModal();
         System.IObservable<Sextant.IPageViewModel> TopPage();
     }
-    public sealed class ViewStackService : Sextant.IViewStackService, System.IDisposable
+    public sealed class ViewStackService : Sextant.IViewStackService, Splat.IEnableLogger, System.IDisposable
     {
         public ViewStackService(Sextant.IView view) { }
         public System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IPageViewModel>> ModalStack { get; }

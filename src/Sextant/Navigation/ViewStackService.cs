@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Genesis.Logging;
+using Splat;
 
 namespace Sextant
 {
@@ -19,9 +19,9 @@ namespace Sextant
     /// Taken from https://kent-boogaart.com/blog/custom-routing-in-reactiveui and adjusted.
     /// </summary>
     /// <seealso cref="IViewStackService" />
-    public sealed class ViewStackService : IViewStackService, IDisposable
+    public sealed class ViewStackService : IViewStackService, IDisposable, IEnableLogger
     {
-        private readonly ILogger _logger;
+        private readonly IFullLogger _logger;
         private readonly BehaviorSubject<IImmutableList<IPageViewModel>> _modalStack;
         private readonly BehaviorSubject<IImmutableList<IPageViewModel>> _pageStack;
         private readonly IView _view;
@@ -32,7 +32,7 @@ namespace Sextant
         /// <param name="view">The view.</param>
         public ViewStackService(IView view)
         {
-            _logger = LoggerService.GetLogger(GetType());
+            _logger = this.Log();
             _view = view;
             _modalStack = new BehaviorSubject<IImmutableList<IPageViewModel>>(ImmutableList<IPageViewModel>.Empty);
             _pageStack = new BehaviorSubject<IImmutableList<IPageViewModel>>(ImmutableList<IPageViewModel>.Empty);
@@ -69,7 +69,7 @@ namespace Sextant
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the pop is complete.</returns>
-        public IObservable<Unit> PopModal(bool animate = true) => _view.PopModal().Do(_ => { PopStackAndTick(_modalStack); });
+        public IObservable<Unit> PopModal(bool animate = true) => _view.PopModal().Do(_ => PopStackAndTick(_modalStack));
 
         /// <summary>
         /// Pops the <see cref="IPageViewModel" /> off the stack.

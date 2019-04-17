@@ -6,7 +6,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Genesis.Logging;
+using Splat;
 
 namespace System.Reactive.Linq
 {
@@ -36,7 +36,7 @@ namespace System.Reactive.Linq
                     _ => { },
                     ex =>
                     {
-                        var logger = LoggerService.GetLogger(typeof(SubscribeSafeExtensions));
+                        var logger = new DefaultLogManager().GetLogger(typeof(SubscribeSafeExtensions));
                         logger.Error(ex, "An exception went unhandled. Caller member name: '{0}', caller file path: '{1}', caller line number: {2}.", callerMemberName, callerFilePath, callerLineNumber);
 
                         Debugger.Break();
