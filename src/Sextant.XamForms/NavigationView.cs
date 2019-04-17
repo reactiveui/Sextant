@@ -10,6 +10,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using ReactiveUI;
+using Splat;
 using Xamarin.Forms;
 
 namespace Sextant.XamForms
@@ -17,11 +18,12 @@ namespace Sextant.XamForms
     /// <summary>
     /// The main navigation view.
     /// </summary>
-    public class NavigationView : NavigationPage, IView
+    public class NavigationView : NavigationPage, IView, IEnableLogger
     {
         private readonly IScheduler _backgroundScheduler;
         private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
+        private IFullLogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
@@ -36,10 +38,11 @@ namespace Sextant.XamForms
             _backgroundScheduler = backgroundScheduler;
             _mainScheduler = mainScheduler;
             _viewLocator = viewLocator;
+            _logger = this.Log();
 
             PagePopped = Observable
                 .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
-                .Select(ep => ep.EventArgs.Page.BindingContext as IPageViewModel)
+                .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
                 .WhereNotNull();
         }
 
@@ -57,19 +60,14 @@ namespace Sextant.XamForms
 
             PagePopped = Observable
                 .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
-                .Select(ep => ep.EventArgs.Page.BindingContext as IPageViewModel)
+                .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
                 .WhereNotNull();
         }
 
-        /// <summary>
-        /// Gets an observable which signals when a page is popped.
-        /// </summary>
-        public IObservable<IPageViewModel> PagePopped { get; }
+        /// <inheritdoc />
+        public IObservable<IViewModel> PagePopped { get; }
 
-        /// <summary>
-        /// Pops the modal.
-        /// </summary>
-        /// <returns>An observable that signals when the pop is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PopModal() =>
             Navigation
                 .PopModalAsync()
@@ -77,11 +75,7 @@ namespace Sextant.XamForms
                 .ToSignal()
                 .ObserveOn(_mainScheduler); // XF completes the pop operation on a background thread :/
 
-        /// <summary>
-        /// Pops the page.
-        /// </summary>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns>An observable that signals when the pop is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PopPage(bool animate) =>
             Navigation
                 .PopAsync(animate)
@@ -89,11 +83,7 @@ namespace Sextant.XamForms
                 .ToSignal()
                 .ObserveOn(_mainScheduler); // XF completes the pop operation on a background thread :/
 
-        /// <summary>
-        /// Pops to root page.
-        /// </summary>
-        /// <returns>The to root page.</returns>
-        /// <param name="animate">If set to <c>true</c> animate.</param>
+        /// <inheritdoc />
         public IObservable<Unit> PopToRootPage(bool animate) =>
              Navigation
                 .PopToRootAsync(animate)
@@ -101,13 +91,8 @@ namespace Sextant.XamForms
                 .ToSignal()
                 .ObserveOn(_mainScheduler);
 
-        /// <summary>
-        /// Pushes the modal.
-        /// </summary>
-        /// <param name="modalViewModel">The modal view model.</param>
-        /// <param name="contract">The contract.</param>
-        /// <returns>An observable which signals when the push is complete.</returns>
-        public IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract) =>
+        /// <inheritdoc />
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract) =>
             Observable
                 .Start(
                     () =>
@@ -128,16 +113,9 @@ namespace Sextant.XamForms
                             .PushModalAsync(page)
                             .ToObservable());
 
-        /// <summary>
-        /// Pushes the page.
-        /// </summary>
-        /// <param name="pageViewModel">The page view model.</param>
-        /// <param name="contract">The contract.</param>
-        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns>An observable which signals when the push is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PushPage(
-            IPageViewModel pageViewModel,
+            IViewModel viewModel,
             string contract,
             bool resetStack,
             bool animate) =>
@@ -145,8 +123,8 @@ namespace Sextant.XamForms
                 .Start(
                     () =>
                     {
-                        var page = LocatePageFor(pageViewModel, contract);
-                        SetPageTitle(page, pageViewModel.Id);
+                        var page = LocatePageFor(viewModel, contract);
+                        SetPageTitle(page, viewModel.Id);
                         return page;
                     },
                     CurrentThreadScheduler.Instance)
@@ -175,14 +153,14 @@ namespace Sextant.XamForms
                             .ToObservable();
                     });
 
-        private IView LocateNavigationFor(IPageViewModel viewModel)
+        private IView LocateNavigationFor(IViewModel viewModel)
         {
             var view = _viewLocator.ResolveView(viewModel, "NavigationView");
             var navigationPage = view as IView;
 
             if (navigationPage is null)
             {
-                Debug.WriteLine($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
+                _logger.Debug($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
                 navigationPage = new NavigationView(_mainScheduler, _backgroundScheduler, _viewLocator);
             }
 

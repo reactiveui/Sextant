@@ -31,7 +31,20 @@ namespace Sextant
         public static IMutableDependencyResolver RegisterViewStackService(this IMutableDependencyResolver dependencyResolver)
         {
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ViewStackService(view));
+            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ParameterViewStackService(view));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the view stack service.
+        /// </summary>
+        /// <typeparam name="T">The view stack service type.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <returns>The dependencyResovler.</returns>
+        public static IMutableDependencyResolver RegisterParameterViewStackService(this IMutableDependencyResolver dependencyResolver)
+        {
+            IView view = Locator.Current.GetService<IView>(NavigationView);
+            dependencyResolver.RegisterLazySingleton<IParameterViewStackService>(() => new ParameterViewStackService(view));
             return dependencyResolver;
         }
 
@@ -46,7 +59,7 @@ namespace Sextant
             where T : IViewStackService
         {
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<T>(() => factory(view));
+            dependencyResolver.RegisterLazySingleton(() => factory(view));
             return dependencyResolver;
         }
 
@@ -60,7 +73,7 @@ namespace Sextant
         /// <returns>The dependencyResovler.</returns>
         public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string contract = null)
             where TView : IViewFor<TViewModel>, new()
-            where TViewModel : class, IPageViewModel
+            where TViewModel : class, IViewModel
         {
             dependencyResolver.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;
@@ -79,7 +92,7 @@ namespace Sextant
         /// </returns>
         public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<IViewFor<TViewModel>> viewFactory, string contract = null)
             where TView : IViewFor
-            where TViewModel : class, IPageViewModel
+            where TViewModel : class, IViewModel
         {
             dependencyResolver.Register(() => viewFactory(), typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;

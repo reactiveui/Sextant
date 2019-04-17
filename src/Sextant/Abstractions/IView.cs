@@ -16,7 +16,7 @@ namespace Sextant
         /// <summary>
         /// Gets an observable notifying that a page was popped from the navigation stack.
         /// </summary>
-        IObservable<IPageViewModel> PagePopped { get; }
+        IObservable<IViewModel> PagePopped { get; }
 
         /// <summary>
         /// Pops the modal from the modal stack.
@@ -44,18 +44,18 @@ namespace Sextant
         /// <param name="modalViewModel">The modal view model.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract);
+        IObservable<Unit> PushModal(IViewModel modalViewModel, string contract);
 
         /// <summary>
         /// Pushes the page onto the navigation stack.
         /// </summary>
-        /// <param name="pageViewModel">The page view model.</param>
+        /// <param name="viewModel">The view model.</param>
         /// <param name="contract">The contract.</param>
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
         IObservable<Unit> PushPage(
-            IPageViewModel pageViewModel,
+            IViewModel viewModel,
             string contract,
             bool resetStack,
             bool animate = true);

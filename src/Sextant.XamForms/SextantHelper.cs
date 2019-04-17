@@ -24,7 +24,7 @@ namespace Sextant.XamForms
         [Obsolete("Use the dependency resolver mixins.")]
         public static void RegisterView<TView, TViewModel>(string contract = null)
             where TView : IViewFor, new()
-            where TViewModel : class, IPageViewModel
+            where TViewModel : class, IViewModel
         {
             Locator.CurrentMutable.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
         }
@@ -40,7 +40,7 @@ namespace Sextant.XamForms
         [Obsolete("Use the dependency resolver mixins.")]
         public static void RegisterNavigation<TView, TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
             where TView : IViewFor
-            where TViewModel : class, IPageViewModel
+            where TViewModel : class, IViewModel
         {
             var bgScheduler = mainThreadScheduler ?? RxApp.TaskpoolScheduler;
             var mScheduler = backgroundScheduler ?? RxApp.MainThreadScheduler;
@@ -62,7 +62,7 @@ namespace Sextant.XamForms
         /// <returns>The navigation view.</returns>
         [Obsolete("Use the dependency resolver mixins.")]
         public static NavigationView Initialize<TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
-            where TViewModel : class, IPageViewModel
+            where TViewModel : class, IViewModel
         {
             var bgScheduler = mainThreadScheduler ?? RxApp.TaskpoolScheduler;
             var mScheduler = backgroundScheduler ?? RxApp.MainThreadScheduler;
@@ -87,7 +87,7 @@ namespace Sextant.XamForms
         /// <returns>The navigation view.</returns>
         [Obsolete("Use the " + nameof(Initialize) + " method.")]
         public static NavigationView Initialise<TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
-            where TViewModel : class, IPageViewModel
+            where TViewModel : class, IViewModel
         {
             return Initialize<TViewModel>(mainThreadScheduler, backgroundScheduler, viewLocator);
         }

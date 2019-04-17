@@ -19,7 +19,7 @@ using UIKit;
 namespace Sextant
 {
     /// <summary>
-    /// A frame that can load navigation to other controllers.
+    /// A view that can load navigation to other controllers.
     /// </summary>
     /// <seealso cref="UINavigationController" />
     /// <seealso cref="IView" />
@@ -29,7 +29,7 @@ namespace Sextant
         private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
         private readonly Stack<UIViewController> _navigationPages;
-        private readonly Subject<IPageViewModel> _pagePopped = new Subject<IPageViewModel>();
+        private readonly Subject<IViewModel> _pagePopped = new Subject<IViewModel>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationViewController" /> class.
@@ -50,7 +50,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<IPageViewModel> PagePopped => _pagePopped;
+        public IObservable<IViewModel> PagePopped => _pagePopped;
 
         /// <inheritdoc />
         public IObservable<Unit> PopModal() =>
@@ -90,7 +90,7 @@ namespace Sextant
             });
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IPageViewModel modalViewModel, string contract) =>
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract) =>
             Observable.Start(
                     () =>
                     {
@@ -104,7 +104,7 @@ namespace Sextant
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
-            IPageViewModel pageViewModel,
+            IViewModel pageViewModel,
             string contract,
             bool resetStack,
             bool animate = true)
@@ -136,7 +136,14 @@ namespace Sextant
 
                             if (resetStack)
                             {
+                                CATransaction.Begin();
+                                CATransaction.CompletionBlock = () =>
+                                {
+                                    _navigationPages.Clear();
+                                    _navigationPages.Push(this);
+                                };
                                 SetViewControllers(null, false);
+                                CATransaction.Commit();
                             }
 
                             PushViewController(viewController, animate);
@@ -151,7 +158,7 @@ namespace Sextant
         {
             var popped = _navigationPages.Pop();
             var view = popped as IViewFor;
-            _pagePopped.OnNext(view?.ViewModel as IPageViewModel);
+            _pagePopped.OnNext(view?.ViewModel as IViewModel);
             return base.PopViewController(animated);
         }
 

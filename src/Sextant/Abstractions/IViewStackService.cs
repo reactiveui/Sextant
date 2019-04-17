@@ -17,12 +17,12 @@ namespace Sextant
         /// <summary>
         /// Gets the modal navigation stack.
         /// </summary>
-        IObservable<IImmutableList<IPageViewModel>> ModalStack { get; }
+        IObservable<IImmutableList<IViewModel>> ModalStack { get; }
 
         /// <summary>
         /// Gets the page navigation stack.
         /// </summary>
-        IObservable<IImmutableList<IPageViewModel>> PageStack { get; }
+        IObservable<IImmutableList<IViewModel>> PageStack { get; }
 
         /// <summary>
         /// Gets the current view on the stack.
@@ -30,14 +30,14 @@ namespace Sextant
         IView View { get; }
 
         /// <summary>
-        /// Pops the <see cref="IPageViewModel"/> off the stack.
+        /// Pops the <see cref="INavigable"/> off the stack.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the pop has been completed.</returns>
         IObservable<Unit> PopModal(bool animate = true);
 
         /// <summary>
-        /// Pops the <see cref="IPageViewModel"/> off the stack.
+        /// Pops the <see cref="INavigable"/> off the stack.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the pop has been completed.</returns>
@@ -51,33 +51,43 @@ namespace Sextant
         IObservable<Unit> PopToRootPage(bool animate = true);
 
         /// <summary>
-        /// Pushes the <see cref="IPageViewModel"/> onto the stack.
+        /// Pushes the <see cref="IViewModel"/> onto the stack.
         /// </summary>
         /// <param name="modal">The modal.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
+        IObservable<Unit> PushModal(IViewModel modal, string contract = null);
 
         /// <summary>
-        /// Pushes the <see cref="IPageViewModel"/> onto the stack.
+        /// Pushes the <see cref="INavigable"/> onto the stack.
         /// </summary>
         /// <param name="page">The page.</param>
         /// <param name="contract">The contract.</param>
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
+        IObservable<Unit> PushPage(INavigable page, string contract = null, bool resetStack = false, bool animate = true);
+
+        /// <summary>
+        /// Pushes the <see cref="IViewModel"/> onto the stack.
+        /// </summary>
+        /// <param name="page">The page.</param>
+        /// <param name="contract">The contract.</param>
+        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+        /// <param name="animate">if set to <c>true</c> [animate].</param>
+        /// <returns>An observable that signals when the push has been completed.</returns>
+        IObservable<Unit> PushPage(IViewModel page, string contract = null, bool resetStack = false, bool animate = true);
 
         /// <summary>
         /// Returns the top page from the current navigation stack.
         /// </summary>
         /// <returns>An observable that signals the top page of the stack.</returns>
-        IObservable<IPageViewModel> TopPage();
+        IObservable<IViewModel> TopPage();
 
         /// <summary>
         /// Returns the top modal from the current modal stack.
         /// </summary>
         /// <returns>An observable that signals the top modal of the stack.</returns>
-        IObservable<IPageViewModel> TopModal();
+        IObservable<IViewModel> TopModal();
     }
 }
