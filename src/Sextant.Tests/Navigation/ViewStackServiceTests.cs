@@ -4,8 +4,10 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Immutable;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
 using Shouldly;
@@ -19,6 +21,70 @@ namespace Sextant.Tests.Navigation
     public sealed class ViewStackServiceTests
     {
         /// <summary>
+        /// Tests associated with the page stack property.
+        /// </summary>
+        public class ThePageStackProperty
+        {
+            /// <summary>
+            /// Tests to verify the return value is an observable type.
+            /// </summary>
+            [Fact]
+            public void Should_Return_Observable()
+            {
+                // Given, When
+                ViewStackService sut = new ViewStackServiceFixture();
+
+                // Then
+                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+            }
+
+            /// <summary>
+            /// Tests to verify the return value is not a subject type.
+            /// </summary>
+            [Fact]
+            public void Should_Not_Return_Behavior()
+            {
+                // Given, When
+                ViewStackService sut = new ViewStackServiceFixture();
+
+                // Then
+                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+            }
+        }
+
+        /// <summary>
+        /// Tests associated with the modal stack property.
+        /// </summary>
+        public class TheModalStackProperty
+        {
+            /// <summary>
+            /// Tests to verify the return value is an observable type.
+            /// </summary>
+            [Fact]
+            public void Should_Return_Observable()
+            {
+                // Given, When
+                ViewStackService sut = new ViewStackServiceFixture();
+
+                // Then
+                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+            }
+
+            /// <summary>
+            /// Tests to verify the return value is not a subject type.
+            /// </summary>
+            [Fact]
+            public void Should_Not_Return_Behavior()
+            {
+                // Given, When
+                ViewStackService sut = new ViewStackServiceFixture();
+
+                // Then
+                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+            }
+        }
+
+        /// <summary>
         /// Tests associated with the pop model methods.
         /// </summary>
         public class ThePopModalMethod
@@ -26,55 +92,55 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Checks to make sure that the pop modal method works correctly.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Pop_Modal()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                var item = await fixture.ViewStackService.ModalStack.FirstAsync();
+                var item = await sut.ModalStack.FirstAsync();
                 item.Count.ShouldBe(1);
-                fixture.PopModal().Subscribe();
+                await sut.PopModal();
 
                 // Then
-                item = await fixture.ViewStackService.ModalStack.FirstAsync();
+                item = await sut.ModalStack.FirstAsync();
                 item.ShouldBeEmpty();
             }
 
             /// <summary>
             /// Checks to make sure that the pop modal observables are received.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Receive_Pop_Modal()
             {
                 // Given, When
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                fixture.PopModal().Subscribe();
+                await sut.PopModal();
 
                 // Then
-                await fixture.View.Received().PopModal();
+                await sut.View.Received().PopModal();
             }
 
             /// <summary>
             /// Checks to make sure that the pop returns a <see cref="Unit"/>.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Return_Unit()
             {
                 // Given, When
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                var result = await fixture.PopModal();
+                var result = await sut.PopModal();
 
                 // Then
                 result.ShouldBeOfType<Unit>();
@@ -83,18 +149,19 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Checks to make sure that there is a exception thrown if the stack happens to be empty.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Throw_If_Stack_Empty()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await fixture.ViewStackService.PopModal()).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PopModal()).ConfigureAwait(false);
 
                 // Then
                 result.ShouldBeOfType<InvalidOperationException>();
+                result?.Message.ShouldBe("Stack is empty.");
             }
         }
 
@@ -106,17 +173,17 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Checks to make sure that the pop page works.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Pop_Page()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                fixture.ViewStackService.PopPage().Subscribe();
-                var result = await fixture.ViewStackService.PageStack.FirstAsync();
+                await sut.PopPage();
+                var result = await sut.PageStack.FirstAsync();
 
                 // Then
                 result.ShouldBeEmpty();
@@ -125,36 +192,122 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Checks to make sure that the pop page observables are received.
             /// </summary>
+            /// <returns>A completion notification.</returns>
             [Fact]
-            public void Should_Receive_Pop_Page()
+            public async Task Should_Receive_Pop_Page()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                fixture.ViewStackService.PopPage().Subscribe();
+                await sut.PopPage();
 
                 // Then
-                fixture.View.Received().PopPage();
+                sut.View.Received().PopPage();
             }
 
             /// <summary>
             /// Checks to make sure that the pop returns a <see cref="Unit"/>.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Return_Unit()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushPage(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushPage(new PageViewModelMock());
 
                 // When
-                var result = await fixture.ViewStackService.PopPage();
+                var result = await sut.PopPage();
 
                 // Then
                 result.ShouldBeOfType<Unit>();
+            }
+        }
+
+        /// <summary>
+        /// Tests for the pop to root method.
+        /// </summary>
+        public class ThePopToRootPageMethod
+        {
+            /// <summary>
+            /// Tests to verify that no exception is thrown if the stack happens to be empty.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Throw_If_Stack_Empty()
+            {
+                // Given
+                ViewStackService sut = new ViewStackServiceFixture();
+
+                // When
+                var result = await Should.ThrowAsync<InvalidOperationException>(async () => await sut.PopToRootPage()).ConfigureAwait(false);
+
+                // Then
+                result.Message.ShouldBe("Stack is empty.");
+            }
+
+            /// <summary>
+            /// Tests to verify the navigatino stack is cleared.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Clear_Navigation_Stack()
+            {
+                // Given
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushPage(new PageViewModelMock(), pages: 3);
+
+                // When
+                await sut.PopToRootPage();
+                var result = await sut.PageStack.FirstOrDefaultAsync();
+
+                // Then
+                result.ShouldHaveSingleItem();
+            }
+
+            /// <summary>
+            /// Tests to verify the navigatino stack is cleared.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Return_Single_Notification()
+            {
+                // Given
+                int count = 0;
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushPage(new PageViewModelMock(), pages: 3);
+
+                sut.View.PagePopped.Subscribe(_ =>
+                {
+                    count++;
+                });
+
+                // When
+                await sut.PopToRootPage();
+
+                // Then
+                count.ShouldBe(1);
+            }
+
+            /// <summary>
+            /// Tests to verify the navigation stack has an element left.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Have_One_Item_On_Stack()
+            {
+                // Given
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushPage(new PageViewModelMock(), pages: 3);
+                await sut.PopToRootPage();
+
+                // When
+                var result = await sut.PageStack.FirstOrDefaultAsync();
+
+                // Then
+                result.ShouldHaveSingleItem();
             }
         }
 
@@ -167,7 +320,7 @@ namespace Sextant.Tests.Navigation
             /// Makes sure that the push and pop methods work correctly.
             /// </summary>
             /// <param name="amount">The number of pages.</param>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Theory]
             [InlineData(1)]
             [InlineData(3)]
@@ -175,13 +328,13 @@ namespace Sextant.Tests.Navigation
             public async Task Should_Push_And_Pop(int amount)
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock(), "modal", amount).Subscribe();
-                fixture.ViewStackService.ModalStack.FirstAsync().Wait().Count.ShouldBe(amount);
-                fixture.PopModal(amount).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock(), "modal", amount);
+                sut.ModalStack.FirstAsync().Wait().Count.ShouldBe(amount);
+                await sut.PopModal(amount);
 
                 // When
-                var result = await fixture.ViewStackService.ModalStack.FirstAsync();
+                var result = await sut.ModalStack.FirstAsync();
 
                 // Then
                 result.ShouldBeEmpty();
@@ -190,16 +343,16 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure that the push model works.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Push_Modal()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                var result = await fixture.ViewStackService.TopModal();
+                var result = await sut.TopModal();
 
                 // Then
                 result.ShouldNotBeNull();
@@ -209,16 +362,16 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure we can push a page onto the stack.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Push_Page_On_Stack()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                await fixture.ViewStackService.PushModal(new PageViewModelMock(), "modal");
-                var result = await fixture.ViewStackService.ModalStack.FirstAsync();
+                await sut.PushModal(new PageViewModelMock(), "modal");
+                var result = await sut.ModalStack.FirstAsync();
 
                 // Then
                 result.ShouldNotBeEmpty();
@@ -228,31 +381,32 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure we receive an push modal notifications.
             /// </summary>
+            /// <returns>A completion notification.</returns>
             [Fact]
-            public void Should_Receive_Push_Modal()
+            public async Task Should_Receive_Push_Modal()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(Substitute.For<IView>());
 
                 // When
-                fixture.ViewStackService.PushModal(new PageViewModelMock(), "modal");
+                await sut.PushModal(new PageViewModelMock(), "modal");
 
                 // Then
-                fixture.View.Received().PushModal(Arg.Any<IPageViewModel>(), "modal");
+                sut.View.Received().PushModal(Arg.Any<IPageViewModel>(), "modal");
             }
 
             /// <summary>
             /// Tests to make sure that we get an exception throw if we pass in a null view model.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Throw_If_View_Model_Null()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await fixture.ViewStackService.PushModal(null)).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PushModal(null)).ConfigureAwait(false);
 
                 // Then
                 result.ShouldBeOfType<ArgumentNullException>();
@@ -265,18 +419,35 @@ namespace Sextant.Tests.Navigation
         public class ThePushPageMethod
         {
             /// <summary>
+            /// Tests to make sure that we get an exception throw if we pass in a null view model.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Throw_If_View_Model_Null()
+            {
+                // Given
+                ViewStackService sut = new ViewStackServiceFixture();
+
+                // When
+                var result = await Should.ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(null)).ConfigureAwait(false);
+
+                // Then
+                result.Message.ShouldBe("Value cannot be null.\r\nParameter name: page");
+            }
+
+            /// <summary>
             /// Tests to make sure that the push page works.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Push_Page()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                await fixture.ViewStackService.PushPage(new PageViewModelMock());
-                var result = await fixture.ViewStackService.TopPage();
+                await sut.PushPage(new PageViewModelMock());
+                var result = await sut.TopPage();
 
                 // Then
                 result.ShouldNotBeNull();
@@ -286,16 +457,16 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure we can push a page onto the stack.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Push_Page_On_Stack()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                await fixture.ViewStackService.PushPage(new PageViewModelMock());
-                var result = await fixture.ViewStackService.PageStack.FirstAsync();
+                await sut.PushPage(new PageViewModelMock());
+                var result = await sut.PageStack.FirstAsync();
 
                 // Then
                 result.ShouldNotBeEmpty();
@@ -305,34 +476,37 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure we receive an push page notifications.
             /// </summary>
+            /// <returns>A completion notification.</returns>
             [Fact]
-            public void Should_Receive_Push_Page()
+            public async Task Should_Receive_Push_Page()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(Substitute.For<IView>());
 
                 // When
-                fixture.PushPage(new PageViewModelMock());
+                await sut.PushPage(new PageViewModelMock());
 
                 // Then
-                fixture.View.Received().PushPage(Arg.Any<IPageViewModel>(), null, false, true);
+                sut.View.Received().PushPage(Arg.Any<IPageViewModel>(), null, false, true);
             }
 
             /// <summary>
-            /// Tests to make sure that we get an exception throw if we pass in a null view model.
+            /// Tests to make sure we receive an push page notifications.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
-            public async Task Should_Throw_If_View_Model_Null()
+            public async Task Should_Clear_Navigation_Stack_If_Reset()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(Substitute.For<IView>());
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await fixture.ViewStackService.PushPage(null)).ConfigureAwait(false);
+                await sut.PushPage(new PageViewModelMock(), pages: 3);
+                await sut.PushPage(new PageViewModelMock(), resetStack: true);
+                var result = await sut.PageStack.FirstOrDefaultAsync();
 
                 // Then
-                result.ShouldBeOfType<ArgumentNullException>();
+                result.ShouldHaveSingleItem();
             }
         }
 
@@ -344,35 +518,35 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure that it does not pop the stack.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Not_Pop()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(Substitute.For<IView>());
+                await sut.PushModal(new PageViewModelMock());
 
                 // When
-                fixture.ViewStackService.TopModal().Subscribe();
+                await sut.TopModal();
 
                 // Then
-                await fixture.View.DidNotReceive().PopModal();
+                await sut.View.DidNotReceive().PopModal();
             }
 
             /// <summary>
             /// Tests to make sure that it returns the last element only.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Return_Last_Element()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushModal(new PageViewModelMock("1")).Subscribe();
-                fixture.PushModal(new PageViewModelMock("2")).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushModal(new PageViewModelMock("1"));
+                await sut.PushModal(new PageViewModelMock("2"));
 
                 // When
-                var result = await fixture.ViewStackService.TopModal();
+                var result = await sut.TopModal();
 
                 // Then
                 result.ShouldBeOfType<PageViewModelMock>();
@@ -382,17 +556,17 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure it throws an exception if the stack is empty.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Throw_If_Stack_Empty()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await fixture.ViewStackService.TopModal()).ConfigureAwait(false);
+                var result = await Should.ThrowAsync<InvalidOperationException>(async () => await sut.TopModal()).ConfigureAwait(false);
 
-                result.ShouldBeOfType<InvalidOperationException>();
+                // Then
                 result.Message.ShouldBe("Sequence contains no elements");
             }
         }
@@ -405,35 +579,35 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure that it does not pop the stack.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Not_Pop()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushPage(new PageViewModelMock()).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(Substitute.For<IView>());
+                await sut.PushPage(new PageViewModelMock());
 
                 // When
-                fixture.ViewStackService.TopPage().Subscribe();
+                await sut.TopPage();
 
                 // Then
-                await fixture.View.DidNotReceive().PopPage();
+                await sut.View.DidNotReceive().PopPage();
             }
 
             /// <summary>
             /// Tests to make sure that it returns the last element only.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Return_Last_Element()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
-                fixture.PushPage(new PageViewModelMock("1")).Subscribe();
-                fixture.PushPage(new PageViewModelMock("2")).Subscribe();
+                ViewStackService sut = new ViewStackServiceFixture();
+                await sut.PushPage(new PageViewModelMock("1"));
+                await sut.PushPage(new PageViewModelMock("2"));
 
                 // When
-                var result = await fixture.ViewStackService.TopPage();
+                var result = await sut.TopPage();
 
                 // Then
                 result.ShouldBeOfType<PageViewModelMock>();
@@ -443,17 +617,17 @@ namespace Sextant.Tests.Navigation
             /// <summary>
             /// Tests to make sure it throws an exception if the stack is empty.
             /// </summary>
-            /// <returns>A task to monitor the progress.</returns>
+            /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Throw_If_Stack_Empty()
             {
                 // Given
-                var fixture = new ViewStackServiceFixture();
+                ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await fixture.ViewStackService.TopPage()).ConfigureAwait(false);
+                var result = await Should.ThrowAsync<InvalidOperationException>(async () => await sut.TopPage()).ConfigureAwait(false);
 
-                result.ShouldBeOfType<InvalidOperationException>();
+                // Then
                 result.Message.ShouldBe("Sequence contains no elements");
             }
         }

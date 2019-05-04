@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Windows.Input;
 using ReactiveUI;
 using Sextant;
 
@@ -9,27 +10,17 @@ namespace SextantSample.ViewModels
 {
 	public class RedViewModel : ViewModelBase, IPageViewModel
 	{
-		public ReactiveCommand<Unit, Unit> PopModal
-		{
-			get;
-			set;
-		}
+	    public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 
-        public ReactiveCommand<Unit, Unit> PushPage
-        {
-            get;
-            set;
-        }
+	    public ReactiveCommand<Unit, Unit> PushPage { get; set; }
 
-        public ReactiveCommand<Unit, Unit> PopPage
-        {
-            get;
-            set;
-        }
+	    public ReactiveCommand<Unit, Unit> PopPage { get; set; }
 
-		public string Id => nameof(RedViewModel);
+	    public ReactiveCommand<Unit, Unit> PopToRoot { get; set; }
 
-		public RedViewModel(IViewStackService viewStackService) : base(viewStackService)
+        public string Id => nameof(RedViewModel);
+
+	    public RedViewModel(IViewStackService viewStackService) : base(viewStackService)
 		{
 			PopModal = ReactiveCommand
 				.CreateFromObservable(() =>
@@ -45,8 +36,12 @@ namespace SextantSample.ViewModels
                 .CreateFromObservable(() =>
                     this.ViewStackService.PushPage(new RedViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
+		    PopToRoot = ReactiveCommand
+                .CreateFromObservable(() => 
+                    this.ViewStackService.PopToRootPage(),
+		            outputScheduler: RxApp.MainThreadScheduler);
 
-			PopModal.Subscribe(x => Debug.WriteLine("PagePushed"));
+            PopModal.Subscribe(x => Debug.WriteLine("PagePushed"));
 		}
 	}
 }

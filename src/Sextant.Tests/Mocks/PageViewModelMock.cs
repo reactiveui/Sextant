@@ -22,6 +22,11 @@ namespace Sextant.Tests
         }
 
         /// <summary>
+        /// Gets the mock.
+        /// </summary>
+        public static PageViewModelMock Mock { get; } = new PageViewModelMock();
+
+        /// <summary>
         /// Gets the ID of the page.
         /// </summary>
         public string Id => _id ?? nameof(PageViewModelMock);

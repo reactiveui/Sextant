@@ -6,32 +6,30 @@
 using System.Reactive;
 using System.Reactive.Linq;
 using NSubstitute;
+using ReactiveUI.Testing;
 
 namespace Sextant.Tests.Navigation
 {
     /// <summary>
     /// A fixture for the view stack.
     /// </summary>
-    internal sealed class ViewStackServiceFixture
+    internal sealed class ViewStackServiceFixture : IBuilder
     {
+        private IView _view;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewStackServiceFixture"/> class.
         /// </summary>
         public ViewStackServiceFixture()
         {
-            View = Substitute.For<IView>();
-            View.PushPage(Arg.Any<IPageViewModel>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>()).Returns(Observable.Return(Unit.Default));
-            ViewStackService = new ViewStackService(View);
+            _view = Substitute.For<IView>();
+            _view.PushPage(Arg.Any<IPageViewModel>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>()).Returns(Observable.Return(Unit.Default));
         }
 
-        /// <summary>
-        /// Gets the view.
-        /// </summary>
-        public IView View { get; }
+        public static implicit operator ViewStackService(ViewStackServiceFixture fixture) => fixture.Build();
 
-        /// <summary>
-        /// Gets the view stack service.
-        /// </summary>
-        public IViewStackService ViewStackService { get; }
+        public ViewStackServiceFixture WithView(IView view) => this.With(ref _view, view);
+
+        private ViewStackService Build() => new ViewStackService(_view);
     }
 }
