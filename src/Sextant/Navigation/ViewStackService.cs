@@ -49,48 +49,25 @@ namespace Sextant
             }).SubscribeSafe();
         }
 
-        /// <summary>
-        /// Gets the modal navigation stack.
-        /// </summary>
-        public IObservable<IImmutableList<IPageViewModel>> ModalStack => _modalStack;
+        /// <inheritdoc />
+        public IObservable<IImmutableList<IPageViewModel>> ModalStack => _modalStack.AsObservable();
 
-        /// <summary>
-        /// Gets the page navigation stack.
-        /// </summary>
-        public IObservable<IImmutableList<IPageViewModel>> PageStack => _pageStack;
+        /// <inheritdoc />
+        public IObservable<IImmutableList<IPageViewModel>> PageStack => _pageStack.AsObservable();
 
-        /// <summary>
-        /// Gets the current view on the stack.
-        /// </summary>
+        /// <inheritdoc />
         public IView View => _view;
 
-        /// <summary>
-        /// Pops the <see cref="IPageViewModel" /> off the stack.
-        /// </summary>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns>An observable that signals when the pop is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PopModal(bool animate = true) => _view.PopModal().Do(_ => PopStackAndTick(_modalStack));
 
-        /// <summary>
-        /// Pops the <see cref="IPageViewModel" /> off the stack.
-        /// </summary>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns>An observable that signals when the pop is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PopPage(bool animate = true) => _view.PopPage(animate);
 
-        /// <summary>
-        /// Pops to root page.
-        /// </summary>
-        /// <returns>The to root page.</returns>
-        /// <param name="animate">If set to <c>true</c> animate.</param>
-        public IObservable<Unit> PopToRootPage(bool animate = true) => _view.PopToRootPage(animate);
+        /// <inheritdoc />
+        public IObservable<Unit> PopToRootPage(bool animate = true) => _view.PopToRootPage(animate).Do(_ => PopRootAndTick(_pageStack));
 
-        /// <summary>
-        /// Pushes the <see cref="IPageViewModel" /> onto the stack.
-        /// </summary>
-        /// <param name="modal">The modal.</param>
-        /// <param name="contract">The contract.</param>
-        /// <returns>An observable that signals when the push is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PushModal(IPageViewModel modal, string contract = null)
         {
             if (modal == null)
@@ -107,14 +84,7 @@ namespace Sextant
                 });
         }
 
-        /// <summary>
-        /// Pushes the <see cref="IPageViewModel" /> onto the stack.
-        /// </summary>
-        /// <param name="page">The page.</param>
-        /// <param name="contract">The contract.</param>
-        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
-        /// <param name="animate">if set to <c>true</c> [animate].</param>
-        /// <returns>An observable that signals when the push is complete.</returns>
+        /// <inheritdoc />
         public IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true)
         {
             if (page == null)
@@ -131,17 +101,11 @@ namespace Sextant
                 });
         }
 
-        /// <summary>
-        /// Returns the top modal from the current modal stack.
-        /// </summary>
-        /// <returns>An observable that signals the top modal view model.</returns>
+        /// <inheritdoc />
         [SuppressMessage("Design", "CA1826: Do not use Enumerable methods on indexable collections.", Justification = "Deliberate usage")]
         public IObservable<IPageViewModel> TopModal() => _modalStack.FirstAsync().Select(x => x.Last());
 
-        /// <summary>
-        /// Returns the top page from the current navigation stack.
-        /// </summary>
-        /// <returns>An observable that signals the top page view model.</returns>
+        /// <inheritdoc />
         [SuppressMessage("Design", "CA1826: Do not use Enumerable methods on indexable collections.", Justification = "Deliberate usage")]
         public IObservable<IPageViewModel> TopPage() => _pageStack.FirstAsync().Select(x => x.Last());
 
@@ -181,6 +145,26 @@ namespace Sextant
             stack = stack.RemoveAt(stack.Count - 1);
             stackSubject.OnNext(stack);
             return removedItem;
+        }
+
+        private static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject)
+        {
+            IImmutableList<T> poppedStack = ImmutableList<T>.Empty;
+
+            if (stackSubject?.Value == null || !stackSubject.Value.Any())
+            {
+                throw new InvalidOperationException("Stack is empty.");
+            }
+
+            stackSubject
+                .Take(stackSubject.Value.Count - 1)
+                .Where(stack => stack != null)
+                .Subscribe(stack =>
+                {
+                    poppedStack = stack.RemoveRange(stack.IndexOf(stack[0]), stack.Count - 1);
+                });
+
+            stackSubject.OnNext(poppedStack);
         }
     }
 }

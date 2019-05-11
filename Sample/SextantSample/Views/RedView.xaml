@@ -11,6 +11,7 @@
             <Button x:Name="PopModal" Text="Pop Modal" TextColor="White"/>
             <Button x:Name="PushPage" Text="Push Another Red Page" TextColor="White"/>
             <Button x:Name="PopPage" Text="Pop Page" TextColor="White"/>
+            <Button x:Name="PopToRoot" Text="Pop To Root" TextColor="White"/>
         </StackLayout>
     </ContentPage.Content>
 </rxui:ReactiveContentPage>
