@@ -432,7 +432,7 @@ namespace Sextant.Tests.Navigation
                 var result = await Should.ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(null)).ConfigureAwait(false);
 
                 // Then
-                result.Message.ShouldBe("Value cannot be null.\r\nParameter name: page");
+                result.ParamName.ShouldBe("page");
             }
 
             /// <summary>
