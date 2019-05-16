@@ -1,4 +1,4 @@
-#load nuget:https://www.myget.org/F/reactiveui/api/v2?package=ReactiveUI.Cake.Recipe&version=1.0.114
+#load nuget:https://www.myget.org/F/reactiveui/api/v2?package=ReactiveUI.Cake.Recipe&prerelease
 
 Environment.SetVariableNames();
 
