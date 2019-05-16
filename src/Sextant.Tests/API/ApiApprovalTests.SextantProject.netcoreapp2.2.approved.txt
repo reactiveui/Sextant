@@ -27,31 +27,6 @@ namespace Sextant
         System.IObservable<Sextant.IPageViewModel> TopModal();
         System.IObservable<Sextant.IPageViewModel> TopPage();
     }
-    public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView
-    {
-        public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator, Xamarin.Forms.Page rootPage) { }
-        public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator) { }
-        public System.IObservable<Sextant.IPageViewModel> PagePopped { get; }
-        public System.IObservable<System.Reactive.Unit> PopModal() { }
-        public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
-        public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate) { }
-        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IPageViewModel modalViewModel, string contract) { }
-        public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IPageViewModel pageViewModel, string contract, bool resetStack, bool animate) { }
-    }
-    public class static SextantHelper
-    {
-        [System.ObsoleteAttribute("Use the Initialize method.")]
-        public static Sextant.NavigationView Initialise<TViewModel>(System.Reactive.Concurrency.IScheduler mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler backgroundScheduler = null, ReactiveUI.IViewLocator viewLocator = null)
-            where TViewModel :  class, Sextant.IPageViewModel { }
-        public static Sextant.NavigationView Initialize<TViewModel>(System.Reactive.Concurrency.IScheduler mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler backgroundScheduler = null, ReactiveUI.IViewLocator viewLocator = null)
-            where TViewModel :  class, Sextant.IPageViewModel { }
-        public static void RegisterNavigation<TView, TViewModel>(System.Reactive.Concurrency.IScheduler mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler backgroundScheduler = null, ReactiveUI.IViewLocator viewLocator = null)
-            where TView : ReactiveUI.IViewFor
-            where TViewModel :  class, Sextant.IPageViewModel { }
-        public static void RegisterView<TView, TViewModel>(string contract = null)
-            where TView : ReactiveUI.IViewFor, new ()
-            where TViewModel :  class, Sextant.IPageViewModel { }
-    }
     public sealed class ViewStackService : Sextant.IViewStackService, Splat.IEnableLogger, System.IDisposable
     {
         public ViewStackService(Sextant.IView view) { }
