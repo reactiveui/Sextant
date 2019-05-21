@@ -1,6 +1,7 @@
 using System;
 using ReactiveUI;
 using Sextant;
+using Sextant.XamForms;
 using SextantSample.ViewModels;
 using SextantSample.Views;
 using Splat;

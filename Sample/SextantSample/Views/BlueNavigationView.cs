@@ -2,6 +2,7 @@
 using System.Reactive.Concurrency;
 using ReactiveUI;
 using Sextant;
+using Sextant.XamForms;
 using Xamarin.Forms;
 
 namespace SextantSample.Views
