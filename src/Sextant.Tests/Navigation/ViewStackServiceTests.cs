@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
+using Sextant.Testing;
 using Shouldly;
 using Xunit;
 

@@ -69,6 +69,7 @@ namespace Sextant.XamForms
         public static IMutableDependencyResolver RegisterViewStackService(this IMutableDependencyResolver dependencyResolver)
         {
             var view = Locator.Current.GetService<IView>(NavigationView);
+
             dependencyResolver.Register<IViewStackService>(() => new ViewStackService(view));
             return dependencyResolver;
         }
@@ -101,6 +102,25 @@ namespace Sextant.XamForms
             where TViewModel : class, IPageViewModel
         {
             dependencyResolver.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the specified view with the Splat locator.
+        /// </summary>
+        /// <typeparam name="TView">The type of the view.</typeparam>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="viewFactory">The view factory.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>
+        /// The dependencyResovler.
+        /// </returns>
+        public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<IViewFor<TViewModel>> viewFactory, string contract = null)
+            where TView : IViewFor<TViewModel>
+            where TViewModel : class, IPageViewModel
+        {
+            dependencyResolver.Register(() => viewFactory(), typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;
         }
     }
