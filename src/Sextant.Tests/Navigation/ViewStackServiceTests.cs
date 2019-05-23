@@ -10,11 +10,11 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
-using Sextant.Testing;
+using Sextant.Mocks;
 using Shouldly;
 using Xunit;
 
-namespace Sextant.Tests.Navigation
+namespace Sextant.Tests
 {
     /// <summary>
     /// Tests that check to make sure that the view stack works correctly.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NSubstitute;
 using ReactiveUI;
-using Sextant.Testing;
+using Sextant.Mocks;
 using Shouldly;
 using Splat;
 using Xunit;

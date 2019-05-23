@@ -5,7 +5,7 @@
 
 using ReactiveUI;
 
-namespace Sextant.Testing
+namespace Sextant.Mocks
 {
     /// <summary>
     /// A mock of a page view.

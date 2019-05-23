@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 using NSubstitute;
 using ReactiveUI.Testing;
 
-namespace Sextant.Tests.Navigation
+namespace Sextant.Tests
 {
     /// <summary>
     /// A fixture for the view stack.

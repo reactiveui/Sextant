@@ -7,7 +7,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Linq;
 
-namespace Sextant.Tests.Navigation
+namespace Sextant.Tests
 {
     /// <summary>
     /// Extension methods to help us with the ViewStackService.

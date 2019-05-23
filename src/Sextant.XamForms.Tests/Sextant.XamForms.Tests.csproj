@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sextant.Testing\Sextant.Testing.csproj" />
+    <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
     <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
   </ItemGroup>
 </Project>
