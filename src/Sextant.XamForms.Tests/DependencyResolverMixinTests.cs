@@ -160,10 +160,10 @@ namespace Sextant.XamForms.Tests
                 Locator.CurrentMutable.RegisterView<PageView, PageViewModelMock>(() => new PageView());
 
                 // When
-                var result = Locator.Current.GetService<IViewStackService>();
+                var result = Locator.Current.GetService<IViewFor<PageViewModelMock>>();
 
                 // Then
-                result.ShouldBeOfType<ViewStackService>();
+                result.ShouldBeOfType<PageView>();
             }
         }
     }

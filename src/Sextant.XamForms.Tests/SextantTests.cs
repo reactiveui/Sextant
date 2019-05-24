@@ -18,14 +18,6 @@ namespace Sextant.XamForms.Tests
         public sealed class TheInitializeMethod
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="TheInitializeMethod"/> class.
-            /// </summary>
-            public TheInitializeMethod()
-            {
-                Locator.CurrentMutable.InitializeSplat();
-            }
-
-            /// <summary>
             /// Tests the navigation view is registered.
             /// </summary>
             [Fact]
@@ -63,15 +55,6 @@ namespace Sextant.XamForms.Tests
         /// </summary>
         public sealed class TheRegisterViewStackServiceFactoryMethod
         {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="TheRegisterViewStackServiceFactoryMethod"/> class.
-            /// </summary>
-            public TheRegisterViewStackServiceFactoryMethod()
-            {
-                Locator.CurrentMutable.InitializeSplat();
-                Locator.CurrentMutable.RegisterNavigationView();
-            }
-
             /// <summary>
             /// Tests the navigation view is registered.
             /// </summary>
