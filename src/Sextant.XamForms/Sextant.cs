@@ -13,8 +13,10 @@ namespace Sextant.XamForms
     /// <summary>
     /// The main registration point for Sextant.
     /// </summary>
-    public static class Sextant
+    public class Sextant
     {
+        private static readonly Lazy<Sextant> _sextant;
+
         static Sextant()
         {
             Locator.RegisterResolverCallbackChanged(() =>
@@ -26,7 +28,14 @@ namespace Sextant.XamForms
 
                 Initialize();
             });
+
+            _sextant = new Lazy<Sextant>();
         }
+
+        /// <summary>
+        /// Gets the instance of <see cref="Sextant"/>.
+        /// </summary>
+        public static Sextant Instance => _sextant.Value;
 
         /// <summary>
         /// Initializes Sextant.
