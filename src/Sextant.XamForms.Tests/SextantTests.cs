@@ -13,6 +13,16 @@ namespace Sextant.XamForms.Tests
     public sealed class SextantTests
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="SextantTests"/> class.
+        /// </summary>
+        public SextantTests()
+        {
+            Locator.CurrentMutable.UnregisterAll<NavigationView>();
+            Locator.CurrentMutable.UnregisterAll<ViewStackService>();
+            Locator.CurrentMutable.InitializeSplat();
+        }
+
+        /// <summary>
         /// Tests the Sextant Initalize method.
         /// </summary>
         public sealed class TheInitializeMethod
@@ -62,6 +72,7 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View_Stack_Service_Factory()
             {
                 // Given
+                Locator.CurrentMutable.RegisterNavigationView();
                 Locator.CurrentMutable.RegisterViewStackService<IViewStackService>(view => new ViewStackService(view));
 
                 // When

@@ -103,6 +103,7 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View_Stack_Service()
             {
                 // Given
+                Locator.CurrentMutable.RegisterNavigationView();
                 Locator.CurrentMutable.RegisterViewStackService();
 
                 // When
@@ -119,6 +120,7 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View_Stack_Service_Factory()
             {
                 // Given
+                Locator.CurrentMutable.RegisterNavigationView();
                 Locator.CurrentMutable.RegisterViewStackService<IViewStackService>(view => new ViewStackService(view));
 
                 // When
@@ -141,13 +143,13 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View()
             {
                 // Given
-                Locator.CurrentMutable.RegisterViewStackService();
+                Locator.CurrentMutable.RegisterView<PageView, PageViewModelMock>();
 
                 // When
-                var result = Locator.Current.GetService<IViewStackService>();
+                var result = Locator.Current.GetService<IViewFor<PageViewModelMock>>();
 
                 // Then
-                result.ShouldBeOfType<ViewStackService>();
+                result.ShouldBeOfType<PageView>();
             }
 
             /// <summary>

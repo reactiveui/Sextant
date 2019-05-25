@@ -68,9 +68,8 @@ namespace Sextant.XamForms
         /// <returns>The dependencyResovler.</returns>
         public static IMutableDependencyResolver RegisterViewStackService(this IMutableDependencyResolver dependencyResolver)
         {
-            var view = Locator.Current.GetService<IView>(NavigationView);
-
-            dependencyResolver.Register<IViewStackService>(() => new ViewStackService(view));
+            IView view = Locator.Current.GetService<IView>(NavigationView);
+            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ViewStackService(view));
             return dependencyResolver;
         }
 
@@ -84,7 +83,7 @@ namespace Sextant.XamForms
         public static IMutableDependencyResolver RegisterViewStackService<T>(this IMutableDependencyResolver dependencyResolver, Func<IView, T> factory)
             where T : IViewStackService
         {
-            var view = Locator.Current.GetService<IView>(NavigationView);
+            IView view = Locator.Current.GetService<IView>(NavigationView);
             dependencyResolver.RegisterLazySingleton<T>(() => factory(view));
             return dependencyResolver;
         }
