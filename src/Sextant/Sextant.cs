@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using Splat;
 
-namespace Sextant.XamForms
+namespace Sextant
 {
     /// <summary>
     /// The main registration point for Sextant.
@@ -19,14 +19,14 @@ namespace Sextant.XamForms
 
         static Sextant()
         {
-            Locator.RegisterResolverCallbackChanged(() =>
+            Splat.Locator.RegisterResolverCallbackChanged(() =>
             {
-                if (Locator.CurrentMutable == null)
+                if (Splat.Locator.CurrentMutable == null)
                 {
                     return;
                 }
 
-                Initialize();
+                Instance.Initialize();
             });
 
             _sextant = new Lazy<Sextant>();
@@ -38,12 +38,8 @@ namespace Sextant.XamForms
         public static Sextant Instance => _sextant.Value;
 
         /// <summary>
-        /// Initializes Sextant.
+        /// Gets the mutable dependency resolver.
         /// </summary>
-        public static void Initialize() =>
-            Locator
-                .CurrentMutable
-                .RegisterNavigationView()
-                .RegisterViewStackService();
+        public IMutableDependencyResolver MutableLocator => Splat.Locator.CurrentMutable;
     }
 }

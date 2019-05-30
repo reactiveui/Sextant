@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Sextant.XamForms;
 using Shouldly;
 using Splat;
 using Xunit;
@@ -8,27 +9,17 @@ using Xunit;
 namespace Sextant.XamForms.Tests
 {
     /// <summary>
-    /// Tests the Sextant static class.
+    /// Tests <see cref="Sextant"/> initialization methods.
     /// </summary>
-    public sealed class SextantTests
+    public sealed class SextantExtensionTests
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SextantTests"/> class.
+        /// Tests the initialization method.
         /// </summary>
-        public SextantTests()
-        {
-            Locator.CurrentMutable.UnregisterAll<NavigationView>();
-            Locator.CurrentMutable.UnregisterAll<ViewStackService>();
-            Locator.CurrentMutable.InitializeSplat();
-        }
-
-        /// <summary>
-        /// Tests the Sextant Initalize method.
-        /// </summary>
-        public sealed class TheInitializeMethod
+        public sealed class TheInitializeSextantMethod
         {
             /// <summary>
-            /// Tests the navigation view is registered.
+            /// Should register the navigation view.
             /// </summary>
             [Fact]
             public void Should_Register_Navigation_View()
@@ -37,14 +28,14 @@ namespace Sextant.XamForms.Tests
                 Sextant.Instance.Initialize();
 
                 // When
-                var result = Locator.Current.GetService<IView>(nameof(NavigationView));
+                var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
 
                 // Then
                 result.ShouldBeOfType<NavigationView>();
             }
 
             /// <summary>
-            /// Tests the navigation view is registered.
+            /// Should register the view stack service.
             /// </summary>
             [Fact]
             public void Should_Register_View_Stack_Service()

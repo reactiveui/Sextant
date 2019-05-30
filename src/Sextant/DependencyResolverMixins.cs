@@ -8,10 +8,9 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Text;
 using ReactiveUI;
-using Sextant.XamForms;
 using Splat;
 
-namespace Sextant.XamForms
+namespace Sextant
 {
     /// <summary>
     /// Extension methods associated with the IMutableDependencyResolver interface.
@@ -22,34 +21,6 @@ namespace Sextant.XamForms
         /// Gets the navigation view key.
         /// </summary>
         public static string NavigationView => nameof(NavigationView);
-
-        /// <summary>
-        /// Initializes the sextant.
-        /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver)
-        {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, vLocator), typeof(IView), NavigationView);
-            return dependencyResolver;
-        }
-
-        /// <summary>
-        /// Initializes sextant.
-        /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="mainScheudler">The main scheudler.</param>
-        /// <param name="backgroundScheduler">The background scheduler.</param>
-        /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainScheudler, IScheduler backgroundScheduler)
-        {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainScheudler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
-            return dependencyResolver;
-        }
 
         /// <summary>
         /// Registers the view stack service.
