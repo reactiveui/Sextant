@@ -1,6 +1,19 @@
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6.1", FrameworkDisplayName=".NET Framework 4.6.1")]
 namespace Sextant
 {
+    public class static DependencyResolverMixins
+    {
+        public static string NavigationView { get; }
+        public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string contract = null)
+            where TView : ReactiveUI.IViewFor<>, new ()
+            where TViewModel :  class, Sextant.IPageViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<ReactiveUI.IViewFor<TViewModel>> viewFactory, string contract = null)
+            where TView : ReactiveUI.IViewFor<>
+            where TViewModel :  class, Sextant.IPageViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterViewStackService(this Splat.IMutableDependencyResolver dependencyResolver) { }
+        public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, T> factory)
+            where T : Sextant.IViewStackService { }
+    }
     public interface IPageViewModel
     {
         string Id { get; }
@@ -26,6 +39,16 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.IPageViewModel page, string contract = null, bool resetStack = False, bool animate = True);
         System.IObservable<Sextant.IPageViewModel> TopModal();
         System.IObservable<Sextant.IPageViewModel> TopPage();
+    }
+    public class Sextant
+    {
+        public Sextant() { }
+        public static Sextant.Sextant Instance { get; }
+        public Splat.IMutableDependencyResolver MutableLocator { get; }
+    }
+    public class static SextantExtensions
+    {
+        public static void Initialize(this Sextant.Sextant sextant) { }
     }
     public sealed class ViewStackService : Sextant.IViewStackService, Splat.IEnableLogger, System.IDisposable
     {

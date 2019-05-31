@@ -4,7 +4,6 @@ namespace Sextant.XamForms
     public class static DependencyResolverMixins
     {
         public static string NavigationView { get; }
-        public static void InitializeSextant(this Splat.IMutableDependencyResolver dependencyResolver) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainScheudler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
         public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string contract = null)
@@ -28,9 +27,9 @@ namespace Sextant.XamForms
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IPageViewModel modalViewModel, string contract) { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IPageViewModel pageViewModel, string contract, bool resetStack, bool animate) { }
     }
-    public class static Sextant
+    public class static SextantExtensions
     {
-        public static void Initialize() { }
+        public static void Initialize(this Sextant.Sextant sextant) { }
     }
     public class static SextantHelper
     {

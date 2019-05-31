@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Text;
 using Splat;
 
@@ -33,6 +34,38 @@ namespace Sextant
             this IMutableDependencyResolver dependencyResolver)
         {
             dependencyResolver.RegisterLazySingleton(() => new NavigationViewController());
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the navigation controller.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="mainScheduler">The main scheduler.</param>
+        /// <param name="backgroundScheduler">The background scheduler.</param>
+        /// <returns>
+        /// The mutable dependency resolver.
+        /// </returns>
+        public static IMutableDependencyResolver RegisterNavigationController(
+            this IMutableDependencyResolver dependencyResolver,
+            IScheduler mainScheduler,
+            IScheduler backgroundScheduler)
+        {
+            dependencyResolver.RegisterLazySingleton(() => new NavigationViewController(mainScheduler, backgroundScheduler));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the navigation controller.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="factory">The factory.</param>
+        /// <returns>The mutable dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterNavigationController(
+            this IMutableDependencyResolver dependencyResolver,
+            Func<NavigationViewController> factory)
+        {
+            dependencyResolver.RegisterLazySingleton(() => factory);
             return dependencyResolver;
         }
     }
