@@ -15,7 +15,7 @@ namespace Sextant
     /// </summary>
     public class Sextant
     {
-        private static readonly Lazy<Sextant> _sextant;
+        private static readonly Lazy<Sextant> _sextant = new Lazy<Sextant>();
 
         static Sextant()
         {
@@ -28,8 +28,6 @@ namespace Sextant
 
                 Instance.Initialize();
             });
-
-            _sextant = new Lazy<Sextant>();
         }
 
         /// <summary>

@@ -13,16 +13,6 @@ namespace Sextant.XamForms.Tests
     public sealed class SextantTests
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SextantTests"/> class.
-        /// </summary>
-        public SextantTests()
-        {
-            Locator.CurrentMutable.UnregisterAll<NavigationView>();
-            Locator.CurrentMutable.UnregisterAll<ViewStackService>();
-            Locator.CurrentMutable.InitializeSplat();
-        }
-
-        /// <summary>
         /// Tests the Sextant Initalize method.
         /// </summary>
         public sealed class TheInitializeMethod
