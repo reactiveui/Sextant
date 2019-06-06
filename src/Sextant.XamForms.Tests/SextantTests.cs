@@ -13,18 +13,25 @@ namespace Sextant.XamForms.Tests
     public sealed class SextantTests
     {
         /// <summary>
-        /// Tests the Sextant Initalize method.
+        /// Tests the Sextant Instance property.
         /// </summary>
-        public sealed class TheInitializeMethod
+        public sealed class TheInstanceProperty
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TheInstanceProperty"/> class.
+            /// </summary>
+            public TheInstanceProperty()
+            {
+            }
+
             /// <summary>
             /// Tests the navigation view is registered.
             /// </summary>
             [Fact]
-            public void Should_Register_Navigation_View()
+            public void Should_Not_Register_Navigation_View()
             {
                 // Given
-                Sextant.Instance.Initialize();
+                var instance = Sextant.Instance;
 
                 // When
                 var result = Locator.Current.GetService<IView>(nameof(NavigationView));
@@ -37,10 +44,10 @@ namespace Sextant.XamForms.Tests
             /// Tests the navigation view is registered.
             /// </summary>
             [Fact]
-            public void Should_Register_View_Stack_Service()
+            public void Should_Not_Register_View_Stack_Service()
             {
                 // Given
-                Sextant.Instance.Initialize();
+                var instance = Sextant.Instance;
 
                 // When
                 var result = Locator.Current.GetService<IViewStackService>();

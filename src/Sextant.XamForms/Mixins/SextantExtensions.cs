@@ -18,7 +18,7 @@ namespace Sextant.XamForms
         /// Initializes the sextant.
         /// </summary>
         /// <param name="sextant">The sextant.</param>
-        public static void Initialize(this Sextant sextant)
+        public static void InitializeForms(this Sextant sextant)
         {
             sextant.MutableLocator.RegisterNavigationView().RegisterViewStackService();
         }

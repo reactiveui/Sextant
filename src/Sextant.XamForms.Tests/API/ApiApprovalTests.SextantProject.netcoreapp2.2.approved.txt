@@ -29,7 +29,7 @@ namespace Sextant.XamForms
     }
     public class static SextantExtensions
     {
-        public static void Initialize(this Sextant.Sextant sextant) { }
+        public static void InitializeForms(this Sextant.Sextant sextant) { }
     }
     public class static SextantHelper
     {
