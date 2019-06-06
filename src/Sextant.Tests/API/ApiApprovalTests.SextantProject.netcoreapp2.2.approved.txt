@@ -8,7 +8,7 @@ namespace Sextant
             where TView : ReactiveUI.IViewFor<>, new ()
             where TViewModel :  class, Sextant.IPageViewModel { }
         public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<ReactiveUI.IViewFor<TViewModel>> viewFactory, string contract = null)
-            where TView : ReactiveUI.IViewFor<>
+            where TView : ReactiveUI.IViewFor
             where TViewModel :  class, Sextant.IPageViewModel { }
         public static Splat.IMutableDependencyResolver RegisterViewStackService(this Splat.IMutableDependencyResolver dependencyResolver) { }
         public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, T> factory)

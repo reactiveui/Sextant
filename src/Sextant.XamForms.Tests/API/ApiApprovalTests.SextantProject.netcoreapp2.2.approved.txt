@@ -4,17 +4,11 @@ namespace Sextant.XamForms
     public class static DependencyResolverMixins
     {
         public static string NavigationView { get; }
+        public static Sextant.XamForms.NavigationView GetNavigationView(this Splat.IReadonlyDependencyResolver dependencyResolver, string contract = null) { }
+        public static Splat.IMutableDependencyResolver RegisterNavigation<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
+            where TView : ReactiveUI.IViewFor, Sextant.IView { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver) { }
-        public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainScheudler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
-        public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string contract = null)
-            where TView : ReactiveUI.IViewFor<>, new ()
-            where TViewModel :  class, Sextant.IPageViewModel { }
-        public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<ReactiveUI.IViewFor<TViewModel>> viewFactory, string contract = null)
-            where TView : ReactiveUI.IViewFor<>
-            where TViewModel :  class, Sextant.IPageViewModel { }
-        public static Splat.IMutableDependencyResolver RegisterViewStackService(this Splat.IMutableDependencyResolver dependencyResolver) { }
-        public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, T> factory)
-            where T : Sextant.IViewStackService { }
+        public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainThreadScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
     }
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView
     {

@@ -68,5 +68,16 @@ namespace Sextant.XamForms
             dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, NavigationView);
             return dependencyResolver;
         }
+
+        /// <summary>
+        /// Gets the navigation view.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>The navigation view.</returns>
+        public static NavigationView GetNavigationView(
+            this IReadonlyDependencyResolver dependencyResolver,
+            string contract = null) =>
+            dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
     }
 }

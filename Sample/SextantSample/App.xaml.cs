@@ -7,6 +7,7 @@ using SextantSample.Views;
 using Splat;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static Sextant.Sextant;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SextantSample
@@ -19,7 +20,7 @@ namespace SextantSample
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
 
-            Sextant.Sextant.Instance.InitializeForms();
+            Instance.InitializeForms();
 
             Locator
                 .CurrentMutable
@@ -29,14 +30,13 @@ namespace SextantSample
                 .RegisterView<RedView, RedViewModel>()
                 .RegisterNavigation(() => new BlueNavigationView());
 
-
             Locator
                 .Current
                 .GetService<IViewStackService>()
                 .PushPage(new HomeViewModel(), null, true, false)
                 .Subscribe();
 
-            MainPage = Locator.Current.GetService<IView>(nameof(NavigationView)) as NavigationView;
+            MainPage = Locator.Current.GetNavigationView();
         }
 
         protected override void OnStart()
