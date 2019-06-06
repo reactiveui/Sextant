@@ -19,13 +19,24 @@ namespace SextantSample
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
 
-            SextantHelper.RegisterView<HomeView, HomeViewModel>();
-            SextantHelper.RegisterView<FirstModalView, FirstModalViewModel>();
-            SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
-            SextantHelper.RegisterView<RedView, RedViewModel>();
-            SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
+            Sextant.Sextant.Instance.InitializeForms();
 
-            MainPage = SextantHelper.Initialize<HomeViewModel>();
+            Locator
+                .CurrentMutable
+                .RegisterView<HomeView, HomeViewModel>()
+                .RegisterView<FirstModalView, FirstModalViewModel>()
+                .RegisterView<SecondModalView, SecondModalViewModel>()
+                .RegisterView<RedView, RedViewModel>()
+                .RegisterNavigation(() => new BlueNavigationView());
+
+
+            Locator
+                .Current
+                .GetService<IViewStackService>()
+                .PushPage(new HomeViewModel(), null, true, false)
+                .Subscribe();
+
+            MainPage = Locator.Current.GetService<IView>(nameof(NavigationView)) as NavigationView;
         }
 
         protected override void OnStart()

@@ -4,6 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Sextant;
+using Splat;
 
 namespace SextantSample.ViewModels
 {
@@ -23,7 +24,8 @@ namespace SextantSample.ViewModels
             set;
         }
 
-        public HomeViewModel(IViewStackService viewStackService) : base(viewStackService)
+        public HomeViewModel()
+            : base(Locator.Current.GetService<IViewStackService>())
         {
             OpenModal = ReactiveCommand
                 .CreateFromObservable(() =>

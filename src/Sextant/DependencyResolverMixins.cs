@@ -78,7 +78,7 @@ namespace Sextant
         /// The dependencyResovler.
         /// </returns>
         public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<IViewFor<TViewModel>> viewFactory, string contract = null)
-            where TView : IViewFor<TViewModel>
+            where TView : IViewFor
             where TViewModel : class, IPageViewModel
         {
             dependencyResolver.Register(() => viewFactory(), typeof(IViewFor<TViewModel>), contract);

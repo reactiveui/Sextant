@@ -40,77 +40,32 @@ namespace Sextant.XamForms
         /// Initializes sextant.
         /// </summary>
         /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="mainScheudler">The main scheudler.</param>
+        /// <param name="mainThreadScheduler">The main scheduler.</param>
         /// <param name="backgroundScheduler">The background scheduler.</param>
         /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainScheudler, IScheduler backgroundScheduler)
+        public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainThreadScheduler, IScheduler backgroundScheduler)
         {
             var vLocator = Locator.Current.GetService<IViewLocator>();
 
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainScheudler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
             return dependencyResolver;
         }
 
         /// <summary>
-        /// Registers the view stack service.
+        /// Registers a value for navigation.
         /// </summary>
-        /// <typeparam name="T">The view stack service type.</typeparam>
+        /// <typeparam name="TView">The type of view to register.</typeparam>
         /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="navigationViewFactory">The navigation view factory.</param>
         /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterViewStackService(this IMutableDependencyResolver dependencyResolver)
+        public static IMutableDependencyResolver RegisterNavigation<TView>(this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
+            where TView : IViewFor, IView
         {
-            IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ViewStackService(view));
-            return dependencyResolver;
-        }
+            var navigationView = navigationViewFactory();
+            var viewStackService = new ViewStackService(navigationView);
 
-        /// <summary>
-        /// Registers the view stack service.
-        /// </summary>
-        /// <typeparam name="T">The view stack service type.</typeparam>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="factory">The factory.</param>
-        /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterViewStackService<T>(this IMutableDependencyResolver dependencyResolver, Func<IView, T> factory)
-            where T : IViewStackService
-        {
-            IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<T>(() => factory(view));
-            return dependencyResolver;
-        }
-
-        /// <summary>
-        /// Registers the specified view with the Splat locator.
-        /// </summary>
-        /// <typeparam name="TView">The type of the view.</typeparam>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="contract">The contract.</param>
-        /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string contract = null)
-            where TView : IViewFor<TViewModel>, new()
-            where TViewModel : class, IPageViewModel
-        {
-            dependencyResolver.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
-            return dependencyResolver;
-        }
-
-        /// <summary>
-        /// Registers the specified view with the Splat locator.
-        /// </summary>
-        /// <typeparam name="TView">The type of the view.</typeparam>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="viewFactory">The view factory.</param>
-        /// <param name="contract">The contract.</param>
-        /// <returns>
-        /// The dependencyResovler.
-        /// </returns>
-        public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<IViewFor<TViewModel>> viewFactory, string contract = null)
-            where TView : IViewFor<TViewModel>
-            where TViewModel : class, IPageViewModel
-        {
-            dependencyResolver.Register(() => viewFactory(), typeof(IViewFor<TViewModel>), contract);
+            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);
+            dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, NavigationView);
             return dependencyResolver;
         }
     }
