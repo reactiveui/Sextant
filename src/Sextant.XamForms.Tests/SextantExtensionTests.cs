@@ -22,7 +22,7 @@ namespace Sextant.XamForms.Tests
             /// Should register the navigation view.
             /// </summary>
             [Fact]
-            public void Should_Register_Navigation_View()
+            public void Should_Not_Register_Navigation_View()
             {
                 // Given
                 Sextant.Instance.Initialize();
@@ -31,7 +31,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
 
                 // Then
-                result.ShouldBeOfType<NavigationView>();
+                result.ShouldBeNull();
             }
 
             /// <summary>
