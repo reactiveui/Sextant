@@ -19,6 +19,14 @@ namespace Sextant.XamForms.Tests
         public sealed class TheInitializeMethod
         {
             /// <summary>
+            /// Initializes a new instance of the <see cref="TheInitializeMethod"/> class.
+            /// </summary>
+            public TheInitializeMethod()
+            {
+                Locator.SetLocator(new ModernDependencyResolver());
+            }
+
+            /// <summary>
             /// Should register the navigation view.
             /// </summary>
             [Fact]
