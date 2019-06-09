@@ -14,28 +14,6 @@ namespace Sextant.XamForms.Tests
     public sealed class SextantExtensionTests
     {
         /// <summary>
-        /// Tests the initialization method.
-        /// </summary>
-        public sealed class TheInitializeMethod
-        {
-            /// <summary>
-            /// Should register the view stack service.
-            /// </summary>
-            [Fact]
-            public void Should_Register_View_Stack_Service()
-            {
-                // Given
-                Sextant.Instance.Initialize();
-
-                // When
-                var result = Locator.Current.GetService<IViewStackService>();
-
-                // Then
-                result.ShouldBeOfType<ViewStackService>();
-            }
-        }
-
-        /// <summary>
         /// Tests the Sextant Initalize Forms method.
         /// </summary>
         public sealed class TheInitializeFormsMethod
