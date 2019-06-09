@@ -19,30 +19,6 @@ namespace Sextant.XamForms.Tests
         public sealed class TheInitializeMethod
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="TheInitializeMethod"/> class.
-            /// </summary>
-            public TheInitializeMethod()
-            {
-                Locator.SetLocator(new ModernDependencyResolver());
-            }
-
-            /// <summary>
-            /// Should register the navigation view.
-            /// </summary>
-            [Fact]
-            public void Should_Not_Register_Navigation_View()
-            {
-                // Given
-                Sextant.Instance.Initialize();
-
-                // When
-                var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
-
-                // Then
-                result.ShouldBeNull();
-            }
-
-            /// <summary>
             /// Should register the view stack service.
             /// </summary>
             [Fact]
