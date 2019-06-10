@@ -21,4 +21,12 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
 
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net461')) ">
+    <Compile Include="Platforms\net461\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">
+    <Compile Include="Platforms\netstandard2.0\**\*.cs" />
+  </ItemGroup>
+
 </Project>

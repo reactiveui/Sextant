@@ -2,14 +2,15 @@
 using System.Reactive.Concurrency;
 using ReactiveUI;
 using Sextant;
+using Sextant.XamForms;
 using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
     public class BlueNavigationView : NavigationView, IViewFor
     {
-        public BlueNavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator)
-            : base(mainScheduler, backgroundScheduler, viewLocator)
+        public BlueNavigationView()
+            : base(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
         {
             this.BarBackgroundColor = Color.Blue;
             this.BarTextColor = Color.White;

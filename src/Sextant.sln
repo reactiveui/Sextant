@@ -21,12 +21,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.build.props = Directory.build.props
 		Directory.build.targets = Directory.build.targets
 		global.json = global.json
+		Sextant.Testing\Mocks\PageViewModelMock.cs = Sextant.Testing\Mocks\PageViewModelMock.cs
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.XamForms", "Sextant.XamForms\Sextant.XamForms.csproj", "{91D39618-AF73-4A28-9145-2DAC63437762}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant.XamForms.Tests", "Sextant.XamForms.Tests\Sextant.XamForms.Tests.csproj", "{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.XamForms.Tests", "Sextant.XamForms.Tests\Sextant.XamForms.Tests.csproj", "{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Mocks", "Sextant.Mocks\Sextant.Mocks.csproj", "{07C90E5B-858E-4EB2-948B-8D0A698F439B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +260,36 @@ Global
 		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Sample Release|iPhone.Build.0 = Release|Any CPU
 		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Sample Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Sample Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|iPhone.Build.0 = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Sample Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Sample Release|Any CPU.Build.0 = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Sample Release|iPhone.ActiveCfg = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Sample Release|iPhone.Build.0 = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Sample Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Sample Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

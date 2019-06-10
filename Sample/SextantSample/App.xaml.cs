@@ -1,11 +1,13 @@
 using System;
 using ReactiveUI;
 using Sextant;
+using Sextant.XamForms;
 using SextantSample.ViewModels;
 using SextantSample.Views;
 using Splat;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static Sextant.Sextant;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SextantSample
@@ -18,13 +20,23 @@ namespace SextantSample
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
 
-            SextantHelper.RegisterView<HomeView, HomeViewModel>();
-            SextantHelper.RegisterView<FirstModalView, FirstModalViewModel>();
-            SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
-            SextantHelper.RegisterView<RedView, RedViewModel>();
-            SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
+            Instance.InitializeForms();
 
-            MainPage = SextantHelper.Initialize<HomeViewModel>();
+            Locator
+                .CurrentMutable
+                .RegisterView<HomeView, HomeViewModel>()
+                .RegisterView<FirstModalView, FirstModalViewModel>()
+                .RegisterView<SecondModalView, SecondModalViewModel>()
+                .RegisterView<RedView, RedViewModel>()
+                .RegisterNavigation(() => new BlueNavigationView());
+
+            Locator
+                .Current
+                .GetService<IViewStackService>()
+                .PushPage(new HomeViewModel(), null, true, false)
+                .Subscribe();
+
+            MainPage = Locator.Current.GetNavigationView();
         }
 
         protected override void OnStart()
