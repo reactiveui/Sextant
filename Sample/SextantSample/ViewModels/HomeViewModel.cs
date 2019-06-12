@@ -38,6 +38,9 @@ namespace SextantSample.ViewModels
                     outputScheduler: RxApp.MainThreadScheduler);
 
             OpenModal.Subscribe(x => Debug.WriteLine("PagePushed"));
+
+            PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+            OpenModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
         }
     }
 }

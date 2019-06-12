@@ -3,6 +3,7 @@ using ReactiveUI;
 using System;
 using System.Diagnostics;
 using Sextant;
+using System.Reactive.Linq;
 
 namespace SextantSample.ViewModels
 {
@@ -37,6 +38,8 @@ namespace SextantSample.ViewModels
             PushPage.Subscribe(x => Debug.WriteLine("PagePushed"));
 			PopModal.Subscribe(x => Debug.WriteLine("PagePoped"));
 
-		}
+		    PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+		    PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+        }
 	}
 }

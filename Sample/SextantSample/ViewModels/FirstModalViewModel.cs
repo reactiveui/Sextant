@@ -36,7 +36,7 @@ namespace SextantSample.ViewModels
 
 			OpenModal.Subscribe(x => Debug.WriteLine("PagePushed"));
 			PopModal.Subscribe(x => Debug.WriteLine("PagePoped"));
-
-		}
+		    PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+        }
 	}
 }
