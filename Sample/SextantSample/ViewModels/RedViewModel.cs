@@ -8,8 +8,8 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-	public class RedViewModel : ViewModelBase, IPageViewModel
-	{
+	public class RedViewModel : ViewModelBase, IPageViewModel, ITabViewModel
+    {
 	    public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 
 	    public ReactiveCommand<Unit, Unit> PushPage { get; set; }
@@ -20,7 +20,11 @@ namespace SextantSample.ViewModels
 
         public string Id => nameof(RedViewModel);
 
-	    public RedViewModel(IViewStackService viewStackService) : base(viewStackService)
+        public string TabTitle => Id;
+
+        public string TabIcon => "";
+
+        public RedViewModel(IViewStackService viewStackService) : base(viewStackService)
 		{
 			PopModal = ReactiveCommand
 				.CreateFromObservable(() =>

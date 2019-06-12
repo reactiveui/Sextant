@@ -8,7 +8,7 @@ using Splat;
 
 namespace SextantSample.ViewModels
 {
-    public class HomeViewModel : ViewModelBase, IPageViewModel
+    public class HomeViewModel : ViewModelBase, IPageViewModel, ITabViewModel
     {
         public string Id => nameof(HomeViewModel);
 
@@ -24,17 +24,21 @@ namespace SextantSample.ViewModels
             set;
         }
 
-        public HomeViewModel()
-            : base(Locator.Current.GetService<IViewStackService>())
+        public string TabTitle => Id;
+
+        public string TabIcon => "";
+
+        public HomeViewModel(IViewStackService viewStackService)
+            : base(viewStackService)
         {
             OpenModal = ReactiveCommand
                 .CreateFromObservable(() =>
-                    this.ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)),
+                    ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
 
             PushPage = ReactiveCommand
                 .CreateFromObservable(() =>
-                    this.ViewStackService.PushPage(new RedViewModel(ViewStackService)),
+                    ViewStackService.PushPage(new RedViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
 
             OpenModal.Subscribe(x => Debug.WriteLine("PagePushed"));

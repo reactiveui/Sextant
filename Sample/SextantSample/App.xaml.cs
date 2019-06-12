@@ -28,12 +28,14 @@ namespace SextantSample
                 .RegisterView<FirstModalView, FirstModalViewModel>()
                 .RegisterView<SecondModalView, SecondModalViewModel>()
                 .RegisterView<RedView, RedViewModel>()
+                .RegisterView<BlueView, BlueViewModel>()
+                .RegisterView<MainNavigationView, MainNavigationViewModel>()
                 .RegisterNavigation(() => new BlueNavigationView());
 
             Locator
                 .Current
                 .GetService<IViewStackService>()
-                .PushPage(new HomeViewModel(), null, true, false)
+                .PushPage(new MainNavigationViewModel(null), null, true, false)
                 .Subscribe();
 
             MainPage = Locator.Current.GetNavigationView();
