@@ -6,15 +6,12 @@
     <PackageReference Include="Xamarin.Forms" Version="3.6.*" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
     <PackageReference Include="ReactiveUI.XamForms" Version="9.*" />
+    <PackageReference Include="Sextant.XamForms" Version="1.7.2" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\FirstModalNavigationView.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Sextant.XamForms\Sextant.XamForms.csproj" />
-    <ProjectReference Include="..\..\src\Sextant\Sextant.csproj" />
   </ItemGroup>
 </Project>
