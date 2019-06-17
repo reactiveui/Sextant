@@ -27,12 +27,14 @@ namespace SextantSample.Views
             {
                 if (Children.Count == 0)
                 {
-                    ViewModel.TabViewModels.ForEach(x => this.Children.Add(InitNavigation(x)));
+                    ViewModel
+                        .TabViewModels
+                        .ForEach(x => Children.Add(InitializeTabNavigationService(x)));
                 }
             });
         }
 
-        public NavigationPage InitNavigation(Func<IViewStackService, ITabViewModel> createViewModelFunc)
+        private Page InitializeTabNavigationService(Func<IViewStackService, TabViewModel> createViewModelFunc)
         {
             var bgScheduler = RxApp.TaskpoolScheduler;
             var mScheduler = RxApp.MainThreadScheduler;

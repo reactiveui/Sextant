@@ -6,7 +6,7 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-    public class BlueViewModel : ViewModelBase, IPageViewModel, ITabViewModel
+    public class BlueViewModel : ViewModelBase
     {
         public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 

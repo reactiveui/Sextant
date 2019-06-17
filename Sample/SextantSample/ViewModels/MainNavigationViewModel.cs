@@ -7,36 +7,22 @@ namespace SextantSample.ViewModels
 {
     public class MainNavigationViewModel : ViewModelBase
     {
-        public List<Func<IViewStackService, ITabViewModel>> TabViewModels
+        public List<Func<IViewStackService, TabViewModel>> TabViewModels
         {
             get => _tabViewModels;
             set => this.RaiseAndSetIfChanged(ref _tabViewModels, value);
         }
 
-        private List<Func<IViewStackService, ITabViewModel>> _tabViewModels;
-
-        public readonly List<IViewStackService> _tabStackServices = new List<IViewStackService>();
+        private List<Func<IViewStackService, TabViewModel>> _tabViewModels;
 
         public MainNavigationViewModel(IViewStackService viewStackService = null)
             : base(viewStackService)
         {
-            TabViewModels = new List<Func<IViewStackService, ITabViewModel>>()
+            TabViewModels = new List<Func<IViewStackService, TabViewModel>>()
             {
-                (customViewStack) =>
-                {
-                    _tabStackServices.Add(customViewStack);
-                    return new HomeViewModel(customViewStack);
-                },
-                (customViewStack) =>
-                {
-                    _tabStackServices.Add(customViewStack);
-                    return new RedViewModel(customViewStack);
-                },
-                (customViewStack) =>
-                {
-                    _tabStackServices.Add(customViewStack);
-                    return new BlueViewModel(customViewStack);
-                }
+                (customViewStack) => new TabViewModel("Home", "", customViewStack, () => new HomeViewModel(customViewStack)),
+                (customViewStack) => new TabViewModel("Red", "", customViewStack, () => new RedViewModel(customViewStack)),
+                (customViewStack) => new TabViewModel("Blue", "", customViewStack, () => new BlueViewModel(customViewStack))
             };
         }
     }

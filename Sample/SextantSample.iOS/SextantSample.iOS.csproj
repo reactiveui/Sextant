@@ -166,10 +166,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Sextant\Sextant.csproj">
-      <Project>{d6b84899-4afc-4e6c-9c3f-005f21df5a52}</Project>
-      <Name>Sextant</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SextantSample\SextantSample.csproj">
       <Project>{3F955209-D929-4AE3-BD2A-A5823EB9D295}</Project>
       <Name>SextantSample</Name>

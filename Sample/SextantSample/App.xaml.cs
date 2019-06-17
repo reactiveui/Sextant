@@ -24,6 +24,7 @@ namespace SextantSample
 
             Locator
                 .CurrentMutable
+                .RegisterView<TabView, TabViewModel>()
                 .RegisterView<HomeView, HomeViewModel>()
                 .RegisterView<FirstModalView, FirstModalViewModel>()
                 .RegisterView<SecondModalView, SecondModalViewModel>()
