@@ -28,7 +28,7 @@ namespace Sextant.Tests
                 ParameterViewModel sut = new ParameterViewModel();
 
                 // When
-                sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" } });
+                sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" } }).Subscribe();
 
                 // Then
                 sut.Text.ShouldBe("world");
@@ -44,7 +44,7 @@ namespace Sextant.Tests
                 ParameterViewModel sut = new ParameterViewModel();
 
                 // When
-                sut.WhenNavigatingTo(new NavigationParameter { });
+                sut.WhenNavigatingTo(new NavigationParameter());
 
                 // Then
                 sut.Text.ShouldBeNull();
@@ -66,7 +66,7 @@ namespace Sextant.Tests
                 ParameterViewModel sut = new ParameterViewModel();
 
                 // When
-                sut.WhenNavigatedTo(new NavigationParameter { { "hello", "world" }, { "life", 42 } });
+                sut.WhenNavigatedTo(new NavigationParameter { { "hello", "world" }, { "life", 42 } }).Subscribe();
 
                 // Then
                 sut.Text.ShouldBe("world");
@@ -82,10 +82,23 @@ namespace Sextant.Tests
                 ParameterViewModel sut = new ParameterViewModel();
 
                 // When
-                sut.WhenNavigatedTo(new NavigationParameter { });
+                sut.WhenNavigatedTo(new NavigationParameter());
 
                 // Then
                 sut.Text.ShouldBeNull();
+            }
+
+            /// <summary>
+            /// Should return null if key not found.
+            /// </summary>
+            [Fact]
+            public void Should_Not_Throw_If_Key_Not_Found()
+            {
+                // Given, When
+                ParameterViewModel sut = new ParameterViewModel();
+
+                // Then
+                Should.NotThrow(() => sut.WhenNavigatedTo(new NavigationParameter { { "hello", "world" } }).Subscribe());
             }
         }
     }
