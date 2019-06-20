@@ -32,13 +32,14 @@ namespace Sextant.Tests
 
                 // Then
                 sut.Text.ShouldBe("world");
+                sut.Meaning.ShouldBe(42);
             }
 
             /// <summary>
-            /// Should return null if key not found.
+            /// Should return null if no values are provided for the parameter.
             /// </summary>
             [Fact]
-            public void Should_Return_Null_If_Key_Not_Found()
+            public void Should_Return_Null_If_No_Values_Provided()
             {
                 // Given
                 ParameterViewModel sut = new ParameterViewModel();
@@ -86,13 +87,14 @@ namespace Sextant.Tests
 
                 // Then
                 sut.Text.ShouldBe("world");
+                sut.Meaning.ShouldBe(42);
             }
 
             /// <summary>
             /// Should return null if key not found.
             /// </summary>
             [Fact]
-            public void Should_Return_Null_If_Key_Not_Found()
+            public void Should_Return_Null_If_No_Values_Provided()
             {
                 // Given
                 ParameterViewModel sut = new ParameterViewModel();
