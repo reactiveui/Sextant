@@ -63,7 +63,7 @@ namespace Sextant.Tests
                 var result = Should.Throw<KeyNotFoundException>(() => sut.WhenNavigatedTo(new NavigationParameter { { "hello", "world" } }).Subscribe());
 
                 // Then
-                result.Message.ShouldStartWith("The given key 'life'");
+                result.Message.ShouldBe("The given key was not present in the dictionary.");
             }
         }
 
@@ -117,7 +117,7 @@ namespace Sextant.Tests
                 var result = Should.Throw<KeyNotFoundException>(() => sut.WhenNavigatedFrom(new NavigationParameter { { "hello", "world" } }).Subscribe());
 
                 // Then
-                result.Message.ShouldStartWith("The given key 'life'");
+                result.Message.ShouldBe("The given key was not present in the dictionary.");
             }
         }
     }

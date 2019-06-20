@@ -61,7 +61,7 @@ namespace Sextant.Tests
                 var result = Should.Throw<KeyNotFoundException>(() => sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" } }).Subscribe());
 
                 // Then
-                result.Message.ShouldStartWith("The given key 'life'");
+                result.Message.ShouldBe("The given key 'life'");
             }
         }
     }
