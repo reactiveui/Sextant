@@ -23,6 +23,8 @@ BuildParameters.SetParameters(context: Context,
                             artifactsDirectory: "./artifacts",
                             sourceDirectory: "./src");
 
-ToolSettings.SetToolSettings(context: Context);
+var testCoverageExcludeFilters = new [] { string.Format("[{0}*Tests*]*", BuildParameters.Title), string.Format("[{0}*Mocks*]*", BuildParameters.Title) };
+
+ToolSettings.SetToolSettings(context: Context, testCoverageExcludeFilters: testCoverageExcludeFilters);
 
 Build.Run();
