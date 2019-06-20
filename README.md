@@ -27,29 +27,58 @@ Sextant is in a very initial stage and in constant change, so please be pantienc
 
 This library is nothing more than me "standing on the shoulders of giants":
 [Kent](https://github.com/kentcb) for been the original and true creator of this, I pretty much just copied and pasted it :)
-[Geoffrey Huntley](https://github.com/ghuntley) maintainer on [ReactiveUI](https://github.com/reactiveui/ReactiveUI) (especially the build.cake) from where learned a lot about Cake + AppVeyor
+[Geoffrey Huntley](https://github.com/ghuntley) maintainer on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
 
-## Usage
+## NuGet Installation
 
 Install the nuget package on your Forms project and ViewModels project.
 
-Register the views:
-```csharp
-SextantHelper.RegisterView<HomeView,HomeViewModel>();
-SextantHelper.RegisterView<FirstModalView,FirstModalViewModel>();
-SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
-SextantHelper.RegisterView<RedView, RedViewModel>();
-```
+### GitHub
+Pre release packages are available at https://nuget.pkg.github.com/reactiveui/index.json
 
-(optional)If you need some especial configuration on the Navigation, like diferent colors, register a NavigationView for the VM:
+### NuGet
+
+| Platform          | Sextant Package                  | NuGet                |
+| ----------------- | -------------------------------- | -------------------- |
+| Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]   |
+| Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core] |
+
+[Core]: https://www.nuget.org/packages/Sextant/
+[CoreBadge]: https://img.shields.io/nuget/v/Sextant.svg
+[CoreDoc]: https://reactiveui.net/docs/getting-started/installation/
+
+[Xam]: https://www.nuget.org/packages/Sextant.XamForms/
+[XamBadge]: https://img.shields.io/nuget/v/Sextant.XamForms.svg
+[XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
+[IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
+
+## Register Components
+
+### Views
+
+Version 2.0 added new extensions methods for the `IMutableDepedencyResolver` that allow you to register an `IViewFor` to a View Model.
+
 ```csharp
-SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
+Locator
+    .CurrentMutable
+    .RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current))
+    .RegisterParameterViewStackService()
+    .RegisterView<RedPage, RedViewModel>()
+    .RegisterView<FirstPage, FirstViewModel>();
 ```
 
 Set the initial page:
 ```csharp
-MainPage = SextantHelper.Initialize<HomeViewModel>();
+Locator
+    .Current
+    .GetService<IParameterViewStackService>()
+    .PushPage(new PassViewModel(), null, true, false)
+    .Subscribe();
+
+MainPage = Locator.Current.GetNavigationView("NavigationView");
 ```
+
+## Use the Navigation Service
 
 After that all you have to do is call one of the methods inside your ViewModels:
 ```csharp
@@ -86,7 +115,7 @@ IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
 IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
 ```
 
-For example:
+### Example
 ```csharp
 OpenModal = ReactiveCommand
     .CreateFromObservable(() =>
@@ -94,7 +123,78 @@ OpenModal = ReactiveCommand
         outputScheduler: RxApp.MainThreadScheduler);
 ```
 
-For more examples, look inside the sample folder in the solution. 
+## Pass Parameters
+
+Version 2.0 added support for passing parameters when navigating.
+
+```csharp
+/// <summary>
+/// Pushes the <see cref="INavigable" /> onto the stack.
+/// </summary>
+/// <param name="navigableViewModel">The navigable view model.</param>
+/// <param name="parameter">The parameter.</param>
+/// <param name="contract">The contract.</param>
+/// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+/// <param name="animate">if set to <c>true</c> [animate].</param>
+/// <returns>An observable that signals when the push has been completed.</returns>
+IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true);
+
+/// <summary>
+/// Pushes the <see cref="IViewModel" /> onto the stack.
+/// </summary>
+/// <param name="modal">The modal.</param>
+/// <param name="parameter">The parameter.</param>
+/// <param name="contract">The contract.</param>
+/// <returns>An observable that signals when the push has been completed.</returns>
+IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null);
+
+/// <summary>
+/// Pops the <see cref="IViewModel" /> off of the stack.
+/// </summary>
+/// <param name="parameter">The parameter.</param>
+/// <param name="animate">if set to <c>true</c> [animate].</param>
+/// <returns>An observable that signals when the push has been completed.</returns>
+IObservable<Unit> PopPage(INavigationParameter parameter, bool animate = true);
+```
+
+### Example
+
+```csharp
+Navigate = ReactiveCommand.CreateFromObservable(
+    () => navigationService
+        .PushPage(new NavigableViewModel(), new NavigationParameter { { "parameter", parameter } }),
+        outputScheduler: RxApp.MainThreadScheduler);
+```
+
+The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object and by implementing them on an implementation will allow you to assign values to the View Model during Navigation.
+
+```csharp
+/// <summary>
+/// An observable sequence that notifies subscribers this item was navigated to.
+/// </summary>
+/// <param name="parameter">The parameter.</param>
+/// <returns>An observable sequence. </returns>
+IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter);
+
+/// <summary>
+/// An observable sequence that notifies subscribers this item was navigated from.
+/// </summary>
+/// <param name="parameter">The parameter.</param>
+/// <returns>An observable sequence. </returns>
+IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter);
+
+/// <summary>
+/// Whens the navigating to.
+/// </summary>
+/// <param name="parameter">The parameter.</param>
+/// <returns>An observable sequence.</returns>
+IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter);
+```
+
+## Samples
+
+- [Sample](https://github.com/reactiveui/Sextant/tree/master/Sample)
+- [Navigation Parameter Sample](https://github.com/reactiveui/ReactiveUI.Samples/tree/master/xamarin-forms/Navigation.Parameters)
 
 ## Contribute
 

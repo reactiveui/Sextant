@@ -25,7 +25,6 @@ namespace Sextant
         /// <summary>
         /// Registers the view stack service.
         /// </summary>
-        /// <typeparam name="T">The view stack service type.</typeparam>
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <returns>The dependencyResovler.</returns>
         public static IMutableDependencyResolver RegisterViewStackService(this IMutableDependencyResolver dependencyResolver)
@@ -38,9 +37,8 @@ namespace Sextant
         /// <summary>
         /// Registers the view stack service.
         /// </summary>
-        /// <typeparam name="T">The view stack service type.</typeparam>
         /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <returns>The dependencyResovler.</returns>
+        /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterParameterViewStackService(this IMutableDependencyResolver dependencyResolver)
         {
             IView view = Locator.Current.GetService<IView>(NavigationView);
