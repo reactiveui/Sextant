@@ -61,6 +61,10 @@ namespace Sextant
         System.IObservable<Sextant.IViewModel> TopModal();
         System.IObservable<Sextant.IViewModel> TopPage();
     }
+    public class NavigationParameter : System.Collections.Generic.Dictionary<string, object>, Sextant.INavigationParameter, System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable
+    {
+        public NavigationParameter() { }
+    }
     public sealed class ParameterViewStackService : Sextant.ViewStackServiceBase, Sextant.IParameterViewStackService
     {
         public ParameterViewStackService(Sextant.IView view) { }

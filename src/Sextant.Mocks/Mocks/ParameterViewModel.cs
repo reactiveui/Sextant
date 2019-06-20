@@ -40,6 +40,7 @@ namespace Sextant.Mocks
 
         private void Unwrap(INavigationParameter parameter)
         {
+            // Note: normally you should check parameter.ContainsKey() before accessing the dictionary.
             Text = (string)parameter["hello"];
             Meaning = (int)parameter["life"];
         }
