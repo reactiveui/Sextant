@@ -142,7 +142,7 @@ namespace Sextant.Tests
                         .ConfigureAwait(false);
 
                 // Then
-                result.Message.ShouldBe("Value cannot be null.\r\nParameter name: modal");
+                result.ParamName.ShouldBe("modal");
             }
 
             /// <summary>
@@ -163,8 +163,7 @@ namespace Sextant.Tests
                         .ConfigureAwait(false);
 
                 // Then
-                result.ShouldBeOfType<ArgumentNullException>();
-                result.Message.ShouldBe("Value cannot be null.\r\nParameter name: parameter");
+                result.ParamName.ShouldBe("parameter");
             }
 
             /// <summary>
