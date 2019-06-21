@@ -55,6 +55,28 @@ namespace Sextant.XamForms.Tests
         }
 
         /// <summary>
+        /// Tests the register navigation method.
+        /// </summary>
+        public sealed class RegisterNavigation
+        {
+            /// <summary>
+            /// Should register the view stack service.
+            /// </summary>
+            [Fact]
+            public void Should_Register_Navigation_View()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current));
+
+                // When
+                var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
+
+                // Then
+                result.ShouldBeOfType<NavigationView>();
+            }
+        }
+
+        /// <summary>
         /// Tests the register view stack service method.
         /// </summary>
         public sealed class TheRegisterViewStackServiceMethod

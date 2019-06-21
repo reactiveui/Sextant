@@ -5,10 +5,10 @@ namespace Sextant.XamForms
     {
         public static string NavigationView { get; }
         public static Sextant.XamForms.NavigationView GetNavigationView(this Splat.IReadonlyDependencyResolver dependencyResolver, string contract = null) { }
-        public static Splat.IMutableDependencyResolver RegisterNavigation<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
-            where TView : ReactiveUI.IViewFor, Sextant.IView { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainThreadScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
+        public static Splat.IMutableDependencyResolver RegisterNavigationView<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
+            where TView : Sextant.IView { }
     }
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
     {
