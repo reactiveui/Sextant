@@ -569,7 +569,6 @@ namespace Sextant.Tests
 
                 // Then
                 result.ParamName.ShouldBe("index");
-                result.Message.ShouldBe("Specified argument was out of the range of valid values. Parameter name: index");
             }
         }
 
@@ -631,7 +630,6 @@ namespace Sextant.Tests
 
                 // Then
                 result.ParamName.ShouldBe("index");
-                result.Message.ShouldBe("Specified argument was out of the range of valid values. Parameter name: index");
             }
         }
     }
