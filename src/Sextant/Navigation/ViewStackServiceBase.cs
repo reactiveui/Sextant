@@ -133,15 +133,13 @@ namespace Sextant
         /// Returns the top modal from the current modal stack.
         /// </summary>
         /// <returns>An observable that signals the top modal view model.</returns>
-        [SuppressMessage("Design", "CA1826: Do not use Enumerable methods on indexable collections.", Justification = "Deliberate usage")]
-        public IObservable<IViewModel> TopModal() => ModalSubject.FirstAsync().Select(x => x.Last());
+        public IObservable<IViewModel> TopModal() => ModalSubject.FirstAsync().Select(x => x[x.Count - 1]);
 
         /// <summary>
         /// Returns the top page from the current navigation stack.
         /// </summary>
         /// <returns>An observable that signals the top page view model.</returns>
-        [SuppressMessage("Design", "CA1826: Do not use Enumerable methods on indexable collections.", Justification = "Deliberate usage")]
-        public IObservable<IViewModel> TopPage() => PageSubject.FirstAsync().Select(x => x.Last());
+        public IObservable<IViewModel> TopPage() => PageSubject.FirstAsync().Select(x => x[x.Count - 1]);
 
         /// <inheritdoc />
         public void Dispose()
