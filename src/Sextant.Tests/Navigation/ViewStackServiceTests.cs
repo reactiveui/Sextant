@@ -565,7 +565,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Should.ThrowAsync<InvalidOperationException>(async () => await sut.TopModal()).ConfigureAwait(false);
+                var result = await Should.ThrowAsync<ArgumentOutOfRangeException>(async () => await sut.TopModal()).ConfigureAwait(false);
 
                 // Then
                 result.Message.ShouldBe("Sequence contains no elements");
@@ -626,7 +626,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Should.ThrowAsync<InvalidOperationException>(async () => await sut.TopPage()).ConfigureAwait(false);
+                var result = await Should.ThrowAsync<ArgumentOutOfRangeException>(async () => await sut.TopPage()).ConfigureAwait(false);
 
                 // Then
                 result.Message.ShouldBe("Sequence contains no elements");
