@@ -568,7 +568,8 @@ namespace Sextant.Tests
                 var result = await Should.ThrowAsync<ArgumentOutOfRangeException>(async () => await sut.TopModal()).ConfigureAwait(false);
 
                 // Then
-                result.Message.ShouldBe("Sequence contains no elements");
+                result.ParamName.ShouldBe("index");
+                result.Message.ShouldBe("Specified argument was out of the range of valid values");
             }
         }
 
@@ -629,7 +630,8 @@ namespace Sextant.Tests
                 var result = await Should.ThrowAsync<ArgumentOutOfRangeException>(async () => await sut.TopPage()).ConfigureAwait(false);
 
                 // Then
-                result.Message.ShouldBe("Sequence contains no elements");
+                result.ParamName.ShouldBe("index");
+                result.Message.ShouldBe("Specified argument was out of the range of valid values");
             }
         }
     }
