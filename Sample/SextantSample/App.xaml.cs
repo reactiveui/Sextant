@@ -28,7 +28,7 @@ namespace SextantSample
                 .RegisterView<FirstModalView, FirstModalViewModel>()
                 .RegisterView<SecondModalView, SecondModalViewModel>()
                 .RegisterView<RedView, RedViewModel>()
-                .RegisterNavigation(() => new BlueNavigationView());
+                .RegisterNavigationView(() => new BlueNavigationView());
 
             Locator
                 .Current

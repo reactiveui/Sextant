@@ -24,4 +24,3 @@ namespace SextantSample.Droid
         }
     }
 }
-

@@ -58,8 +58,8 @@ namespace Sextant.XamForms
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="navigationViewFactory">The navigation view factory.</param>
         /// <returns>The dependencyResovler.</returns>
-        public static IMutableDependencyResolver RegisterNavigation<TView>(this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
-            where TView : IViewFor, IView
+        public static IMutableDependencyResolver RegisterNavigationView<TView>(this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
+            where TView : IView
         {
             var navigationView = navigationViewFactory();
             var viewStackService = new ViewStackService(navigationView);

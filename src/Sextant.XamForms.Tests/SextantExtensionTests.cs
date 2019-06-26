@@ -47,7 +47,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ViewStackService>();
+                result.ShouldBeOfType<ParameterViewStackService>();
             }
         }
     }

@@ -11,7 +11,7 @@ namespace Sextant.Mocks
     /// A mock of a page view.
     /// </summary>
     /// <seealso cref="ReactiveUI.IViewFor{PageViewModelMock}" />
-    public class PageView : IViewFor<PageViewModelMock>
+    public class PageView : IViewFor<NavigableViewModelMock>
     {
         /// <summary>
         /// Gets or sets the ViewModel corresponding to this specific View. This should be
@@ -20,13 +20,13 @@ namespace Sextant.Mocks
         object IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (PageViewModelMock)value;
+            set => ViewModel = (NavigableViewModelMock)value;
         }
 
         /// <summary>
         /// Gets or sets the ViewModel corresponding to this specific View. This should be
         /// a DependencyProperty if you're using XAML.
         /// </summary>
-        public PageViewModelMock ViewModel { get; set; }
+        public NavigableViewModelMock ViewModel { get; set; }
     }
 }

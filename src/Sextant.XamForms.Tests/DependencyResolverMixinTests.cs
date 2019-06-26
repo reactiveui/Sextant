@@ -55,6 +55,28 @@ namespace Sextant.XamForms.Tests
         }
 
         /// <summary>
+        /// Tests the register navigation method.
+        /// </summary>
+        public sealed class RegisterNavigation
+        {
+            /// <summary>
+            /// Should register the view stack service.
+            /// </summary>
+            [Fact]
+            public void Should_Register_Navigation_View()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current));
+
+                // When
+                var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
+
+                // Then
+                result.ShouldBeOfType<NavigationView>();
+            }
+        }
+
+        /// <summary>
         /// Tests the register view stack service method.
         /// </summary>
         public sealed class TheRegisterViewStackServiceMethod
@@ -73,7 +95,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ViewStackService>();
+                result.ShouldBeOfType<ParameterViewStackService>();
             }
 
             /// <summary>
@@ -84,13 +106,13 @@ namespace Sextant.XamForms.Tests
             {
                 // Given
                 Locator.CurrentMutable.RegisterNavigationView();
-                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>(view => new ViewStackService(view));
+                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>(view => new ParameterViewStackService(view));
 
                 // When
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ViewStackService>();
+                result.ShouldBeOfType<ParameterViewStackService>();
             }
         }
 
@@ -106,10 +128,10 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View()
             {
                 // Given
-                Locator.CurrentMutable.RegisterView<PageView, PageViewModelMock>();
+                Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>();
 
                 // When
-                var result = Locator.Current.GetService<IViewFor<PageViewModelMock>>();
+                var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
                 // Then
                 result.ShouldBeOfType<PageView>();
@@ -122,10 +144,10 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View_Factory()
             {
                 // Given
-                Locator.CurrentMutable.RegisterView<PageView, PageViewModelMock>(() => new PageView());
+                Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>(() => new PageView());
 
                 // When
-                var result = Locator.Current.GetService<IViewFor<PageViewModelMock>>();
+                var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
                 // Then
                 result.ShouldBeOfType<PageView>();
