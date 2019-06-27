@@ -28,7 +28,7 @@ namespace Sextant
     public interface INavigationParameter : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable { }
     [System.ObsoleteAttribute("Please use the IViewModel interface.")]
     public interface IPageViewModel : Sextant.IViewModel { }
-    public interface IParameterViewStackService
+    public interface IParameterViewStackService : Sextant.IViewStackService
     {
         System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = True);
         System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable modal, Sextant.INavigationParameter parameter, string contract = null);
@@ -65,7 +65,7 @@ namespace Sextant
     {
         public NavigationParameter() { }
     }
-    public sealed class ParameterViewStackService : Sextant.ViewStackServiceBase, Sextant.IParameterViewStackService
+    public sealed class ParameterViewStackService : Sextant.ViewStackServiceBase, Sextant.IParameterViewStackService, Sextant.IViewStackService
     {
         public ParameterViewStackService(Sextant.IView view) { }
         public System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = True) { }

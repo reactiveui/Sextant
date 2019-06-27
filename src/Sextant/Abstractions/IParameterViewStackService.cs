@@ -11,7 +11,7 @@ namespace Sextant
     /// <summary>
     /// Interface that defines methods for passing parameters on navigation.
     /// </summary>
-    public interface IParameterViewStackService
+    public interface IParameterViewStackService : IViewStackService
     {
         /// <summary>
         /// Pushes the <see cref="INavigable" /> onto the stack.
