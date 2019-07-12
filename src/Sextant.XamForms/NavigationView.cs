@@ -99,11 +99,7 @@ namespace Sextant.XamForms
                     {
                         var page = LocatePageFor(modalViewModel, contract);
                         SetPageTitle(page, modalViewModel.Id);
-
-                        var navigation = LocateNavigationFor(modalViewModel);
-                        navigation.PushPage(modalViewModel, contract, true, false).Subscribe();
-
-                        return navigation as NavigationPage;
+                        return page;
                     },
                     CurrentThreadScheduler.Instance)
                 .ObserveOn(CurrentThreadScheduler.Instance)
