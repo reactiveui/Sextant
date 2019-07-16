@@ -12,17 +12,9 @@ namespace SextantSample.ViewModels
     {
         public string Id => nameof(HomeViewModel);
 
-        public ReactiveCommand<Unit, Unit> OpenModal
-        {
-            get;
-            set;
-        }
+        public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
 
-        public ReactiveCommand<Unit, Unit> PushPage
-        {
-            get;
-            set;
-        }
+        public ReactiveCommand<Unit, Unit> PushPage { get; set; }
 
         public HomeViewModel()
             : base(Locator.Current.GetService<IViewStackService>())
@@ -36,8 +28,6 @@ namespace SextantSample.ViewModels
                 .CreateFromObservable(() =>
                     this.ViewStackService.PushPage(new RedViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
-
-            OpenModal.Subscribe(x => Debug.WriteLine("PagePushed"));
 
             PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
             OpenModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
