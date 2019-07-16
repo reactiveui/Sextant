@@ -3,7 +3,7 @@
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/reactiveui/sextant/</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/reactiveui/Sextant/blob/master/logo/logo.png?raw=true</PackageIconUrl>
+    <PackageIconUrl>https://github.com/reactiveui/styleguide/blob/master/logo_sextant/logo.png?raw=true</PackageIconUrl>
     <Authors>.NET Foundation and Contributors</Authors>
     <Owners>xpaulbettsx;ghuntley</Owners>
     <PackageTags>mvvm;reactiveui;Rx;Reactive Extensions;Observable;xamarin;xamarin ios;xamarin mac;android;monodroid;uwp;net461</PackageTags>

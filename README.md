@@ -15,7 +15,7 @@
         <img src="https://img.shields.io/badge/chat-slack-blue.svg">
 </a>
 
-<p align="left"><img src="logo/vertical.png" alt="Sextant" height="180px"></p>
+<p align="left"><img src="https://github.com/reactiveui/styleguide/blob/master/logo_sextant/vertical.png?raw=true" alt="Sextant" height="180px"></p>
 
 ## A ReactiveUI navigation library for Xamarin.Forms
 
