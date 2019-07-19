@@ -14,6 +14,7 @@ namespace Sextant.XamForms
     {
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator, Xamarin.Forms.Page rootPage) { }
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator) { }
+        public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
         public System.IObservable<Sextant.IViewModel> PagePopped { get; }
         public System.IObservable<System.Reactive.Unit> PopModal() { }
         public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
