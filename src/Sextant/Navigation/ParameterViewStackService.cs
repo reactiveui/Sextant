@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
+using ReactiveUI;
 
 namespace Sextant
 {
@@ -51,6 +52,7 @@ namespace Sextant
                 {
                     navigableViewModel
                         .WhenNavigatingTo(parameter)
+                        .ObserveOn(View.MainThreadScheduler)
                         .Subscribe(navigating =>
                             Logger.Debug(
                                 $"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
@@ -60,6 +62,7 @@ namespace Sextant
 
                     navigableViewModel
                         .WhenNavigatedTo(parameter)
+                        .ObserveOn(View.MainThreadScheduler)
                         .Subscribe(navigated =>
                             Logger.Debug(
                                 $"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
@@ -85,6 +88,7 @@ namespace Sextant
                 {
                     modal
                         .WhenNavigatingTo(parameter)
+                        .ObserveOn(View.MainThreadScheduler)
                         .Subscribe(navigating =>
                             Logger.Debug($"Called `WhenNavigatingTo` on '{modal.Id}' passing parameter {parameter}"));
 
@@ -93,6 +97,7 @@ namespace Sextant
 
                     modal
                         .WhenNavigatedTo(parameter)
+                        .ObserveOn(View.MainThreadScheduler)
                         .Subscribe(navigated =>
                             Logger.Debug($"Called `WhenNavigatedTo` on '{modal.Id}' passing parameter {parameter}"));
                 });
@@ -115,9 +120,9 @@ namespace Sextant
                     {
                         navigable
                             .WhenNavigatedFrom(parameter)
+                            .ObserveOn(View.MainThreadScheduler)
                             .Subscribe(navigated =>
-                                Logger.Debug(
-                                    $"Called `WhenNavigatingTo` on '{navigable.Id}' passing parameter {parameter}"));
+                                Logger.Debug($"Called `WhenNavigatedFrom` on '{navigable.Id}' passing parameter {parameter}"));
                     }
                 });
         }

@@ -36,6 +36,7 @@ namespace Sextant
     }
     public interface IView
     {
+        System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
         System.IObservable<Sextant.IViewModel> PagePopped { get; }
         System.IObservable<System.Reactive.Unit> PopModal();
         System.IObservable<System.Reactive.Unit> PopPage(bool animate = True);

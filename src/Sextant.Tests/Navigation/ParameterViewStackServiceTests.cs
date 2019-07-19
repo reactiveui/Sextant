@@ -20,7 +20,7 @@ namespace Sextant.Tests
         public class ThePushPageWithParameterMethod
         {
             /// <summary>
-            /// Shoulds the throw if view model null.
+            /// Should the throw if view model null.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -41,7 +41,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Shoulds the throw if view model null.
+            /// Should the throw if view model null.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -125,7 +125,7 @@ namespace Sextant.Tests
         public class ThePushModalWithParameterMethod
         {
             /// <summary>
-            /// Shoulds the throw if view model null.
+            /// Should the throw if view model null.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -146,7 +146,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Shoulds the throw if view model null.
+            /// Should the throw if view model null.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -250,7 +250,7 @@ namespace Sextant.Tests
         public class ThePopPageWithParameterMethod
         {
             /// <summary>
-            /// Shoulds the throw if view model null.
+            /// Should the throw if view model null.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]

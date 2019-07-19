@@ -50,6 +50,9 @@ namespace Sextant
         }
 
         /// <inheritdoc />
+        public IScheduler MainThreadScheduler => _mainScheduler;
+
+        /// <inheritdoc />
         public IObservable<IViewModel> PagePopped => _pagePopped;
 
         /// <inheritdoc />
