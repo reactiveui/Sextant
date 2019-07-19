@@ -65,6 +65,9 @@ namespace Sextant.XamForms
         }
 
         /// <inheritdoc />
+        public IScheduler MainThreadScheduler => _mainScheduler;
+
+        /// <inheritdoc />
         public IObservable<IViewModel> PagePopped { get; }
 
         /// <inheritdoc />

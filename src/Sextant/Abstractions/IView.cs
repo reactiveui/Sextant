@@ -5,6 +5,7 @@
 
 using System;
 using System.Reactive;
+using System.Reactive.Concurrency;
 
 namespace Sextant
 {
@@ -13,6 +14,11 @@ namespace Sextant
     /// </summary>
     public interface IView
     {
+        /// <summary>
+        /// Gets the main thread scheduler for the <see cref="IView"/> instance.
+        /// </summary>
+        IScheduler MainThreadScheduler { get; }
+
         /// <summary>
         /// Gets an observable notifying that a page was popped from the navigation stack.
         /// </summary>
