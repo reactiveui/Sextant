@@ -3,11 +3,11 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-	public class ViewModelBase : ReactiveObject
+	public abstract class ViewModelBase : ReactiveObject
 	{
 		protected readonly IViewStackService ViewStackService;
 
-		public ViewModelBase(IViewStackService viewStackService)
+		protected ViewModelBase(IViewStackService viewStackService)
         {
             ViewStackService = viewStackService;
         }

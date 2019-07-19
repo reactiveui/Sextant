@@ -19,7 +19,7 @@ namespace Sextant.XamForms
         public System.IObservable<System.Reactive.Unit> PopModal() { }
         public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
         public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate) { }
-        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string contract) { }
+        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string contract, bool withNavigationPage = True) { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string contract, bool resetStack, bool animate) { }
     }
     public class static SextantExtensions

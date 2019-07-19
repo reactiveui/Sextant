@@ -89,7 +89,7 @@ namespace Sextant
         public IObservable<Unit> PopToRootPage(bool animate = true) => View.PopToRootPage(animate).Do(_ => PopRootAndTick(PageSubject));
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modal, string contract = null)
+        public IObservable<Unit> PushModal(IViewModel modal, string contract = null, bool withNavigationPage = true)
         {
             if (modal == null)
             {
@@ -97,7 +97,7 @@ namespace Sextant
             }
 
             return View
-                .PushModal(modal, contract)
+                .PushModal(modal, contract, withNavigationPage)
                 .Do(_ =>
                 {
                     AddToStackAndTick(ModalSubject, modal, false);

@@ -15,7 +15,7 @@ namespace SextantSample.Views
 			this.WhenActivated(disposables =>
             {
 				this.BindCommand(ViewModel, x => x.OpenModal, x => x.FirstModalButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel, x => x.PushPage, x => x.PushPage);
+                this.BindCommand(ViewModel, x => x.PushPage, x => x.PushPage).DisposeWith(disposables);
             });
 
             Interactions

@@ -41,7 +41,7 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PopModal();
         System.IObservable<System.Reactive.Unit> PopPage(bool animate = True);
         System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate = True);
-        System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string contract);
+        System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string contract, bool withNavigationPage = True);
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string contract, bool resetStack, bool animate = True);
     }
     public interface IViewModel
@@ -56,7 +56,7 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PopModal(bool animate = True);
         System.IObservable<System.Reactive.Unit> PopPage(bool animate = True);
         System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate = True);
-        System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string contract = null);
+        System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string contract = null, bool withNavigationPage = True);
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable page, string contract = null, bool resetStack = False, bool animate = True);
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel page, string contract = null, bool resetStack = False, bool animate = True);
         System.IObservable<Sextant.IViewModel> TopModal();
@@ -104,7 +104,7 @@ namespace Sextant
         protected static void PopRootAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject) { }
         protected static T PopStackAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject) { }
         public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate = True) { }
-        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string contract = null) { }
+        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string contract = null, bool withNavigationPage = True) { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable viewModel, string contract = null, bool resetStack = False, bool animate = True) { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string contract = null, bool resetStack = False, bool animate = True) { }
         public System.IObservable<Sextant.IViewModel> TopModal() { }

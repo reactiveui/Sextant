@@ -313,7 +313,7 @@ namespace Sextant.Tests
         }
 
         /// <summary>
-        /// Tests for the push model method.
+        /// Tests for the push modal method.
         /// </summary>
         public class ThePushModalMethod
         {
@@ -342,7 +342,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Tests to make sure that the push model works.
+            /// Tests to make sure that the push modal works.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -358,6 +358,27 @@ namespace Sextant.Tests
                 // Then
                 result.ShouldNotBeNull();
                 result.ShouldBeOfType<NavigableViewModelMock>();
+            }
+
+            /// <summary>
+            /// Tests to make sure that the push modal respects navigation.
+            /// </summary>
+            /// <param name="withNavigationPage">Whether to use a navigation page.</param>
+            /// <returns>A completion notification.</returns>
+            [Theory]
+            [InlineData(true)]
+            [InlineData(false)]
+            public async Task Should_Push_Modal_Navigation_Page(bool withNavigationPage)
+            {
+                // Given
+                var view = Substitute.For<IView>();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushModal(new NavigableViewModelMock(), withNavigationPage: withNavigationPage);
+
+                // Then
+                view.Received().PushModal(Arg.Any<INavigable>(), Arg.Any<string>(), withNavigationPage);
             }
 
             /// <summary>

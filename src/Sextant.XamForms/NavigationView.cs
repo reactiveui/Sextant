@@ -95,13 +95,18 @@ namespace Sextant.XamForms
                 .ObserveOn(_mainScheduler);
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract) =>
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract, bool withNavigationPage = true) =>
             Observable
                 .Start(
                     () =>
                     {
                         var page = LocatePageFor(modalViewModel, contract);
                         SetPageTitle(page, modalViewModel.Id);
+                        if (withNavigationPage)
+                        {
+                            return new NavigationPage(page);
+                        }
+
                         return page;
                     },
                     CurrentThreadScheduler.Instance)
@@ -160,7 +165,7 @@ namespace Sextant.XamForms
             if (navigationPage is null)
             {
                 _logger.Debug($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
-                navigationPage = new NavigationView(_mainScheduler, _backgroundScheduler, _viewLocator);
+                navigationPage = Locator.Current.GetService<IView>(nameof(NavigationView)) ?? Locator.Current.GetService<IView>();
             }
 
             return navigationPage;

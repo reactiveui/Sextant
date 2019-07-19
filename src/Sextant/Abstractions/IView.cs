@@ -49,8 +49,9 @@ namespace Sextant
         /// </summary>
         /// <param name="modalViewModel">The modal view model.</param>
         /// <param name="contract">The contract.</param>
+        /// <param name="withNavigationPage">Value indicating whether to wrap the modal in a navigation page.</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushModal(IViewModel modalViewModel, string contract);
+        IObservable<Unit> PushModal(IViewModel modalViewModel, string contract, bool withNavigationPage = true);
 
         /// <summary>
         /// Pushes the page onto the navigation stack.

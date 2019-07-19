@@ -93,7 +93,7 @@ namespace Sextant
             });
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract) =>
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract, bool withNavigationPage = true) =>
             Observable.Start(
                     () =>
                     {
