@@ -166,7 +166,7 @@ Navigate = ReactiveCommand.CreateFromObservable(
         outputScheduler: RxApp.MainThreadScheduler);
 ```
 
-The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object and by implementing them on an implementation will allow you to assign values to the View Model during Navigation.
+The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object. Implementing the interface allows you to assign values to the View Model during Navigation.
 
 ```csharp
 /// <summary>
