@@ -127,36 +127,6 @@ OpenModal = ReactiveCommand
 
 Version 2.0 added support for passing parameters when navigating.
 
-```csharp
-/// <summary>
-/// Pushes the <see cref="INavigable" /> onto the stack.
-/// </summary>
-/// <param name="navigableViewModel">The navigable view model.</param>
-/// <param name="parameter">The parameter.</param>
-/// <param name="contract">The contract.</param>
-/// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
-/// <param name="animate">if set to <c>true</c> [animate].</param>
-/// <returns>An observable that signals when the push has been completed.</returns>
-IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true);
-
-/// <summary>
-/// Pushes the <see cref="IViewModel" /> onto the stack.
-/// </summary>
-/// <param name="modal">The modal.</param>
-/// <param name="parameter">The parameter.</param>
-/// <param name="contract">The contract.</param>
-/// <returns>An observable that signals when the push has been completed.</returns>
-IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null);
-
-/// <summary>
-/// Pops the <see cref="IViewModel" /> off of the stack.
-/// </summary>
-/// <param name="parameter">The parameter.</param>
-/// <param name="animate">if set to <c>true</c> [animate].</param>
-/// <returns>An observable that signals when the push has been completed.</returns>
-IObservable<Unit> PopPage(INavigationParameter parameter, bool animate = true);
-```
-
 ### Example
 
 ```csharp
@@ -167,29 +137,6 @@ Navigate = ReactiveCommand.CreateFromObservable(
 ```
 
 The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object. Implementing the interface allows you to assign values to the View Model during Navigation.
-
-```csharp
-/// <summary>
-/// An observable sequence that notifies subscribers this item was navigated to.
-/// </summary>
-/// <param name="parameter">The parameter.</param>
-/// <returns>An observable sequence. </returns>
-IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter);
-
-/// <summary>
-/// An observable sequence that notifies subscribers this item was navigated from.
-/// </summary>
-/// <param name="parameter">The parameter.</param>
-/// <returns>An observable sequence. </returns>
-IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter);
-
-/// <summary>
-/// Whens the navigating to.
-/// </summary>
-/// <param name="parameter">The parameter.</param>
-/// <returns>An observable sequence.</returns>
-IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter);
-```
 
 ## Samples
 
