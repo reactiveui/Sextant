@@ -33,7 +33,6 @@ namespace Sextant
             ModalSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
             PageSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 
-            // TODO: Make this SubscribeSafe();
             View.PagePopped.Do(poppedPage =>
             {
                 var currentPageStack = PageSubject.Value;
@@ -211,10 +210,7 @@ namespace Sextant
             stackSubject
                 .Take(stackSubject.Value.Count - 1)
                 .Where(stack => stack != null)
-                .Subscribe(stack =>
-                {
-                    poppedStack = stack.RemoveRange(stack.IndexOf(stack[0]), stack.Count - 1);
-                });
+                .Subscribe(stack => poppedStack = stack.RemoveRange(stack.IndexOf(stack[0]), stack.Count - 1));
 
             stackSubject.OnNext(poppedStack);
         }

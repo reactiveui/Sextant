@@ -27,29 +27,58 @@ Sextant is in a very initial stage and in constant change, so please be pantienc
 
 This library is nothing more than me "standing on the shoulders of giants":
 [Kent](https://github.com/kentcb) for been the original and true creator of this, I pretty much just copied and pasted it :)
-[Geoffrey Huntley](https://github.com/ghuntley) maintainer on [ReactiveUI](https://github.com/reactiveui/ReactiveUI) (especially the build.cake) from where learned a lot about Cake + AppVeyor
+[Geoffrey Huntley](https://github.com/ghuntley) maintainer on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
 
-## Usage
+## NuGet Installation
 
 Install the nuget package on your Forms project and ViewModels project.
 
-Register the views:
-```csharp
-SextantHelper.RegisterView<HomeView,HomeViewModel>();
-SextantHelper.RegisterView<FirstModalView,FirstModalViewModel>();
-SextantHelper.RegisterView<SecondModalView, SecondModalViewModel>();
-SextantHelper.RegisterView<RedView, RedViewModel>();
-```
+### GitHub
+Pre release packages are available at https://nuget.pkg.github.com/reactiveui/index.json
 
-(optional)If you need some especial configuration on the Navigation, like diferent colors, register a NavigationView for the VM:
+### NuGet
+
+| Platform          | Sextant Package                  | NuGet                |
+| ----------------- | -------------------------------- | -------------------- |
+| Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]   |
+| Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core] |
+
+[Core]: https://www.nuget.org/packages/Sextant/
+[CoreBadge]: https://img.shields.io/nuget/v/Sextant.svg
+[CoreDoc]: https://reactiveui.net/docs/getting-started/installation/
+
+[Xam]: https://www.nuget.org/packages/Sextant.XamForms/
+[XamBadge]: https://img.shields.io/nuget/v/Sextant.XamForms.svg
+[XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
+[IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
+
+## Register Components
+
+### Views
+
+Version 2.0 added new extensions methods for the `IMutableDepedencyResolver` that allow you to register an `IViewFor` to a View Model.
+
 ```csharp
-SextantHelper.RegisterNavigation<BlueNavigationView, SecondModalViewModel>();
+Locator
+    .CurrentMutable
+    .RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current))
+    .RegisterParameterViewStackService()
+    .RegisterView<RedPage, RedViewModel>()
+    .RegisterView<FirstPage, FirstViewModel>();
 ```
 
 Set the initial page:
 ```csharp
-MainPage = SextantHelper.Initialize<HomeViewModel>();
+Locator
+    .Current
+    .GetService<IParameterViewStackService>()
+    .PushPage(new PassViewModel(), null, true, false)
+    .Subscribe();
+
+MainPage = Locator.Current.GetNavigationView("NavigationView");
 ```
+
+## Use the Navigation Service
 
 After that all you have to do is call one of the methods inside your ViewModels:
 ```csharp
@@ -86,7 +115,7 @@ IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
 IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
 ```
 
-For example:
+### Example
 ```csharp
 OpenModal = ReactiveCommand
     .CreateFromObservable(() =>
@@ -94,7 +123,25 @@ OpenModal = ReactiveCommand
         outputScheduler: RxApp.MainThreadScheduler);
 ```
 
-For more examples, look inside the sample folder in the solution. 
+## Pass Parameters
+
+Version 2.0 added support for passing parameters when navigating.
+
+### Example
+
+```csharp
+Navigate = ReactiveCommand.CreateFromObservable(
+    () => navigationService
+        .PushPage(new NavigableViewModel(), new NavigationParameter { { "parameter", parameter } }),
+        outputScheduler: RxApp.MainThreadScheduler);
+```
+
+The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object. Implementing the interface allows you to assign values to the View Model during Navigation.
+
+## Samples
+
+- [Sample](https://github.com/reactiveui/Sextant/tree/master/Sample)
+- [Navigation Parameter Sample](https://github.com/reactiveui/ReactiveUI.Samples/tree/master/xamarin-forms/Navigation.Parameters)
 
 ## Contribute
 

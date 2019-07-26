@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using ReactiveUI;
 
 namespace Sextant
@@ -53,9 +54,7 @@ namespace Sextant
                     navigableViewModel
                         .WhenNavigatingTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigating =>
-                            Logger.Debug(
-                                $"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
 
                     AddToStackAndTick(PageSubject, navigableViewModel, resetStack);
                     Logger.Debug($"Added page '{navigableViewModel.Id}' (contract '{contract}') to stack.");
@@ -63,9 +62,7 @@ namespace Sextant
                     navigableViewModel
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigated =>
-                            Logger.Debug(
-                                $"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
                 });
         }
 
@@ -89,8 +86,7 @@ namespace Sextant
                     modal
                         .WhenNavigatingTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigating =>
-                            Logger.Debug($"Called `WhenNavigatingTo` on '{modal.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{modal.Id}' passing parameter {parameter}"));
 
                     AddToStackAndTick(ModalSubject, modal, false);
                     Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
@@ -98,8 +94,7 @@ namespace Sextant
                     modal
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigated =>
-                            Logger.Debug($"Called `WhenNavigatedTo` on '{modal.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{modal.Id}' passing parameter {parameter}"));
                 });
         }
 
