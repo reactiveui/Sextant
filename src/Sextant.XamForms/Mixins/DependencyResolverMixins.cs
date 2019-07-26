@@ -21,7 +21,7 @@ namespace Sextant.XamForms
         /// <summary>
         /// Gets the navigation view key.
         /// </summary>
-        public static string NavigationViewName => nameof(NavigationView);
+        public static string NavigationView => nameof(NavigationView);
 
         /// <summary>
         /// Initializes the sextant.
@@ -32,7 +32,7 @@ namespace Sextant.XamForms
         {
             var vLocator = Locator.Current.GetService<IViewLocator>();
 
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, vLocator), typeof(IView), NavigationViewName);
+            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, vLocator), typeof(IView), NavigationView);
             return dependencyResolver;
         }
 
@@ -47,7 +47,7 @@ namespace Sextant.XamForms
         {
             var vLocator = Locator.Current.GetService<IViewLocator>();
 
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, vLocator), typeof(IView), NavigationViewName);
+            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
             return dependencyResolver;
         }
 
@@ -65,7 +65,7 @@ namespace Sextant.XamForms
             var viewStackService = new ViewStackService(navigationView);
 
             dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);
-            dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, NavigationViewName);
+            dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, NavigationView);
             return dependencyResolver;
         }
 
@@ -78,6 +78,6 @@ namespace Sextant.XamForms
         public static NavigationView GetNavigationView(
             this IReadonlyDependencyResolver dependencyResolver,
             string contract = null) =>
-            dependencyResolver.GetService<IView>(contract ?? NavigationViewName) as NavigationView;
+            dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
     }
 }
