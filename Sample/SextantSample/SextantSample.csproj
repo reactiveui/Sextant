@@ -6,7 +6,7 @@
     <ItemGroup>
         <PackageReference Include="Xamarin.Forms" Version="3.6.*" />
         <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
-        <PackageReference Include="ReactiveUI.XamForms" Version="9.19.5" />
+        <PackageReference Include="ReactiveUI.XamForms" Version="9.20.1" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Remove="MainPage.xaml" />
