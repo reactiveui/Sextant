@@ -6,7 +6,7 @@ namespace Sextant
         public static string NavigationView { get; }
         public static Splat.IMutableDependencyResolver RegisterParameterViewStackService(this Splat.IMutableDependencyResolver dependencyResolver) { }
         public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string contract = null)
-            where TView : ReactiveUI.IViewFor<>, new ()
+            where TView : ReactiveUI.IViewFor<TViewModel>, new ()
             where TViewModel :  class, Sextant.IViewModel { }
         public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<ReactiveUI.IViewFor<TViewModel>> viewFactory, string contract = null)
             where TView : ReactiveUI.IViewFor
