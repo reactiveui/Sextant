@@ -1,4 +1,5 @@
-<Project>  
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
   <PropertyGroup>
     <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,36 +24,30 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <!-- disable sourcelink on mono, to workaround https://github.com/dotnet/sourcelink/issues/155 -->
     <EnableSourceLink Condition=" '$(OS)' != 'Windows_NT' AND '$(MSBuildRuntimeType)' != 'Core' ">false</EnableSourceLink>
-    <EnableSourceControlManagerQueries>$(EnableSourceLink)</EnableSourceControlManagerQueries>    
+    <EnableSourceControlManagerQueries>$(EnableSourceLink)</EnableSourceControlManagerQueries>
   </PropertyGroup>
-
   <ItemGroup Condition="$(IsTestProject)">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="Xunit.StaFact" Version="0.3.18" />
     <PackageReference Include="Shouldly" Version=" 3.0.2" />
-    <PackageReference Include="ReactiveUI.Testing" Version="9.19.5" />
-    <PackageReference Include="PublicApiGenerator" Version="9.1.0" />
+    <PackageReference Include="ReactiveUI.Testing" Version="10.*" />
+    <PackageReference Include="PublicApiGenerator" Version="9.3.0" />
     <PackageReference Include="NSubstitute" Version="4.2.1" />
   </ItemGroup>
-
   <ItemGroup Condition="$(IsTestProject)">
     <Compile Include="$(MSBuildThisFileDirectory)ApiGeneratorGlobalSuppressions.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="LICENSE" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="stylecop.analyzers" Version="1.1.118" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.4" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" Version="2.1.0" PrivateAssets="All" />
   </ItemGroup>
-
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
- </Project>
- 
+</Project>
