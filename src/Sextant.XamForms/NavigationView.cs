@@ -23,7 +23,15 @@ namespace Sextant.XamForms
         private readonly IScheduler _backgroundScheduler;
         private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
-        private IFullLogger _logger;
+        private readonly IFullLogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationView"/> class.
+        /// </summary>
+        public NavigationView()
+            : this(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
