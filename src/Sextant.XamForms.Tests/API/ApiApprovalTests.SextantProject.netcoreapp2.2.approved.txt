@@ -12,6 +12,7 @@ namespace Sextant.XamForms
     }
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
     {
+        public NavigationView() { }
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator, Xamarin.Forms.Page rootPage) { }
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator) { }
         public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
