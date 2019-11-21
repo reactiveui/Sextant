@@ -104,12 +104,30 @@ namespace Sextant
                 });
         }
 
+        /// <inheritdoc/>
+        public IObservable<Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = true)
+            where TViewModel : INavigable
+        {
+            var viewmodel = ViewModelFactory.Current.Create<TViewModel>();
+
+            return PushModal(viewmodel, contract, withNavigationPage);
+        }
+
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             INavigable viewModel,
             string contract = null,
             bool resetStack = false,
             bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
+
+        /// <inheritdoc/>
+        public IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
+            where TViewModel : INavigable
+        {
+            var viewmodel = ViewModelFactory.Current.Create<TViewModel>();
+
+            return PushPage(viewmodel, contract, resetStack, animate);
+        }
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage(IViewModel viewModel, string contract = null, bool resetStack = false, bool animate = true)
