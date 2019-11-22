@@ -99,6 +99,22 @@ namespace Sextant
         }
 
         /// <inheritdoc />
+        public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
+            where TViewModel : INavigable
+        {
+            var viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            return PushPage(viewModel, parameter, contract);
+        }
+
+        /// <inheritdoc />
+        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null)
+            where TViewModel : INavigable
+        {
+            var viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            return PushModal(viewModel, parameter, contract);
+        }
+
+        /// <inheritdoc />
         public IObservable<Unit> PopPage(INavigationParameter parameter, bool animate = true)
         {
             if (parameter == null)
