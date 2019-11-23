@@ -7,21 +7,13 @@ using System.Reactive.Linq;
 
 namespace SextantSample.ViewModels
 {
-	public class SecondModalViewModel : ViewModelBase, IPageViewModel
+	public class SecondModalViewModel : ViewModelBase
 	{
-		public ReactiveCommand<Unit, Unit> PushPage
-        {
-            get;
-            set;
-        }
+		public ReactiveCommand<Unit, Unit> PushPage { get; set; }
 
-		public ReactiveCommand<Unit, Unit> PopModal
-        {
-            get;
-            set;
-        }
+		public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 
-		public string Id => nameof(SecondModalViewModel);
+		public override string Id => nameof(SecondModalViewModel);
 
 		public SecondModalViewModel(IViewStackService viewStackService) : base(viewStackService)
 		{

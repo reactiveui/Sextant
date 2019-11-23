@@ -90,7 +90,7 @@ namespace Sextant
             where TView : IViewFor
             where TViewModel : class, IViewModel
         {
-            dependencyResolver.Register(() => viewFactory(), typeof(IViewFor<TViewModel>), contract);
+            dependencyResolver.Register(viewFactory, typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;
         }
     }

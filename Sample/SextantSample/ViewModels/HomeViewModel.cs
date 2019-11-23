@@ -8,9 +8,9 @@ using Splat;
 
 namespace SextantSample.ViewModels
 {
-    public class HomeViewModel : ViewModelBase, IPageViewModel
+    public class HomeViewModel : ViewModelBase
     {
-        public string Id => nameof(HomeViewModel);
+        public override string Id => nameof(HomeViewModel);
 
         public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
 

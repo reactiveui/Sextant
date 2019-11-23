@@ -36,7 +36,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
 
             /// <summary>
@@ -49,7 +49,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
         }
 
@@ -68,7 +68,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
 
             /// <summary>
@@ -81,7 +81,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
         }
 

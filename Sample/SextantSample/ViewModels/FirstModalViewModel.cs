@@ -6,13 +6,13 @@ using System.Diagnostics;
 
 namespace SextantSample.ViewModels
 {
-	public class FirstModalViewModel : ViewModelBase, IPageViewModel
+	public class FirstModalViewModel : ViewModelBase
 	{
 		public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
 
         public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 
-        public string Id => nameof(FirstModalViewModel);
+        public override string Id => nameof(FirstModalViewModel);
 
 		public FirstModalViewModel(IViewStackService viewStackService) : base(viewStackService)
 		{

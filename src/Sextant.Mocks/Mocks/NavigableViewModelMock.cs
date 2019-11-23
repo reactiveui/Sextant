@@ -37,15 +37,6 @@ namespace Sextant.Mocks
         /// </summary>
         public string Id => _id ?? nameof(NavigableViewModelMock);
 
-        /// <inheritdoc />
-        public IObservable<Unit> NavigatedTo => _navigatedTo.AsObservable();
-
-        /// <inheritdoc />
-        public IObservable<Unit> NavigatedFrom => _navigatedTo.AsObservable();
-
-        /// <inheritdoc />
-        public IObservable<Unit> NavigatingTo => _navigatedTo.AsObservable();
-
         /// <inheritdoc/>
         public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter)
         {
