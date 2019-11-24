@@ -1,6 +1,18 @@
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
+namespace Sextant.Abstractions
+{
+    public interface IViewModelFactory
+    {
+        TViewModel Create<TViewModel>();
+    }
+}
 namespace Sextant
 {
+    public class DefaultViewModelFactory : Sextant.Abstractions.IViewModelFactory
+    {
+        public DefaultViewModelFactory() { }
+        public TViewModel Create<TViewModel>() { }
+    }
     public class static DependencyResolverMixins
     {
         public static string NavigationView { get; }
@@ -32,7 +44,11 @@ namespace Sextant
     {
         System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = True);
         System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable modal, Sextant.INavigationParameter parameter, string contract = null);
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string contract = null)
+            where TViewModel : Sextant.INavigable;
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter, string contract = null, bool resetStack = False, bool animate = True);
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string contract = null, bool resetStack = False, bool animate = True)
+            where TViewModel : Sextant.INavigable;
     }
     public interface IView
     {
@@ -57,7 +73,11 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PopPage(bool animate = True);
         System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate = True);
         System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string contract = null, bool withNavigationPage = True);
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = True)
+            where TViewModel : Sextant.INavigable;
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable page, string contract = null, bool resetStack = False, bool animate = True);
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string contract = null, bool resetStack = False, bool animate = True)
+            where TViewModel : Sextant.INavigable;
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel page, string contract = null, bool resetStack = False, bool animate = True);
         System.IObservable<Sextant.IViewModel> TopModal();
         System.IObservable<Sextant.IViewModel> TopPage();
@@ -71,7 +91,11 @@ namespace Sextant
         public ParameterViewStackService(Sextant.IView view) { }
         public System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = True) { }
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable modal, Sextant.INavigationParameter parameter, string contract = null) { }
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string contract = null)
+            where TViewModel : Sextant.INavigable { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter, string contract = null, bool resetStack = False, bool animate = True) { }
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string contract = null, bool resetStack = False, bool animate = True)
+            where TViewModel : Sextant.INavigable { }
     }
     public class Sextant
     {
@@ -82,6 +106,17 @@ namespace Sextant
     public class static SextantExtensions
     {
         public static void Initialize(this Sextant.Sextant sextant) { }
+    }
+    public class static ViewModelFactory
+    {
+        public static Sextant.Abstractions.IViewModelFactory Current { get; }
+    }
+    public class ViewModelFactoryNotFoundException : System.Exception
+    {
+        public ViewModelFactoryNotFoundException() { }
+        public ViewModelFactoryNotFoundException(string message) { }
+        public ViewModelFactoryNotFoundException(string message, System.Exception innerException) { }
+        protected ViewModelFactoryNotFoundException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext) { }
     }
     public sealed class ViewStackService : Sextant.ViewStackServiceBase
     {
@@ -105,7 +140,11 @@ namespace Sextant
         protected static T PopStackAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject) { }
         public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate = True) { }
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string contract = null, bool withNavigationPage = True) { }
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = True)
+            where TViewModel : Sextant.INavigable { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable viewModel, string contract = null, bool resetStack = False, bool animate = True) { }
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string contract = null, bool resetStack = False, bool animate = True)
+            where TViewModel : Sextant.INavigable { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string contract = null, bool resetStack = False, bool animate = True) { }
         public System.IObservable<Sextant.IViewModel> TopModal() { }
         public System.IObservable<Sextant.IViewModel> TopPage() { }

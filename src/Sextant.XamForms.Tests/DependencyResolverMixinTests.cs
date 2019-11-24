@@ -87,6 +87,16 @@ namespace Sextant.XamForms.Tests
         public sealed class TheRegisterViewStackServiceMethod
         {
             /// <summary>
+            /// Initializes a new instance of the <see cref="TheRegisterViewStackServiceMethod"/> class.
+            /// </summary>
+            public TheRegisterViewStackServiceMethod()
+            {
+                Locator.CurrentMutable.UnregisterAll<IView>();
+                Locator.CurrentMutable.UnregisterAll<IViewStackService>();
+                Locator.CurrentMutable.UnregisterAll<IParameterViewStackService>();
+            }
+
+            /// <summary>
             /// Should register the view stack service.
             /// </summary>
             [Fact]

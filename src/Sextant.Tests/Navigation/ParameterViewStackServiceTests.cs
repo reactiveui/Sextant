@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
+using ReactiveUI.Testing;
 using Sextant.Abstractions;
 using Sextant.Mocks;
 using Shouldly;
@@ -155,7 +156,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage<NavigableViewModelMock>(navigationParameter))
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage<NullViewModelMock>(navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
@@ -188,56 +189,18 @@ namespace Sextant.Tests
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
-            public async Task Should_Call_When_Navigating_To()
+            public async Task Should_Call_View()
             {
                 // Given
-                var viewModel = Substitute.For<INavigable>();
+                var view = Substitute.For<IView>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
 
                 // When
                 await sut.PushPage<NavigableViewModelMock>(navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatingTo(Arg.Any<INavigationParameter>());
-            }
-
-            /// <summary>
-            /// Tests to make sure we receive a push page notification.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_When_Navigated_To()
-            {
-                // Given
-                var viewModel = Substitute.For<INavigable>();
-                var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
-
-                // When
-                await sut.PushPage<NavigableViewModelMock>(navigationParameter);
-
-                // Then
-                viewModel.Received().WhenNavigatedTo(Arg.Any<INavigationParameter>());
-            }
-
-            /// <summary>
-            /// Tests to make sure we receive a push page notification.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Not_Call_When_Navigated_From()
-            {
-                // Given
-                var viewModel = Substitute.For<INavigable>();
-                var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
-
-                // When
-                await sut.PushPage<NavigableViewModelMock>(navigationParameter);
-
-                // Then
-                viewModel.DidNotReceive().WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
             }
         }
 
@@ -269,11 +232,11 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NavigableViewModelMock>(navigationParameter))
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NullViewModelMock>(navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("navigableViewModel");
+                result.ParamName.ShouldBe("modal");
             }
 
             /// <summary>
@@ -302,56 +265,18 @@ namespace Sextant.Tests
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
-            public async Task Should_Call_When_Navigating_To()
+            public async Task Should_Call_View()
             {
                 // Given
-                var viewModel = Substitute.For<INavigable>();
+                var view = Substitute.For<IView>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
 
                 // When
                 await sut.PushModal<NavigableViewModelMock>(navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatingTo(Arg.Any<INavigationParameter>());
-            }
-
-            /// <summary>
-            /// Tests to make sure we receive a push page notification.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_When_Navigated_To()
-            {
-                // Given
-                var viewModel = Substitute.For<INavigable>();
-                var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
-
-                // When
-                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
-
-                // Then
-                viewModel.Received().WhenNavigatedTo(Arg.Any<INavigationParameter>());
-            }
-
-            /// <summary>
-            /// Tests to make sure we receive a push page notification.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Not_Call_When_Navigated_From()
-            {
-                // Given
-                var viewModel = Substitute.For<INavigable>();
-                var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
-
-                // When
-                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
-
-                // Then
-                viewModel.DidNotReceive().WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
             }
         }
 
