@@ -205,82 +205,6 @@ namespace Sextant.Tests
         }
 
         /// <summary>
-        /// Tests the push modal page method that passes parameters.
-        /// </summary>
-        public class ThePushModalGenericWithParameterMethod
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="ThePushModalGenericWithParameterMethod"/> class.
-            /// </summary>
-            public ThePushModalGenericWithParameterMethod()
-            {
-                Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
-                Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
-            }
-
-            /// <summary>
-            /// Should the throw if view model null.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Throw_If_View_Model_Null()
-            {
-                // Given
-                var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
-
-                // When
-                var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NullViewModelMock>(navigationParameter))
-                        .ConfigureAwait(false);
-
-                // Then
-                result.ParamName.ShouldBe("modal");
-            }
-
-            /// <summary>
-            /// Should the throw if view model null.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Throw_If_Parameter_Null()
-            {
-                // Given
-                var viewModel = Substitute.For<INavigable>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
-
-                // When
-                var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NavigableViewModelMock>(null))
-                        .ConfigureAwait(false);
-
-                // Then
-                result.ParamName.ShouldBe("parameter");
-            }
-
-            /// <summary>
-            /// Tests to make sure we receive a push page notification.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_View()
-            {
-                // Given
-                var view = Substitute.For<IView>();
-                var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
-
-                // When
-                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
-
-                // Then
-                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
-            }
-        }
-
-        /// <summary>
         /// Tests the push modal method that passes parameters.
         /// </summary>
         public class ThePushModalWithParameterMethod
@@ -402,6 +326,82 @@ namespace Sextant.Tests
 
                 // Then
                 viewModel.DidNotReceive().WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+            }
+        }
+
+        /// <summary>
+        /// Tests the push modal page method that passes parameters.
+        /// </summary>
+        public class ThePushModalGenericWithParameterMethod
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ThePushModalGenericWithParameterMethod"/> class.
+            /// </summary>
+            public ThePushModalGenericWithParameterMethod()
+            {
+                Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
+                Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
+                Locator.CurrentMutable.UnregisterAll<NullViewModelMock>();
+            }
+
+            /// <summary>
+            /// Should the throw if view model null.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Throw_If_View_Model_Null()
+            {
+                // Given
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
+
+                // When
+                var result =
+                    await Should
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NullViewModelMock>(navigationParameter))
+                        .ConfigureAwait(false);
+
+                // Then
+                result.ParamName.ShouldBe("modal");
+            }
+
+            /// <summary>
+            /// Should the throw if view model null.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Throw_If_Parameter_Null()
+            {
+                // Given
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
+
+                // When
+                var result =
+                    await Should
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NavigableViewModelMock>(null))
+                        .ConfigureAwait(false);
+
+                // Then
+                result.ParamName.ShouldBe("parameter");
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_View()
+            {
+                // Given
+                var view = Substitute.For<IView>();
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
+
+                // Then
+                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
             }
         }
 
