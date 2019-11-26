@@ -93,5 +93,34 @@ namespace Sextant
             dependencyResolver.Register(viewFactory, typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;
         }
+
+        /// <summary>
+        /// Registers the specified viewmodel with the Splat locator.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, string contract = null)
+            where TViewModel : IViewModel, new()
+        {
+            dependencyResolver.Register(() => new TViewModel(), typeof(TViewModel), contract);
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the specified viewmodel with the Splat locator.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="viewModelFactory">The viewmodel factory.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<TViewModel> viewModelFactory, string contract = null)
+            where TViewModel : class, IViewModel
+        {
+            dependencyResolver.Register(viewModelFactory, typeof(TViewModel), contract);
+            return dependencyResolver;
+        }
     }
 }
