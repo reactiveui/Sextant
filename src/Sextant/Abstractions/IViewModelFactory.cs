@@ -3,10 +3,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Sextant.Abstractions
 {
     /// <summary>
@@ -18,7 +14,9 @@ namespace Sextant.Abstractions
         /// Creates an instance of the specified view model.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="contract">The contract of the view model.</param>
         /// <returns>A view model instance.</returns>
-        TViewModel Create<TViewModel>();
+        TViewModel Create<TViewModel>(string contract = null)
+            where TViewModel : IViewModel;
     }
 }

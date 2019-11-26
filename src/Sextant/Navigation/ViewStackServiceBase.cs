@@ -109,7 +109,6 @@ namespace Sextant
             where TViewModel : INavigable
         {
             var viewmodel = ViewModelFactory.Current.Create<TViewModel>();
-
             return PushModal(viewmodel, contract, withNavigationPage);
         }
 
@@ -125,7 +124,6 @@ namespace Sextant
             where TViewModel : INavigable
         {
             var viewmodel = ViewModelFactory.Current.Create<TViewModel>();
-
             return PushPage(viewmodel, contract, resetStack, animate);
         }
 
