@@ -123,7 +123,8 @@ namespace Sextant
         public IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : INavigable
         {
-            var viewmodel = ViewModelFactory.Current.Create<TViewModel>();
+            var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
+
             return PushPage(viewmodel, contract, resetStack, animate);
         }
 

@@ -13,6 +13,7 @@ namespace Sextant.Abstractions
         /// <summary>
         /// Creates an instance of the specified view model.
         /// </summary>
+        /// <param name="contract">The contract.</param>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="contract">The contract of the view model.</param>
         /// <returns>A view model instance.</returns>
