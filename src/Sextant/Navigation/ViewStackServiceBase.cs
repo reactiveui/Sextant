@@ -108,7 +108,7 @@ namespace Sextant
         public IObservable<Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = true)
             where TViewModel : INavigable
         {
-            var viewmodel = ViewModelFactory.Current.Create<TViewModel>();
+            var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
             return PushModal(viewmodel, contract, withNavigationPage);
         }
 

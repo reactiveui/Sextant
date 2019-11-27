@@ -15,7 +15,6 @@ namespace Sextant.Abstractions
         /// </summary>
         /// <param name="contract">The contract.</param>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="contract">The contract of the view model.</param>
         /// <returns>A view model instance.</returns>
         TViewModel Create<TViewModel>(string contract = null)
             where TViewModel : IViewModel;
