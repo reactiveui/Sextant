@@ -25,7 +25,7 @@ namespace Sextant.IOS.Runner
         public static implicit operator NavigationViewController(NavigationViewControllerFixture fixture) =>
             fixture.Build();
 
-        private NavigationViewController Build() => 
+        private NavigationViewController Build() =>
             new NavigationViewController(new TestScheduler(), new TestScheduler(), new TestViewLocator());
     }
 }
