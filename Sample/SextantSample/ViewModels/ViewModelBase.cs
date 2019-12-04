@@ -1,4 +1,6 @@
-﻿using ReactiveUI;
+﻿using System;
+using System.Reactive;
+using ReactiveUI;
 using Sextant;
 
 namespace SextantSample.ViewModels

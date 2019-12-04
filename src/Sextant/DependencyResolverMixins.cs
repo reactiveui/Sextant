@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Text;
 using ReactiveUI;
+using Sextant.Abstractions;
 using Splat;
 
 namespace Sextant
@@ -58,6 +59,18 @@ namespace Sextant
         {
             IView view = Locator.Current.GetService<IView>(NavigationView);
             dependencyResolver.RegisterLazySingleton(() => factory(view));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the view model factory.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="factory">The factory.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModelFactory(this IMutableDependencyResolver dependencyResolver, Func<IViewModelFactory> factory)
+        {
+            dependencyResolver.RegisterLazySingleton<IViewModelFactory>(factory);
             return dependencyResolver;
         }
 
