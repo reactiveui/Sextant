@@ -61,11 +61,11 @@
     <ItemGroup>
         <PackageReference Include="System.Reactive" Version="4.2.*" />
         <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.3" />
-        <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.1" />
-        <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.1" />
-        <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.1" />
-        <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.1" />
-        <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.1" />
+        <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.3" />
+        <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
+        <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.3" />
+        <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.3" />
+        <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.3" />
         <PackageReference Include="ReactiveUI.XamForms" Version="10.*" />
     </ItemGroup>
     <ItemGroup>
@@ -105,11 +105,11 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\src\Sextant\Sextant.csproj">
-            <Project>{4CF5E8D0-BB2C-4790-9AD5-03AEC069C3C3}</Project>
+            <Project>{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}</Project>
             <Name>Sextant</Name>
         </ProjectReference>
         <ProjectReference Include="..\SextantSample\SextantSample.csproj">
-            <Project>{AB35E5EE-24AE-479A-909E-1FD941E152EF}</Project>
+            <Project>{44FA03FD-7A52-41AD-9332-1B34FFDEE67B}</Project>
             <Name>SextantSample</Name>
         </ProjectReference>
     </ItemGroup>
