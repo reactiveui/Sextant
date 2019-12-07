@@ -106,26 +106,23 @@ namespace Sextant
 
         /// <inheritdoc/>
         public IObservable<Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = true)
-            where TViewModel : INavigable
+            where TViewModel : IViewModel
         {
             var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
             return PushModal(viewmodel, contract, withNavigationPage);
         }
 
-        /// <inheritdoc />
-        public IObservable<Unit> PushPage(
-            INavigable viewModel,
-            string contract = null,
-            bool resetStack = false,
-            bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
-
         /// <inheritdoc/>
         public IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
-            where TViewModel : INavigable
+            where TViewModel : IViewModel
         {
-            var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
+            TViewModel viewModel = default;
+            Observable
+                .Return(Unit.Default)
+                .SubscribeOn(View.MainThreadScheduler)
+                .Subscribe(_ => viewModel = ViewModelFactory.Current.Create<TViewModel>(contract));
 
-            return PushPage(viewmodel, contract, resetStack, animate);
+            return PushPage(viewModel, contract, resetStack, animate);
         }
 
         /// <inheritdoc />

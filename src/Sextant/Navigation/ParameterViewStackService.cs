@@ -67,36 +67,17 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null)
+        public IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
         {
-            if (modal == null)
-            {
-                throw new ArgumentNullException(nameof(modal));
-            }
-
-            if (parameter == null)
-            {
-                throw new ArgumentNullException(nameof(parameter));
-            }
-
-            return View
-                .PushModal(modal, contract)
-                .Do(_ =>
-                {
-                    modal
-                        .WhenNavigatingTo(parameter)
-                        .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{modal.Id}' passing parameter {parameter}"));
-
-                    AddToStackAndTick(ModalSubject, modal, false);
-                    Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
-
-                    modal
-                        .WhenNavigatedTo(parameter)
-                        .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{modal.Id}' passing parameter {parameter}"));
-                });
+            throw new NotImplementedException();
         }
+
+        /// <inheritdoc />
+        public IObservable<Unit> PushPage(
+            INavigable viewModel,
+            string contract = null,
+            bool resetStack = false,
+            bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
@@ -107,7 +88,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null)
+        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();
