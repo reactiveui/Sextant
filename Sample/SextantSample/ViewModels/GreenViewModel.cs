@@ -6,8 +6,19 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-    public class GreenViewModel : ReactiveObject, INavigable
+    public class GreenViewModel : ViewModelBase, INavigable
     {
+        public GreenViewModel(IViewStackService viewStackService)
+            : base(viewStackService)
+        {
+            OpenModal = ReactiveCommand
+                .CreateFromObservable(() =>
+                        this.ViewStackService.PushModal(new FirstModalViewModel(viewStackService), string.Empty, false),
+                    outputScheduler: RxApp.MainThreadScheduler);
+        }
+
+        public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
+
         public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter) =>
             Observable.Return(Unit.Default);
 

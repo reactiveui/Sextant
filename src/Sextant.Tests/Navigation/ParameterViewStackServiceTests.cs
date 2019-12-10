@@ -63,7 +63,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(viewModel, null))
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(viewModel, (INavigationParameter)null))
                         .ConfigureAwait(false);
 
                 // Then

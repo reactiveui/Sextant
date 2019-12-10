@@ -116,11 +116,7 @@ namespace Sextant
         public IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : IViewModel
         {
-            TViewModel viewModel = default;
-            Observable
-                .Return(Unit.Default)
-                .SubscribeOn(View.MainThreadScheduler)
-                .Subscribe(_ => viewModel = ViewModelFactory.Current.Create<TViewModel>(contract));
+            TViewModel viewModel = ViewModelFactory.Current.Create<TViewModel>();
 
             return PushPage(viewModel, contract, resetStack, animate);
         }

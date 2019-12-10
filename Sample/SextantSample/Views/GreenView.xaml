@@ -7,10 +7,8 @@
              x:TypeArguments="viewModels:GreenViewModel"
              x:Class="SextantSample.Views.GreenView">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Hello, world!"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" />
+        <StackLayout BackgroundColor="#043927">
+            <Button x:Name="Modal" Text="Open Modal" />
         </StackLayout>
     </ContentPage.Content>
 </xamForms:ReactiveContentPage>

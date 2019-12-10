@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReactiveUI;
 using ReactiveUI.XamForms;
 using SextantSample.ViewModels;
 using Xamarin.Forms;
@@ -16,6 +17,8 @@ namespace SextantSample.Views
         public GreenView()
         {
             InitializeComponent();
+
+            this.BindCommand(ViewModel, x => x.OpenModal, x => x.Modal);
         }
     }
 }
