@@ -5,6 +5,7 @@
 
 using Sextant.Abstractions;
 using Shouldly;
+using Splat;
 using Xunit;
 
 namespace Sextant.Tests
@@ -24,7 +25,7 @@ namespace Sextant.Tests
             /// </summary>
             public CurrentPropertyTests()
             {
-                Splat.Locator.CurrentMutable.UnregisterAll(typeof(IViewModelFactory));
+                Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
             }
 
             /// <summary>

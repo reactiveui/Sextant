@@ -67,24 +67,43 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
         {
-            throw new NotImplementedException();
-        }
+            if (navigableModal == null)
+            {
+                throw new ArgumentNullException(nameof(navigableModal));
+            }
 
-        /// <inheritdoc />
-        public IObservable<Unit> PushPage(
-            INavigable viewModel,
-            string contract = null,
-            bool resetStack = false,
-            bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
+            if (parameter == null)
+            {
+                throw new ArgumentNullException(nameof(parameter));
+            }
+
+            return View
+                .PushModal(navigableModal, contract, withNavigationPage)
+                .Do(_ =>
+                {
+                    navigableModal
+                        .WhenNavigatingTo(parameter)
+                        .ObserveOn(View.MainThreadScheduler)
+                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"));
+
+                    AddToStackAndTick(ModalSubject, navigableModal, false);
+                    Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
+
+                    navigableModal
+                        .WhenNavigatedTo(parameter)
+                        .ObserveOn(View.MainThreadScheduler)
+                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}"));
+                });
+        }
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();
-            return PushPage(viewModel, parameter, contract);
+            return PushPage(viewModel, parameter, contract, resetStack, animate);
         }
 
         /// <inheritdoc />
@@ -92,7 +111,7 @@ namespace Sextant
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();
-            return PushModal(viewModel, parameter, contract);
+            return PushModal(viewModel, parameter, contract, withNavigationPage);
         }
 
         /// <inheritdoc />

@@ -138,6 +138,13 @@ namespace Sextant
                 });
         }
 
+        /// <inheritdoc />
+        public IObservable<Unit> PushPage(
+            INavigable viewModel,
+            string contract = null,
+            bool resetStack = false,
+            bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
+
         /// <summary>
         /// Returns the top modal from the current modal stack.
         /// </summary>

@@ -124,7 +124,34 @@ namespace Sextant.Tests
                 await sut.PushPage(viewModel, navigationParameter);
 
                 // Then
-                viewModel.DidNotReceive().WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
+            }
+
+            /// <summary>Tests to make sure we receive a push page notification.</summary>
+            /// <param name="contract">The contract.</param>
+            /// <param name="reset">Reset the stack.</param>
+            /// <param name="animate">Animate the navigation.</param>
+            /// <returns>A completion notification.</returns>
+            [Theory]
+            [InlineData(null, false, true)]
+            [InlineData(null, true, false)]
+            [InlineData("hello", true, true)]
+            [InlineData("hello", true, false)]
+            [InlineData("hello", false, true)]
+            [InlineData("hello", false, false)]
+            public async Task Should_Call_View(string contract, bool reset, bool animate)
+            {
+                // Given
+                var viewModel = Substitute.For<INavigable>();
+                var view = Substitute.For<IView>();
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushPage(viewModel, navigationParameter, contract, reset, animate);
+
+                // Then
+                view.Received().PushPage(viewModel, contract, reset, animate);
             }
         }
 
@@ -138,6 +165,8 @@ namespace Sextant.Tests
             /// </summary>
             public ThePushPageGenericWithParameterMethod()
             {
+                Locator.CurrentMutable.UnregisterAll<NavigableViewModelMock>();
+                Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
                 Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
                 Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
             }
@@ -184,12 +213,19 @@ namespace Sextant.Tests
                 result.ParamName.ShouldBe("parameter");
             }
 
-            /// <summary>
-            /// Tests to make sure we receive a push page notification.
-            /// </summary>
+            /// <summary>Tests to make sure we receive a push page notification.</summary>
+            /// <param name="contract">The contract.</param>
+            /// <param name="reset">Reset the stack.</param>
+            /// <param name="animate">Animate the navigation.</param>
             /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_View()
+            [Theory]
+            [InlineData(null, false, true)]
+            [InlineData(null, true, false)]
+            [InlineData("hello", true, true)]
+            [InlineData("hello", true, false)]
+            [InlineData("hello", false, true)]
+            [InlineData("hello", false, false)]
+            public async Task Should_Call_View(string contract, bool reset, bool animate)
             {
                 // Given
                 var view = Substitute.For<IView>();
@@ -197,10 +233,10 @@ namespace Sextant.Tests
                 ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
 
                 // When
-                await sut.PushPage<NavigableViewModelMock>(navigationParameter);
+                await sut.PushPage<NavigableViewModelMock>(navigationParameter, contract, reset, animate);
 
                 // Then
-                view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
+                view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), contract, reset, animate);
             }
         }
 
@@ -227,7 +263,7 @@ namespace Sextant.Tests
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("modal");
+                result.ParamName.ShouldBe("navigableModal");
             }
 
             /// <summary>
@@ -254,9 +290,15 @@ namespace Sextant.Tests
             /// <summary>
             /// Tests to make sure we receive a push page notification.
             /// </summary>
+            /// <param name="contract">The contract.</param>
+            /// <param name="withNavigation">Wrap model in navigation page.</param>
             /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_View()
+            [Theory]
+            [InlineData(null, false)]
+            [InlineData(null, true)]
+            [InlineData("hello", true)]
+            [InlineData("hello", false)]
+            public async Task Should_Call_View(string contract, bool withNavigation)
             {
                 // Given
                 var viewModel = Substitute.For<INavigable>();
@@ -265,10 +307,10 @@ namespace Sextant.Tests
                 ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
 
                 // When
-                await sut.PushModal(viewModel, navigationParameter);
+                await sut.PushModal(viewModel, navigationParameter, contract, withNavigation);
 
                 // Then
-                view.Received().PushModal(viewModel, Arg.Any<string>());
+                view.Received().PushModal(viewModel, contract, withNavigation);
             }
 
             /// <summary>
@@ -287,7 +329,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatingTo(Arg.Any<INavigationParameter>());
+                viewModel.Received().WhenNavigatingTo(navigationParameter);
             }
 
             /// <summary>
@@ -306,7 +348,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatedTo(Arg.Any<INavigationParameter>());
+                viewModel.Received().WhenNavigatedTo(navigationParameter);
             }
 
             /// <summary>
@@ -325,7 +367,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter);
 
                 // Then
-                viewModel.DidNotReceive().WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
             }
         }
 
@@ -339,6 +381,8 @@ namespace Sextant.Tests
             /// </summary>
             public ThePushModalGenericWithParameterMethod()
             {
+                Locator.CurrentMutable.UnregisterAll<NavigableViewModelMock>();
+                Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
                 Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
                 Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
                 Locator.CurrentMutable.UnregisterAll<NullViewModelMock>();
@@ -362,7 +406,7 @@ namespace Sextant.Tests
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("modal");
+                result.ParamName.ShouldBe("navigableModal");
             }
 
             /// <summary>
@@ -388,9 +432,15 @@ namespace Sextant.Tests
             /// <summary>
             /// Tests to make sure we receive a push page notification.
             /// </summary>
+            /// <param name="contract">The contract.</param>
+            /// <param name="withNavigation">Wrap model in navigation page.</param>
             /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_View()
+            [Theory]
+            [InlineData(null, false)]
+            [InlineData(null, true)]
+            [InlineData("hello", true)]
+            [InlineData("hello", false)]
+            public async Task Should_Call_View(string contract, bool withNavigation)
             {
                 // Given
                 var view = Substitute.For<IView>();
@@ -398,10 +448,10 @@ namespace Sextant.Tests
                 ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
 
                 // When
-                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
+                await sut.PushModal<NavigableViewModelMock>(navigationParameter, contract, withNavigation);
 
                 // Then
-                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
+                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), contract, withNavigation);
             }
         }
 
