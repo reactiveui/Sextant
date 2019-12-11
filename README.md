@@ -52,6 +52,10 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 [XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
 [IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
 
+### Target Platform Versions
+
+##### Verify you have the [minimum version](https://reactiveui.net/docs/getting-started/minimum-versions#platform-minimums) for your target platform (i.e. Android, iOS, Tizen).
+
 ## Register Components
 
 ### Views
