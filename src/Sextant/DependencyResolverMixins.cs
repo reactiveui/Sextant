@@ -147,7 +147,7 @@ namespace Sextant
         public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, TViewModel viewModel, string contract)
             where TViewModel : class, IViewModel
         {
-            dependencyResolver.Register(() => viewModel, contract);
+            dependencyResolver.Register(() => viewModel, typeof(TViewModel), contract);
             return dependencyResolver;
         }
     }

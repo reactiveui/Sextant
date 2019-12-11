@@ -17,6 +17,8 @@ namespace SextantSample.ViewModels
                     outputScheduler: RxApp.MainThreadScheduler);
         }
 
+        public override string Id { get; } = string.Empty;
+
         public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
 
         public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter) =>
@@ -27,7 +29,5 @@ namespace SextantSample.ViewModels
 
         public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter) =>
             Observable.Return(Unit.Default);
-
-        public string Id { get; } = string.Empty;
     }
 }

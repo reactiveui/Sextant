@@ -12,6 +12,7 @@ using Sextant.Mocks;
 using Sextant.XamForms;
 using Shouldly;
 using Splat;
+using Xamarin.Forms;
 using Xunit;
 
 namespace Sextant.XamForms.Tests
@@ -62,7 +63,7 @@ namespace Sextant.XamForms.Tests
         /// <summary>
         /// Tests the register navigation method.
         /// </summary>
-        public sealed class RegisterNavigation
+        public sealed class TheRegisterNavigationViewFunctionMethod
         {
             /// <summary>
             /// Should register the view stack service.
@@ -166,6 +167,30 @@ namespace Sextant.XamForms.Tests
 
                 // Then
                 result.ShouldBeOfType<PageView>();
+            }
+        }
+
+        /// <summary>
+        /// Tests the get navigation view method.
+        /// </summary>
+        public sealed class TheGetNavigationView
+        {
+            /// <summary>
+            /// Should register the view stack service.
+            /// </summary>
+            [Fact]
+            public void Should_Return_Navigation_View()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>();
+
+                // When
+                var result = Locator.Current.GetNavigationView();
+
+                // Then
+                result.ShouldBeAssignableTo<IView>();
+                result.ShouldBeAssignableTo<Page>();
+                result.ShouldBeAssignableTo<NavigationPage>();
             }
         }
     }
