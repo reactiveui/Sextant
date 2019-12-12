@@ -10,8 +10,10 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
+using Sextant.Abstractions;
 using Sextant.Mocks;
 using Shouldly;
+using Splat;
 using Xunit;
 
 namespace Sextant.Tests
@@ -36,7 +38,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
 
             /// <summary>
@@ -49,7 +51,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
         }
 
@@ -68,7 +70,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
 
             /// <summary>
@@ -81,7 +83,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IPageViewModel>>>();
+                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
         }
 
@@ -436,6 +438,60 @@ namespace Sextant.Tests
         }
 
         /// <summary>
+        /// Tests the push modal page method that passes parameters.
+        /// </summary>
+        public class ThePushModalGenericMethod
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ThePushModalGenericMethod"/> class.
+            /// </summary>
+            public ThePushModalGenericMethod()
+            {
+                Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
+                Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
+                Locator.CurrentMutable.UnregisterAll<NullViewModelMock>();
+            }
+
+            /// <summary>
+            /// Should the throw if view model null.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Throw_If_View_Model_Null()
+            {
+                // Given
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
+
+                // When
+                var result =
+                    await Should
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NullViewModelMock>())
+                        .ConfigureAwait(false);
+
+                // Then
+                result.ParamName.ShouldBe("modal");
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_View()
+            {
+                // Given
+                var view = Substitute.For<IView>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushModal<NavigableViewModelMock>();
+
+                // Then
+                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
+            }
+        }
+
+        /// <summary>
         /// Tests associated with the push page method.
         /// </summary>
         public class ThePushPageMethod
@@ -529,6 +585,59 @@ namespace Sextant.Tests
 
                 // Then
                 result.ShouldHaveSingleItem();
+            }
+        }
+
+        /// <summary>
+        /// Tests the push page generic method that passes parameters.
+        /// </summary>
+        public class ThePushPageGenericWithParameterMethod
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ThePushPageGenericWithParameterMethod"/> class.
+            /// </summary>
+            public ThePushPageGenericWithParameterMethod()
+            {
+                Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
+                Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
+            }
+
+            /// <summary>
+            /// Should the throw if view model is null.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Throw_If_View_Model_Null()
+            {
+                // Given
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture();
+
+                // When
+                var result =
+                    await Should
+                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage<NullViewModelMock>())
+                        .ConfigureAwait(false);
+
+                // Then
+                result.ParamName.ShouldBe("viewModel");
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_View()
+            {
+                // Given
+                var view = Substitute.For<IView>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushPage<NavigableViewModelMock>();
+
+                // Then
+                view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
             }
         }
 

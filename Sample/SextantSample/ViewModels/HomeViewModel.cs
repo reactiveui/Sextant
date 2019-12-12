@@ -8,13 +8,15 @@ using Splat;
 
 namespace SextantSample.ViewModels
 {
-    public class HomeViewModel : ViewModelBase, IPageViewModel
+    public class HomeViewModel : ViewModelBase
     {
-        public string Id => nameof(HomeViewModel);
+        public override string Id => nameof(HomeViewModel);
 
         public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
 
         public ReactiveCommand<Unit, Unit> PushPage { get; set; }
+
+        public ReactiveCommand<Unit, Unit> PushGenericPage { get; set; }
 
         public HomeViewModel()
             : base(Locator.Current.GetService<IViewStackService>())
@@ -29,7 +31,13 @@ namespace SextantSample.ViewModels
                     this.ViewStackService.PushPage(new RedViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
 
+            PushGenericPage = ReactiveCommand
+                .CreateFromObservable(() =>
+                        ViewStackService.PushPage<GreenViewModel>(),
+                    outputScheduler: RxApp.MainThreadScheduler);
+
             PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+            PushGenericPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
             OpenModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
         }
     }

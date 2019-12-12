@@ -3,6 +3,8 @@ using ReactiveUI.XamForms;
 using Sextant;
 using SextantSample.ViewModels;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
@@ -16,6 +18,7 @@ namespace SextantSample.Views
             {
 				this.BindCommand(ViewModel, x => x.OpenModal, x => x.FirstModalButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel, x => x.PushPage, x => x.PushPage).DisposeWith(disposables);
+                this.BindCommand(ViewModel, x => x.PushGenericPage, x => x.PushGenericPage).DisposeWith(disposables);
             });
 
             Interactions

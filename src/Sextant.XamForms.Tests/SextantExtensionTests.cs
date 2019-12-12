@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Sextant.Abstractions;
 using Sextant.XamForms;
 using Shouldly;
 using Splat;
@@ -53,6 +54,22 @@ namespace Sextant.XamForms.Tests
 
                 // Then
                 result.ShouldBeOfType<ParameterViewStackService>();
+            }
+
+            /// <summary>
+            /// Tests the navigation view is registered.
+            /// </summary>
+            [Fact]
+            public void Should_Register_Default_View_Model_Factory()
+            {
+                // Given
+                Sextant.Instance.InitializeForms();
+
+                // When
+                var result = ViewModelFactory.Current;
+
+                // Then
+                result.ShouldBeAssignableTo<IViewModelFactory>();
             }
         }
     }

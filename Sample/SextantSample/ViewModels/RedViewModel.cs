@@ -8,7 +8,7 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-	public class RedViewModel : ViewModelBase, IPageViewModel
+	public class RedViewModel : ViewModelBase, IViewModel
 	{
 	    public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 
@@ -18,7 +18,7 @@ namespace SextantSample.ViewModels
 
 	    public ReactiveCommand<Unit, Unit> PopToRoot { get; set; }
 
-        public string Id => nameof(RedViewModel);
+        public override string Id => nameof(RedViewModel);
 
 	    public RedViewModel(IViewStackService viewStackService) : base(viewStackService)
 		{

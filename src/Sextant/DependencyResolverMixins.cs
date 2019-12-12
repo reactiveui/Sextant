@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Text;
 using ReactiveUI;
+using Sextant.Abstractions;
 using Splat;
 
 namespace Sextant
@@ -62,6 +63,18 @@ namespace Sextant
         }
 
         /// <summary>
+        /// Registers the view model factory.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="factory">The factory.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModelFactory(this IMutableDependencyResolver dependencyResolver, Func<IViewModelFactory> factory)
+        {
+            dependencyResolver.RegisterLazySingleton<IViewModelFactory>(factory);
+            return dependencyResolver;
+        }
+
+        /// <summary>
         /// Registers the specified view with the Splat locator.
         /// </summary>
         /// <typeparam name="TView">The type of the view.</typeparam>
@@ -90,7 +103,51 @@ namespace Sextant
             where TView : IViewFor
             where TViewModel : class, IViewModel
         {
-            dependencyResolver.Register(() => viewFactory(), typeof(IViewFor<TViewModel>), contract);
+            dependencyResolver.Register(viewFactory, typeof(IViewFor<TViewModel>), contract);
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the specified viewmodel with the Splat locator.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, string contract = null)
+            where TViewModel : IViewModel, new()
+        {
+            dependencyResolver.Register(() => new TViewModel(), typeof(TViewModel), contract);
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the specified viewmodel with the Splat locator.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="viewModelFactory">The viewmodel factory.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<TViewModel> viewModelFactory, string contract = null)
+            where TViewModel : class, IViewModel
+        {
+            dependencyResolver.Register(viewModelFactory, typeof(TViewModel), contract);
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the specified view model with the Splat locator.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="contract">The contract.</param>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, TViewModel viewModel, string contract)
+            where TViewModel : class, IViewModel
+        {
+            dependencyResolver.Register(() => viewModel, typeof(TViewModel), contract);
             return dependencyResolver;
         }
     }

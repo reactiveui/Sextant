@@ -60,14 +60,25 @@ namespace Sextant
         IObservable<Unit> PushModal(IViewModel modal, string contract = null, bool withNavigationPage = true);
 
         /// <summary>
-        /// Pushes the <see cref="INavigable"/> onto the stack.
+        /// Pushes the <see cref="INavigable" /> onto the stack.
         /// </summary>
-        /// <param name="page">The page.</param>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="contract">The contract.</param>
+        /// <param name="withNavigationPage">Value indicating whether to wrap the modal in a navigation page.</param>
+        /// <returns>An observable that signals when the push has been completed.</returns>
+        IObservable<Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = true)
+            where TViewModel : IViewModel;
+
+        /// <summary>
+        /// Pushes the <see cref="INavigable" /> onto the stack.
+        /// </summary>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="contract">The contract.</param>
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushPage(INavigable page, string contract = null, bool resetStack = false, bool animate = true);
+        IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
+            where TViewModel : IViewModel;
 
         /// <summary>
         /// Pushes the <see cref="IViewModel"/> onto the stack.
@@ -78,6 +89,16 @@ namespace Sextant
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
         IObservable<Unit> PushPage(IViewModel page, string contract = null, bool resetStack = false, bool animate = true);
+
+        /// <summary>
+        /// Pushes the <see cref="INavigable"/> onto the stack.
+        /// </summary>
+        /// <param name="page">The page.</param>
+        /// <param name="contract">The contract.</param>
+        /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
+        /// <param name="animate">if set to <c>true</c> [animate].</param>
+        /// <returns>An observable that signals when the push has been completed.</returns>
+        IObservable<Unit> PushPage(INavigable page, string contract = null, bool resetStack = false, bool animate = true);
 
         /// <summary>
         /// Returns the top page from the current navigation stack.

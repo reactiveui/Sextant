@@ -13,7 +13,7 @@ using ReactiveUI;
 namespace Sextant.Mocks
 {
     /// <summary>
-    /// View model to test passing paramaters.
+    /// View model to test passing parameters.
     /// </summary>
     /// <seealso cref="IViewModel" />
     public class ParameterViewModel : ReactiveObject, INavigable

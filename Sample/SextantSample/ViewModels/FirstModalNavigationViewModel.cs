@@ -4,13 +4,13 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-	public class FirstModalNavigationViewModel : ViewModelBase, IPageViewModel
+	public class FirstModalNavigationViewModel : ViewModelBase
 	{
 		public FirstModalNavigationViewModel(IViewStackService viewStackService)
             : base(viewStackService)
 		{
 
 		}
-		public string Id => nameof(FirstModalNavigationViewModel);
+		public override string Id => nameof(FirstModalNavigationViewModel);
 	}
 }

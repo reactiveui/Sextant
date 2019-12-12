@@ -3,16 +3,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using Sextant.Abstractions;
+using Splat;
+
 namespace Sextant
 {
     /// <summary>
-    /// Interface representing a Sextant view model.
+    /// Default View Model Factory.
     /// </summary>
-    public interface IViewModel
+    public class DefaultViewModelFactory : IViewModelFactory
     {
-        /// <summary>
-        /// Gets the ID of the page.
-        /// </summary
-        string Id { get; }
+        /// <inheritdoc />
+        public TViewModel Create<TViewModel>(string contract = null)
+            where TViewModel : IViewModel => Locator.Current.GetService<TViewModel>(contract);
     }
 }

@@ -67,11 +67,11 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null)
+        public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
         {
-            if (modal == null)
+            if (navigableModal == null)
             {
-                throw new ArgumentNullException(nameof(modal));
+                throw new ArgumentNullException(nameof(navigableModal));
             }
 
             if (parameter == null)
@@ -80,22 +80,38 @@ namespace Sextant
             }
 
             return View
-                .PushModal(modal, contract)
+                .PushModal(navigableModal, contract, withNavigationPage)
                 .Do(_ =>
                 {
-                    modal
+                    navigableModal
                         .WhenNavigatingTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{modal.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"));
 
-                    AddToStackAndTick(ModalSubject, modal, false);
+                    AddToStackAndTick(ModalSubject, navigableModal, false);
                     Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
 
-                    modal
+                    navigableModal
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{modal.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}"));
                 });
+        }
+
+        /// <inheritdoc />
+        public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
+            where TViewModel : INavigable
+        {
+            var viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            return PushPage(viewModel, parameter, contract, resetStack, animate);
+        }
+
+        /// <inheritdoc />
+        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+            where TViewModel : INavigable
+        {
+            var viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            return PushModal(viewModel, parameter, contract, withNavigationPage);
         }
 
         /// <inheritdoc />

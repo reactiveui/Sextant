@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -7,6 +7,8 @@
         <PackageReference Include="Xamarin.Forms" Version="4.2.*" />
         <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
         <PackageReference Include="ReactiveUI.XamForms" Version="10.*" />
+        <PackageReference Include="Pharmacist.MsBuild" Version="1.2.*" PrivateAssets="all" />
+        <PackageReference Include="Pharmacist.Common" Version="1.2.*" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Remove="MainPage.xaml" />

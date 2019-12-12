@@ -104,12 +104,22 @@ namespace Sextant
                 });
         }
 
-        /// <inheritdoc />
-        public IObservable<Unit> PushPage(
-            INavigable viewModel,
-            string contract = null,
-            bool resetStack = false,
-            bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
+        /// <inheritdoc/>
+        public IObservable<Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = true)
+            where TViewModel : IViewModel
+        {
+            var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
+            return PushModal(viewmodel, contract, withNavigationPage);
+        }
+
+        /// <inheritdoc/>
+        public IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
+            where TViewModel : IViewModel
+        {
+            TViewModel viewModel = ViewModelFactory.Current.Create<TViewModel>();
+
+            return PushPage(viewModel, contract, resetStack, animate);
+        }
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage(IViewModel viewModel, string contract = null, bool resetStack = false, bool animate = true)
@@ -127,6 +137,13 @@ namespace Sextant
                     Logger.Debug($"Added page '{viewModel.Id}' (contract '{contract}') to stack.");
                 });
         }
+
+        /// <inheritdoc />
+        public IObservable<Unit> PushPage(
+            INavigable viewModel,
+            string contract = null,
+            bool resetStack = false,
+            bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
 
         /// <summary>
         /// Returns the top modal from the current modal stack.
