@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Xamarin.Forms" Version="4.2.*" />
+        <PackageReference Include="Xamarin.Forms" Version="4.3.*" />
         <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
         <PackageReference Include="ReactiveUI.XamForms" Version="10.*" />
         <PackageReference Include="Pharmacist.MsBuild" Version="1.2.*" PrivateAssets="all" />
