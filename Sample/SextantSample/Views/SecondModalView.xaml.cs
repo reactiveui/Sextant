@@ -1,7 +1,8 @@
 ﻿using ReactiveUI;
 using ReactiveUI.XamForms;
 using Sextant;
-using SextantSample.ViewModels;
+using SextantSample.Core;
+using SextantSample.Core.ViewModels;
 
 namespace SextantSample.Views
 {

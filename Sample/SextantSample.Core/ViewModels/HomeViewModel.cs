@@ -4,9 +4,10 @@ using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Sextant;
+using SextantSample.Core;
 using Splat;
 
-namespace SextantSample.ViewModels
+namespace SextantSample.Core.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
@@ -23,12 +24,12 @@ namespace SextantSample.ViewModels
         {
             OpenModal = ReactiveCommand
                 .CreateFromObservable(() =>
-                    this.ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)),
+                    ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
 
             PushPage = ReactiveCommand
                 .CreateFromObservable(() =>
-                    this.ViewStackService.PushPage(new RedViewModel(ViewStackService)),
+                    ViewStackService.PushPage(new RedViewModel(ViewStackService)),
                     outputScheduler: RxApp.MainThreadScheduler);
 
             PushGenericPage = ReactiveCommand
