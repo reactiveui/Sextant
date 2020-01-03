@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Sextant;
 using Sextant.Blazor;
-using SextantSample.Core.ViewModels;
+using SextantSample.ViewModels;
 using Splat;
 
 namespace SextantSample.BlazorServerSide
