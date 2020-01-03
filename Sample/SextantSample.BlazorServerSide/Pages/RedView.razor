@@ -1,0 +1,22 @@
+﻿@page "/red"
+@inherits ReactiveComponentBase<RedViewModel>
+
+<h1>Red</h1>
+<button class="btn-primary" @onclick="() => ViewModel?.PopModal.Execute().Subscribe()">Pop Modal</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PushPage.Execute().Subscribe()">Push Another Red Page</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PopPage.Execute().Subscribe()">Pop Page</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PopToRoot.Execute().Subscribe()">Pop To Root</button>
+
+@code{
+    protected override Task OnInitializedAsync()
+    {
+        SextantSample.Core.Interactions
+                .ErrorMessage
+                .RegisterHandler(async x =>
+                {
+                    System.Diagnostics.Debug.WriteLine(x.Input.Message);
+                    x.SetOutput(true);
+                });
+        return Task.CompletedTask;
+    }
+}

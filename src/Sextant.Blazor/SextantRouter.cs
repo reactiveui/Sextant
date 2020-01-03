@@ -1,4 +1,9 @@
-﻿using System;
+﻿// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,13 +18,16 @@ using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using ReactiveUI;
+using Splat;
 
 namespace Sextant.Blazor
 {
     /// <summary>
     /// The router specifically designed for use by Sextant.
     /// </summary>
-    public class SextantRouter : ComponentBase, IView
+#pragma warning disable CA1063 // Implement IDisposable Correctly
+    public class SextantRouter : ComponentBase, IView, IDisposable
+#pragma warning restore CA1063 // Implement IDisposable Correctly
     {
         private UrlParameterViewModelGenerator _urlParameterVMGenerator;
         private IScheduler _mainScheduler;
@@ -216,11 +224,12 @@ namespace Sextant.Blazor
             _mainScheduler = RxApp.MainThreadScheduler;
             _routeLocator = (RouteViewViewModelLocator)Splat.Locator.Current.GetService(typeof(RouteViewViewModelLocator));
             _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Splat.Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
+
             SextantNavigationManager.Instance.LocationChanged += Instance_LocationChanged;
 
             PagePopped = Observable.FromEventPattern<NavigationActionEventArgs>(
-               x => SextantNavigationManager.Instance.LocationChanged += x,
-               x => SextantNavigationManager.Instance.LocationChanged -= x)
+                   x => SextantNavigationManager.Instance.LocationChanged += x,
+                   x => SextantNavigationManager.Instance.LocationChanged -= x)
                .Where(ep => ep.EventArgs.Navigated)
                .ObserveOn(RxApp.MainThreadScheduler)
                .Select(async (ep) =>
@@ -229,58 +238,65 @@ namespace Sextant.Blazor
                    List<IViewModel> viewModels = new List<IViewModel>();
                    string id = null;
                    bool found = false;
-                   IViewModel targetViewModel = _viewModelDictionary[ep.EventArgs.Id];
-                   CurrentViewModel = targetViewModel;
 
-                   // let try to set the current view's viewmodel
-                   (CurrentView as IViewFor).ViewModel = CurrentViewModel;
+                   return viewModels;
 
-                   Debug.WriteLine($"ViewModel that comes next: {targetViewModel.GetType().Name}");
-
-                   var stack = await _stackService.PageStack.FirstOrDefaultAsync();
-                   count = stack.Count;
-
-                   // Assumes pop event is back navigation.
-                   foreach (var vm in stack.Reverse())
+                   // If this is false, we're probably pre-rendering.
+                   if (_viewModelDictionary.ContainsKey(ep.EventArgs.Id))
                    {
-                       if (vm != targetViewModel)
+                       IViewModel targetViewModel = _viewModelDictionary[ep.EventArgs.Id];
+                       CurrentViewModel = targetViewModel;
+
+                       // let try to set the current view's viewmodel
+                       (CurrentView as IViewFor).ViewModel = CurrentViewModel;
+
+                       Debug.WriteLine($"ViewModel that comes next: {targetViewModel.GetType().Name}");
+
+                       var stack = await _stackService.PageStack.FirstOrDefaultAsync();
+                       count = stack.Count;
+
+                       // Assumes pop event is back navigation.
+                       foreach (var vm in stack.Reverse())
                        {
-                           viewModels.Add(vm);
+                           if (vm != targetViewModel)
+                           {
+                               viewModels.Add(vm);
+                           }
+                           else
+                           {
+                               found = true;
+                               break;
+                           }
                        }
-                       else
+
+                       if (found)
                        {
-                           found = true;
-                           break;
+                           // Stick them in the forward stack now that we know it was a browser back navigation.
+                           foreach (var vm in viewModels)
+                           {
+                               _forwardStack.Push(vm);
+                           }
+
+                           return viewModels;
                        }
+
+                       // If we get here, there was definitely forward navigation instead!
+                       viewModels.Clear();
+                       do
+                       {
+                           var vm = _forwardStack.Peek();
+                           if (vm == targetViewModel)
+                           {
+                               found = true;
+                           }
+
+                           await _stackService.PushPage(_forwardStack.Peek(), null, false);
+
+                           // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
+                           // and not send the nav command to the internal router.
+                       }
+                       while (!found && _forwardStack.Count > 0);
                    }
-
-                   if (found)
-                   {
-                       // Stick them in the forward stack now that we know it was a browser back navigation.
-                       foreach (var vm in viewModels)
-                       {
-                           _forwardStack.Push(vm);
-                       }
-
-                       return viewModels;
-                   }
-
-                   // If we get here, there was definitely forward navigation instead!
-                   viewModels.Clear();
-                   do
-                   {
-                       var vm = _forwardStack.Peek();
-                       if (vm == targetViewModel)
-                       {
-                           found = true;
-                       }
-
-                       await _stackService.PushPage(_forwardStack.Peek(), null, false);
-
-                       // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
-                       // and not send the nav command to the internal router.
-                   }
-                   while (!found && _forwardStack.Count > 0);
 
                    return viewModels;
                })
@@ -349,7 +365,7 @@ namespace Sextant.Blazor
             }
         }
 
-        private void Instance_LocationChanged(object sender, NavigationActionEventArgs e)
+        private async void Instance_LocationChanged(object sender, NavigationActionEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Location changed: {e.Uri}  {e.Id}");
 
@@ -360,7 +376,7 @@ namespace Sextant.Blazor
                 var results = ParseRelativeUrl(e.Uri, e.Id);
                 CurrentViewModel = results.viewModel;
 
-                _stackService.PushPage(results.viewModel, results.contract, false, true).Subscribe();
+                await _stackService.PushPage(results.viewModel, results.contract, false, true);
 
                 // UriHelper.NavigateTo(e.Uri);
                 // BlazorNavigationManager.NavigateTo(e.Uri);
@@ -419,6 +435,16 @@ namespace Sextant.Blazor
             }
 
             return (viewModel, parameters.ContainsKey("contract") ? parameters["contract"] : null);
+        }
+
+        /// <inheritdoc/>
+#pragma warning disable SA1202 // Elements should be ordered by access
+#pragma warning disable CA1063 // Implement IDisposable Correctly
+        public void Dispose()
+#pragma warning restore CA1063 // Implement IDisposable Correctly
+#pragma warning restore SA1202 // Elements should be ordered by access
+        {
+            var i = 3;
         }
     }
 }

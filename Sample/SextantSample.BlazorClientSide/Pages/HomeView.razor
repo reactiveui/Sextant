@@ -1,0 +1,21 @@
+﻿@page "/"
+@inherits ReactiveComponentBase<HomeViewModel>
+
+<h1>Home</h1>
+<button class="btn-primary" @onclick="() => ViewModel?.OpenModal.Execute().Subscribe()">First Modal</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PushPage.Execute().Subscribe()">Push Red Page</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PushGenericPage.Execute().Subscribe()">Push Green Page</button>
+
+@code{
+    protected override Task OnInitializedAsync()
+    {
+        SextantSample.Core.Interactions
+                .ErrorMessage
+                .RegisterHandler(async x =>
+                {
+                    System.Diagnostics.Debug.WriteLine(x.Input.Message);
+                    x.SetOutput(true);
+                });
+        return Task.CompletedTask;
+    }
+}

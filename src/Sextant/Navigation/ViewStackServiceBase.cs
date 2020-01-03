@@ -35,6 +35,7 @@ namespace Sextant
 
             View.PagePopped.Do(poppedPage =>
             {
+                System.Diagnostics.Debug.WriteLine("Page popped!");
                 var currentPageStack = PageSubject.Value;
                 if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
                 {
