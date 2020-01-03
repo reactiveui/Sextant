@@ -75,6 +75,30 @@ namespace Sextant.Blazor
         }
 
         /// <summary>
+        /// Register view for viewmodel, but only return view type for UWP frame.
+        /// </summary>
+        /// <typeparam name="TView">The view type.</typeparam>
+        /// <typeparam name="TViewModel">The viewmodel type.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="route">The route (relative url segment).</param>
+        /// <param name="generator">Generator for viewmodel based on url navigation with parameters.</param>
+        /// <param name="contract">The contract.</param>
+        /// <returns>
+        /// The dependencyResolver.
+        /// </returns>
+        public static IMutableDependencyResolver RegisterBlazorRoute<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string route, Func<Dictionary<string, string>, IViewModel> generator, string contract = null)
+            where TView : IComponent, new()
+            where TViewModel : class, IViewModel
+        {
+            var blazorResolver = Locator.Current.GetService<RouteViewViewModelLocator>();
+            blazorResolver.Register<TView, TViewModel>(route, contract);
+
+            var urlVmGenerator = Locator.Current.GetService<UrlParameterViewModelGenerator>();
+            urlVmGenerator.Register<TViewModel>(generator);
+            return dependencyResolver;
+        }
+
+        /// <summary>
         /// Helper method to get view type for viewmodel.
         /// </summary>
         /// <typeparam name="TViewModel">The viewmodel Type.</typeparam>

@@ -30,15 +30,14 @@ namespace SextantSample.BlazorServerSide
                 .RegisterViewModelFactory(() => new DefaultViewModelFactory())
                 .RegisterUrlParameterViewModelGenerator()
                 .RegisterRouteViewViewModelLocator()
-                .RegisterBlazorRoute<Pages.HomeView, HomeViewModel>("/")
-                .RegisterBlazorRoute<Pages.RedView, RedViewModel>("/red")
-                .RegisterBlazorRoute<Pages.GreenView, GreenViewModel>("/green")
+                .RegisterBlazorRoute<Pages.HomeView, HomeViewModel>("/", p => new HomeViewModel())
+                .RegisterBlazorRoute<Pages.RedView, RedViewModel>("/red", p => new RedViewModel(Locator.Current.GetService<IViewStackService>()))
+                .RegisterBlazorRoute<Pages.GreenView, GreenViewModel>("/green", p => new GreenViewModel(Locator.Current.GetService<IViewStackService>()))
                 .RegisterBlazorRoute<Pages.FirstModalView, FirstModalViewModel>("/firstModal")
                 .RegisterBlazorRoute<Pages.SecondModalView, SecondModalViewModel>("/secondModal")
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
 
-            var urlVmGenerator = Locator.Current.GetService<UrlParameterViewModelGenerator>();
-            urlVmGenerator.Register<HomeViewModel>(p => new HomeViewModel());
+            // Blazor apps start via url navigation so there's no need to push a start page.  The start page is determined by the url.
         }
     }
 }
