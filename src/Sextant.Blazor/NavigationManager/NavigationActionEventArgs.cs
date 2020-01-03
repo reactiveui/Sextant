@@ -27,12 +27,12 @@ namespace Sextant.Blazor
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationActionEventArgs"/> class.
         /// </summary>
-        /// <param name="navigated">Navigated.</param>
-        /// <param name="uri">Uri.</param>
-        /// <param name="id">Id.</param>
-        public NavigationActionEventArgs(bool navigated, string uri, string id)
+        /// <param name="sextantNavigationType">Type of navigation: back, forward, uri.</param>
+        /// <param name="uri">Current Uri.</param>
+        /// <param name="id">Current viewmodel Id.</param>
+        public NavigationActionEventArgs(SextantNavigationType sextantNavigationType, string uri, string id)
         {
-            Navigated = navigated;
+            NavigationType = sextantNavigationType;
             Uri = uri;
             Id = id;
         }
@@ -40,7 +40,7 @@ namespace Sextant.Blazor
         /// <summary>
         /// Gets or sets a value indicating whether navigation has actually occurred yet.
         /// </summary>
-        public bool Navigated { get; set; }
+        public SextantNavigationType NavigationType { get; set; }
 
         /// <summary>
         /// Gets or sets the Uri.

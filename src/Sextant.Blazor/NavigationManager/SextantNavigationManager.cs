@@ -101,11 +101,11 @@ namespace Sextant.Blazor
         /// <summary>
         /// Triggers the <see cref="LocationChanged"/> event with the current URI value.
         /// </summary>
-        internal void NotifyNavigationAction(bool navigated, string uri, string id)
+        internal void NotifyNavigationAction(SextantNavigationType sextantNavigationType, string uri, string id)
         {
             try
             {
-                _locationChanged?.Invoke(this, new NavigationActionEventArgs(navigated, uri, id));
+                _locationChanged?.Invoke(this, new NavigationActionEventArgs(sextantNavigationType, uri, id));
             }
             catch (Exception ex)
             {

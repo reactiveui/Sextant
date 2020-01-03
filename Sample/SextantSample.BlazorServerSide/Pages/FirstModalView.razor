@@ -1,10 +1,10 @@
-﻿@page "/green"
-@inherits ReactiveComponentBase<GreenViewModel>
+﻿@inherits ReactiveComponentBase<FirstModalViewModel>
+<h3>FirstModalView</h3>
 
-<h1 style="background-color:green;color:white;">Green</h1>
-<button class="btn-primary" @onclick="() => ViewModel?.OpenModal.Execute().Subscribe()">Open Modal</button>
+<button class="btn-primary" @onclick="()=>ViewModel?.OpenModal.Execute().Subscribe()">Second Modal</button>
+<button class="btn-primary" @onclick="()=>ViewModel?.PopModal.Execute().Subscribe()">Pop Modal</button>
 
-@code{
+@code {
     protected override Task OnInitializedAsync()
     {
         SextantSample.ViewModels.Interactions

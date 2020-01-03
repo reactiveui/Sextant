@@ -39,8 +39,13 @@ namespace Sextant.Blazor
 
         private Dictionary<string, IViewModel> _viewModelDictionary = new Dictionary<string, IViewModel>();
 
+        // Need to mirror the viewmodel stack on IViewStackService.
+        private Stack<IViewModel> _mainStack = new Stack<IViewModel>();
+
         // This will NEVER be accessed by the programmer.  Instead, it only gets filled when hitting the browser back button.
         private Stack<IViewModel> _forwardStack = new Stack<IViewModel>();
+
+        // Mirrored modal stack on IViewStackService.
         private Stack<Type> _modalBackStack = new Stack<Type>();
 
         /// <summary>
@@ -73,7 +78,7 @@ namespace Sextant.Blazor
         /// <inheritdoc/>
         public IObservable<IViewModel> PagePopped { get; set; }
 
-        internal IViewModel CurrentViewModel { get; set; }
+        internal IViewModel CurrentViewModel => _mainStack.Count > 0 ? _mainStack.Peek() : null;
 
         internal object CurrentView { get; set; }
 
@@ -132,8 +137,7 @@ namespace Sextant.Blazor
             return Observable.Start(
                 async () =>
                 {
-                    var stack = await _stackService.PageStack.FirstOrDefaultAsync();
-                    var count = stack.Count;
+                    var count = _mainStack.Count;
 
                     await SextantNavigationManager.Instance.GoToRootAsync((count - 1) * -1).ConfigureAwait(false);
 
@@ -154,7 +158,12 @@ namespace Sextant.Blazor
                         throw new Exception("Your modal component type hasn't been defined in SextantRouter.  Make sure it implements IModalView.");
                     }
 
-                    var viewType = _routeLocator.ResolveViewType(modalViewModel.GetType(), contract);
+                    var viewType = _routeLocator.ResolveViewType(modalViewModel.GetType(), string.IsNullOrWhiteSpace(contract) ? null : contract);
+
+                    if (viewType == null)
+                    {
+                        throw new Exception($"A view hasn't been registered for the viewmodel type, {modalViewModel.GetType()}, with contract, {contract}.");
+                    }
 
                     // Save the type in a view backstack for later.  Since the StackService doesn't save the contract, we won't know exactly what view to use otherwise.
                     _modalBackStack.Push(viewType);
@@ -172,7 +181,7 @@ namespace Sextant.Blazor
             return Observable.Start(
                 () =>
                 {
-                    CurrentViewModel = viewModel;
+                    _mainStack.Push(viewModel);
                     var route = _routeLocator.ResolveRoute(viewModel.GetType());
                     while (route.StartsWith("/", StringComparison.InvariantCulture))
                     {
@@ -225,38 +234,27 @@ namespace Sextant.Blazor
             _routeLocator = (RouteViewViewModelLocator)Splat.Locator.Current.GetService(typeof(RouteViewViewModelLocator));
             _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Splat.Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
 
-            SextantNavigationManager.Instance.LocationChanged += Instance_LocationChanged;
-
             PagePopped = Observable.FromEventPattern<NavigationActionEventArgs>(
                    x => SextantNavigationManager.Instance.LocationChanged += x,
                    x => SextantNavigationManager.Instance.LocationChanged -= x)
-               .Where(ep => ep.EventArgs.Navigated)
+               .Where(ep => ep.EventArgs.NavigationType == SextantNavigationType.Popstate)
                .ObserveOn(RxApp.MainThreadScheduler)
                .Select(async (ep) =>
                {
-                   int count = 0;
                    List<IViewModel> viewModels = new List<IViewModel>();
                    string id = null;
                    bool found = false;
 
-                   return viewModels;
-
                    // If this is false, we're probably pre-rendering.
                    if (_viewModelDictionary.ContainsKey(ep.EventArgs.Id))
                    {
+                       // This might not be a simple back navigation.  Could be any page in the history.  Need to find this target vm in the stack(s).
                        IViewModel targetViewModel = _viewModelDictionary[ep.EventArgs.Id];
-                       CurrentViewModel = targetViewModel;
-
-                       // let try to set the current view's viewmodel
-                       (CurrentView as IViewFor).ViewModel = CurrentViewModel;
 
                        Debug.WriteLine($"ViewModel that comes next: {targetViewModel.GetType().Name}");
 
-                       var stack = await _stackService.PageStack.FirstOrDefaultAsync();
-                       count = stack.Count;
-
                        // Assumes pop event is back navigation.
-                       foreach (var vm in stack.Reverse())
+                       foreach (var vm in _mainStack)
                        {
                            if (vm != targetViewModel)
                            {
@@ -275,12 +273,13 @@ namespace Sextant.Blazor
                            foreach (var vm in viewModels)
                            {
                                _forwardStack.Push(vm);
+                               _mainStack.Pop();
                            }
 
                            return viewModels;
                        }
 
-                       // If we get here, there was definitely forward navigation instead!
+                       // If we get here, there was **definitely** forward navigation instead!
                        viewModels.Clear();
                        do
                        {
@@ -319,9 +318,6 @@ namespace Sextant.Blazor
                 await SextantNavigationManager.Instance.InitializeAsync(JSRuntime);
                 var result = ParseRelativeUrl(SextantNavigationManager.Instance.AbsoluteUri);
 
-                CurrentViewModel = result.viewModel;
-
-                // await _stackService.PushPage(result.viewModel, null, true, false);
                 await _stackService.PushPage(result.viewModel, result.contract, true, false); // .Subscribe();
 #pragma warning restore RCS1090 // Call 'ConfigureAwait(false)'
 
@@ -367,19 +363,16 @@ namespace Sextant.Blazor
 
         private async void Instance_LocationChanged(object sender, NavigationActionEventArgs e)
         {
+            _ = sender;
             System.Diagnostics.Debug.WriteLine($"Location changed: {e.Uri}  {e.Id}");
 
             // back or forward event will set history automatically... but link click will not.
-            if (!e.Navigated)
+            if (e.NavigationType == SextantNavigationType.Url)
             {
                 // link click
                 var results = ParseRelativeUrl(e.Uri, e.Id);
-                CurrentViewModel = results.viewModel;
 
                 await _stackService.PushPage(results.viewModel, results.contract, false, true);
-
-                // UriHelper.NavigateTo(e.Uri);
-                // BlazorNavigationManager.NavigateTo(e.Uri);
             }
             else
             {

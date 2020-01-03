@@ -42,23 +42,30 @@ namespace Sextant.Blazor.Modal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Blazor standard.")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.OpenElement(0, "div");
-            builder.AddAttribute(1, "style", "width:100vw;height:100vh;background-color:gray;");
-
-            builder.OpenElement(2, "div");
-            builder.AddAttribute(3, "style", "width:80vw;height:80vh;background-color:white;");
-            if (_view != null)
+            if (_isOpen)
             {
-                builder.OpenComponent(4, _view);
-                builder.AddComponentReferenceCapture(5, (viewReference) =>
-                {
-                    ((IViewFor)viewReference).ViewModel = _currentViewModel;
-                });
-                builder.CloseComponent();
-            }
+                builder.OpenElement(0, "div");
+                builder.AddAttribute(1, "style", "position:fixed;width:100%;height:100%;top:0;left:0;");
 
-            builder.CloseElement();
-            builder.CloseElement();
+                builder.OpenElement(2, "div");
+                builder.AddAttribute(3, "style", "position:fixed;width:100%;height:100%;top:0;left:0;background-color:gray;opacity:0.6;");
+                builder.CloseElement();
+
+                builder.OpenElement(4, "div");
+                builder.AddAttribute(5, "style", "width:80%;height:80%;background-color:white;top:10%;margin:0 auto;position:relative;");
+                if (_view != null)
+                {
+                    builder.OpenComponent(6, _view);
+                    builder.AddComponentReferenceCapture(7, (viewReference) =>
+                    {
+                        ((IViewFor)viewReference).ViewModel = _currentViewModel;
+                    });
+                    builder.CloseComponent();
+                }
+
+                builder.CloseElement();
+                builder.CloseElement();
+            }
         }
     }
 }

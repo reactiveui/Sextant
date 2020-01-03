@@ -43,9 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SextantSample.ViewModels", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Blazor", "Sextant.Blazor\Sextant.Blazor.csproj", "{75A9DE97-AC70-48D2-B3FC-A0FC455CFBDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.BlazorClientSide", "..\Sample\SextantSample.BlazorClientSide\SextantSample.BlazorClientSide.csproj", "{C52CED4D-9EAD-41E5-A5D8-52BDB0971078}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SextantSample.BlazorClientSide", "..\Sample\SextantSample.BlazorClientSide\SextantSample.BlazorClientSide.csproj", "{C52CED4D-9EAD-41E5-A5D8-52BDB0971078}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.BlazorServerSide", "..\Sample\SextantSample.BlazorServerSide\SextantSample.BlazorServerSide.csproj", "{3CB0A8BF-3B21-4EF7-9D14-ADC55D510177}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SextantSample.BlazorServerSide", "..\Sample\SextantSample.BlazorServerSide\SextantSample.BlazorServerSide.csproj", "{3CB0A8BF-3B21-4EF7-9D14-ADC55D510177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

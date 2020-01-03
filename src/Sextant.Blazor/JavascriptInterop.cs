@@ -20,22 +20,29 @@ namespace Sextant.Blazor
         /// <summary>
         /// Interop method for returning location and state.
         /// </summary>
-        /// <param name="navigated">Whether navigation has been done by the browser yet.</param>
+        /// <param name="sextantNavigationType">Forward, back, or other type of navigation.</param>
         /// <param name="uri">The uri.</param>
         /// <param name="state">The state of the viewmodel.</param>
         /// <returns>A task.</returns>
         [JSInvokable]
-        public static Task NotifyLocationState(bool navigated, string uri, Dictionary<string, object> state)
+        public static Task NotifyLocationState(SextantNavigationType sextantNavigationType, string uri, Dictionary<string, object> state)
         {
             if (state == null)
             {
-                SextantNavigationManager.Instance.NotifyNavigationAction(navigated, uri, null);
+                try
+                {
+                    SextantNavigationManager.Instance.NotifyNavigationAction(sextantNavigationType, uri, null);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
             }
             else
             {
                 try
                 {
-                    SextantNavigationManager.Instance.NotifyNavigationAction(navigated, uri, ((JsonElement)state["id"]).GetString());
+                    SextantNavigationManager.Instance.NotifyNavigationAction(sextantNavigationType, uri, ((JsonElement)state["id"]).GetString());
                 }
                 catch (Exception ex)
                 {

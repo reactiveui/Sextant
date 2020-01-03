@@ -33,6 +33,8 @@ namespace SextantSample.BlazorServerSide
                 .RegisterBlazorRoute<Pages.HomeView, HomeViewModel>("/")
                 .RegisterBlazorRoute<Pages.RedView, RedViewModel>("/red")
                 .RegisterBlazorRoute<Pages.GreenView, GreenViewModel>("/green")
+                .RegisterBlazorRoute<Pages.FirstModalView, FirstModalViewModel>("/firstModal")
+                .RegisterBlazorRoute<Pages.SecondModalView, SecondModalViewModel>("/secondModal")
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
 
             var urlVmGenerator = Locator.Current.GetService<UrlParameterViewModelGenerator>();

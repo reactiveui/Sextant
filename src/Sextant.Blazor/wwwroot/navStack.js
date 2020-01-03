@@ -19,13 +19,20 @@ const SextantFunctions = {
     goBack,
     goToRoot
 };
+var SextantNavigationType;
+(function (SextantNavigationType) {
+    SextantNavigationType[SextantNavigationType["forward"] = 0] = "forward";
+    SextantNavigationType[SextantNavigationType["back"] = 1] = "back";
+    SextantNavigationType[SextantNavigationType["url"] = 2] = "url";
+    SextantNavigationType[SextantNavigationType["popstate"] = 3] = "popstate";
+})(SextantNavigationType || (SextantNavigationType = {}));
 window.SextantFunctions = SextantFunctions;
 // need this registered from the beginning!
+// Will be triggered by user hitting back/forward button in browser.  Also triggered by history.go(), history.back(), etc  api calls.
 window.addEventListener('popstate', (ev) => {
     console.log("Popstate event: " + ev.state);
-    // ev.stopImmediatePropagation();
     if (ev.state == null || !ev.state.shouldHandleInternally) {
-        notifyNavigation(true, location.href, ev.state);
+        notifyNavigationAsync(SextantNavigationType.popstate, location.href, ev.state);
     }
 });
 document.addEventListener('click', event => {
@@ -47,17 +54,15 @@ document.addEventListener('click', event => {
         const absoluteHref = toAbsoluteUri(href);
         if (isWithinBaseUriSpace(absoluteHref)) {
             event.preventDefault();
-            event.stopImmediatePropagation();
-            //anchorTarget.getAttribute()
-            // performInternalNavigation(absoluteHref, true);
-            notifyNavigation(false, absoluteHref, null);
+            event.stopImmediatePropagation(); // we don't want the original blazor router to pick up this event.
+            notifyNavigationAsync(SextantNavigationType.url, absoluteHref, null);
         }
     }
 });
+// The original blazor router will do the navigation.  It will pick up a navigation event after this event goes out.
 function performInternalNavigation(absoluteInternalHref, interceptedLink) {
-    //history.pushState(null, /* ignored title */ '', absoluteInternalHref);
     console.log("Internal Navigation: " + absoluteInternalHref);
-    notifyNavigation(false, absoluteInternalHref, null);
+    notifyNavigationAsync(SextantNavigationType.forward, absoluteInternalHref, null);
 }
 function toAbsoluteUri(relativeUri) {
     testAnchor = testAnchor || document.createElement('a');
@@ -82,27 +87,28 @@ function eventHasSpecialKey(event) {
     return event.ctrlKey || event.shiftKey || event.altKey || event.metaKey;
 }
 // Add some details about the viewmodel so we can match it up to Sextant's stack.  Keep the same url so don't add the optional parameter.
+// Ultimately, we can replace document.title with something more meaningful so browser history shows a more information.
 function replaceState(state) {
     history.replaceState(state, document.title);
 }
 function goBack() {
-    history.back();
+    history.back(); // This will trigger popstate.
 }
 function goToRoot(count) {
     if (count >= 0)
         console.log("There's a problem.  GoToRoot should be called with a negative number in order to go back.");
-    history.go(count);
+    history.go(count); // This will trigger popstate.
 }
-// this is a way to trick the browser into resending the popstate event so we can call a PopPage method from the viewstack when someone actually clicks back
-function undoBrowserBack() {
-    let currentState = history.state;
-    currentState.shouldHandleInternally = true;
-    history.pushState(null, document.title, location + "#");
-}
-function notifyNavigation(navigated, url, state) {
+//// this is a way to trick the browser into resending the popstate event so we can call a PopPage method from the viewstack when someone actually clicks back
+//function undoBrowserBack() {
+//    let currentState = history.state;
+//    currentState.shouldHandleInternally = true;
+//    history.pushState(null, document.title, location + "#");
+//}
+function notifyNavigationAsync(navigationType, url, state) {
     return __awaiter(this, void 0, void 0, function* () {
         if (notifyLocationChangedCallback) {
-            yield window.DotNet.invokeMethodAsync(notifyLocationChangedCallback.assemblyName, notifyLocationChangedCallback.functionName, navigated, url, state);
+            yield window.DotNet.invokeMethodAsync(notifyLocationChangedCallback.assemblyName, notifyLocationChangedCallback.functionName, navigationType, url, state);
         }
     });
 }

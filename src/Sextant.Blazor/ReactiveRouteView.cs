@@ -97,6 +97,10 @@ namespace Sextant.Blazor
         {
             builder.OpenComponent(0, RouteData.PageType);
 
+            // Need to force Blazor to render a new page even if the page type is the same or else the ViewModel setting below won't happen.
+            // Setting a key will force a re-render even if the type is the same when router state changes.
+            builder.SetKey(Guid.NewGuid().ToString());
+
             builder.AddComponentReferenceCapture(1, compRef =>
             {
                 if (compRef is IViewFor)
