@@ -38,57 +38,17 @@ namespace Sextant.UWP
         private readonly IViewLocator _viewLocator;
         private IFullLogger _logger;
 
-        private IViewModel _currentViewModel;
         private ContentDialog _contentDialog;
+        private IViewModel _lastPoppedViewModel;
+        private Stack<IViewModel> _mirroredPageStack;
+        private Stack<IViewModel> _mirroredModalStack;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
         /// </summary>
-        /// <param name="mainScheduler">The main scheduler to scheduler UI tasks on.</param>
-        /// <param name="backgroundScheduler">The background scheduler.</param>
-        /// <param name="viewLocator">The view locator which will find views associated with view models.</param>
-        /// <param name="rootPage">The starting root page.</param>
-        public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator, Page rootPage)
+        public NavigationView()
+            : this(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
         {
-            InitializeComponent();
-
-            _backgroundScheduler = backgroundScheduler;
-            _mainScheduler = mainScheduler;
-            _viewLocator = viewLocator;
-            _logger = this.Log();
-
-            PagePopped = Observable
-                .FromEvent<NavigatedEventHandler, NavigationEventArgs>(x => mainFrame.Navigated += x, x => mainFrame.Navigated -= x)
-                .Do(args =>
-                {
-                    if (mainFrame.CanGoBack)
-                    {
-                        backButton.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        backButton.Visibility = Visibility.Collapsed;
-                    }
-                })
-                .Where(ep => ep.NavigationMode == NavigationMode.Back)
-                .Select(ep => (ep.Content as IViewFor).ViewModel as IViewModel)
-                .WhereNotNull();
-
-            // Observable.FromEvent<NavigatedEventHandler, NavigationEventArgs>(x => mainFrame.Navigated += x, x => mainFrame.Navigated -= x)
-            //    .Subscribe(args =>
-            //    {
-            //        if (mainFrame.CanGoBack)
-            //        {
-            //            backButton.Visibility = Visibility.Visible;
-            //        }
-            //        else
-            //        {
-            //            backButton.Visibility = Visibility.Collapsed;
-            //        }
-            //    });
-            var rootPag = rootPage;
-
-            throw new NotImplementedException("Need to figure out how to add an instanced page to Frame");
         }
 
         /// <summary>
@@ -104,6 +64,9 @@ namespace Sextant.UWP
             _backgroundScheduler = backgroundScheduler;
             _mainScheduler = mainScheduler;
             _viewLocator = viewLocator;
+
+            _mirroredPageStack = new Stack<IViewModel>();
+            _mirroredModalStack = new Stack<IViewModel>();
 
             backButton.Visibility = Visibility.Collapsed;
 
@@ -130,30 +93,23 @@ namespace Sextant.UWP
                 .Where(ep => ep.NavigationMode == NavigationMode.Back)
                 .Select(ep =>
                 {
+                    var view = ep.Content as IViewFor;
+                    if (view == null)
+                    {
+                        _logger.Debug($"The view ({ep.Content.GetType()}) does not implement IViewFor<>.  Cannot set ViewModel from a back navigation.");
+                    }
+                    else
+                    {
+                        view.ViewModel = _mirroredPageStack.Peek();
+                    }
+
                     // Since view stack doesn't contain instances (only types), we have to store the latest viewmodel and return it on a back nav.
-                    return _currentViewModel;
+                    // ep.Content contains an instance of the new view, but it may have just been created and its ViewModel property will be null.
+                    // But we want the view that was just removed.  We need to send the old view's viewmodel to IViewStackService so that the ViewModel can be removed from the stack.
+                    return _lastPoppedViewModel;
                 })
                 .WhereNotNull();
 
-            // Observable.FromEvent<NavigatedEventHandler, NavigationEventArgs>(
-            //       handler =>
-            //       {
-            //           NavigatedEventHandler navHandler = (sender, e) => handler(e);
-            //           return navHandler;
-            //       },
-            //       x => mainFrame.Navigated += x,
-            //       x => mainFrame.Navigated -= x)
-            //   .Subscribe(args =>
-            //   {
-            //       if (mainFrame.CanGoBack)
-            //       {
-            //           IsBackButtonVisible = true;
-            //       }
-            //       else
-            //       {
-            //           IsBackButtonVisible = false;
-            //       }
-            //   });
             BackRequested.Subscribe();
         }
 
@@ -197,15 +153,20 @@ namespace Sextant.UWP
         /// </summary>
         public IObservable<Unit> BackRequested => Observable.Merge(
             Observable
-                .FromEventPattern<BackRequestedEventArgs>(
-                x => SystemNavigationManager.GetForCurrentView().BackRequested += x,
-                x => SystemNavigationManager.GetForCurrentView().BackRequested -= x)
+                .FromEvent<EventHandler<BackRequestedEventArgs>, BackRequestedEventArgs>(
+                    handler =>
+                    {
+                        EventHandler<BackRequestedEventArgs> eventHandler = (sender, e) => handler(e);
+                        return eventHandler;
+                    },
+                    x => SystemNavigationManager.GetForCurrentView().BackRequested += x,
+                    x => SystemNavigationManager.GetForCurrentView().BackRequested -= x)
                 .Do(ev =>
                 {
                     if (mainFrame.CanGoBack)
                     {
                         PopPage(true);
-                        ev.EventArgs.Handled = true;
+                        ev.Handled = true;
                     }
                 })
                 .ToSignal(),
@@ -251,24 +212,21 @@ namespace Sextant.UWP
         {
             if (_contentDialog != null)
             {
+                _mirroredModalStack.TryPop(out _);
                 _contentDialog.Hide();
-                var viewStackService = Locator.Current.GetService<IViewStackService>();
 
-                viewStackService.ModalStack.Skip(1).Take(1).Subscribe(stack =>
+                if (_mirroredModalStack.TryPeek(out var modal))
                 {
-                    if (stack.Count > 0)
-                    {
-                        _contentDialog = new ContentDialog();
-                        _contentDialog.FullSizeDesired = true;
-                        _contentDialog.IsPrimaryButtonEnabled = false;
-                        _contentDialog.IsSecondaryButtonEnabled = false;
-                        var page = LocatePageFor(stack[stack.Count - 1], null);
+                    _contentDialog = new ContentDialog();
+                    _contentDialog.FullSizeDesired = true;
+                    _contentDialog.IsPrimaryButtonEnabled = false;
+                    _contentDialog.IsSecondaryButtonEnabled = false;
+                    var page = LocatePageFor(modal, null);
 
-                        _contentDialog.Content = page;
+                    _contentDialog.Content = page;
 
-                        _ = _contentDialog.ShowAsync();
-                    }
-                });
+                    _ = _contentDialog.ShowAsync();
+                }
             }
 
             return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
@@ -287,7 +245,15 @@ namespace Sextant.UWP
                 animation = new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo();
             }
 
-            _currentViewModel = (IViewModel)(mainFrame.Content as IViewFor).ViewModel;
+            _mirroredPageStack.Pop();
+
+            var view = mainFrame.Content as IViewFor;
+            if (view == null)
+            {
+                _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
+            }
+
+            _lastPoppedViewModel = view.ViewModel as IViewModel;
 
             mainFrame.GoBack(animation);
 
@@ -312,6 +278,19 @@ namespace Sextant.UWP
                 mainFrame.BackStack.Remove(mainFrame.BackStack.Last());
             }
 
+            while (_mirroredPageStack.Count > 1)
+            {
+                _mirroredPageStack.Pop();
+            }
+
+            var view = mainFrame.Content as IViewFor;
+            if (view == null)
+            {
+                _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
+            }
+
+            _lastPoppedViewModel = view.ViewModel as IViewModel;
+
             mainFrame.GoBack(animation);
 
             return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
@@ -333,6 +312,8 @@ namespace Sextant.UWP
                 .SelectMany(
                     page =>
                     {
+                        _mirroredModalStack.Push(modalViewModel);
+
                         if (_contentDialog != null && ModalVisible)
                         {
                             _contentDialog.Hide();
@@ -371,15 +352,19 @@ namespace Sextant.UWP
                     {
                         if (resetStack)
                         {
-                            if (mainFrame.BackStackDepth == 0)
-                            {
-                                mainFrame.Navigate(pageType, null, new SuppressNavigationTransitionInfo());
-                                (mainFrame.Content as IViewFor).ViewModel = viewModel;
-                                return Observable.Return(Unit.Default);
-                            }
+                            _mirroredPageStack.Clear();
+                            _mirroredPageStack.Push(viewModel);
 
                             mainFrame.Navigate(pageType, null, new SuppressNavigationTransitionInfo());
-                            (mainFrame.Content as IViewFor).ViewModel = viewModel;
+                            if (mainFrame.Content is IViewFor)
+                            {
+                                (mainFrame.Content as IViewFor).ViewModel = viewModel;
+                            }
+                            else
+                            {
+                               _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot set ViewModel of type, {viewModel.GetType()}, on view.");
+                            }
+
                             mainFrame.BackStack.Clear();
 
                             return Observable.Return(Unit.Default);
@@ -395,10 +380,22 @@ namespace Sextant.UWP
                             animation = new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo();
                         }
 
+                        _mirroredPageStack.Push(viewModel);
+
                         mainFrame.Navigate(pageType, null, animation);
-                        (mainFrame.Content as IViewFor).ViewModel = viewModel;
+                        if (mainFrame.Content is IViewFor)
+                        {
+                            (mainFrame.Content as IViewFor).ViewModel = viewModel;
+                        }
+                        else
+                        {
+                            _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot set ViewModel of type, {viewModel.GetType()}, on view.");
+                        }
+
                         return Observable.Return(Unit.Default);
                     });
+
+        private IViewModel CurrentViewModel() => (IViewModel)(mainFrame.Content as IViewFor).ViewModel;
 
         private IView LocateNavigationFor(IViewModel viewModel)
         {

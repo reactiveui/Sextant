@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using ReactiveUI;
 using Sextant;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class GreenViewModel : ViewModelBase, INavigable
     {

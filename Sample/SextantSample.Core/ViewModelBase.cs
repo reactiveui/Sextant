@@ -3,7 +3,7 @@ using System.Reactive;
 using ReactiveUI;
 using Sextant;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public abstract class ViewModelBase : ReactiveObject, IViewModel
     {

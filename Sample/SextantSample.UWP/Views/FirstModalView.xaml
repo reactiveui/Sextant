@@ -11,7 +11,9 @@
     <StackPanel Padding="0,40,0,0">
         <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="First Modal"/>
-        <Button x:Name="OpenSecondModal" Content="Second Modal" />
-        <Button x:Name="PopModal" Content="Pop Modal" />
+        <Button x:Name="OpenSecondModal" Content="Second Modal"
+                Command="{x:Bind ViewModel.OpenModal}"/>
+        <Button x:Name="PopModal" Content="Pop Modal"
+                Command="{x:Bind ViewModel.PopModal}"/>
     </StackPanel>
 </Page>

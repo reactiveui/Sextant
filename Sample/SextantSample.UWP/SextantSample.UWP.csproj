@@ -119,10 +119,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AppBootstrapper.cs" />
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SextantDefaultExceptionHandler.cs" />
     <Compile Include="Views\BlueNavigationView.cs" />
@@ -162,10 +158,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\FirstModalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -204,9 +196,9 @@
       <Project>{d6b84899-4afc-4e6c-9c3f-005f21df5a52}</Project>
       <Name>Sextant</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SextantSample.Core\SextantSample.Core.csproj">
+    <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj">
       <Project>{69790d55-7aa2-4d01-8d1d-70cc25aae8f0}</Project>
-      <Name>SextantSample.Core</Name>
+      <Name>SextantSample.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

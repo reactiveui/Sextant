@@ -15,6 +15,7 @@
                    Text="Green View"/>
         <Button x:Name="Modal" 
                 Foreground="White" 
+                Command="{x:Bind ViewModel.OpenModal}"
                 Content="Open Modal" />
     </StackPanel>
 </Page>

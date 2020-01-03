@@ -1,5 +1,5 @@
 ﻿using ReactiveUI;
-using SextantSample.Core.ViewModels;
+using SextantSample.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -15,11 +15,6 @@ namespace SextantSample.UWP.Views
         public GreenView()
         {
             this.InitializeComponent();
-            this.WhenActivated(d =>
-            {
-                d(this.BindCommand(ViewModel, x => x.OpenModal, x => x.Modal));
-            });
-            
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty

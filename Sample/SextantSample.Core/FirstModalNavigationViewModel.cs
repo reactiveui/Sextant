@@ -2,7 +2,7 @@
 using ReactiveUI;
 using Sextant;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class FirstModalNavigationViewModel : ViewModelBase
     {

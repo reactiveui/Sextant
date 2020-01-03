@@ -29,8 +29,7 @@ namespace Sextant.UWP
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver)
         {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current), typeof(IView), NavigationView);
             return dependencyResolver;
         }
 
@@ -43,9 +42,7 @@ namespace Sextant.UWP
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainThreadScheduler, IScheduler backgroundScheduler)
         {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, ViewLocator.Current), typeof(IView), NavigationView);
             return dependencyResolver;
         }
 
@@ -121,8 +118,6 @@ namespace Sextant.UWP
         {
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
             var viewType = uwpViewTypeResolver.ResolveViewType<TViewModel>();
-
-            // var viewType = (Type)dependencyResolver.GetService<IViewFor<TViewModel>>(contract);
             return viewType;
         }
 
@@ -140,8 +135,6 @@ namespace Sextant.UWP
             var vm = viewModel;
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
             var viewType = uwpViewTypeResolver.ResolveViewType<TViewModel>();
-
-            // var viewType = (Type)dependencyResolver.GetService<IViewFor<TViewModel>>(contract);
             return viewType;
         }
     }
