@@ -1,15 +1,14 @@
 ﻿using ReactiveUI;
 using ReactiveUI.XamForms;
 using Sextant;
-using SextantSample.Core;
-using SextantSample.Core.ViewModels;
+using SextantSample.ViewModels;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
-	public partial class HomeView : ReactiveContentPage<HomeViewModel>
+    public partial class HomeView : ReactiveContentPage<HomeViewModel>
     {
 		public HomeView()
         {

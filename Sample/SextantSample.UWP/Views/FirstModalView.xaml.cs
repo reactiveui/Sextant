@@ -1,7 +1,6 @@
 ﻿using System;
 using ReactiveUI;
-using SextantSample.Core;
-using SextantSample.Core.ViewModels;
+using SextantSample.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -17,10 +16,7 @@ namespace SextantSample.UWP.Views
         public FirstModalView()
         {
             this.InitializeComponent();
-
-            this.BindCommand(ViewModel, x => x.OpenModal, x => x.OpenSecondModal);
-            this.BindCommand(ViewModel, x => x.PopModal, x => x.PopModal);
-
+                        
             Interactions
                 .ErrorMessage
                 .RegisterHandler(async x =>

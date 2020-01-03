@@ -5,9 +5,8 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using ReactiveUI;
 using Sextant;
-using SextantSample.Core;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class RedViewModel : ViewModelBase, IViewModel
     {

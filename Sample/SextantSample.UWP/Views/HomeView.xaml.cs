@@ -1,6 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using ReactiveUI;
-using SextantSample.Core.ViewModels;
+using SextantSample.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -16,13 +16,6 @@ namespace SextantSample.UWP.Views
         public HomeView()
         {
             this.InitializeComponent();
-
-            ViewModel = new HomeViewModel();
-            this.WhenActivated(disposables => {
-                this.BindCommand(ViewModel, x => x.OpenModal, x => x.FirstModalButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel, x => x.PushPage, x => x.PushPage).DisposeWith(disposables);
-                this.BindCommand(ViewModel, x => x.PushGenericPage, x => x.PushGenericPage).DisposeWith(disposables);
-            });
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty

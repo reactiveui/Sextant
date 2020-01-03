@@ -3,10 +3,8 @@ using ReactiveUI;
 using Sextant;
 using System;
 using System.Diagnostics;
-using SextantSample.Core;
 
-
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class FirstModalViewModel : ViewModelBase
     {

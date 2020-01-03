@@ -13,9 +13,13 @@
         <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                    Foreground="White"
                    Text="First Modal"/>
-        <Button x:Name="PopModal" Content="Pop Modal" Foreground="White"/>
-        <Button x:Name="PushPage" Content="Push Another Red Page" Foreground="White"/>
-        <Button x:Name="PopPage" Content="Pop Page" Foreground="White"/>
-        <Button x:Name="PopToRoot" Content="Pop To Root" Foreground="White"/>
+        <Button x:Name="PopModal" Content="Pop Modal" Foreground="White"
+                Command="{x:Bind ViewModel.PopModal}"/>
+        <Button x:Name="PushPage" Content="Push Another Red Page" Foreground="White"
+                Command="{x:Bind ViewModel.PushPage}"/>
+        <Button x:Name="PopPage" Content="Pop Page" Foreground="White"
+                Command="{x:Bind ViewModel.PopPage}"/>
+        <Button x:Name="PopToRoot" Content="Pop To Root" Foreground="White"
+                Command="{x:Bind ViewModel.PopToRoot}"/>
     </StackPanel>
 </Page>

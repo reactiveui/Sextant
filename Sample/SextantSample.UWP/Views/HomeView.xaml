@@ -11,8 +11,11 @@
     <StackPanel Padding="0,40,0,0">
         <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="Home View"/>
-        <Button x:Name="FirstModalButton" Content="First Modal" />
-        <Button x:Name="PushPage" Content="Push Red Page" />
-        <Button x:Name="PushGenericPage" Content="Push Green Page" />
+        <Button x:Name="FirstModalButton" Content="First Modal"
+                Command="{x:Bind ViewModel.OpenModal}"/>
+        <Button x:Name="PushPage" Content="Push Red Page"
+                Command="{x:Bind ViewModel.PushPage}"/>
+        <Button x:Name="PushGenericPage" Content="Push Green Page"
+                Command="{x:Bind ViewModel.PushGenericPage}"/>
     </StackPanel>
 </Page>

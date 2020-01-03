@@ -4,9 +4,8 @@ using System;
 using System.Diagnostics;
 using Sextant;
 using System.Reactive.Linq;
-using SextantSample.Core;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class SecondModalViewModel : ViewModelBase
     {

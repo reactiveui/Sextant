@@ -18,6 +18,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\src\Sextant.XamForms\Sextant.XamForms.csproj" />
-        <ProjectReference Include="..\SextantSample.Core\SextantSample.Core.csproj" />
+        <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" />
     </ItemGroup>
 </Project>

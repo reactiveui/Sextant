@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class HomeNavigationViewModel : ReactiveObject
     {

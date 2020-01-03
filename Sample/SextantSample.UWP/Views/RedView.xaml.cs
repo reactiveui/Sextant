@@ -1,7 +1,6 @@
 ﻿using System;
 using ReactiveUI;
-using SextantSample.Core;
-using SextantSample.Core.ViewModels;
+using SextantSample.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -18,14 +17,7 @@ namespace SextantSample.UWP.Views
         {
             this.InitializeComponent();
 
-            this.WhenActivated(d =>
-            {
-                d(this.BindCommand(ViewModel, x => x.PopModal, x => x.PopModal));
-                d(this.BindCommand(ViewModel, x => x.PushPage, x => x.PushPage));
-                d(this.BindCommand(ViewModel, x => x.PopPage, x => x.PopPage));
-                d(this.BindCommand(ViewModel, x => x.PopToRoot, x => x.PopToRoot));
-
-                d(Interactions
+            Interactions
                     .ErrorMessage
                     .RegisterHandler(async x =>
                     {
@@ -33,8 +25,7 @@ namespace SextantSample.UWP.Views
                         dialog.Commands.Add(new Windows.UI.Popups.UICommand("Done"));
                         _ = await dialog.ShowAsync();
                         x.SetOutput(true);
-                    }));
-            });
+                    });
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty

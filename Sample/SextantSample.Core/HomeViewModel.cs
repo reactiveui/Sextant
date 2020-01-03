@@ -4,10 +4,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Sextant;
-using SextantSample.Core;
 using Splat;
 
-namespace SextantSample.Core.ViewModels
+namespace SextantSample.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {

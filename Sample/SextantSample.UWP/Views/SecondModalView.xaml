@@ -11,7 +11,9 @@
     <StackPanel Padding="0,40,0,0">
         <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
                    Text="Second Modal"/>
-        <Button x:Name="PushPage" Content="Push Page" />
-        <Button x:Name="PopModal" Content="Pop Modal" />
+        <Button x:Name="PushPage" Content="Push Page"
+                Command="{x:Bind ViewModel.PushPage}"/>
+        <Button x:Name="PopModal" Content="Pop Modal" 
+                Command="{x:Bind ViewModel.PopModal}"/>
     </StackPanel>
 </Page>

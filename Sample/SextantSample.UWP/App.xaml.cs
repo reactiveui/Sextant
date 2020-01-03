@@ -6,8 +6,8 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using ReactiveUI;
 using Sextant;
 using Sextant.UWP;
-using SextantSample.Core.ViewModels;
 using SextantSample.UWP.Views;
+using SextantSample.ViewModels;
 using Splat;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using static Sextant.Sextant;
 
 namespace SextantSample.UWP
 {
@@ -38,8 +39,6 @@ namespace SextantSample.UWP
             this.Suspending += OnSuspending;
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
-
-
         }
 
         /// <summary>
@@ -51,7 +50,17 @@ namespace SextantSample.UWP
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
-            new AppBootstrapper();
+            Instance.InitializeUWP();
+
+            Locator
+                .CurrentMutable
+                .RegisterViewUWP<HomeView, HomeViewModel>()
+                .RegisterViewUWP<FirstModalView, FirstModalViewModel>()
+                .RegisterViewUWP<SecondModalView, SecondModalViewModel>()
+                .RegisterViewUWP<RedView, RedViewModel>()
+                .RegisterViewUWP<GreenView, GreenViewModel>()
+                .RegisterNavigationView(() => new BlueNavigationView())
+                .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
 
             Window.Current.Content = Splat.Locator.Current.GetNavigationView();
 
