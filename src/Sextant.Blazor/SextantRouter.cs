@@ -181,6 +181,20 @@ namespace Sextant.Blazor
             return Observable.Start(
                 () =>
                 {
+                    if (resetStack)
+                    {
+                        // Remove vm from dictionary.
+                        while (_mainStack.Count > 0)
+                        {
+                            var vm = _mainStack.Pop();
+                            var pairToDelete = _viewModelDictionary.FirstOrDefault(x => x.Value == vm);
+                            if (!pairToDelete.Equals(default(KeyValuePair<string, IViewModel>)))
+                            {
+                                _viewModelDictionary.Remove(pairToDelete.Key);
+                            }
+                        }
+                    }
+
                     _mainStack.Push(viewModel);
                     var route = _routeLocator.ResolveRoute(viewModel.GetType());
                     while (route.StartsWith("/", StringComparison.InvariantCulture))
@@ -208,9 +222,10 @@ namespace Sextant.Blazor
                         // If this is the first page load, then the internal router has already taken care of navigation. Skip it.
                         if (_firstPageRendered)
                         {
+                            // Do a normal navigation.
+                            // Unfortunately, browser histories can't be cleared.  The user can still navigate to an old page, but those viewmodels will no longer exist.
+                            // A new viewmodel will be created if the generator parameter of RegisterBlazorRoute is set to create a viewmodel from a route.
                             BlazorNavigationManager.NavigateTo(SextantNavigationManager.Instance.BaseUri + route);
-
-                            // UriHelper.NavigateTo(SextantNavigationManager.Instance.BaseUri + route);
                         }
                     }
 

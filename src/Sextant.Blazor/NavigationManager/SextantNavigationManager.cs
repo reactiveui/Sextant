@@ -52,9 +52,15 @@ namespace Sextant.Blazor
 #pragma warning restore RCS1090 // Call 'ConfigureAwait(false)'.
         }
 
+        [Obsolete]
         internal ValueTask NavigateToAsync(string uri)
         {
             return _jsRuntime.InvokeVoidAsync("SextantFunctions.navigateTo", uri);
+        }
+
+        internal ValueTask ClearHistory()
+        {
+            return _jsRuntime.InvokeVoidAsync("SextantFunctions.clearHistory");
         }
 
         internal ValueTask ReplaceStateAsync(string viewModelId)

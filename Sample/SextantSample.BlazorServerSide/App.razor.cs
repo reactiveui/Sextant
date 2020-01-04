@@ -15,12 +15,6 @@ namespace SextantSample.BlazorServerSide
 {
     public partial class App : ComponentBase
     {
-        [Inject]
-        private IJSRuntime _jsRuntime { get; set; }
-
-        [Inject]
-        private HttpClient _httpClient { get; set; }
-
         public App()
         {
             PlatformEnlightenmentProvider.Current.EnableWasm();
