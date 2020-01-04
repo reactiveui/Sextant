@@ -16,9 +16,7 @@ namespace SextantSample.BlazorServerSide
     public partial class App : ComponentBase
     {
         public App()
-        {
-            PlatformEnlightenmentProvider.Current.EnableWasm();
-
+        {            
             Locator
                 .CurrentMutable
                 .RegisterViewModelFactory(() => new DefaultViewModelFactory())

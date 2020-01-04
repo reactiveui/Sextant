@@ -329,6 +329,8 @@ namespace Sextant.Blazor
             if (!_initialized)
             {
                 _initialized = true;
+                SextantNavigationManager.Instance.LocationChanged += Instance_LocationChanged;
+
 #pragma warning disable RCS1090 // Call 'ConfigureAwait(false)'.
                 await SextantNavigationManager.Instance.InitializeAsync(JSRuntime);
                 var result = ParseRelativeUrl(SextantNavigationManager.Instance.AbsoluteUri);
