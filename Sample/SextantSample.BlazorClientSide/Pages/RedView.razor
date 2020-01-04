@@ -1,7 +1,7 @@
 ﻿@page "/red"
 @inherits ReactiveComponentBase<RedViewModel>
 
-<h1>Red</h1>
+<h1 style="background-color:red;color:white;">Red</h1>
 <button class="btn-primary" @onclick="() => ViewModel?.PopModal.Execute().Subscribe()">Pop Modal</button>
 <button class="btn-primary" @onclick="() => ViewModel?.PushPage.Execute().Subscribe()">Push Another Red Page</button>
 <button class="btn-primary" @onclick="() => ViewModel?.PopPage.Execute().Subscribe()">Pop Page</button>
@@ -12,7 +12,7 @@
     {
         SextantSample.ViewModels.Interactions
                 .ErrorMessage
-                .RegisterHandler(async x =>
+                .RegisterHandler(x =>
                 {
                     System.Diagnostics.Debug.WriteLine(x.Input.Message);
                     x.SetOutput(true);
