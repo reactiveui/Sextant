@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
-	public partial class FirstModalView : ReactiveContentPage<FirstModalViewModel>
+    public partial class FirstModalView : ReactiveContentPage<FirstModalViewModel>
     {
 		public FirstModalView()
         {

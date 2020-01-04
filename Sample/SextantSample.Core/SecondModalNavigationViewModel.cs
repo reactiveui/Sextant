@@ -4,7 +4,7 @@ using Sextant;
 
 namespace SextantSample.ViewModels
 {
-	public class SecondModalNavigationViewModel : ReactiveObject
+    public class SecondModalNavigationViewModel : ReactiveObject
     {
     }
 }

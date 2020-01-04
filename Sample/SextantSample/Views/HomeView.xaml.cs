@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
-	public partial class HomeView : ReactiveContentPage<HomeViewModel>
+    public partial class HomeView : ReactiveContentPage<HomeViewModel>
     {
 		public HomeView()
         {

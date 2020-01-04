@@ -1,11 +1,10 @@
 ﻿using ReactiveUI;
 using ReactiveUI.XamForms;
-using Sextant;
 using SextantSample.ViewModels;
 
 namespace SextantSample.Views
 {
-	public partial class RedView : ReactiveContentPage<RedViewModel>
+    public partial class RedView : ReactiveContentPage<RedViewModel>
     {
         public RedView()
         {

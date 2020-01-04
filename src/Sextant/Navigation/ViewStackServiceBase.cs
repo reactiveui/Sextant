@@ -218,16 +218,25 @@ namespace Sextant
         protected static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject)
         {
             IImmutableList<T> poppedStack = ImmutableList<T>.Empty;
-
             if (stackSubject?.Value == null || !stackSubject.Value.Any())
             {
                 throw new InvalidOperationException("Stack is empty.");
             }
 
             stackSubject
-                .Take(stackSubject.Value.Count - 1)
-                .Where(stack => stack != null)
-                .Subscribe(stack => poppedStack = stack.RemoveRange(stack.IndexOf(stack[0]), stack.Count - 1));
+               .Take(1)
+               .Where(stack => stack != null)
+               .Subscribe(stack =>
+               {
+                   if (stack.Count > 1)
+                   {
+                       poppedStack = stack.RemoveRange(stack.IndexOf(stack[1]), stack.Count - 1);
+                   }
+                   else
+                   {
+                       poppedStack = stack;
+                   }
+               });
 
             stackSubject.OnNext(poppedStack);
         }

@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="SextantSample.UWP.Views.RedView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SextantSample.UWP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Background="Red"
+                Padding="0,40,0,0">
+        <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
+                   Foreground="White"
+                   Text="First Modal"/>
+        <Button x:Name="PopModal" Content="Pop Modal" Foreground="White"
+                Command="{x:Bind ViewModel.PopModal}"/>
+        <Button x:Name="PushPage" Content="Push Another Red Page" Foreground="White"
+                Command="{x:Bind ViewModel.PushPage}"/>
+        <Button x:Name="PopPage" Content="Pop Page" Foreground="White"
+                Command="{x:Bind ViewModel.PopPage}"/>
+        <Button x:Name="PopToRoot" Content="Pop To Root" Foreground="White"
+                Command="{x:Bind ViewModel.PopToRoot}"/>
+    </StackPanel>
+</Page>

@@ -13,7 +13,7 @@ namespace SextantSample.ViewModels
         {
             OpenModal = ReactiveCommand
                 .CreateFromObservable(() =>
-                        this.ViewStackService.PushModal(new FirstModalViewModel(viewStackService), string.Empty, false),
+                        ViewStackService.PushModal(new FirstModalViewModel(viewStackService), string.Empty, false),
                     outputScheduler: RxApp.MainThreadScheduler);
         }
 

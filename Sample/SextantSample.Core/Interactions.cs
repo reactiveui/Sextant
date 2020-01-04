@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ReactiveUI;
 
-namespace SextantSample
+namespace SextantSample.ViewModels
 {
     public static class Interactions
     {

@@ -5,7 +5,7 @@ using SextantSample.ViewModels;
 
 namespace SextantSample.Views
 {
-	public partial class SecondModalView : ReactiveContentPage<SecondModalViewModel>
+    public partial class SecondModalView : ReactiveContentPage<SecondModalViewModel>
     {
 		public SecondModalView()
         {

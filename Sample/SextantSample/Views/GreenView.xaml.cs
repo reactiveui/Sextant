@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.XamForms;
-using SextantSample.ViewModels;
+ using SextantSample.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
