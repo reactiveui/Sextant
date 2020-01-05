@@ -33,7 +33,7 @@ namespace Sextant
         public IObservable<Unit> PushPage(
             INavigable navigableViewModel,
             INavigationParameter parameter,
-            string contract = null,
+            string? contract = null,
             bool resetStack = false,
             bool animate = true)
         {
@@ -67,7 +67,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
         {
             if (navigableModal == null)
             {
@@ -99,7 +99,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
+        public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();
@@ -107,7 +107,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();

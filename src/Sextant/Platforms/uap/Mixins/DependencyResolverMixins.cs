@@ -5,23 +5,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
 using System.Text;
 using ReactiveUI;
 using Splat;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Extension methods associated with the IMutableDependencyResolver interface.
     /// </summary>
-    public static class DependencyResolverMixins
+    public static partial class DependencyResolverMixins
     {
-        /// <summary>
-        /// Gets the navigation view key.
-        /// </summary>
-        public static string NavigationView => nameof(NavigationView);
-
         /// <summary>
         /// Initializes the sextant.
         /// </summary>
@@ -53,9 +49,20 @@ namespace Sextant.UWP
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="navigationViewFactory">The navigation view factory.</param>
         /// <returns>The dependencyResolver.</returns>
+        [SuppressMessage("Design", "CA2000: Dispose ViewStackService", Justification = "Long lived object.")]
         public static IMutableDependencyResolver RegisterNavigationView<TView>(this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
             where TView : IView
         {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
+            if (navigationViewFactory is null)
+            {
+                throw new ArgumentNullException(nameof(navigationViewFactory));
+            }
+
             var navigationView = navigationViewFactory();
             var viewStackService = new ViewStackService(navigationView);
 
@@ -70,9 +77,9 @@ namespace Sextant.UWP
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The navigation view.</returns>
-        public static NavigationView GetNavigationView(
+        public static NavigationView? GetNavigationView(
             this IReadonlyDependencyResolver dependencyResolver,
-            string contract = null) =>
+            string? contract = null) =>
             dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
 
         /// <summary>
@@ -82,6 +89,11 @@ namespace Sextant.UWP
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterUWPViewLocator(this IMutableDependencyResolver dependencyResolver)
         {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
             dependencyResolver.RegisterConstant(new ViewTypeResolver(), typeof(ViewTypeResolver));
             return dependencyResolver;
         }
@@ -96,10 +108,15 @@ namespace Sextant.UWP
         /// <returns>
         /// The dependencyResolver.
         /// </returns>
-        public static IMutableDependencyResolver RegisterViewUWP<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string contract = null)
+        public static IMutableDependencyResolver RegisterViewUWP<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string? contract = null)
             where TView : IViewFor<TViewModel>, new()
             where TViewModel : class, IViewModel
         {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>();
             uwpViewTypeResolver.Register<TView, TViewModel>();
             dependencyResolver.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
@@ -113,12 +130,16 @@ namespace Sextant.UWP
         /// <param name="dependencyResolver">The dependencyResolver.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The view Type again.</returns>
-        public static Type ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, string contract = null)
+        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, string? contract = null)
             where TViewModel : class
         {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
-            var viewType = uwpViewTypeResolver.ResolveViewType<TViewModel>();
-            return viewType;
+            return uwpViewTypeResolver.ResolveViewType<TViewModel>();
         }
 
         /// <summary>
@@ -129,13 +150,22 @@ namespace Sextant.UWP
         /// <param name="viewModel">The viewmodel.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The view Type again.</returns>
-        public static Type ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, TViewModel viewModel, string contract = null)
+        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, TViewModel viewModel, string? contract = null)
             where TViewModel : class, IViewModel
         {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
+            if (viewModel is null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
             var vm = viewModel;
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
-            var viewType = uwpViewTypeResolver.ResolveViewType<TViewModel>();
-            return viewType;
+            return uwpViewTypeResolver.ResolveViewType<TViewModel>();
         }
     }
 }

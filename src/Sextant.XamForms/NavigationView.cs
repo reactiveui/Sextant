@@ -65,6 +65,7 @@ namespace Sextant.XamForms
             _backgroundScheduler = backgroundScheduler;
             _mainScheduler = mainScheduler;
             _viewLocator = viewLocator;
+            _logger = this.Log();
 
             PagePopped = Observable
                 .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
@@ -76,7 +77,7 @@ namespace Sextant.XamForms
         public IScheduler MainThreadScheduler => _mainScheduler;
 
         /// <inheritdoc />
-        public IObservable<IViewModel> PagePopped { get; }
+        public IObservable<IViewModel?> PagePopped { get; }
 
         /// <inheritdoc />
         public IObservable<Unit> PopModal() =>
@@ -103,7 +104,7 @@ namespace Sextant.XamForms
                 .ObserveOn(_mainScheduler);
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract, bool withNavigationPage = true) =>
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) =>
             Observable
                 .Start(
                     () =>
@@ -128,7 +129,7 @@ namespace Sextant.XamForms
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             IViewModel viewModel,
-            string contract,
+            string? contract,
             bool resetStack,
             bool animate) =>
             Observable
@@ -179,7 +180,7 @@ namespace Sextant.XamForms
             return navigationPage;
         }
 
-        private Page LocatePageFor(object viewModel, string contract)
+        private Page LocatePageFor(object viewModel, string? contract)
         {
             var view = _viewLocator.ResolveView(viewModel, contract);
             var page = view as Page;
@@ -191,7 +192,7 @@ namespace Sextant.XamForms
 
             if (view == null)
             {
-                throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
+                throw new InvalidOperationException($"Could not find view for type '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
             }
 
             if (page == null)

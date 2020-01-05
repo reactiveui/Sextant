@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
 using System.Text;
 using ReactiveUI;
@@ -21,6 +22,7 @@ namespace Sextant.XamForms
         /// <summary>
         /// Gets the navigation view key.
         /// </summary>
+        [SuppressMessage("Design", "CA1721: Confusing name, should be method.", Justification = "Deliberate usage.")]
         public static string NavigationView => nameof(NavigationView);
 
         /// <summary>
@@ -58,9 +60,20 @@ namespace Sextant.XamForms
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="navigationViewFactory">The navigation view factory.</param>
         /// <returns>The dependencyResolver.</returns>
+        [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Long term object.")]
         public static IMutableDependencyResolver RegisterNavigationView<TView>(this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
             where TView : IView
         {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
+            if (navigationViewFactory is null)
+            {
+                throw new ArgumentNullException(nameof(navigationViewFactory));
+            }
+
             var navigationView = navigationViewFactory();
             var viewStackService = new ViewStackService(navigationView);
 
@@ -75,9 +88,16 @@ namespace Sextant.XamForms
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The navigation view.</returns>
-        public static NavigationView GetNavigationView(
+        public static NavigationView? GetNavigationView(
             this IReadonlyDependencyResolver dependencyResolver,
-            string contract = null) =>
-            dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
+            string? contract = null)
+        {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
+            return dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
+        }
     }
 }

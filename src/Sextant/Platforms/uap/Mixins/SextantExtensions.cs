@@ -9,7 +9,7 @@ using System.Reactive.Concurrency;
 using System.Text;
 using Splat;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Extension methods interact with <see cref="Sextant"/>.
@@ -20,7 +20,13 @@ namespace Sextant.UWP
         /// Initializes the sextant.
         /// </summary>
         /// <param name="sextant">The sextant.</param>
-        public static void InitializeUWP(this Sextant sextant) =>
+        public static void Initialize(this Sextant sextant)
+        {
+            if (sextant is null)
+            {
+                throw new ArgumentNullException(nameof(sextant));
+            }
+
             sextant
                 .MutableLocator
                 .RegisterUWPViewLocator()
@@ -28,5 +34,6 @@ namespace Sextant.UWP
                 .RegisterViewStackService()
                 .RegisterParameterViewStackService()
                 .RegisterViewModelFactory(() => new DefaultViewModelFactory());
+        }
     }
 }

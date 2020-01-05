@@ -10,20 +10,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Trigger for device type.
     /// </summary>
     public class DeviceFamilyTrigger : StateTriggerBase
     {
-        private string _currentDeviceFamily;
-        private string _queriedDeviceFamily;
+        private string? _currentDeviceFamily;
+        private string? _queriedDeviceFamily;
 
         /// <summary>
         /// Gets or sets the DeviceFamily.
         /// </summary>
-        public string DeviceFamily
+        public string? DeviceFamily
         {
             get
             {
