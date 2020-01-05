@@ -33,15 +33,21 @@ namespace Sextant
     /// </summary>
     public partial class NavigationView : Page, IView, IEnableLogger
     {
+        /// <summary>
+        /// A depedendency property for the back button.
+        /// </summary>
+        public static readonly DependencyProperty IsBackButtonVisibleProperty =
+            DependencyProperty.Register("IsBackButtonVisible", typeof(bool), typeof(NavigationView), new PropertyMetadata(true));
+
         private readonly IScheduler _backgroundScheduler;
         private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
         private IFullLogger _logger;
 
-        private ContentDialog _contentDialog;
-        private IViewModel _lastPoppedViewModel;
-        private Stack<IViewModel> _mirroredPageStack;
-        private Stack<IViewModel> _mirroredModalStack;
+        private ContentDialog? _contentDialog;
+        private IViewModel? _lastPoppedViewModel;
+        private Stack<IViewModel?> _mirroredPageStack;
+        private Stack<IViewModel?> _mirroredModalStack;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
@@ -61,12 +67,14 @@ namespace Sextant
         {
             InitializeComponent();
 
+            _logger = this.Log();
+
             _backgroundScheduler = backgroundScheduler;
             _mainScheduler = mainScheduler;
             _viewLocator = viewLocator;
 
-            _mirroredPageStack = new Stack<IViewModel>();
-            _mirroredModalStack = new Stack<IViewModel>();
+            _mirroredPageStack = new Stack<IViewModel?>();
+            _mirroredModalStack = new Stack<IViewModel?>();
 
             backButton.Visibility = Visibility.Collapsed;
 
@@ -74,8 +82,7 @@ namespace Sextant
                 .FromEvent<NavigatedEventHandler, NavigationEventArgs>(
                     handler =>
                     {
-                        NavigatedEventHandler navHandler = (sender, e) => handler(e);
-                        return navHandler;
+                        return (sender, e) => handler(e);
                     },
                     x => mainFrame.Navigated += x,
                     x => mainFrame.Navigated -= x)
@@ -114,26 +121,9 @@ namespace Sextant
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the default back button is visible.
-        /// </summary>
-        public bool IsBackButtonVisible
-        {
-            get { return (bool)GetValue(IsBackButtonVisibleProperty); }
-            set { SetValue(IsBackButtonVisibleProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for IsBackButtonVisible.  This enables animation, styling, binding, etc...
-#pragma warning disable SA1201 // Elements should appear in the correct order
-#pragma warning disable SA1600 // Elements should be documented
-        public static readonly DependencyProperty IsBackButtonVisibleProperty =
-#pragma warning restore SA1600 // Elements should be documented
-#pragma warning restore SA1201 // Elements should appear in the correct order
-            DependencyProperty.Register("IsBackButtonVisible", typeof(bool), typeof(NavigationView), new PropertyMetadata(true));
-
-        /// <summary>
         /// Gets a value indicating whether a modal (ContentDialog) is visible.
         /// </summary>
-        public bool ModalVisible
+        public static bool ModalVisible
         {
             get
             {
@@ -142,11 +132,20 @@ namespace Sextant
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the default back button is visible.
+        /// </summary>
+        public bool IsBackButtonVisible
+        {
+            get { return (bool)GetValue(IsBackButtonVisibleProperty); }
+            set { SetValue(IsBackButtonVisibleProperty, value); }
+        }
+
         /// <inheritdoc />
         public IScheduler MainThreadScheduler => _mainScheduler;
 
         /// <inheritdoc />
-        public IObservable<IViewModel> PagePopped { get; }
+        public IObservable<IViewModel?> PagePopped { get; }
 
         /// <summary>
         /// Gets combined backrequested observable from system, backbutton, and xbox controller sources.
@@ -156,8 +155,7 @@ namespace Sextant
                 .FromEvent<EventHandler<BackRequestedEventArgs>, BackRequestedEventArgs>(
                     handler =>
                     {
-                        EventHandler<BackRequestedEventArgs> eventHandler = (sender, e) => handler(e);
-                        return eventHandler;
+                        return (_, e) => handler(e);
                     },
                     x => SystemNavigationManager.GetForCurrentView().BackRequested += x,
                     x => SystemNavigationManager.GetForCurrentView().BackRequested -= x)
@@ -172,11 +170,7 @@ namespace Sextant
                 .ToSignal(),
             Observable
                 .FromEvent<PointerEventHandler, PointerRoutedEventArgs>(
-                handler =>
-                {
-                    PointerEventHandler pointerHandler = (sender, e) => handler(e);
-                    return pointerHandler;
-                },
+                handler => (_, e) => handler(e),
                 x => PointerPressed += x,
                 x => PointerPressed -= x)
                 .Where(args => args.GetCurrentPoint(this as UIElement).Properties.PointerUpdateKind == Windows.UI.Input.PointerUpdateKind.XButton1Pressed)
@@ -193,8 +187,8 @@ namespace Sextant
                 .FromEvent<RoutedEventHandler, RoutedEventArgs>(
                 handler =>
                 {
-                    RoutedEventHandler routedHandler = (sender, e) => handler(e);
-                    return routedHandler;
+                    void RoutedHandler(object sender, RoutedEventArgs e) => handler(e);
+                    return RoutedHandler;
                 },
                 x => backButton.Click += x,
                 x => backButton.Click -= x)
@@ -217,13 +211,16 @@ namespace Sextant
 
                 if (_mirroredModalStack.TryPeek(out var modal))
                 {
+                    if (modal == null)
+                    {
+                        return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
+                    }
+
                     _contentDialog = new ContentDialog();
                     _contentDialog.FullSizeDesired = true;
                     _contentDialog.IsPrimaryButtonEnabled = false;
                     _contentDialog.IsSecondaryButtonEnabled = false;
-                    var page = LocatePageFor(modal, null);
-
-                    _contentDialog.Content = page;
+                    _contentDialog.Content = LocatePageFor(modal, null);
 
                     _ = _contentDialog.ShowAsync();
                 }
@@ -238,11 +235,11 @@ namespace Sextant
             NavigationTransitionInfo animation;
             if (animate)
             {
-                animation = new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo();
+                animation = new EntranceNavigationTransitionInfo();
             }
             else
             {
-                animation = new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo();
+                animation = new SuppressNavigationTransitionInfo();
             }
 
             _mirroredPageStack.Pop();
@@ -251,6 +248,7 @@ namespace Sextant
             if (view == null)
             {
                 _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
+                return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
             }
 
             _lastPoppedViewModel = view.ViewModel as IViewModel;
@@ -266,11 +264,11 @@ namespace Sextant
             NavigationTransitionInfo animation;
             if (animate)
             {
-                animation = new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo();
+                animation = new EntranceNavigationTransitionInfo();
             }
             else
             {
-                animation = new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo();
+                animation = new SuppressNavigationTransitionInfo();
             }
 
             while (mainFrame.BackStackDepth > 1)
@@ -287,6 +285,7 @@ namespace Sextant
             if (view == null)
             {
                 _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
+                return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
             }
 
             _lastPoppedViewModel = view.ViewModel as IViewModel;
@@ -297,15 +296,13 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract, bool withNavigationPage = true) =>
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) =>
             Observable
                 .Start(
                     () =>
                     {
                         // ignore withNavigationPage, not necessary for UWP.
-                        var page = LocatePageFor(modalViewModel, contract);
-
-                        return page;
+                        return LocatePageFor(modalViewModel, contract);
                     },
                     CurrentThreadScheduler.Instance)
                 .ObserveOn(CurrentThreadScheduler.Instance)
@@ -333,7 +330,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             IViewModel viewModel,
-            string contract,
+            string? contract,
             bool resetStack,
             bool animate) =>
             Observable
@@ -341,9 +338,7 @@ namespace Sextant
                     () =>
                     {
                         // ignore withNavigationPage, not necessary for UWP.
-                        var pageType = LocatePageTypeFor(viewModel, contract);
-
-                        return pageType;
+                        return LocatePageTypeFor(viewModel, contract);
                     },
                     CurrentThreadScheduler.Instance)
                 .ObserveOn(CurrentThreadScheduler.Instance)
@@ -358,7 +353,7 @@ namespace Sextant
                             mainFrame.Navigate(pageType, null, new SuppressNavigationTransitionInfo());
                             if (mainFrame.Content is IViewFor)
                             {
-                                (mainFrame.Content as IViewFor).ViewModel = viewModel;
+                                ((IViewFor)mainFrame.Content).ViewModel = viewModel;
                             }
                             else
                             {
@@ -373,11 +368,11 @@ namespace Sextant
                         NavigationTransitionInfo animation;
                         if (animate)
                         {
-                            animation = new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo();
+                            animation = new EntranceNavigationTransitionInfo();
                         }
                         else
                         {
-                            animation = new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo();
+                            animation = new SuppressNavigationTransitionInfo();
                         }
 
                         _mirroredPageStack.Push(viewModel);
@@ -385,7 +380,7 @@ namespace Sextant
                         mainFrame.Navigate(pageType, null, animation);
                         if (mainFrame.Content is IViewFor)
                         {
-                            (mainFrame.Content as IViewFor).ViewModel = viewModel;
+                            ((IViewFor)mainFrame.Content).ViewModel = viewModel;
                         }
                         else
                         {
@@ -395,7 +390,7 @@ namespace Sextant
                         return Observable.Return(Unit.Default);
                     });
 
-        private IViewModel CurrentViewModel() => (IViewModel)(mainFrame.Content as IViewFor).ViewModel;
+        private IViewModel? CurrentViewModel() => (IViewModel?)(mainFrame.Content as IViewFor)?.ViewModel;
 
         private IView LocateNavigationFor(IViewModel viewModel)
         {
@@ -411,7 +406,7 @@ namespace Sextant
             return navigationPage;
         }
 
-        private Type LocatePageTypeFor(object viewModel, string contract)
+        private Type LocatePageTypeFor(object viewModel, string? contract)
         {
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
 
@@ -425,7 +420,7 @@ namespace Sextant
             return viewType;
         }
 
-        private Page LocatePageFor(object viewModel, string contract)
+        private Page LocatePageFor(object viewModel, string? contract)
         {
             var view = _viewLocator.ResolveView(viewModel, contract);
             var page = view as Page;
@@ -437,7 +432,7 @@ namespace Sextant
 
             if (view == null)
             {
-                throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
+                throw new InvalidOperationException($"Cannot find view for '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
             }
 
             if (page == null)

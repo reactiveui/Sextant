@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace SextantSample.UWP.Views
 {
-    public class BlueNavigationView : Sextant.UWP.NavigationView, IViewFor
+    public class BlueNavigationView : Sextant.NavigationView, IViewFor
     {
         public BlueNavigationView() : base(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
         {

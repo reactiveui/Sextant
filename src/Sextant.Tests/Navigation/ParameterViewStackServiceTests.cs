@@ -86,7 +86,7 @@ namespace Sextant.Tests
                 await sut.PushPage(viewModel, navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatingTo(navigationParameter);
+                await viewModel.Received().WhenNavigatingTo(navigationParameter);
             }
 
             /// <summary>
@@ -105,7 +105,7 @@ namespace Sextant.Tests
                 await sut.PushPage(viewModel, navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatedTo(navigationParameter);
+                await viewModel.Received().WhenNavigatedTo(navigationParameter);
             }
 
             /// <summary>
@@ -124,7 +124,7 @@ namespace Sextant.Tests
                 await sut.PushPage(viewModel, navigationParameter);
 
                 // Then
-                viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
+                await viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
             }
 
             /// <summary>Tests to make sure we receive a push page notification.</summary>
@@ -151,7 +151,7 @@ namespace Sextant.Tests
                 await sut.PushPage(viewModel, navigationParameter, contract, reset, animate);
 
                 // Then
-                view.Received().PushPage(viewModel, contract, reset, animate);
+                await view.Received().PushPage(viewModel, contract, reset, animate);
             }
         }
 
@@ -236,7 +236,7 @@ namespace Sextant.Tests
                 await sut.PushPage<NavigableViewModelMock>(navigationParameter, contract, reset, animate);
 
                 // Then
-                view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), contract, reset, animate);
+                await view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), contract, reset, animate);
             }
         }
 
@@ -310,7 +310,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter, contract, withNavigation);
 
                 // Then
-                view.Received().PushModal(viewModel, contract, withNavigation);
+                await view.Received().PushModal(viewModel, contract, withNavigation);
             }
 
             /// <summary>
@@ -329,7 +329,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatingTo(navigationParameter);
+                await viewModel.Received().WhenNavigatingTo(navigationParameter);
             }
 
             /// <summary>
@@ -348,7 +348,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatedTo(navigationParameter);
+                await viewModel.Received().WhenNavigatedTo(navigationParameter);
             }
 
             /// <summary>
@@ -367,7 +367,7 @@ namespace Sextant.Tests
                 await sut.PushModal(viewModel, navigationParameter);
 
                 // Then
-                viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
+                await viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
             }
         }
 
@@ -451,7 +451,7 @@ namespace Sextant.Tests
                 await sut.PushModal<NavigableViewModelMock>(navigationParameter, contract, withNavigation);
 
                 // Then
-                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), contract, withNavigation);
+                await view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), contract, withNavigation);
             }
         }
 
@@ -497,7 +497,7 @@ namespace Sextant.Tests
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                view.Received().PopPage(Arg.Any<bool>());
+                await view.Received().PopPage(Arg.Any<bool>());
             }
 
             /// <summary>
@@ -516,7 +516,7 @@ namespace Sextant.Tests
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                viewModel.DidNotReceive().WhenNavigatedTo(navigationParameter);
+                await viewModel.DidNotReceive().WhenNavigatedTo(navigationParameter);
             }
 
             /// <summary>
@@ -535,7 +535,7 @@ namespace Sextant.Tests
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                viewModel.Received().WhenNavigatedFrom(navigationParameter);
+                await viewModel.Received().WhenNavigatedFrom(navigationParameter);
             }
 
             /// <summary>
@@ -554,7 +554,7 @@ namespace Sextant.Tests
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                viewModel.DidNotReceive().WhenNavigatingTo(navigationParameter);
+                await viewModel.DidNotReceive().WhenNavigatingTo(navigationParameter);
             }
         }
     }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using ReactiveUI;
 using Sextant;
-using Sextant.UWP;
 using SextantSample.UWP.Views;
 using SextantSample.ViewModels;
 using Splat;
@@ -50,7 +49,7 @@ namespace SextantSample.UWP
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
-            Instance.InitializeUWP();
+            Instance.Initialize();
 
             Locator
                 .CurrentMutable

@@ -22,7 +22,7 @@ namespace Sextant.XamForms
         /// <typeparam name="TViewModel">The type of view model to register.</typeparam>
         /// <param name="contract">An optional contract which will only provide a value if this contract is passed.</param>
         [Obsolete("Use the dependency resolver mixins.")]
-        public static void RegisterView<TView, TViewModel>(string contract = null)
+        public static void RegisterView<TView, TViewModel>(string? contract = null)
             where TView : IViewFor, new()
             where TViewModel : class, IViewModel
         {
@@ -38,7 +38,7 @@ namespace Sextant.XamForms
         /// <param name="backgroundScheduler">The scheduler which schedules tasks in the background.</param>
         /// <param name="viewLocator">A view locator which is responsible for finding a view for a view model pair.</param>
         [Obsolete("Use the dependency resolver mixins.")]
-        public static void RegisterNavigation<TView, TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
+        public static void RegisterNavigation<TView, TViewModel>(IScheduler? mainThreadScheduler = null, IScheduler? backgroundScheduler = null, IViewLocator? viewLocator = null)
             where TView : IViewFor
             where TViewModel : class, IViewModel
         {
@@ -61,7 +61,7 @@ namespace Sextant.XamForms
         /// <param name="viewLocator">A view locator which is responsible for finding a view for a view model pair.</param>
         /// <returns>The navigation view.</returns>
         [Obsolete("Use the dependency resolver mixins.")]
-        public static NavigationView Initialize<TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
+        public static NavigationView Initialize<TViewModel>(IScheduler? mainThreadScheduler = null, IScheduler? backgroundScheduler = null, IViewLocator? viewLocator = null)
             where TViewModel : class, IViewModel
         {
             var bgScheduler = mainThreadScheduler ?? RxApp.TaskpoolScheduler;
@@ -72,7 +72,14 @@ namespace Sextant.XamForms
             var viewStackService = new ViewStackService(navigationView);
 
             Locator.CurrentMutable.Register<IViewStackService>(() => viewStackService);
-            navigationView.PushPage(Activator.CreateInstance(typeof(TViewModel), viewStackService) as TViewModel, null, true, false).Subscribe();
+            var instance = Activator.CreateInstance(typeof(TViewModel), viewStackService) as TViewModel;
+
+            if (instance == null)
+            {
+                throw new InvalidOperationException($"Could not initialize a view for view model {typeof(TViewModel)}");
+            }
+
+            navigationView.PushPage(instance, null, true, false).Subscribe();
 
             return navigationView;
         }
@@ -86,7 +93,7 @@ namespace Sextant.XamForms
         /// <param name="viewLocator">A view locator which is responsible for finding a view for a view model pair.</param>
         /// <returns>The navigation view.</returns>
         [Obsolete("Use the " + nameof(Initialize) + " method.")]
-        public static NavigationView Initialise<TViewModel>(IScheduler mainThreadScheduler = null, IScheduler backgroundScheduler = null, IViewLocator viewLocator = null)
+        public static NavigationView Initialise<TViewModel>(IScheduler? mainThreadScheduler = null, IScheduler? backgroundScheduler = null, IViewLocator? viewLocator = null)
             where TViewModel : class, IViewModel
         {
             return Initialize<TViewModel>(mainThreadScheduler, backgroundScheduler, viewLocator);

@@ -27,8 +27,8 @@ namespace System.Reactive.Linq
         /// <returns>A disposable which when disposed will unsubscribe from the observable.</returns>
         public static IDisposable SubscribeSafe<T>(
             this IObservable<T> observable,
-            [CallerMemberName]string callerMemberName = null,
-            [CallerFilePath]string callerFilePath = null,
+            [CallerMemberName]string? callerMemberName = null,
+            [CallerFilePath]string? callerFilePath = null,
             [CallerLineNumber]int callerLineNumber = 0)
         {
             return observable

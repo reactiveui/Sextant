@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Splat;
 
@@ -19,9 +20,9 @@ namespace Sextant
 
         static Sextant()
         {
-            Splat.Locator.RegisterResolverCallbackChanged(() =>
+            Locator.RegisterResolverCallbackChanged(() =>
             {
-                if (Splat.Locator.CurrentMutable == null)
+                if (Locator.CurrentMutable == null)
                 {
                     return;
                 }
@@ -38,6 +39,7 @@ namespace Sextant
         /// <summary>
         /// Gets the mutable dependency resolver.
         /// </summary>
-        public IMutableDependencyResolver MutableLocator => Splat.Locator.CurrentMutable;
+        [SuppressMessage("Design", "CA1822: Implement statically", Justification = "Existing API.")]
+        public IMutableDependencyResolver MutableLocator => Locator.CurrentMutable;
     }
 }

@@ -207,7 +207,7 @@ namespace Sextant.Tests
                 await sut.PopPage();
 
                 // Then
-                sut.View.Received().PopPage();
+                await sut.View.Received().PopPage();
             }
 
             /// <summary>
@@ -380,7 +380,7 @@ namespace Sextant.Tests
                 await sut.PushModal(new NavigableViewModelMock(), withNavigationPage: withNavigationPage);
 
                 // Then
-                view.Received().PushModal(Arg.Any<INavigable>(), Arg.Any<string>(), withNavigationPage);
+                await view.Received().PushModal(Arg.Any<INavigable>(), Arg.Any<string>(), withNavigationPage);
             }
 
             /// <summary>
@@ -416,7 +416,7 @@ namespace Sextant.Tests
                 await sut.PushModal(new NavigableViewModelMock(), "modal");
 
                 // Then
-                sut.View.Received().PushModal(Arg.Any<IViewModel>(), "modal");
+                await sut.View.Received().PushModal(Arg.Any<IViewModel>(), "modal");
             }
 
             /// <summary>
@@ -487,7 +487,7 @@ namespace Sextant.Tests
                 await sut.PushModal<NavigableViewModelMock>();
 
                 // Then
-                view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
+                await view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
             }
         }
 
@@ -565,7 +565,7 @@ namespace Sextant.Tests
                 await sut.PushPage(new NavigableViewModelMock());
 
                 // Then
-                sut.View.Received().PushPage(Arg.Any<IViewModel>(), null, false, true);
+                await sut.View.Received().PushPage(Arg.Any<IViewModel>(), null, false, true);
             }
 
             /// <summary>
@@ -637,7 +637,7 @@ namespace Sextant.Tests
                 await sut.PushPage<NavigableViewModelMock>();
 
                 // Then
-                view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
+                await view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
             }
         }
 

@@ -5,9 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ReactiveUI;
 
 namespace Sextant
@@ -17,14 +14,14 @@ namespace Sextant
     /// </summary>
     public class ViewTypeResolver
     {
-        private Dictionary<(string vmTypeName, string contract), Type> _typeDictionary;
+        private Dictionary<(string vmTypeName, string? contract), Type> _typeDictionary;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewTypeResolver"/> class.
         /// </summary>
         public ViewTypeResolver()
         {
-            _typeDictionary = new Dictionary<(string vmTypeName, string contract), Type>();
+            _typeDictionary = new Dictionary<(string vmTypeName, string? contract), Type>();
         }
 
         /// <summary>
@@ -33,7 +30,7 @@ namespace Sextant
         /// <typeparam name="TView">View Type.</typeparam>
         /// <typeparam name="TViewModel">ViewModel Type.</typeparam>
         /// <param name="contract">The contract.</param>
-        public void Register<TView, TViewModel>(string contract = null)
+        public void Register<TView, TViewModel>(string? contract = null)
             where TView : IViewFor<TViewModel>
             where TViewModel : class, IViewModel
         {
@@ -51,7 +48,7 @@ namespace Sextant
         /// <typeparam name="TViewModel">The viewmodel Type.</typeparam>
         /// <param name="contract">The contract.</param>
         /// <returns>The view Type again.</returns>
-        public Type ResolveViewType<TViewModel>(string contract = null)
+        public Type? ResolveViewType<TViewModel>(string? contract = null)
             where TViewModel : class
         {
             if (_typeDictionary.ContainsKey((typeof(TViewModel).AssemblyQualifiedName, contract)))
@@ -68,8 +65,13 @@ namespace Sextant
         /// <param name="viewModelType">The viewmodel Type.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The view Type again.</returns>
-        public Type ResolveViewType(Type viewModelType, string contract = null)
+        public Type? ResolveViewType(Type viewModelType, string? contract = null)
         {
+            if (viewModelType is null)
+            {
+                throw new ArgumentNullException(nameof(viewModelType));
+            }
+
             if (_typeDictionary.ContainsKey((viewModelType.AssemblyQualifiedName, contract)))
             {
                 return _typeDictionary[(viewModelType.AssemblyQualifiedName, contract)];

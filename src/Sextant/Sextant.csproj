@@ -5,8 +5,11 @@
     <AssemblyName>Sextant</AssemblyName>
     <RootNamespace>Sextant</RootNamespace>
     <PackageId>Sextant</PackageId>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <WarningsAsErrors>CS8625;CS8604;CS8600;CS8614;CS8603;CS8618;CS8619</WarningsAsErrors>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs" />
     <None Include="Platforms\**\*.cs" />
@@ -27,6 +30,7 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
     <Compile Include="Platforms\uap\**\*.cs" />
+    <Page Include="Platforms\uap\**\*.xaml" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">

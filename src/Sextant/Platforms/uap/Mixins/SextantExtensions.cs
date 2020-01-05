@@ -20,7 +20,13 @@ namespace Sextant
         /// Initializes the sextant.
         /// </summary>
         /// <param name="sextant">The sextant.</param>
-        public static void InitializeUWP(this Sextant sextant) =>
+        public static void Initialize(this Sextant sextant)
+        {
+            if (sextant is null)
+            {
+                throw new ArgumentNullException(nameof(sextant));
+            }
+
             sextant
                 .MutableLocator
                 .RegisterUWPViewLocator()
@@ -28,5 +34,6 @@ namespace Sextant
                 .RegisterViewStackService()
                 .RegisterParameterViewStackService()
                 .RegisterViewModelFactory(() => new DefaultViewModelFactory());
+        }
     }
 }
