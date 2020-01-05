@@ -1,5 +1,6 @@
 ﻿let notifyLocationChangedCallback = { assemblyName: "Sextant.Blazor", functionName: "NotifyLocationState" };
 
+
 let testAnchor;
 
 interface Window {
@@ -8,7 +9,6 @@ interface Window {
 interface DotNet {
     invokeMethodAsync<T>(methodIdentifier: string, ...args: any[]): Promise<T>;
 }
-Window
 
 const SextantFunctions = {
     replaceState,

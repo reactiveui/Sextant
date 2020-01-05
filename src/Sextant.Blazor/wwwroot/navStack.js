@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 let notifyLocationChangedCallback = { assemblyName: "Sextant.Blazor", functionName: "NotifyLocationState" };
 let testAnchor;
-Window;
 const SextantFunctions = {
     replaceState,
     getBaseUri: () => document.baseURI,
