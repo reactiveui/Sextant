@@ -505,6 +505,28 @@ namespace Sextant.Tests
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
+            public async Task Should_Not_Call_When_Navigated_To()
+            {
+                // Given
+                var firstViewModel = Substitute.For<INavigable>();
+                var secondViewModel = Substitute.For<INavigable>();
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(new NavigationViewMock());
+
+                // When
+                await sut.PushPage(firstViewModel);
+                await sut.PushPage(secondViewModel);
+                await sut.PopPage(navigationParameter);
+
+                // Then
+                await secondViewModel.DidNotReceive().WhenNavigatedTo(navigationParameter);
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
             public async Task Should_Call_When_Navigated_To()
             {
                 // Given
