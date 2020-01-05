@@ -122,18 +122,28 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(parameter));
             }
 
-            var topPage = TopPage().FirstOrDefaultAsync().Wait();
+            IViewModel poppedPage = TopPage().FirstOrDefaultAsync().Wait();
             return View
                 .PopPage(animate)
                 .Do(_ =>
                 {
-                    if (topPage is INavigable navigable)
+                    if (poppedPage is INavigable navigable)
                     {
                         navigable
                             .WhenNavigatedFrom(parameter)
                             .ObserveOn(View.MainThreadScheduler)
-                            .Subscribe(navigated =>
+                            .Subscribe(navigatedFrom =>
                                 Logger.Debug($"Called `WhenNavigatedFrom` on '{navigable.Id}' passing parameter {parameter}"));
+                    }
+
+                    IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait();
+                    if (topPage is INavigated navigated)
+                    {
+                        navigated
+                            .WhenNavigatedTo(parameter)
+                            .ObserveOn(View.MainThreadScheduler)
+                            .Subscribe(navigatedTo =>
+                                Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}"));
                     }
                 });
         }

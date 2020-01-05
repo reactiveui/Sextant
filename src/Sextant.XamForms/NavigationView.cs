@@ -48,10 +48,11 @@ namespace Sextant.XamForms
             _viewLocator = viewLocator;
             _logger = this.Log();
 
-            PagePopped = Observable
-                .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
-                .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
-                .WhereNotNull();
+            PagePopped =
+                Observable
+                    .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
+                    .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
+                    .WhereNotNull();
         }
 
         /// <summary>
@@ -67,10 +68,11 @@ namespace Sextant.XamForms
             _viewLocator = viewLocator;
             _logger = this.Log();
 
-            PagePopped = Observable
-                .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
-                .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
-                .WhereNotNull();
+            PagePopped =
+                Observable
+                    .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
+                    .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
+                    .WhereNotNull();
         }
 
         /// <inheritdoc />

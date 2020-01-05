@@ -34,15 +34,18 @@ namespace Sextant
             ModalSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
             PageSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 
-            View.PagePopped.Do(poppedPage =>
-            {
-                var currentPageStack = PageSubject.Value;
-                if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
+            View
+                .PagePopped
+                .Do(poppedPage =>
                 {
-                    var removedPage = PopStackAndTick(PageSubject);
-                    Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
-                }
-            }).SubscribeSafe();
+                    var currentPageStack = PageSubject.Value;
+                    if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
+                    {
+                        var removedPage = PopStackAndTick(PageSubject);
+                        Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
+                    }
+                })
+                .SubscribeSafe();
         }
 
         /// <summary>

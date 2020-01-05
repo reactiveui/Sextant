@@ -505,18 +505,22 @@ namespace Sextant.Tests
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
-            public async Task Should_Not_Call_When_Navigated_To()
+            public async Task Should_Call_When_Navigated_To()
             {
                 // Given
-                var viewModel = Substitute.For<INavigable>();
+                var firstViewModel = Substitute.For<INavigable>();
+                var secondViewModel = Substitute.For<INavigable>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithPushed(viewModel);
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(new NavigationViewMock());
 
                 // When
+                await sut.PushPage(firstViewModel, navigationParameter);
+                await sut.PushPage(secondViewModel);
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                await viewModel.DidNotReceive().WhenNavigatedTo(navigationParameter);
+                await firstViewModel.Received(2).WhenNavigatedTo(Arg.Any<INavigationParameter>());
+                await secondViewModel.Received().WhenNavigatedFrom(navigationParameter);
             }
 
             /// <summary>
