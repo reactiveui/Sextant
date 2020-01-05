@@ -7,6 +7,7 @@ var packageWhitelist = new[]
 { 
     MakeAbsolute(File("./src/Sextant/Sextant.csproj")),
     MakeAbsolute(File("./src/Sextant.XamForms/Sextant.XamForms.csproj")),
+    MakeAbsolute(File("./src/Sextant.UWP/Sextant.UWP.csproj")),
 };
 
 var packageTestWhitelist = new[]
