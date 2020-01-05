@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Special resolver for UWP that only spits out view Type.

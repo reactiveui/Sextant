@@ -10,7 +10,7 @@ using System.Text;
 using ReactiveUI;
 using Splat;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Extension methods associated with the IMutableDependencyResolver interface.

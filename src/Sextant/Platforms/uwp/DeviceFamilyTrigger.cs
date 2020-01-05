@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Trigger for device type.

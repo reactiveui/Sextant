@@ -9,7 +9,7 @@ using System.Reactive.Concurrency;
 using System.Text;
 using Splat;
 
-namespace Sextant.UWP
+namespace Sextant
 {
     /// <summary>
     /// Extension methods interact with <see cref="Sextant"/>.
