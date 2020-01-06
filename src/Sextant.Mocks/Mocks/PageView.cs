@@ -17,16 +17,16 @@ namespace Sextant.Mocks
         /// Gets or sets the ViewModel corresponding to this specific View. This should be
         /// a DependencyProperty if you're using XAML.
         /// </summary>
-        object IViewFor.ViewModel
+        object? IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (NavigableViewModelMock)value;
+            set => ViewModel = (NavigableViewModelMock?)value;
         }
 
         /// <summary>
         /// Gets or sets the ViewModel corresponding to this specific View. This should be
         /// a DependencyProperty if you're using XAML.
         /// </summary>
-        public NavigableViewModelMock ViewModel { get; set; }
+        public NavigableViewModelMock? ViewModel { get; set; }
     }
 }

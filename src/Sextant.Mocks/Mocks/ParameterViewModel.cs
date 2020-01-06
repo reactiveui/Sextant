@@ -18,16 +18,16 @@ namespace Sextant.Mocks
     /// <seealso cref="IViewModel" />
     public class ParameterViewModel : ReactiveObject, INavigable
     {
-        private string _text;
+        private string? _text;
         private int _meaning;
 
         /// <inheritdoc />
-        public string Id { get; }
+        public string? Id { get; }
 
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
-        public string Text { get => _text; set => this.RaiseAndSetIfChanged(ref _text, value); }
+        public string? Text { get => _text; set => this.RaiseAndSetIfChanged(ref _text, value); }
 
         /// <summary>
         /// Gets or sets the meaning.
