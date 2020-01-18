@@ -17,7 +17,7 @@ namespace SextantSample.BlazorClientSide
     {
         public App()
         {
-            PlatformEnlightenmentProvider.Current.EnableWasm();
+            //PlatformEnlightenmentProvider.Current.EnableWasm();
 
             Locator
                 .CurrentMutable
