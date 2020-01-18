@@ -10,18 +10,18 @@ using Sextant;
 using Sextant.Blazor;
 using SextantSample.ViewModels;
 using Splat;
+using static Sextant.Sextant;
 
 namespace SextantSample.BlazorServerSide
 {
     public partial class App : ComponentBase
     {
         public App()
-        {            
+        {
+            Instance.InitializeBlazor();
+
             Locator
                 .CurrentMutable
-                .RegisterViewModelFactory(() => new DefaultViewModelFactory())
-                .RegisterUrlParameterViewModelGenerator()
-                .RegisterRouteViewViewModelLocator()
                 .RegisterBlazorRoute<Pages.HomeView, HomeViewModel>("/", p => new HomeViewModel())
                 .RegisterBlazorRoute<Pages.RedView, RedViewModel>("/red", p => new RedViewModel(Locator.Current.GetService<IViewStackService>()))
                 .RegisterBlazorRoute<Pages.GreenView, GreenViewModel>("/green", p => new GreenViewModel(Locator.Current.GetService<IViewStackService>()))

@@ -22,7 +22,12 @@ namespace Sextant.Blazor
         /// <param name="sextant">The sextant.</param>
         public static void InitializeBlazor(this Sextant sextant)
         {
-            sextant.MutableLocator.RegisterParameterViewStackService();
+            sextant.MutableLocator
+                .RegisterUrlParameterViewModelGenerator()
+                .RegisterRouteViewViewModelLocator()
+                .RegisterViewStackService()
+                .RegisterParameterViewStackService()
+                .RegisterViewModelFactory(() => new DefaultViewModelFactory());
         }
     }
 }
