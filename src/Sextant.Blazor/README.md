@@ -38,7 +38,7 @@ using static Sextant.Sextant;
 
 Instance.InitializeBlazor();
 ```
-### RegisterBlazorRoute
+#### RegisterBlazorRoute
 Then, you'll need to register Blazor routes, views, and viewmodels together.  Since you are navigating by viewmodel, the viewmodel must have some associated route that can be displayed in the url bar.  The two method signatures available are:
 ```
 IMutableDependencyResolver RegisterBlazorRoute<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string route, string contract = null)
@@ -57,8 +57,18 @@ Splat.Locator.CurrentMutable
     .RegisterBlazorRoute<Pages.TestView, TestViewModel>("/test", parameters = new TestViewModel(parameters["id"]));
 ```
 
-### App start
+#### App start
 Blazor apps start by loading an initial page with a url (usually baseUrl + "/"), so there is no need to push an initial page into the stack you would for other platforms using Sextant.
 
-### Views 
+### In Views 
 Views must either inherit `ReactiveComponentBase<IViewModel>` or you'll have to implement `IViewFor<IViewModel>` yourself.
+
+Since there is no real binding, you need to reference ViewModel properties directly in your razor code.  You will also need to handle cases where the `ViewModel` parameter is `null` in your razor code.  The null-check operator (i.e. `ViewModel?.SomeProperty`) will work for normal property referencing.  If you use Blazor's `@bind-Value` for two-way binding, you cannot use the null-check operator and will have to explicitly check for `@if (ViewModel != null)` first.
+
+### Implementing IModalView
+`IModalView` has two methods to implement:
+```
+Task ShowViewAsync(Type viewType, IViewModel viewModel);
+Task HideAsync();
+```
+You can view `SimpleModal` for an example of how you might implement `IModalView` into your own component. There is no need to manually add your modal component to the page.  `ReactiveRouteView` will automatically include it when it renders the page that was navigated to.
