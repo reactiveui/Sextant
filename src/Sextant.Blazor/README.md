@@ -10,6 +10,13 @@ All of this means you _can_ add in some special functionality that won't be avai
 
 # To use
 
+### In index.html or \_Host.cshtml
+Add the following script:
+```
+<script src="_content/Sextant.Blazor/navStack.js"></script>
+```
+The javascript contained within intercepts clicks to check for link-based navigation, notifies `onpopstate` changes, and alters the state of `History` objects.
+
 ### In App.razor
 
 1.  Replace the default `Router` component with `SextantRouter`.  This will allow viewmodel-based navigation.  
