@@ -82,3 +82,4 @@ You can view `SimpleModal` for an example of how you might implement `IModalView
 
 Below is an example of a BlazorFabric `Modal` component implementing `IModalView`
 
+![BlazorFabric Modal](https://media.giphy.com/media/IeivavX2xDqscZublS/giphy.gif)
