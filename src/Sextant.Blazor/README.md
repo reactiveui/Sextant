@@ -79,3 +79,6 @@ Task ShowViewAsync(Type viewType, IViewModel viewModel);
 Task HideAsync();
 ```
 You can view `SimpleModal` for an example of how you might implement `IModalView` into your own component. There is no need to manually add your modal component to the page.  `ReactiveRouteView` will automatically include it when it renders the page that was navigated to.
+
+Below is an example of a BlazorFabric `Modal` component implementing `IModalView`
+
