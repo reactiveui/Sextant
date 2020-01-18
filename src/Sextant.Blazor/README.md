@@ -1,6 +1,6 @@
 # Blazor quirks to keep in mind when using Sextant
 1. Blazor can navigate using the url address bar.
-2. Blazor can accept paramaters through the url.
+2. Blazor can accept parameters through the url.
 3. Browsers have forward navigation buttons.
 4. Browsers can skip pages in the navigation stack with the navigation buttons (right-click).
 5. You can't clear the browser history with app commands.
