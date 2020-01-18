@@ -29,7 +29,7 @@ using Windows.UI.Xaml.Navigation;
 namespace Sextant.UWP
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Navigation view used by Sextant to control navigation.
     /// </summary>
     public partial class NavigationView : Page, IView, IEnableLogger
     {
@@ -83,11 +83,11 @@ namespace Sextant.UWP
                 {
                     if (mainFrame.CanGoBack)
                     {
-                        IsBackButtonVisible = true;
+                        IsBackButtonEnabled = true;
                     }
                     else
                     {
-                        IsBackButtonVisible = false;
+                        IsBackButtonEnabled = false;
                     }
                 })
                 .Where(ep => ep.NavigationMode == NavigationMode.Back)
@@ -129,6 +129,23 @@ namespace Sextant.UWP
 #pragma warning restore SA1600 // Elements should be documented
 #pragma warning restore SA1201 // Elements should appear in the correct order
             DependencyProperty.Register("IsBackButtonVisible", typeof(bool), typeof(NavigationView), new PropertyMetadata(true));
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the default back button is enabled.
+        /// </summary>
+        public bool IsBackButtonEnabled
+        {
+            get { return (bool)GetValue(IsBackButtonEnabledProperty); }
+            set { SetValue(IsBackButtonEnabledProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsBackButtonEnabled.  This enables animation, styling, binding, etc...
+#pragma warning disable SA1201 // Elements should appear in the correct order
+#pragma warning disable SA1600 // Elements should be documented
+        public static readonly DependencyProperty IsBackButtonEnabledProperty =
+            DependencyProperty.Register("IsBackButtonEnabled", typeof(bool), typeof(NavigationView), new PropertyMetadata(false));
+#pragma warning restore SA1600 // Elements should be documented
+#pragma warning restore SA1201 // Elements should appear in the correct order
 
         /// <summary>
         /// Gets a value indicating whether a modal (ContentDialog) is visible.

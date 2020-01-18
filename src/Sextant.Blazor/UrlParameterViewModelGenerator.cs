@@ -46,7 +46,17 @@ namespace Sextant.Blazor
         /// <returns>The viewmodel.</returns>
         public IViewModel GetViewModel(Type viewModelType, Dictionary<string, string> parameters)
         {
-            return _generators[viewModelType].Invoke(parameters);
+            if (viewModelType == null)
+            {
+                return null;
+            }
+
+            if (_generators.ContainsKey(viewModelType))
+            {
+                return _generators[viewModelType].Invoke(parameters);
+            }
+
+            return null;
         }
     }
 }

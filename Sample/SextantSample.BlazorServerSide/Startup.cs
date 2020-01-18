@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,9 +32,41 @@ namespace SextantSample.BlazorServerSide
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddDbContext<ApplicationDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>(options =>
+            //{
+            //    options.SignIn.RequireConfirmedAccount = true;
+            //})
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthentication(AzureADDefaults.OpenIdScheme)
+                .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = false
+                };
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnTicketReceived = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+                    OnAuthenticationFailed = context =>
+                    {
+                        context.Response.Redirect("/Error");
+                        context.HandleResponse();
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
             services.AddRazorPages();
             services.AddSingleton<HttpClient>();
             services.AddServerSideBlazor();
+
             services.AddSingleton<WeatherForecastService>();
         }
 
@@ -52,8 +89,12 @@ namespace SextantSample.BlazorServerSide
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

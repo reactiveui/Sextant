@@ -35,6 +35,7 @@
         
         <Button x:Name="backButton"
                 Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay}"
+                IsEnabled="{x:Bind IsBackButtonEnabled, Mode=OneWay}"
                 VerticalAlignment="Top"
                 Style="{ThemeResource NavigationBackButtonNormalStyle}" />
     </Grid>
