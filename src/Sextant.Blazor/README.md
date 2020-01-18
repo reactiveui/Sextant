@@ -21,7 +21,7 @@ The javascript contained within intercepts clicks to check for link-based naviga
 
 1.  Replace the default `Router` component with `SextantRouter`.  This will allow viewmodel-based navigation.  
 2.  Replace the default `RouteView` component with `ReactiveRouteView`.  This allows your views to have their `ViewModel` parameters set automatically.
-3.  Choose a modal that Sextant will use for your modal navigation.  Sextant comes with a very basic `Sextant.Blazor.Modal.SimpleModel` that you can use.  Otherwise, implement your own using `Sextant.Blazor.Modal.IModalView`. Details below.
+3.  Choose a modal that Sextant will use for your modal navigation.  Sextant.Blazor comes with a very basic `Sextant.Blazor.Modal.SimpleModel` that you can use.  Otherwise, implement your own using `Sextant.Blazor.Modal.IModalView`. Details below.
 
 ```
 <SextantRouter AppAssembly="@typeof(Program).Assembly"
