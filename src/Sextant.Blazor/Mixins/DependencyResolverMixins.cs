@@ -55,7 +55,7 @@ namespace Sextant.Blazor
         }
 
         /// <summary>
-        /// Register view for viewmodel, but only return view type for UWP frame.
+        /// Register view for viewmodel along with a route for url navigation.
         /// </summary>
         /// <typeparam name="TView">The view type.</typeparam>
         /// <typeparam name="TViewModel">The viewmodel type.</typeparam>
@@ -75,7 +75,7 @@ namespace Sextant.Blazor
         }
 
         /// <summary>
-        /// Register view for viewmodel, but only return view type for UWP frame.
+        /// Register view for viewmodel along with a route for url navigation.  Includes route parameters in a dictionary.
         /// </summary>
         /// <typeparam name="TView">The view type.</typeparam>
         /// <typeparam name="TViewModel">The viewmodel type.</typeparam>

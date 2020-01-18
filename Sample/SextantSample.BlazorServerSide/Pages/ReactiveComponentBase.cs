@@ -12,6 +12,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using ReactiveUI;
@@ -53,7 +54,7 @@ namespace SextantSample.BlazorServerSide.Pages
 
             propertyChangedObservable.Do(_ => StateHasChanged()).Subscribe();
 
-            this.WhenAnyValue(x => x.ViewModel).WhereNotNull().Subscribe(_ => InvokeAsync(StateHasChanged));
+            this.WhenAnyValue(x => x.ViewModel).WhereNotNull().ObserveOn(SynchronizationContext.Current).Subscribe(_ => StateHasChanged());
         }
 
         /// <inheritdoc />
