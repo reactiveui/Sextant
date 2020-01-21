@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.AspNetCore.Components.RenderTree;
 using ReactiveUI;
+using Splat;
 
 namespace Sextant.Blazor
 {
@@ -21,11 +22,12 @@ namespace Sextant.Blazor
     /// Displays the specified page component, rendering it inside its layout
     /// and any further nested layouts.
     /// </summary>
-    public class ReactiveRouteView : IComponent
+    public class ReactiveRouteView : IComponent, IEnableLogger
     {
         private readonly RenderFragment _renderDelegate;
         private readonly RenderFragment _renderPageWithParametersDelegate;
         private RenderHandle _renderHandle;
+        private IFullLogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReactiveRouteView"/> class.
@@ -35,13 +37,14 @@ namespace Sextant.Blazor
             // Cache the delegate instances
             _renderDelegate = Render;
             _renderPageWithParametersDelegate = RenderPageWithParameters;
+            _logger = this.Log();
         }
 
         /// <summary>
-        /// Gets or sets the sextant router as a cascading parameter so we can get the viewmodel and set the latest view reference.
+        /// Gets or sets the navigation router as a cascading parameter so we can get the viewmodel and set the latest view reference.
         /// </summary>
         [CascadingParameter]
-        public SextantRouter Router { get; set; }
+        public NavigationRouter Router { get; set; }
 
         /// <summary>
         /// Gets or sets the route data. This determines the page that will be
@@ -106,18 +109,18 @@ namespace Sextant.Blazor
                 if (compRef is IViewFor)
                 {
                     // this works for url and link navigation, but CurrentViewModel not set in time for popstate nav.
-                    Debug.WriteLine("RouteView: Checking VM not null");
+                    _logger.Debug("RouteView: Checking VM not null");
                     if (Router.CurrentViewModel != null)
                     {
-                        Debug.WriteLine("RouteView: Gettings VM type from IViewFor<>");
+                        _logger.Debug("RouteView: Getting VM type from IViewFor<>");
                         var i = compRef.GetType().GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IViewFor<>));
-                        Debug.WriteLine($"RouteView: Type required is {i.GetGenericArguments()[0]}");
+                        _logger.Debug($"RouteView: Type required is {i.GetGenericArguments()[0]}");
 
                         var args = i.GetGenericArguments();
-                        Debug.WriteLine($"RouteView: CurrentViewModel Type is {Router.CurrentViewModel}");
+                        _logger.Debug($"RouteView: CurrentViewModel Type is {Router.CurrentViewModel}");
                         if (args.Length > 0 && args[0].FullName == Router.CurrentViewModel.GetType().FullName)
                         {
-                            (compRef as IViewFor).ViewModel = Router.CurrentViewModel;
+                            ((IViewFor)compRef).ViewModel = Router.CurrentViewModel;
                         }
                     }
 

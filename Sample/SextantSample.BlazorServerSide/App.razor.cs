@@ -22,11 +22,11 @@ namespace SextantSample.BlazorServerSide
 
             Locator
                 .CurrentMutable
-                .RegisterBlazorRoute<Pages.HomeView, HomeViewModel>("/", p => new HomeViewModel())
-                .RegisterBlazorRoute<Pages.RedView, RedViewModel>("/red", p => new RedViewModel(Locator.Current.GetService<IViewStackService>()))
-                .RegisterBlazorRoute<Pages.GreenView, GreenViewModel>("/green", p => new GreenViewModel(Locator.Current.GetService<IViewStackService>()))
-                .RegisterBlazorRoute<Pages.FirstModalView, FirstModalViewModel>("/firstModal")
-                .RegisterBlazorRoute<Pages.SecondModalView, SecondModalViewModel>("/secondModal")
+                .RegisterRoute<Pages.HomeView, HomeViewModel>("/", p => new HomeViewModel())
+                .RegisterRoute<Pages.RedView, RedViewModel>("/red", p => new RedViewModel(Locator.Current.GetService<IViewStackService>()))
+                .RegisterRoute<Pages.GreenView, GreenViewModel>("/green", p => new GreenViewModel(Locator.Current.GetService<IViewStackService>()))
+                .RegisterRoute<Pages.FirstModalView, FirstModalViewModel>("/firstModal")
+                .RegisterRoute<Pages.SecondModalView, SecondModalViewModel>("/secondModal")
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
 
             // Blazor apps start via url navigation so there's no need to push a start page.  The start page is determined by the url.

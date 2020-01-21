@@ -65,7 +65,7 @@ namespace Sextant.Blazor
         /// <returns>
         /// The dependencyResolver.
         /// </returns>
-        public static IMutableDependencyResolver RegisterBlazorRoute<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string route, string contract = null)
+        public static IMutableDependencyResolver RegisterRoute<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string route, string contract = null)
             where TView : IComponent, new()
             where TViewModel : class, IViewModel
         {
@@ -86,7 +86,7 @@ namespace Sextant.Blazor
         /// <returns>
         /// The dependencyResolver.
         /// </returns>
-        public static IMutableDependencyResolver RegisterBlazorRoute<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string route, Func<Dictionary<string, string>, IViewModel> generator, string contract = null)
+        public static IMutableDependencyResolver RegisterRoute<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string route, Func<Dictionary<string, string>, IViewModel> generator, string contract = null)
             where TView : IComponent, new()
             where TViewModel : class, IViewModel
         {

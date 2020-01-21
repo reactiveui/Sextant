@@ -25,9 +25,7 @@ namespace Sextant.Blazor
     /// <summary>
     /// The router specifically designed for use by Sextant.
     /// </summary>
-#pragma warning disable CA1063 // Implement IDisposable Correctly
-    public class SextantRouter : ComponentBase, IView, IDisposable
-#pragma warning restore CA1063 // Implement IDisposable Correctly
+    public class NavigationRouter : ComponentBase, IView, IDisposable
     {
         private UrlParameterViewModelGenerator _urlParameterVMGenerator;
         private IScheduler _mainScheduler;
@@ -265,6 +263,21 @@ namespace Sextant.Blazor
                 RxApp.MainThreadScheduler);
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <inheritdoc />
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+        }
+
         /// <inheritdoc/>
         protected override Task OnInitializedAsync()
         {
@@ -375,16 +388,16 @@ namespace Sextant.Blazor
                 }
 
                 _firstPageRendered = true;
-           }
+            }
         }
 
         /// <inheritdoc/>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Makes Blazor RenderTreeBuilder code more readable this way.")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.OpenComponent<CascadingValue<SextantRouter>>(0);
-            builder.AddAttribute(1, nameof(CascadingValue<SextantRouter>.Value), this);
-            builder.AddAttribute(2, nameof(CascadingValue<SextantRouter>.ChildContent), (RenderFragment)((builder2) =>
+            builder.OpenComponent<CascadingValue<NavigationRouter>>(0);
+            builder.AddAttribute(1, nameof(CascadingValue<NavigationRouter>.Value), this);
+            builder.AddAttribute(2, nameof(CascadingValue<NavigationRouter>.ChildContent), (RenderFragment)((builder2) =>
             {
                 builder2.OpenComponent<Router>(3);
                 builder2.AddAttribute(4, nameof(Router.AppAssembly), AppAssembly);
@@ -484,16 +497,6 @@ namespace Sextant.Blazor
             }
 
             return (viewModel, parameters.ContainsKey("contract") ? parameters["contract"] : null);
-        }
-
-        /// <inheritdoc/>
-#pragma warning disable SA1202 // Elements should be ordered by access
-#pragma warning disable CA1063 // Implement IDisposable Correctly
-        public void Dispose()
-#pragma warning restore CA1063 // Implement IDisposable Correctly
-#pragma warning restore SA1202 // Elements should be ordered by access
-        {
-            var i = 3;
         }
     }
 }
