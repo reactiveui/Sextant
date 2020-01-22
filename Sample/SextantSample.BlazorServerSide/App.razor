@@ -1,0 +1,13 @@
+<CascadingAuthenticationState>
+    <SextantRouter AppAssembly="@typeof(Program).Assembly"
+                   ModalComponent="typeof(Sextant.Blazor.Modal.SimpleModal)">
+        <Found Context="routeData">
+            <ReactiveAuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </SextantRouter>
+</CascadingAuthenticationState>

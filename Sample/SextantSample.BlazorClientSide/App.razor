@@ -1,0 +1,12 @@
+﻿
+<SextantRouter AppAssembly="@typeof(Program).Assembly"
+                ModalComponent="typeof(Sextant.Blazor.Modal.SimpleModal)">
+    <Found Context="routeData">
+        <ReactiveRouteView RouteData="routeData" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</SextantRouter>

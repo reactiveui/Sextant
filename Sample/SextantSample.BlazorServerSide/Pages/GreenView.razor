@@ -1,0 +1,21 @@
+﻿@page "/green"
+@inherits ReactiveComponentBase<GreenViewModel>
+
+<h1 style="background-color:green;color:white;">Green</h1>
+<button class="btn-primary" @onclick="() => ViewModel?.OpenModal.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Open Modal</button>
+
+@code{
+    [Inject] IJSRuntime jSRuntime { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        SextantSample.ViewModels.Interactions
+                .ErrorMessage
+                .RegisterHandler(x =>
+                {
+                    jSRuntime.InvokeVoidAsync("alert", x.Input.Message);
+                    x.SetOutput(true);
+                });
+        return Task.CompletedTask;
+    }
+}

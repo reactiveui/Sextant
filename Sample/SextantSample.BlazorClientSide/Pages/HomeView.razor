@@ -1,0 +1,25 @@
+﻿@page "/"
+@page "/Account/SignOut"
+@inherits ReactiveComponentBase<HomeViewModel>
+
+<h1>Home</h1>
+
+<button class="btn-primary" @onclick="() => ViewModel?.OpenModal.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()" >First Modal</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PushPage.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Push Red Page</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PushGenericPage.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Push Green Page</button>
+
+@code{
+    [Inject] IJSRuntime jSRuntime { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        SextantSample.ViewModels.Interactions
+                .ErrorMessage
+                .RegisterHandler(async x =>
+                {
+                    jSRuntime.InvokeVoidAsync("alert", x.Input.Message);
+                    x.SetOutput(true);
+                });
+        return Task.CompletedTask;
+    }
+}

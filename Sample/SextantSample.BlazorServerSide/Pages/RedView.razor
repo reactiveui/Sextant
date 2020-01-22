@@ -1,0 +1,25 @@
+﻿@page "/red"
+@inherits ReactiveComponentBase<RedViewModel>
+
+<h1 style="background-color:red;color:white;">Red</h1>
+<button class="btn-primary" @onclick="() => ViewModel?.PopModal.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Pop Modal</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PushPage.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Push Another Red Page</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PopPage.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Pop Page</button>
+<button class="btn-primary" @onclick="() => ViewModel?.PopToRoot.Execute().Catch(Observable.Return(Unit.Default)).Subscribe()">Pop To Root</button>
+
+@code{
+
+    [Inject] IJSRuntime jSRuntime { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        SextantSample.ViewModels.Interactions
+                .ErrorMessage
+                .RegisterHandler(x =>
+                {
+                    jSRuntime.InvokeVoidAsync("alert", x.Input.Message);
+                    x.SetOutput(true);
+                });
+        return Task.CompletedTask;
+    }
+}

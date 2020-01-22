@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -47,6 +47,7 @@ namespace SextantSample.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             Instance.Initialize();
