@@ -25,8 +25,9 @@ namespace Sextant.Blazor
     /// <summary>
     /// The router specifically designed for use by Sextant.
     /// </summary>
-    public class NavigationRouter : ComponentBase, IView, IDisposable
+    public class NavigationRouter : ComponentBase, IView, IDisposable, IEnableLogger
     {
+        private readonly IObservable<NavigationActionEventArgs> _navigationEventArgs;
         private UrlParameterViewModelGenerator _urlParameterVMGenerator;
         private IScheduler _mainScheduler;
         private RouteViewViewModelLocator _routeLocator;
@@ -45,6 +46,105 @@ namespace Sextant.Blazor
 
         // Mirrored modal stack on IViewStackService.
         private Stack<Type> _modalBackStack = new Stack<Type>();
+        private IFullLogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationRouter"/> class.
+        /// </summary>
+        public NavigationRouter()
+            : this(RxApp.MainThreadScheduler)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationRouter"/> class.
+        /// </summary>
+        /// <param name="mainScheduler">The main thread scheduler.</param>
+        public NavigationRouter(IScheduler mainScheduler)
+        {
+            _mainScheduler = mainScheduler;
+            _routeLocator = (RouteViewViewModelLocator)Locator.Current.GetService(typeof(RouteViewViewModelLocator));
+            _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
+            _stackService = Locator.Current.GetService<IViewStackService>();
+
+            _logger = this.Log();
+            _navigationEventArgs =
+                Observable.FromEvent<EventHandler<NavigationActionEventArgs>, NavigationActionEventArgs>(
+                    handler =>
+                    {
+                        void EventHandler(object sender, NavigationActionEventArgs args) => handler(args);
+                        return EventHandler;
+                    },
+                    x => SextantNavigationManager.Instance.LocationChanged += x,
+                    x => SextantNavigationManager.Instance.LocationChanged -= x);
+
+            PagePopped =
+                _navigationEventArgs
+                    .Where(args => args.NavigationType == SextantNavigationType.Popstate)
+                    .ObserveOn(MainThreadScheduler)
+                    .Select(async args =>
+                    {
+                        List<IViewModel> viewModels = new List<IViewModel>();
+                        string id = null;
+                        bool found = false;
+
+                        // If this is false, we're probably pre-rendering.
+                        if (_viewModelDictionary.ContainsKey(args.Id))
+                        {
+                            // This might not be a simple back navigation.  Could be any page in the history.  Need to find this target vm in the stack(s).
+                            IViewModel targetViewModel = _viewModelDictionary[args.Id];
+
+                            _logger.Debug($"ViewModel that comes next: {targetViewModel.GetType().Name}");
+
+                            // Assumes pop event is back navigation.
+                            foreach (var vm in _mainStack)
+                            {
+                                if (vm != targetViewModel)
+                                {
+                                    viewModels.Add(vm);
+                                }
+                                else
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found)
+                            {
+                                // Stick them in the forward stack now that we know it was a browser back navigation.
+                                foreach (var vm in viewModels)
+                                {
+                                    _forwardStack.Push(vm);
+                                    _mainStack.Pop();
+                                }
+
+                                return viewModels;
+                            }
+
+                            // If we get here, there was **definitely** forward navigation instead!
+                            viewModels.Clear();
+                            do
+                            {
+                                var vm = _forwardStack.Peek();
+                                if (vm == targetViewModel)
+                                {
+                                    found = true;
+                                }
+
+                                await _stackService.PushPage(_forwardStack.Peek(), null, false);
+
+                                // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
+                                // and not send the nav command to the internal router.
+                            }
+                            while (!found && _forwardStack.Count > 0);
+                        }
+
+                        return viewModels;
+                    })
+                    .Concat()
+                    .SelectMany(x => x);
+        }
 
         /// <summary>
         /// Gets or sets the content to display when a match is found for the requested route.
@@ -202,10 +302,10 @@ namespace Sextant.Blazor
                     string route = null;
 
                     // Check if ViewModel is a dummy for a non-registered navigation route ... i.e. controllers, authentication, etc...
-                    if (viewModel is DirectRouteViewModel)
+                    if (viewModel is IRouteViewModel routeViewModel)
                     {
                         // Set the route from that stored in the dummy viewmodel.
-                        route = ((DirectRouteViewModel)viewModel).Route;
+                        route = routeViewModel.Route;
                     }
                     else
                     {
@@ -260,7 +360,7 @@ namespace Sextant.Blazor
                     _ = SextantNavigationManager.Instance.ReplaceStateAsync(pair.Key);
                     return Unit.Default;
                 },
-                RxApp.MainThreadScheduler);
+                MainThreadScheduler);
         }
 
         /// <inheritdoc />
@@ -281,86 +381,6 @@ namespace Sextant.Blazor
         /// <inheritdoc/>
         protected override Task OnInitializedAsync()
         {
-            _mainScheduler = RxApp.MainThreadScheduler;
-            _routeLocator = (RouteViewViewModelLocator)Splat.Locator.Current.GetService(typeof(RouteViewViewModelLocator));
-            _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Splat.Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
-
-            PagePopped = Observable.FromEvent<EventHandler<NavigationActionEventArgs>, NavigationActionEventArgs>(
-                    handler =>
-                    {
-                        void EventHandler(object sender, NavigationActionEventArgs args) => handler(args);
-                        return EventHandler;
-                    },
-                    x => SextantNavigationManager.Instance.LocationChanged += x,
-                    x => SextantNavigationManager.Instance.LocationChanged -= x)
-                .Where(args => args.NavigationType == SextantNavigationType.Popstate)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Select(async (args) =>
-                {
-                    List<IViewModel> viewModels = new List<IViewModel>();
-                    string id = null;
-                    bool found = false;
-
-                    // If this is false, we're probably pre-rendering.
-                    if (_viewModelDictionary.ContainsKey(args.Id))
-                    {
-                        // This might not be a simple back navigation.  Could be any page in the history.  Need to find this target vm in the stack(s).
-                        IViewModel targetViewModel = _viewModelDictionary[args.Id];
-
-                        Debug.WriteLine($"ViewModel that comes next: {targetViewModel.GetType().Name}");
-
-                        // Assumes pop event is back navigation.
-                        foreach (var vm in _mainStack)
-                        {
-                            if (vm != targetViewModel)
-                            {
-                                viewModels.Add(vm);
-                            }
-                            else
-                            {
-                                found = true;
-                                break;
-                            }
-                        }
-
-                        if (found)
-                        {
-                            // Stick them in the forward stack now that we know it was a browser back navigation.
-                            foreach (var vm in viewModels)
-                            {
-                                _forwardStack.Push(vm);
-                                _mainStack.Pop();
-                            }
-
-                            return viewModels;
-                        }
-
-                        // If we get here, there was **definitely** forward navigation instead!
-                        viewModels.Clear();
-                        do
-                        {
-                            var vm = _forwardStack.Peek();
-                            if (vm == targetViewModel)
-                            {
-                                found = true;
-                            }
-
-                            await _stackService.PushPage(_forwardStack.Peek(), null, false);
-
-                            // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
-                            // and not send the nav command to the internal router.
-                        }
-                        while (!found && _forwardStack.Count > 0);
-                    }
-
-                    return viewModels;
-                })
-                .Concat()
-                .SelectMany(x => x);
-
-            Locator.CurrentMutable.RegisterStackServices(this);
-            _stackService = Locator.Current.GetService<IViewStackService>();
-
             return base.OnInitializedAsync();
         }
 
@@ -399,6 +419,11 @@ namespace Sextant.Blazor
         /// <inheritdoc/>
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
             void RenderFragment(RenderTreeBuilder builder2)
             {
                 builder2.OpenComponent<Router>(3);
@@ -420,7 +445,7 @@ namespace Sextant.Blazor
             if (ModalComponent != null)
             {
                 builder.OpenComponent(7, ModalComponent);
-                builder.AddComponentReferenceCapture(8, (componentReference) =>
+                builder.AddComponentReferenceCapture(8, componentReference =>
                 {
                     if (!(componentReference is IModalView))
                     {

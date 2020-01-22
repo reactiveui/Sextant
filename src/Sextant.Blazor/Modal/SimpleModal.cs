@@ -42,6 +42,11 @@ namespace Sextant.Blazor.Modal
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Blazor standard.")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
             if (_isOpen)
             {
                 builder.OpenElement(0, "div");
@@ -56,7 +61,7 @@ namespace Sextant.Blazor.Modal
                 if (_view != null)
                 {
                     builder.OpenComponent(6, _view);
-                    builder.AddComponentReferenceCapture(7, (viewReference) =>
+                    builder.AddComponentReferenceCapture(7, viewReference =>
                     {
                         ((IViewFor)viewReference).ViewModel = _currentViewModel;
                     });

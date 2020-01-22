@@ -71,6 +71,11 @@ namespace Sextant.Blazor
         /// <inheritdoc />
         protected override void Render(RenderTreeBuilder builder)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
             if (ExistingCascadedAuthenticationState != null)
             {
                 // If this component is already wrapped in a <CascadingAuthenticationState> (or another

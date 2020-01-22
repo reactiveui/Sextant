@@ -24,10 +24,10 @@ namespace Sextant.Blazor
     /// </summary>
     public class ReactiveRouteView : IComponent, IEnableLogger
     {
+        private readonly IFullLogger _logger;
         private readonly RenderFragment _renderDelegate;
         private readonly RenderFragment _renderPageWithParametersDelegate;
         private RenderHandle _renderHandle;
-        private IFullLogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReactiveRouteView"/> class.
@@ -87,7 +87,16 @@ namespace Sextant.Blazor
         /// <param name="builder">The <see cref="RenderTreeBuilder"/>.</param>
         protected virtual void Render(RenderTreeBuilder builder)
         {
-            var pageLayoutType = RouteData.PageType.GetCustomAttribute<LayoutAttribute>()?.LayoutType
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            var pageLayoutType =
+                RouteData
+                    .PageType
+                    .GetCustomAttribute<LayoutAttribute>()?
+                    .LayoutType
                 ?? DefaultLayout;
 
             builder.OpenComponent<LayoutView>(0);

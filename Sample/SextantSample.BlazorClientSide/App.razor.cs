@@ -21,6 +21,7 @@ namespace SextantSample.BlazorClientSide
 
             Locator
                 .CurrentMutable
+                .Register
                 .RegisterViewModelFactory(() => new DefaultViewModelFactory())
                 .RegisterUrlParameterViewModelGenerator()
                 .RegisterRouteViewViewModelLocator()

@@ -22,13 +22,11 @@ namespace Sextant.Blazor
         /// Registers a value for navigation.
         /// </summary>
         /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="viewModelRouter">The viewmodel router.</param>
+        /// <param name="view">The viewmodel router.</param>
         /// <returns>The dependencyResolver.</returns>
-        public static IMutableDependencyResolver RegisterStackServices(this IMutableDependencyResolver dependencyResolver, IView viewModelRouter)
+        public static IMutableDependencyResolver RegisterStackServices(this IMutableDependencyResolver dependencyResolver, IView view)
         {
-            var viewStackService = new ViewStackService(viewModelRouter);
-
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);
+            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ViewStackService(view));
             return dependencyResolver;
         }
 
@@ -95,13 +93,6 @@ namespace Sextant.Blazor
 
             var urlVmGenerator = Locator.Current.GetService<UrlParameterViewModelGenerator>();
             urlVmGenerator.Register<TViewModel>(generator);
-            return dependencyResolver;
-        }
-
-        public static IMutableDependencyResolver RegisterRoute<TRoute>(this IMutableDependencyResolver dependencyResolver, TRoute route)
-            where TRoute : Route
-        {
-            dependencyResolver.Register();
             return dependencyResolver;
         }
 

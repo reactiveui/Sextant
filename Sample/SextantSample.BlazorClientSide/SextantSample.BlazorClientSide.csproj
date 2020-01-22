@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Sextant.Blazor\Sextant.Blazor.csproj" />
-    <ProjectReference Include="..\SextantSample.Core\SextantSample.Core.csproj" />
     <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" />
   </ItemGroup>
 

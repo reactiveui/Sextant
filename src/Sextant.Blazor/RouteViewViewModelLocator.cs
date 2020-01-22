@@ -108,6 +108,11 @@ namespace Sextant.Blazor
         /// <returns>The view Type again.</returns>
         public Type ResolveViewType(Type viewModelType, string contract = null)
         {
+            if (viewModelType == null)
+            {
+                throw new ArgumentNullException(nameof(viewModelType));
+            }
+
             if (_viewModelToViewTypeDictionary.ContainsKey((viewModelType.AssemblyQualifiedName, contract)))
             {
                 return _viewModelToViewTypeDictionary[(viewModelType.AssemblyQualifiedName, contract)];
@@ -154,6 +159,11 @@ namespace Sextant.Blazor
         /// <returns>The viewmodel Type.</returns>
         public Type ResolveViewModelType(Type viewType)
         {
+            if (viewType == null)
+            {
+                throw new ArgumentNullException(nameof(viewType));
+            }
+
             if (_viewToViewModelTypeDictionary.ContainsKey(viewType.AssemblyQualifiedName))
             {
                 return _viewToViewModelTypeDictionary[viewType.AssemblyQualifiedName];
@@ -169,6 +179,11 @@ namespace Sextant.Blazor
         /// <returns>The route.</returns>
         public string ResolveRoute(Type viewModelType)
         {
+            if (viewModelType == null)
+            {
+                throw new ArgumentNullException(nameof(viewModelType));
+            }
+
             if (_viewModelTypeToRouteDictionary.ContainsKey(viewModelType.AssemblyQualifiedName))
             {
                 return _viewModelTypeToRouteDictionary[viewModelType.AssemblyQualifiedName];
