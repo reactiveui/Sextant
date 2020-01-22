@@ -14,7 +14,7 @@ namespace Sextant
     public class DefaultViewModelFactory : IViewModelFactory
     {
         /// <inheritdoc />
-        public TViewModel Create<TViewModel>(string contract = null)
+        public TViewModel Create<TViewModel>(string? contract = null)
             where TViewModel : IViewModel => Locator.Current.GetService<TViewModel>(contract);
     }
 }

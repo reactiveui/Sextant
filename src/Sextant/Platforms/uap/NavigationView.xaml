@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="Sextant.NavigationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sextant"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup>
+            <VisualState>
+                <VisualState.StateTriggers>
+                    <local:DeviceFamilyTrigger DeviceFamily="Windows.Xbox"/>
+                </VisualState.StateTriggers>
+                <VisualState.Setters>
+                    <Setter Target="RootSplitView.OpenPaneLength"
+                        Value="368"/>
+                    <Setter Target="RootSplitView.CompactPaneLength"
+                        Value="96"/>
+                    <Setter Target="NavMenuList.Margin"
+                        Value="0,75,0,27"/>
+                    <Setter Target="Frame.Margin"
+                        Value="0,27,48,27"/>
+                    <Setter Target="NavMenuList.ItemContainerStyle"
+                        Value="{StaticResource NavMenuItemContainerXboxStyle}"/>
+                </VisualState.Setters>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Grid>
+        <Frame x:Name="mainFrame"></Frame>
+        
+        <Button x:Name="backButton"
+                Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay}"
+                VerticalAlignment="Top"
+                Style="{ThemeResource NavigationBackButtonNormalStyle}" />
+    </Grid>
+</Page>

@@ -184,14 +184,10 @@
       <Version>6.2.9</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI">
-      <Version>11.1.12</Version>
+      <Version>11.*</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Sextant.UWP\Sextant.UWP.csproj">
-      <Project>{d6825f95-8983-45ae-9cd1-11d27aae8bca}</Project>
-      <Name>Sextant.UWP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Sextant\Sextant.csproj">
       <Project>{d6b84899-4afc-4e6c-9c3f-005f21df5a52}</Project>
       <Name>Sextant</Name>

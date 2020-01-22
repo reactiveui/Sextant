@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
@@ -23,13 +24,14 @@ namespace Sextant
     /// </summary>
     /// <seealso cref="UINavigationController" />
     /// <seealso cref="IView" />
+    [SuppressMessage("Design", "CA1010: Implement generic IEnumerable", Justification = "Base class declared IEnumerable.")]
     public class NavigationViewController : UINavigationController, IView
     {
         private readonly IScheduler _backgroundScheduler;
         private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
-        private readonly Stack<UIViewController> _navigationPages;
-        private readonly Subject<IViewModel> _pagePopped = new Subject<IViewModel>();
+        private readonly Stack<UIViewController> _navigationPages = new Stack<UIViewController>();
+        private readonly Subject<IViewModel?> _pagePopped = new Subject<IViewModel?>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationViewController" /> class.
@@ -38,9 +40,9 @@ namespace Sextant
         /// <param name="backgroundScheduler">The background scheduler.</param>
         /// <param name="viewLocator">The view locator.</param>
         public NavigationViewController(
-            IScheduler mainScheduler = null,
-            IScheduler backgroundScheduler = null,
-            IViewLocator viewLocator = null)
+            IScheduler? mainScheduler = null,
+            IScheduler? backgroundScheduler = null,
+            IViewLocator? viewLocator = null)
         {
             _mainScheduler = mainScheduler ?? RxApp.MainThreadScheduler;
             _backgroundScheduler = backgroundScheduler ?? RxApp.TaskpoolScheduler;
@@ -51,7 +53,7 @@ namespace Sextant
         public IScheduler MainThreadScheduler => _mainScheduler;
 
         /// <inheritdoc />
-        public IObservable<IViewModel> PagePopped => _pagePopped;
+        public IObservable<IViewModel?> PagePopped => _pagePopped;
 
         /// <inheritdoc />
         public IObservable<Unit> PopModal() =>
@@ -91,7 +93,7 @@ namespace Sextant
             });
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modalViewModel, string contract, bool withNavigationPage = true) =>
+        public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) =>
             Observable.Start(
                     () =>
                     {
@@ -106,11 +108,11 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             IViewModel pageViewModel,
-            string contract,
+            string? contract,
             bool resetStack,
             bool animate = true)
         {
-            UIViewController viewController = null;
+            UIViewController? viewController = null;
 
             return Observable.Start(
                     () =>
@@ -164,7 +166,7 @@ namespace Sextant
             return poppedController;
         }
 
-        private UIViewController LocatePageFor(object viewModel, string contract)
+        private UIViewController LocatePageFor(object viewModel, string? contract)
         {
             var viewFor = _viewLocator.ResolveView(viewModel, contract);
             var page = viewFor as UIViewController;

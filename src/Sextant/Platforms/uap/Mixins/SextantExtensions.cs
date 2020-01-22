@@ -5,10 +5,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Text;
 using Splat;
 
-namespace Sextant.XamForms
+namespace Sextant
 {
     /// <summary>
     /// Extension methods interact with <see cref="Sextant"/>.
@@ -19,7 +20,7 @@ namespace Sextant.XamForms
         /// Initializes the sextant.
         /// </summary>
         /// <param name="sextant">The sextant.</param>
-        public static void InitializeForms(this Sextant sextant)
+        public static void Initialize(this Sextant sextant)
         {
             if (sextant is null)
             {
@@ -28,6 +29,7 @@ namespace Sextant.XamForms
 
             sextant
                 .MutableLocator
+                .RegisterUWPViewLocator()
                 .RegisterNavigationView()
                 .RegisterViewStackService()
                 .RegisterParameterViewStackService()

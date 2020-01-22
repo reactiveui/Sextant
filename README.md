@@ -17,7 +17,7 @@
 
 <p align="left"><img src="https://github.com/reactiveui/styleguide/blob/master/logo_sextant/vertical.png?raw=true" alt="Sextant" height="180px"></p>
 
-## A ReactiveUI navigation library for Xamarin.Forms
+## A ReactiveUI view model based navigation library
 
 Sextant was born from a fork of [Xamvvm](https://github.com/xamvvm/xamvvm) which is nice and simple MVVM Framework with a good navigation system. The problem is, I just wanted a simple navigation system to use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI) without all the things that come along an MVVM framework. Plus, I wanted to make it more "Reactive Friendly".
 
@@ -40,17 +40,19 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 
 | Platform          | Sextant Package                  | NuGet                |
 | ----------------- | -------------------------------- | -------------------- |
+| UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core] |
 | Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]   |
 | Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core] |
 
 [Core]: https://www.nuget.org/packages/Sextant/
 [CoreBadge]: https://img.shields.io/nuget/v/Sextant.svg
 [CoreDoc]: https://reactiveui.net/docs/getting-started/installation/
+[IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
+[UwpDoc]: https://reactiveui.net/docs/getting-started/installation/universal-windows-platform
 
 [Xam]: https://www.nuget.org/packages/Sextant.XamForms/
 [XamBadge]: https://img.shields.io/nuget/v/Sextant.XamForms.svg
 [XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
-[IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
 
 ### Target Platform Versions
 

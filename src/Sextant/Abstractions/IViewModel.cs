@@ -12,7 +12,7 @@ namespace Sextant
     {
         /// <summary>
         /// Gets the ID of the page.
-        /// </summary
+        /// </summary>
         string Id { get; }
     }
 }

@@ -22,7 +22,7 @@ namespace Sextant
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true);
+        IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true);
 
         /// <summary>
         /// Pushes the <see cref="INavigable" /> onto the stack.
@@ -33,7 +33,7 @@ namespace Sextant
         /// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
+        IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : INavigable;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Sextant
         /// <param name="contract">The contract.</param>
         /// <param name="withNavigationPage">Value indicating whether to wrap the modal in a navigation page.</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true);
+        IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true);
 
         /// <summary>
         /// Pushes the <see cref="IViewModel" /> onto the stack.
@@ -54,7 +54,7 @@ namespace Sextant
         /// <param name="contract">The contract.</param>
         /// <param name="withNavigationPage">Value indicating whether to wrap the modal in a navigation page.</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+        IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
             where TViewModel : INavigable;
 
         /// <summary>

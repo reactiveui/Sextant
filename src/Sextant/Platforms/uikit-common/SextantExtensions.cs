@@ -22,6 +22,11 @@ namespace Sextant
         /// <param name="sextant">The sextant.</param>
         public static void Initialize(this Sextant sextant)
         {
+            if (sextant is null)
+            {
+                throw new ArgumentNullException(nameof(sextant));
+            }
+
             sextant.MutableLocator.RegisterNavigationController().RegisterViewStackService();
         }
 

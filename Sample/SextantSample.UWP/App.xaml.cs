@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using ReactiveUI;
 using Sextant;
-using Sextant.UWP;
 using SextantSample.UWP.Views;
 using SextantSample.ViewModels;
 using Splat;
@@ -48,9 +47,10 @@ namespace SextantSample.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            //Frame rootFrame = Window.Current.Content as Frame;
 
-            Instance.InitializeUWP();
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            Instance.Initialize();
 
             Locator
                 .CurrentMutable

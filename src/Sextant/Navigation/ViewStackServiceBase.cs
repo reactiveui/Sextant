@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -29,20 +30,22 @@ namespace Sextant
         protected ViewStackServiceBase(IView view)
         {
             Logger = this.Log();
-            View = view;
+            View = view ?? throw new ArgumentNullException(nameof(view));
             ModalSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
             PageSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 
-            View.PagePopped.Do(poppedPage =>
-            {
-                System.Diagnostics.Debug.WriteLine("Page popped!");
-                var currentPageStack = PageSubject.Value;
-                if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
+            View
+                .PagePopped
+                .Do(poppedPage =>
                 {
-                    var removedPage = PopStackAndTick(PageSubject);
-                    Logger.Debug("Removed page '{0}' from stack.", removedPage.Id);
-                }
-            }).SubscribeSafe();
+                    var currentPageStack = PageSubject.Value;
+                    if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
+                    {
+                        var removedPage = PopStackAndTick(PageSubject);
+                        Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
+                    }
+                })
+                .SubscribeSafe();
         }
 
         /// <summary>
@@ -89,7 +92,7 @@ namespace Sextant
         public IObservable<Unit> PopToRootPage(bool animate = true) => View.PopToRootPage(animate).Do(_ => PopRootAndTick(PageSubject));
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(IViewModel modal, string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal(IViewModel modal, string? contract = null, bool withNavigationPage = true)
         {
             if (modal == null)
             {
@@ -106,7 +109,7 @@ namespace Sextant
         }
 
         /// <inheritdoc/>
-        public IObservable<Unit> PushModal<TViewModel>(string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal<TViewModel>(string? contract = null, bool withNavigationPage = true)
             where TViewModel : IViewModel
         {
             var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
@@ -114,7 +117,7 @@ namespace Sextant
         }
 
         /// <inheritdoc/>
-        public IObservable<Unit> PushPage<TViewModel>(string contract = null, bool resetStack = false, bool animate = true)
+        public IObservable<Unit> PushPage<TViewModel>(string? contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : IViewModel
         {
             TViewModel viewModel = ViewModelFactory.Current.Create<TViewModel>();
@@ -123,7 +126,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushPage(IViewModel viewModel, string contract = null, bool resetStack = false, bool animate = true)
+        public IObservable<Unit> PushPage(IViewModel viewModel, string? contract = null, bool resetStack = false, bool animate = true)
         {
             if (viewModel == null)
             {
@@ -142,7 +145,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             INavigable viewModel,
-            string contract = null,
+            string? contract = null,
             bool resetStack = false,
             bool animate = true) => PushPage((IViewModel)viewModel, contract, resetStack, animate);
 
@@ -174,6 +177,11 @@ namespace Sextant
         /// <param name="reset">if set to <c>true</c> [reset].</param>
         protected static void AddToStackAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, T item, bool reset)
         {
+            if (stackSubject is null)
+            {
+                throw new ArgumentNullException(nameof(stackSubject));
+            }
+
             var stack = stackSubject.Value;
 
             if (reset)
@@ -197,6 +205,11 @@ namespace Sextant
         /// <exception cref="InvalidOperationException">Stack is empty.</exception>
         protected static T PopStackAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject)
         {
+            if (stackSubject is null)
+            {
+                throw new ArgumentNullException(nameof(stackSubject));
+            }
+
             var stack = stackSubject.Value;
 
             if (stack.Count == 0)
@@ -215,20 +228,29 @@ namespace Sextant
         /// </summary>
         /// <typeparam name="T">The view model type.</typeparam>
         /// <param name="stackSubject">The stack subject.</param>
-        /// <exception cref="System.InvalidOperationException">Stack is empty.</exception>
+        /// <exception cref="InvalidOperationException">Stack is empty.</exception>
         protected static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject)
         {
             IImmutableList<T> poppedStack = ImmutableList<T>.Empty;
-
             if (stackSubject?.Value == null || !stackSubject.Value.Any())
             {
                 throw new InvalidOperationException("Stack is empty.");
             }
 
             stackSubject
-                .Take(stackSubject.Value.Count - 1)
-                .Where(stack => stack != null)
-                .Subscribe(stack => poppedStack = stack.RemoveRange(stack.IndexOf(stack[0]), stack.Count - 1));
+               .Take(1)
+               .Where(stack => stack != null)
+               .Subscribe(stack =>
+               {
+                   if (stack.Count > 1)
+                   {
+                       poppedStack = stack.RemoveRange(stack.IndexOf(stack[1]), stack.Count - 1);
+                   }
+                   else
+                   {
+                       poppedStack = stack;
+                   }
+               });
 
             stackSubject.OnNext(poppedStack);
         }

@@ -33,7 +33,7 @@ namespace Sextant
         public IObservable<Unit> PushPage(
             INavigable navigableViewModel,
             INavigationParameter parameter,
-            string contract = null,
+            string? contract = null,
             bool resetStack = false,
             bool animate = true)
         {
@@ -67,7 +67,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
         {
             if (navigableModal == null)
             {
@@ -99,7 +99,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string contract = null, bool resetStack = false, bool animate = true)
+        public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();
@@ -107,7 +107,7 @@ namespace Sextant
         }
 
         /// <inheritdoc />
-        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string contract = null, bool withNavigationPage = true)
+        public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
             where TViewModel : INavigable
         {
             var viewModel = ViewModelFactory.Current.Create<TViewModel>();
@@ -122,18 +122,28 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(parameter));
             }
 
-            var topPage = TopPage().FirstOrDefaultAsync().Wait();
+            IViewModel poppedPage = TopPage().FirstOrDefaultAsync().Wait();
             return View
                 .PopPage(animate)
                 .Do(_ =>
                 {
-                    if (topPage is INavigable navigable)
+                    if (poppedPage is INavigable navigable)
                     {
                         navigable
                             .WhenNavigatedFrom(parameter)
                             .ObserveOn(View.MainThreadScheduler)
-                            .Subscribe(navigated =>
+                            .Subscribe(navigatedFrom =>
                                 Logger.Debug($"Called `WhenNavigatedFrom` on '{navigable.Id}' passing parameter {parameter}"));
+                    }
+
+                    IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait();
+                    if (topPage is INavigated navigated)
+                    {
+                        navigated
+                            .WhenNavigatedTo(parameter)
+                            .ObserveOn(View.MainThreadScheduler)
+                            .Subscribe(navigatedTo =>
+                                Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}"));
                     }
                 });
         }
