@@ -98,6 +98,13 @@ namespace Sextant.Blazor
             return dependencyResolver;
         }
 
+        public static IMutableDependencyResolver RegisterRoute<TRoute>(this IMutableDependencyResolver dependencyResolver, TRoute route)
+            where TRoute : Route
+        {
+            dependencyResolver.Register();
+            return dependencyResolver;
+        }
+
         /// <summary>
         /// Helper method to get view type for viewmodel.
         /// </summary>

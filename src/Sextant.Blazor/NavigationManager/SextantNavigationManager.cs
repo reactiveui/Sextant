@@ -53,25 +53,17 @@ namespace Sextant.Blazor
         }
 
         [Obsolete]
-        internal ValueTask NavigateToAsync(string uri)
-        {
-            return _jsRuntime.InvokeVoidAsync("SextantFunctions.navigateTo", uri);
-        }
+        internal ValueTask NavigateToAsync(string uri) =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.navigateTo", uri);
 
-        internal ValueTask ClearHistory()
-        {
-            return _jsRuntime.InvokeVoidAsync("SextantFunctions.clearHistory");
-        }
+        internal ValueTask ClearHistory() =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.clearHistory");
 
-        internal ValueTask ReplaceStateAsync(string viewModelId)
-        {
-            return _jsRuntime.InvokeVoidAsync("SextantFunctions.replaceState", new Dictionary<string, object>() { { "id", viewModelId }, { "shouldHandleInternally", false } });
-        }
+        internal ValueTask ReplaceStateAsync(string viewModelId) =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.replaceState", new Dictionary<string, object>() { { "id", viewModelId }, { "shouldHandleInternally", false } });
 
-        internal ValueTask GoBackAsync()
-        {
-            return _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
-        }
+        internal ValueTask GoBackAsync() =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
 
         internal ValueTask GoToRootAsync(int count)
         {

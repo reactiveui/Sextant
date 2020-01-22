@@ -285,73 +285,78 @@ namespace Sextant.Blazor
             _routeLocator = (RouteViewViewModelLocator)Splat.Locator.Current.GetService(typeof(RouteViewViewModelLocator));
             _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Splat.Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
 
-            PagePopped = Observable.FromEventPattern<NavigationActionEventArgs>(
-                   x => SextantNavigationManager.Instance.LocationChanged += x,
-                   x => SextantNavigationManager.Instance.LocationChanged -= x)
-               .Where(ep => ep.EventArgs.NavigationType == SextantNavigationType.Popstate)
-               .ObserveOn(RxApp.MainThreadScheduler)
-               .Select(async (ep) =>
-               {
-                   List<IViewModel> viewModels = new List<IViewModel>();
-                   string id = null;
-                   bool found = false;
+            PagePopped = Observable.FromEvent<EventHandler<NavigationActionEventArgs>, NavigationActionEventArgs>(
+                    handler =>
+                    {
+                        void EventHandler(object sender, NavigationActionEventArgs args) => handler(args);
+                        return EventHandler;
+                    },
+                    x => SextantNavigationManager.Instance.LocationChanged += x,
+                    x => SextantNavigationManager.Instance.LocationChanged -= x)
+                .Where(args => args.NavigationType == SextantNavigationType.Popstate)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Select(async (args) =>
+                {
+                    List<IViewModel> viewModels = new List<IViewModel>();
+                    string id = null;
+                    bool found = false;
 
-                   // If this is false, we're probably pre-rendering.
-                   if (_viewModelDictionary.ContainsKey(ep.EventArgs.Id))
-                   {
-                       // This might not be a simple back navigation.  Could be any page in the history.  Need to find this target vm in the stack(s).
-                       IViewModel targetViewModel = _viewModelDictionary[ep.EventArgs.Id];
+                    // If this is false, we're probably pre-rendering.
+                    if (_viewModelDictionary.ContainsKey(args.Id))
+                    {
+                        // This might not be a simple back navigation.  Could be any page in the history.  Need to find this target vm in the stack(s).
+                        IViewModel targetViewModel = _viewModelDictionary[args.Id];
 
-                       Debug.WriteLine($"ViewModel that comes next: {targetViewModel.GetType().Name}");
+                        Debug.WriteLine($"ViewModel that comes next: {targetViewModel.GetType().Name}");
 
-                       // Assumes pop event is back navigation.
-                       foreach (var vm in _mainStack)
-                       {
-                           if (vm != targetViewModel)
-                           {
-                               viewModels.Add(vm);
-                           }
-                           else
-                           {
-                               found = true;
-                               break;
-                           }
-                       }
+                        // Assumes pop event is back navigation.
+                        foreach (var vm in _mainStack)
+                        {
+                            if (vm != targetViewModel)
+                            {
+                                viewModels.Add(vm);
+                            }
+                            else
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
 
-                       if (found)
-                       {
-                           // Stick them in the forward stack now that we know it was a browser back navigation.
-                           foreach (var vm in viewModels)
-                           {
-                               _forwardStack.Push(vm);
-                               _mainStack.Pop();
-                           }
+                        if (found)
+                        {
+                            // Stick them in the forward stack now that we know it was a browser back navigation.
+                            foreach (var vm in viewModels)
+                            {
+                                _forwardStack.Push(vm);
+                                _mainStack.Pop();
+                            }
 
-                           return viewModels;
-                       }
+                            return viewModels;
+                        }
 
-                       // If we get here, there was **definitely** forward navigation instead!
-                       viewModels.Clear();
-                       do
-                       {
-                           var vm = _forwardStack.Peek();
-                           if (vm == targetViewModel)
-                           {
-                               found = true;
-                           }
+                        // If we get here, there was **definitely** forward navigation instead!
+                        viewModels.Clear();
+                        do
+                        {
+                            var vm = _forwardStack.Peek();
+                            if (vm == targetViewModel)
+                            {
+                                found = true;
+                            }
 
-                           await _stackService.PushPage(_forwardStack.Peek(), null, false);
+                            await _stackService.PushPage(_forwardStack.Peek(), null, false);
 
-                           // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
-                           // and not send the nav command to the internal router.
-                       }
-                       while (!found && _forwardStack.Count > 0);
-                   }
+                            // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
+                            // and not send the nav command to the internal router.
+                        }
+                        while (!found && _forwardStack.Count > 0);
+                    }
 
-                   return viewModels;
-               })
-               .Concat()
-               .SelectMany(x => x);
+                    return viewModels;
+                })
+                .Concat()
+                .SelectMany(x => x);
 
             Locator.CurrentMutable.RegisterStackServices(this);
             _stackService = Locator.Current.GetService<IViewStackService>();
@@ -392,19 +397,24 @@ namespace Sextant.Blazor
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Makes Blazor RenderTreeBuilder code more readable this way.")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            builder.OpenComponent<CascadingValue<NavigationRouter>>(0);
-            builder.AddAttribute(1, nameof(CascadingValue<NavigationRouter>.Value), this);
-            builder.AddAttribute(2, nameof(CascadingValue<NavigationRouter>.ChildContent), (RenderFragment)((builder2) =>
+            void RenderFragment(RenderTreeBuilder builder2)
             {
                 builder2.OpenComponent<Router>(3);
                 builder2.AddAttribute(4, nameof(Router.AppAssembly), AppAssembly);
                 builder2.AddAttribute(5, nameof(Router.Found), Found);
                 builder2.AddAttribute(6, nameof(Router.NotFound), NotFound);
                 builder2.CloseComponent();
-            }));
+            }
+
+            builder.OpenComponent<CascadingValue<NavigationRouter>>(0);
+            builder.AddAttribute(1, nameof(CascadingValue<NavigationRouter>.Value), this);
+
+            builder.AddAttribute(
+                2,
+                nameof(CascadingValue<NavigationRouter>.ChildContent),
+                (RenderFragment)RenderFragment);
             builder.CloseComponent();
 
             if (ModalComponent != null)

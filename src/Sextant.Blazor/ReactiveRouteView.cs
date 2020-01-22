@@ -106,25 +106,25 @@ namespace Sextant.Blazor
 
             builder.AddComponentReferenceCapture(1, compRef =>
             {
-                if (compRef is IViewFor)
+                if (compRef is IViewFor viewFor)
                 {
                     // this works for url and link navigation, but CurrentViewModel not set in time for popstate nav.
-                    _logger.Debug("RouteView: Checking VM not null");
+                    _logger.Debug($"{nameof(RouteView)}: Checking VM not null");
                     if (Router.CurrentViewModel != null)
                     {
-                        _logger.Debug("RouteView: Getting VM type from IViewFor<>");
-                        var i = compRef.GetType().GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IViewFor<>));
-                        _logger.Debug($"RouteView: Type required is {i.GetGenericArguments()[0]}");
+                        _logger.Debug($"{nameof(RouteView)}: Getting VM type from IViewFor<>");
+                        var i = viewFor.GetType().GetInterfaces().FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IViewFor<>));
+                        _logger.Debug($"{nameof(RouteView)}: Type required is {i.GetGenericArguments()[0]}");
 
                         var args = i.GetGenericArguments();
-                        _logger.Debug($"RouteView: CurrentViewModel Type is {Router.CurrentViewModel}");
+                        _logger.Debug($"{nameof(RouteView)}: CurrentViewModel Type is {Router.CurrentViewModel}");
                         if (args.Length > 0 && args[0].FullName == Router.CurrentViewModel.GetType().FullName)
                         {
-                            ((IViewFor)compRef).ViewModel = Router.CurrentViewModel;
+                            viewFor.ViewModel = Router.CurrentViewModel;
                         }
                     }
 
-                    Router.CurrentView = compRef;
+                    Router.CurrentView = viewFor;
                 }
             });
 
