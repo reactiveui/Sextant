@@ -6,8 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Splat;
+
+[assembly:InternalsVisibleTo("Sextant.Blazor.Tests")]
 
 namespace Sextant.Blazor
 {
