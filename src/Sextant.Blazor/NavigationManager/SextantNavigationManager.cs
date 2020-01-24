@@ -5,45 +5,39 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
 namespace Sextant.Blazor
 {
-    internal class SextantNavigationManager
+    internal sealed class SextantNavigationManager : IDisposable
     {
-        public static readonly SextantNavigationManager Instance = new SextantNavigationManager();
-
-        private EventHandler<NavigationActionEventArgs> _locationChanged;
+        private readonly Subject<NavigationActionEventArgs> _locationChanged;
         private IJSRuntime _jsRuntime;
         private string _baseUri;
         private string _absoluteUri;
 
-        /// <summary>
-        /// An event that fires when the navigation location has changed.
-        /// </summary>
-        public event EventHandler<NavigationActionEventArgs> LocationChanged
+        internal SextantNavigationManager()
         {
-            add
-            {
-                _locationChanged += value;
-            }
-
-            remove
-            {
-                _locationChanged -= value;
-            }
+            _locationChanged = new Subject<NavigationActionEventArgs>();
         }
 
-        internal string BaseUri { get => _baseUri; }
+        /// <summary>
+        /// Gets an observable sequence of the navigation location changes.
+        /// </summary>
+        public IObservable<NavigationActionEventArgs> LocationChanged => _locationChanged.AsObservable();
 
-        internal string AbsoluteUri { get => _absoluteUri; }
+        public string BaseUri => _baseUri;
+
+        public string AbsoluteUri => _absoluteUri;
 
         /// <summary>
         /// Initialize base url.
         /// </summary>
-        internal async Task InitializeAsync(IJSRuntime jSRuntime)
+        public async Task InitializeAsync(IJSRuntime jSRuntime)
         {
             _jsRuntime = jSRuntime;
 #pragma warning disable RCS1090 // Call 'ConfigureAwait(false)'.
@@ -53,24 +47,24 @@ namespace Sextant.Blazor
         }
 
         [Obsolete]
-        internal ValueTask NavigateToAsync(string uri) =>
+        public ValueTask NavigateToAsync(string uri) =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.navigateTo", uri);
 
-        internal ValueTask ClearHistory() =>
+        public ValueTask ClearHistory() =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.clearHistory");
 
-        internal ValueTask ReplaceStateAsync(string viewModelId) =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.replaceState", new Dictionary<string, object>() { { "id", viewModelId }, { "shouldHandleInternally", false } });
+        public ValueTask ReplaceStateAsync(string viewModelId) =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.replaceState", new Dictionary<string, object> { { "id", viewModelId }, { "shouldHandleInternally", false } });
 
-        internal ValueTask GoBackAsync() =>
+        public ValueTask GoBackAsync() =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
 
-        internal ValueTask GoToRootAsync(int count)
+        public ValueTask GoToRootAsync(int count)
         {
             return _jsRuntime.InvokeVoidAsync("SextantFunctions.goToRoot", count);
         }
 
-        internal string ToBaseRelativePath(string uri)
+        public string ToBaseRelativePath(string uri)
         {
             if (uri.StartsWith(_baseUri, StringComparison.Ordinal))
             {
@@ -99,16 +93,21 @@ namespace Sextant.Blazor
         /// <summary>
         /// Triggers the <see cref="LocationChanged"/> event with the current URI value.
         /// </summary>
-        internal void NotifyNavigationAction(SextantNavigationType sextantNavigationType, string uri, string id)
+        public void NotifyNavigationAction(SextantNavigationType sextantNavigationType, string uri, string id)
         {
             try
             {
-                _locationChanged?.Invoke(this, new NavigationActionEventArgs(sextantNavigationType, uri, id));
+                _locationChanged.OnNext(new NavigationActionEventArgs(sextantNavigationType, uri, id));
             }
             catch (Exception ex)
             {
                 throw new Exception("An exception occurred while dispatching a location changed event.", ex);
             }
+        }
+
+        public void Dispose()
+        {
+            _locationChanged?.Dispose();
         }
     }
 }

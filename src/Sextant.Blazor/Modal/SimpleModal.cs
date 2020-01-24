@@ -39,7 +39,6 @@ namespace Sextant.Blazor.Modal
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1118:Parameter should not span multiple lines", Justification = "Blazor standard.")]
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             if (builder == null)

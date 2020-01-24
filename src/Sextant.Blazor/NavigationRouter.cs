@@ -27,7 +27,6 @@ namespace Sextant.Blazor
     /// </summary>
     public class NavigationRouter : ComponentBase, IView, IDisposable, IEnableLogger
     {
-        private readonly IObservable<NavigationActionEventArgs> _navigationEventArgs;
         private UrlParameterViewModelGenerator _urlParameterVMGenerator;
         private IScheduler _mainScheduler;
         private RouteViewViewModelLocator _routeLocator;
@@ -47,6 +46,7 @@ namespace Sextant.Blazor
         // Mirrored modal stack on IViewStackService.
         private Stack<Type> _modalBackStack = new Stack<Type>();
         private IFullLogger _logger;
+        private SextantNavigationManager _navigationManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationRouter"/> class.
@@ -60,26 +60,20 @@ namespace Sextant.Blazor
         /// Initializes a new instance of the <see cref="NavigationRouter"/> class.
         /// </summary>
         /// <param name="mainScheduler">The main thread scheduler.</param>
+        /// <param name="navigationManager">The navigation manager.</param>
         public NavigationRouter(IScheduler mainScheduler)
         {
             _mainScheduler = mainScheduler;
             _routeLocator = (RouteViewViewModelLocator)Locator.Current.GetService(typeof(RouteViewViewModelLocator));
             _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
             _stackService = Locator.Current.GetService<IViewStackService>();
+            _navigationManager = Locator.Current.GetService<SextantNavigationManager>();
 
             _logger = this.Log();
-            _navigationEventArgs =
-                Observable.FromEvent<EventHandler<NavigationActionEventArgs>, NavigationActionEventArgs>(
-                    handler =>
-                    {
-                        void EventHandler(object sender, NavigationActionEventArgs args) => handler(args);
-                        return EventHandler;
-                    },
-                    x => SextantNavigationManager.Instance.LocationChanged += x,
-                    x => SextantNavigationManager.Instance.LocationChanged -= x);
 
             PagePopped =
-                _navigationEventArgs
+                _navigationManager
+                    .LocationChanged
                     .Where(args => args.NavigationType == SextantNavigationType.Popstate)
                     .ObserveOn(MainThreadScheduler)
                     .Select(async args =>
@@ -225,7 +219,7 @@ namespace Sextant.Blazor
             return Observable.Start(
                 async () =>
                 {
-                    await SextantNavigationManager.Instance.GoBackAsync().ConfigureAwait(false);
+                    await _navigationManager.GoBackAsync().ConfigureAwait(false);
                     return Unit.Default;
                 }).Concat();
         }
@@ -240,7 +234,7 @@ namespace Sextant.Blazor
                 {
                     var count = _mainStack.Count;
 
-                    await SextantNavigationManager.Instance.GoToRootAsync((count - 1) * -1).ConfigureAwait(false);
+                    await _navigationManager.GoToRootAsync((count - 1) * -1).ConfigureAwait(false);
 
                     return Unit.Default;
                 })
@@ -342,7 +336,7 @@ namespace Sextant.Blazor
                             // Do a normal navigation.  The second parameter needs to be true to force load a page (i.e. window.location = href) if the path isn't registered with Sextant.
                             // Unfortunately, browser histories can't be cleared.  The user can still navigate to an old page, but those viewmodels will no longer exist.
                             // A new viewmodel will be created if the generator parameter of RegisterBlazorRoute is set to create a viewmodel from a route.
-                            BlazorNavigationManager.NavigateTo(SextantNavigationManager.Instance.BaseUri + route, viewModel is DirectRouteViewModel);
+                            BlazorNavigationManager.NavigateTo(_navigationManager.BaseUri + route, viewModel is DirectRouteViewModel);
                         }
                     }
 
@@ -357,7 +351,7 @@ namespace Sextant.Blazor
                     }
 
                     // Place this generated key within the History state so we know what viewmodel to restore on popevents.
-                    _ = SextantNavigationManager.Instance.ReplaceStateAsync(pair.Key);
+                    _ = _navigationManager.ReplaceStateAsync(pair.Key);
                     return Unit.Default;
                 },
                 MainThreadScheduler);
@@ -375,6 +369,7 @@ namespace Sextant.Blazor
         {
             if (disposing)
             {
+                _navigationManager?.Dispose();
             }
         }
 
@@ -390,17 +385,19 @@ namespace Sextant.Blazor
             if (!_initialized)
             {
                 _initialized = true;
-                SextantNavigationManager.Instance.LocationChanged += Instance_LocationChanged;
+                _navigationManager
+                    .LocationChanged
+                    .Subscribe(Instance_LocationChanged);
 
                 // Initialize the sextant navigation manager in javascript.
-                await SextantNavigationManager.Instance.InitializeAsync(JSRuntime).ConfigureAwait(false);
+                await _navigationManager.InitializeAsync(JSRuntime).ConfigureAwait(false);
 
                 // Lookup the viewmodel that goes with the url that started the blazor app.
-                var results = ParseRelativeUrl(SextantNavigationManager.Instance.AbsoluteUri);
+                var results = ParseRelativeUrl(_navigationManager.AbsoluteUri);
                 if (results.viewModel == null)
                 {
                     // a viewModel wasn't registered for the route... could be a controller on the same server or similar.  Navigate using a generic ViewModel.
-                    await _stackService.PushPage(new DirectRouteViewModel(SextantNavigationManager.Instance.ToBaseRelativePath(SextantNavigationManager.Instance.AbsoluteUri)), null, true, false);
+                    await _stackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(_navigationManager.AbsoluteUri)), null, true, false);
                 }
                 else
                 {
@@ -447,20 +444,23 @@ namespace Sextant.Blazor
                 builder.OpenComponent(7, ModalComponent);
                 builder.AddComponentReferenceCapture(8, componentReference =>
                 {
-                    if (!(componentReference is IModalView))
+                    if (!(componentReference is IModalView modalView))
                     {
-                        throw new Exception("Your modal needs to implement IModalView so SextantRouter knows how to use it.");
+                        throw new Exception($"{nameof(modalView)} does not implement {nameof(IModalView)}. so {nameof(NavigationRouter)} knows how to use it.");
                     }
 
-                    _modalReference = (IModalView)componentReference;
+                    _modalReference = modalView;
                 });
                 builder.CloseComponent();
             }
         }
 
-        private async void Instance_LocationChanged(object sender, NavigationActionEventArgs e)
+        private async void Instance_LocationChanged(NavigationActionEventArgs e)
         {
-            _ = sender;
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
 
             // back or forward event will set history automatically... but link click will not.
             if (e.NavigationType == SextantNavigationType.Url)
@@ -471,7 +471,7 @@ namespace Sextant.Blazor
                 if (results.viewModel == null)
                 {
                     // a viewModel wasn't registered for the route... this a controller or authentication middleware.  Navigate using a generic ViewModel.
-                    await _stackService.PushPage(new DirectRouteViewModel(SextantNavigationManager.Instance.ToBaseRelativePath(e.Uri)), null, true);
+                    await _stackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(e.Uri)), null, true);
                 }
                 else
                 {
@@ -489,7 +489,7 @@ namespace Sextant.Blazor
             IViewModel viewModel = null;
             Type viewModelType = null;
             char[] separator = new[] { '?' };
-            var relativeUri = SextantNavigationManager.Instance.ToBaseRelativePath(url);
+            var relativeUri = _navigationManager.ToBaseRelativePath(url);
 
             var segments = relativeUri.Split(separator, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < segments.Length; i++)

@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
+using Splat;
 
 namespace Sextant.Blazor
 {
@@ -17,6 +18,15 @@ namespace Sextant.Blazor
     /// </summary>
     public static class JavascriptInterop
     {
+        private static readonly SextantNavigationManager _navigationManager;
+        private static readonly IFullLogger _logger;
+
+        static JavascriptInterop()
+        {
+            _navigationManager = Locator.Current.GetService<SextantNavigationManager>();
+            _logger = Locator.Current.GetService<IFullLogger>();
+        }
+
         /// <summary>
         /// Interop method for returning location and state.
         /// </summary>
@@ -31,22 +41,22 @@ namespace Sextant.Blazor
             {
                 try
                 {
-                    SextantNavigationManager.Instance.NotifyNavigationAction(sextantNavigationType, uri, null);
+                    _navigationManager.NotifyNavigationAction(sextantNavigationType, uri, null);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    _logger.Debug(exception, exception.Message);
                 }
             }
             else
             {
                 try
                 {
-                    SextantNavigationManager.Instance.NotifyNavigationAction(sextantNavigationType, uri, ((JsonElement)state["id"]).GetString());
+                    _navigationManager.NotifyNavigationAction(sextantNavigationType, uri, ((JsonElement)state["id"]).GetString());
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    _logger.Debug(exception, exception.Message);
                 }
             }
 

@@ -29,6 +29,8 @@ namespace Sextant.Blazor
 
             sextant
                 .MutableLocator
+                .RegisterNavigationRouter(() => new NavigationRouter())
+                .RegisterNavigationManager()
                 .RegisterUrlParameterViewModelGenerator()
                 .RegisterRouteViewViewModelLocator()
                 .RegisterViewStackService()

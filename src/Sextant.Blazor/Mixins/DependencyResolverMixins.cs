@@ -19,6 +19,40 @@ namespace Sextant.Blazor
     public static class DependencyResolverMixins
     {
         /// <summary>
+        /// Registers the <see cref="NavigationRouter"/> for displaying routes.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="navigationRouter">The navigation router.</param>
+        /// <returns>The mutable dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterNavigationRouter(this IMutableDependencyResolver dependencyResolver, NavigationRouter navigationRouter)
+        {
+            dependencyResolver.RegisterLazySingleton(() => navigationRouter, nameof(NavigationRouter));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the <see cref="NavigationRouter"/> for displaying routes.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="factory">The factory.</param>
+        /// <returns>The mutable dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterNavigationRouter(this IMutableDependencyResolver dependencyResolver, Func<NavigationRouter> factory)
+        {
+            dependencyResolver.RegisterLazySingleton(factory, nameof(NavigationRouter));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the <see cref="SextantNavigationManager"/>.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <returns>The mutable dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterNavigationManager(this IMutableDependencyResolver dependencyResolver)
+        {
+            return dependencyResolver;
+        }
+
+        /// <summary>
         /// Registers a value for navigation.
         /// </summary>
         /// <param name="dependencyResolver">The dependency resolver.</param>
