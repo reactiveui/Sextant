@@ -59,10 +59,8 @@ namespace Sextant.Blazor
         public ValueTask GoBackAsync() =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
 
-        public ValueTask GoToRootAsync(int count)
-        {
-            return _jsRuntime.InvokeVoidAsync("SextantFunctions.goToRoot", count);
-        }
+        public ValueTask GoToRootAsync(int count) =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.goToRoot", count);
 
         public string ToBaseRelativePath(string uri)
         {
