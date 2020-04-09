@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Sextant.Blazor;
 using SextantSample.BlazorServerSide.Data;
+using Splat;
 
 namespace SextantSample.BlazorServerSide
 {
@@ -41,6 +43,9 @@ namespace SextantSample.BlazorServerSide
 
             services.AddAuthentication(AzureADDefaults.OpenIdScheme)
                 .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            // Sextant.Sextant.Instance.InitializeBlazor();
+            services.AddSextant();
 
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
             {

@@ -9,18 +9,25 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace Sextant.Blazor
 {
-    internal sealed class SextantNavigationManager : IDisposable
+    /// <summary>
+    /// This is the Sextant version of the <see cref="NavigationManager"/> provided by blazor.
+    /// </summary>
+    public sealed class SextantNavigationManager : IDisposable
     {
         private readonly Subject<NavigationActionEventArgs> _locationChanged;
         private IJSRuntime _jsRuntime;
         private string _baseUri;
         private string _absoluteUri;
 
-        internal SextantNavigationManager()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SextantNavigationManager"/> class.
+        /// </summary>
+        public SextantNavigationManager()
         {
             _locationChanged = new Subject<NavigationActionEventArgs>();
         }
@@ -30,13 +37,21 @@ namespace Sextant.Blazor
         /// </summary>
         public IObservable<NavigationActionEventArgs> LocationChanged => _locationChanged.AsObservable();
 
+        /// <summary>
+        /// Gets the base uri.
+        /// </summary>
         public string BaseUri => _baseUri;
 
+        /// <summary>
+        /// Gets the absolute uri.
+        /// </summary>
         public string AbsoluteUri => _absoluteUri;
 
         /// <summary>
         /// Initialize base url.
         /// </summary>
+        /// <param name="jSRuntime">The Java Script runtime environment.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public async Task InitializeAsync(IJSRuntime jSRuntime)
         {
             _jsRuntime = jSRuntime;
@@ -46,24 +61,48 @@ namespace Sextant.Blazor
 #pragma warning restore RCS1090 // Call 'ConfigureAwait(false)'.
         }
 
-        [Obsolete]
-        public ValueTask NavigateToAsync(string uri) =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.navigateTo", uri);
-
+        /// <summary>
+        /// Clears the browser history.
+        /// </summary>
+        /// <returns>A notification of completion.</returns>
         public ValueTask ClearHistory() =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.clearHistory");
 
+        /// <summary>
+        /// Replace the state in the browser.
+        /// </summary>
+        /// <param name="viewModelId">The view model id.</param>
+        /// <returns>A notification of completion.</returns>
         public ValueTask ReplaceStateAsync(string viewModelId) =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.replaceState", new Dictionary<string, object> { { "id", viewModelId }, { "shouldHandleInternally", false } });
 
+        /// <summary>
+        /// Go back in the browser.
+        /// </summary>
+        /// <returns>A notification of completion.</returns>
         public ValueTask GoBackAsync() =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
 
+        /// <summary>
+        /// Go to the root of the browser navigation history.
+        /// </summary>
+        /// <param name="count">number of pages to remove.</param>
+        /// <returns>A notification of completion.</returns>
         public ValueTask GoToRootAsync(int count) =>
             _jsRuntime.InvokeVoidAsync("SextantFunctions.goToRoot", count);
 
+        /// <summary>
+        /// Converts the uri to a relative path.
+        /// </summary>
+        /// <param name="uri">The uri.</param>
+        /// <returns>The relative path.</returns>
         public string ToBaseRelativePath(string uri)
         {
+            if (uri == null)
+            {
+                throw new ArgumentNullException(nameof(uri));
+            }
+
             if (uri.StartsWith(_baseUri, StringComparison.Ordinal))
             {
                 // The absolute URI must be of the form "{baseUri}something" (where
@@ -91,6 +130,9 @@ namespace Sextant.Blazor
         /// <summary>
         /// Triggers the <see cref="LocationChanged"/> event with the current URI value.
         /// </summary>
+        /// <param name="sextantNavigationType">The navigation type.</param>
+        /// <param name="uri">The uri.</param>
+        /// <param name="id">The id.</param>
         public void NotifyNavigationAction(SextantNavigationType sextantNavigationType, string uri, string id)
         {
             try
@@ -103,6 +145,7 @@ namespace Sextant.Blazor
             }
         }
 
+        /// <inheritdoc />
         public void Dispose()
         {
             _locationChanged?.Dispose();

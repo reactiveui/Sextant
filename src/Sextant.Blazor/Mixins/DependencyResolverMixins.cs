@@ -26,7 +26,7 @@ namespace Sextant.Blazor
         /// <returns>The mutable dependency resolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationRouter(this IMutableDependencyResolver dependencyResolver, NavigationRouter navigationRouter)
         {
-            dependencyResolver.RegisterLazySingleton(() => navigationRouter, nameof(NavigationRouter));
+            dependencyResolver.RegisterLazySingleton<IView>(() => navigationRouter, nameof(NavigationRouter));
             return dependencyResolver;
         }
 
@@ -38,7 +38,7 @@ namespace Sextant.Blazor
         /// <returns>The mutable dependency resolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationRouter(this IMutableDependencyResolver dependencyResolver, Func<NavigationRouter> factory)
         {
-            dependencyResolver.RegisterLazySingleton(factory, nameof(NavigationRouter));
+            dependencyResolver.RegisterLazySingleton<IView>(factory, "NavigationView");
             return dependencyResolver;
         }
 

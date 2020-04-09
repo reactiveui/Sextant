@@ -27,12 +27,12 @@ namespace Sextant.Blazor
     /// </summary>
     public class NavigationRouter : ComponentBase, IView, IDisposable, IEnableLogger
     {
-        private UrlParameterViewModelGenerator _urlParameterVMGenerator;
+        private readonly IParameterViewStackService _viewStackService;
+        private readonly RouteViewViewModelLocator _routeViewViewModelLocator;
+        private readonly UrlParameterViewModelGenerator _urlParameterVmGenerator;
         private IScheduler _mainScheduler;
-        private RouteViewViewModelLocator _routeLocator;
         private bool _initialized;
         private bool _firstPageRendered;
-        private IViewStackService _stackService;
         private IModalView _modalReference;
 
         private Dictionary<string, IViewModel> _viewModelDictionary = new Dictionary<string, IViewModel>();
@@ -51,28 +51,19 @@ namespace Sextant.Blazor
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationRouter"/> class.
         /// </summary>
-        public NavigationRouter()
-            : this(RxApp.MainThreadScheduler)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationRouter"/> class.
-        /// </summary>
-        /// <param name="mainScheduler">The main thread scheduler.</param>
+        /// <param name="viewStackService">The view stack service.</param>
         /// <param name="navigationManager">The navigation manager.</param>
-        public NavigationRouter(IScheduler mainScheduler)
+        /// <param name="routeViewViewModelLocator">The route view model locator.</param>
+        /// <param name="urlParameterVmGenerator">The url parameter generator.</param>
+        public NavigationRouter(IParameterViewStackService viewStackService, SextantNavigationManager navigationManager, RouteViewViewModelLocator routeViewViewModelLocator, UrlParameterViewModelGenerator urlParameterVmGenerator)
         {
-            _mainScheduler = mainScheduler;
-            _routeLocator = (RouteViewViewModelLocator)Locator.Current.GetService(typeof(RouteViewViewModelLocator));
-            _urlParameterVMGenerator = (UrlParameterViewModelGenerator)Locator.Current.GetService(typeof(UrlParameterViewModelGenerator));
-            _stackService = Locator.Current.GetService<IViewStackService>();
-            _navigationManager = Locator.Current.GetService<SextantNavigationManager>();
-
-            _logger = this.Log();
+            _viewStackService = viewStackService;
+            _navigationManager = navigationManager;
+            _routeViewViewModelLocator = routeViewViewModelLocator;
+            _urlParameterVmGenerator = urlParameterVmGenerator;
 
             PagePopped =
-                _navigationManager
+                _navigationManager?
                     .LocationChanged
                     .Where(args => args.NavigationType == SextantNavigationType.Popstate)
                     .ObserveOn(MainThreadScheduler)
@@ -126,7 +117,7 @@ namespace Sextant.Blazor
                                     found = true;
                                 }
 
-                                await _stackService.PushPage(_forwardStack.Peek(), null, false);
+                                await _viewStackService.PushPage(_forwardStack.Peek(), null, false);
 
                                 // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
                                 // and not send the nav command to the internal router.
@@ -195,7 +186,7 @@ namespace Sextant.Blazor
                     {
                         var modalNavigatingAwayFrom = _modalBackStack.Pop();
 
-                        var modalStack = await _stackService.ModalStack.FirstOrDefaultAsync();
+                        var modalStack = await _viewStackService.ModalStack.FirstOrDefaultAsync();
                         if (modalStack.Count > 1 && _modalBackStack.Count > 0)
                         {
                             var previousViewModel = modalStack[modalStack.Count - 2];
@@ -253,7 +244,7 @@ namespace Sextant.Blazor
                         throw new Exception("Your modal component type hasn't been defined in SextantRouter.  Make sure it implements IModalView.");
                     }
 
-                    var viewType = _routeLocator.ResolveViewType(modalViewModel.GetType(), string.IsNullOrWhiteSpace(contract) ? null : contract);
+                    var viewType = _routeViewViewModelLocator.ResolveViewType(modalViewModel.GetType(), string.IsNullOrWhiteSpace(contract) ? null : contract);
 
                     if (viewType == null)
                     {
@@ -304,7 +295,7 @@ namespace Sextant.Blazor
                     else
                     {
                         // If not, look it up in the RouteViewViewModelLocator
-                        route = _routeLocator.ResolveRoute(viewModel.GetType());
+                        route = _routeViewViewModelLocator.ResolveRoute(viewModel.GetType());
                     }
 
                     // Force all routes to be relative.
@@ -397,12 +388,12 @@ namespace Sextant.Blazor
                 if (results.viewModel == null)
                 {
                     // a viewModel wasn't registered for the route... could be a controller on the same server or similar.  Navigate using a generic ViewModel.
-                    await _stackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(_navigationManager.AbsoluteUri)), null, true, false);
+                    await _viewStackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(_navigationManager.AbsoluteUri)), null, true, false);
                 }
                 else
                 {
                     // Push the viewmodel to the sextant stack.
-                    await _stackService.PushPage(results.viewModel, results.contract, true, false);
+                    await _viewStackService.PushPage(results.viewModel, results.contract, true, false);
 
                     // When the blazor app first starts, a page will have already been loaded so it's too late for the page creation logic (in ReactiveRouteView) to set the viewmodel.
                     // We have to do it manually here.
@@ -471,11 +462,11 @@ namespace Sextant.Blazor
                 if (results.viewModel == null)
                 {
                     // a viewModel wasn't registered for the route... this a controller or authentication middleware.  Navigate using a generic ViewModel.
-                    await _stackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(e.Uri)), null, true);
+                    await _viewStackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(e.Uri)), null, true);
                 }
                 else
                 {
-                    await _stackService.PushPage(results.viewModel, results.contract, false, true);
+                    await _viewStackService.PushPage(results.viewModel, results.contract, false, true);
                 }
             }
             else
@@ -511,16 +502,16 @@ namespace Sextant.Blazor
 
             if (segments.Length == 0)
             {
-                viewModelType = _routeLocator.ResolveViewModelType("/");
+                viewModelType = _routeViewViewModelLocator.ResolveViewModelType("/");
             }
             else
             {
-                viewModelType = _routeLocator.ResolveViewModelType("/" + segments[0]);
+                viewModelType = _routeViewViewModelLocator.ResolveViewModelType("/" + segments[0]);
             }
 
             if (id == null)
             {
-                viewModel = _urlParameterVMGenerator.GetViewModel(viewModelType, parameters);
+                viewModel = _urlParameterVmGenerator.GetViewModel(viewModelType, parameters);
             }
             else
             {

@@ -59,30 +59,6 @@ namespace Sextant.Blazor.Tests
         /// </summary>
         /// <returns>A completion.</returns>
         [Fact]
-        public async Task Should_Call_Navigate_To_Js_Runtime()
-        {
-            // Given
-            var received = false;
-            SextantNavigationManager manager = new SextantNavigationManagerFixture();
-
-            var jsRuntime = Substitute.For<IJSRuntime>();
-            jsRuntime
-                .When(x => x.InvokeVoidAsync("SextantFunctions.navigateTo"))
-                .Do(_ => received = true);
-
-            // When
-            await manager.InitializeAsync(jsRuntime).ConfigureAwait(false);
-            await manager.NavigateToAsync("ViewModel");
-
-            // Then
-            received.ShouldBeTrue();
-        }
-
-        /// <summary>
-        /// Tests the GoBackAsync method calls the javascript runtime.
-        /// </summary>
-        /// <returns>A completion.</returns>
-        [Fact]
         public async Task Should_Call_Go_Back_Js_Runtime()
         {
             // Given
