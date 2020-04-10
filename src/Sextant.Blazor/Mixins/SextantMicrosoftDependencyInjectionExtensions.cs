@@ -20,8 +20,8 @@ namespace Sextant.Blazor
         /// <returns>The services.</returns>
         public static IServiceCollection AddSextant(this IServiceCollection services)
         {
-            services.AddSingleton<NavigationRouter>();
-            services.AddSingleton<IParameterViewStackService>();
+            services.AddSingleton<IView, NavigationRouter>();
+            services.AddSingleton<IParameterViewStackService, ParameterViewStackService>();
             services.AddSingleton<SextantNavigationManager>();
             services.AddSingleton<DefaultViewModelFactory>();
             services.AddSingleton<RouteViewViewModelLocator>();
