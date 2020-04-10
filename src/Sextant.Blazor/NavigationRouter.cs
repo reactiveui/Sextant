@@ -27,7 +27,6 @@ namespace Sextant.Blazor
     /// </summary>
     public class NavigationRouter : ComponentBase, IView, IDisposable, IEnableLogger
     {
-        private readonly IParameterViewStackService _viewStackService;
         private readonly RouteViewViewModelLocator _routeViewViewModelLocator;
         private readonly UrlParameterViewModelGenerator _urlParameterVmGenerator;
         private IScheduler _mainScheduler;
@@ -55,9 +54,8 @@ namespace Sextant.Blazor
         /// <param name="navigationManager">The navigation manager.</param>
         /// <param name="routeViewViewModelLocator">The route view model locator.</param>
         /// <param name="urlParameterVmGenerator">The url parameter generator.</param>
-        public NavigationRouter(IParameterViewStackService viewStackService, SextantNavigationManager navigationManager, RouteViewViewModelLocator routeViewViewModelLocator, UrlParameterViewModelGenerator urlParameterVmGenerator)
+        public NavigationRouter(SextantNavigationManager navigationManager, RouteViewViewModelLocator routeViewViewModelLocator, UrlParameterViewModelGenerator urlParameterVmGenerator)
         {
-            _viewStackService = viewStackService;
             _navigationManager = navigationManager;
             _routeViewViewModelLocator = routeViewViewModelLocator;
             _urlParameterVmGenerator = urlParameterVmGenerator;
@@ -117,7 +115,7 @@ namespace Sextant.Blazor
                                     found = true;
                                 }
 
-                                await _viewStackService.PushPage(_forwardStack.Peek(), null, false);
+                                // await _viewStackService.PushPage(_forwardStack.Peek(), null, false);
 
                                 // We're keeping the active viewmodel on the forwardstack so that when we call pushpage, we can recognize it was a forward button nav
                                 // and not send the nav command to the internal router.
@@ -174,34 +172,36 @@ namespace Sextant.Blazor
         /// <inheritdoc/>
         public IObservable<Unit> PopModal()
         {
-            return Observable.Start(
-                async () =>
-                {
-                    if (_modalReference == null)
-                    {
-                        throw new Exception("Your modal component type hasn't been defined in SextantRouter.  Make sure it implements IModalView.");
-                    }
+            // return Observable.Start(
+            //     async () =>
+            //     {
+            //         if (_modalReference == null)
+            //         {
+            //             throw new Exception("Your modal component type hasn't been defined in SextantRouter.  Make sure it implements IModalView.");
+            //         }
+            //
+            //         if (_modalBackStack.Count > 0)
+            //         {
+            //             var modalNavigatingAwayFrom = _modalBackStack.Pop();
+            //
+            //             var modalStack = await _viewStackService.ModalStack.FirstOrDefaultAsync();
+            //             if (modalStack.Count > 1 && _modalBackStack.Count > 0)
+            //             {
+            //                 var previousViewModel = modalStack[modalStack.Count - 2];
+            //                 var viewType = _modalBackStack.Peek();
+            //
+            //                 await _modalReference.ShowViewAsync(viewType, previousViewModel).ConfigureAwait(false);
+            //             }
+            //             else
+            //             {
+            //                 await _modalReference.HideAsync().ConfigureAwait(false);
+            //             }
+            //         }
+            //
+            //         return Unit.Default;
+            //     }).Concat();
 
-                    if (_modalBackStack.Count > 0)
-                    {
-                        var modalNavigatingAwayFrom = _modalBackStack.Pop();
-
-                        var modalStack = await _viewStackService.ModalStack.FirstOrDefaultAsync();
-                        if (modalStack.Count > 1 && _modalBackStack.Count > 0)
-                        {
-                            var previousViewModel = modalStack[modalStack.Count - 2];
-                            var viewType = _modalBackStack.Peek();
-
-                            await _modalReference.ShowViewAsync(viewType, previousViewModel).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            await _modalReference.HideAsync().ConfigureAwait(false);
-                        }
-                    }
-
-                    return Unit.Default;
-                }).Concat();
+            return _navigationManager.GoBackAsync()
         }
 
         /// <inheritdoc/>

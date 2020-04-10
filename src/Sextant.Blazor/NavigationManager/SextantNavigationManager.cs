@@ -84,6 +84,13 @@ namespace Sextant.Blazor
             _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
 
         /// <summary>
+        /// Go back in the browser.
+        /// </summary>
+        /// <returns>A notification of completion.</returns>
+        public ValueTask GoBackModalAsync() =>
+            _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
+
+        /// <summary>
         /// Go to the root of the browser navigation history.
         /// </summary>
         /// <param name="count">number of pages to remove.</param>
