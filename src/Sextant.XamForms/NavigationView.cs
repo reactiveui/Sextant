@@ -52,7 +52,7 @@ namespace Sextant.XamForms
                 Observable
                     .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
                     .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
-                    .WhereNotNull();
+                    .Where(x => x != null);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Sextant.XamForms
                 Observable
                     .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
                     .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
-                    .WhereNotNull();
+                    .Where(x => x != null);
         }
 
         /// <inheritdoc />
@@ -86,7 +86,7 @@ namespace Sextant.XamForms
             Navigation
                 .PopModalAsync()
                 .ToObservable()
-                .ToSignal()
+                .Select(_ => Unit.Default)
                 .ObserveOn(_mainScheduler); // XF completes the pop operation on a background thread :/
 
         /// <inheritdoc />
@@ -94,7 +94,7 @@ namespace Sextant.XamForms
             Navigation
                 .PopAsync(animate)
                 .ToObservable()
-                .ToSignal()
+                .Select(_ => Unit.Default)
                 .ObserveOn(_mainScheduler); // XF completes the pop operation on a background thread :/
 
         /// <inheritdoc />
@@ -102,7 +102,7 @@ namespace Sextant.XamForms
              Navigation
                 .PopToRootAsync(animate)
                 .ToObservable()
-                .ToSignal()
+                .Select(_ => Unit.Default)
                 .ObserveOn(_mainScheduler);
 
         /// <inheritdoc />
