@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
-    <PackageReference Include="Xamarin.Forms" Version="4.4.*" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.*" />
   </ItemGroup>
 
   <ItemGroup>
