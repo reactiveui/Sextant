@@ -1,52 +1,46 @@
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
 namespace Sextant.XamForms
 {
-    [System.Runtime.CompilerServices.NullableAttribute(0)]
-    public class static DependencyResolverMixins
+    public static class DependencyResolverMixins
     {
         public static string NavigationView { get; }
-        public static Sextant.XamForms.NavigationView GetNavigationView([System.Runtime.CompilerServices.NullableAttribute(1)] this Splat.IReadonlyDependencyResolver dependencyResolver, string contract = null) { }
+        public static Sextant.XamForms.NavigationView? GetNavigationView(this Splat.IReadonlyDependencyResolver dependencyResolver, string? contract = null) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainThreadScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
-        public static Splat.IMutableDependencyResolver RegisterNavigationView<[System.Runtime.CompilerServices.NullableAttribute(0)]  TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
+        public static Splat.IMutableDependencyResolver RegisterNavigationView<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
             where TView : Sextant.IView { }
     }
-    [System.Runtime.CompilerServices.NullableAttribute(0)]
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
     {
         public NavigationView() { }
-        public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator, Xamarin.Forms.Page rootPage) { }
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator) { }
+        public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator, Xamarin.Forms.Page rootPage) { }
         public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
-        [System.Runtime.CompilerServices.NullableAttribute(new byte[] {
-                1,
-                2})]
-        public System.IObservable<Sextant.IViewModel> PagePopped { get; }
+        public System.IObservable<Sextant.IViewModel?> PagePopped { get; }
         public System.IObservable<System.Reactive.Unit> PopModal() { }
         public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
         public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate) { }
-        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, [System.Runtime.CompilerServices.NullableAttribute(2)] string contract, bool withNavigationPage = True) { }
-        public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, [System.Runtime.CompilerServices.NullableAttribute(2)] string contract, bool resetStack, bool animate) { }
+        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string? contract, bool withNavigationPage = true) { }
+        public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string? contract, bool resetStack, bool animate) { }
     }
-    public class static SextantExtensions
+    public static class SextantExtensions
     {
         public static void InitializeForms(this Sextant.Sextant sextant) { }
     }
-    [System.Runtime.CompilerServices.NullableAttribute(0)]
-    public class static SextantHelper
+    public static class SextantHelper
     {
-        [System.ObsoleteAttribute("Use the Initialize method.")]
-        public static Sextant.XamForms.NavigationView Initialise<TViewModel>([System.Runtime.CompilerServices.NullableAttribute(2)] System.Reactive.Concurrency.IScheduler mainThreadScheduler = null, [System.Runtime.CompilerServices.NullableAttribute(2)] System.Reactive.Concurrency.IScheduler backgroundScheduler = null, [System.Runtime.CompilerServices.NullableAttribute(2)] ReactiveUI.IViewLocator viewLocator = null)
+        [System.Obsolete("Use the Initialize method.")]
+        public static Sextant.XamForms.NavigationView Initialise<TViewModel>(System.Reactive.Concurrency.IScheduler? mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler? backgroundScheduler = null, ReactiveUI.IViewLocator? viewLocator = null)
             where TViewModel :  class, Sextant.IViewModel { }
-        [System.ObsoleteAttribute("Use the dependency resolver mixins.")]
-        public static Sextant.XamForms.NavigationView Initialize<TViewModel>([System.Runtime.CompilerServices.NullableAttribute(2)] System.Reactive.Concurrency.IScheduler mainThreadScheduler = null, [System.Runtime.CompilerServices.NullableAttribute(2)] System.Reactive.Concurrency.IScheduler backgroundScheduler = null, [System.Runtime.CompilerServices.NullableAttribute(2)] ReactiveUI.IViewLocator viewLocator = null)
+        [System.Obsolete("Use the dependency resolver mixins.")]
+        public static Sextant.XamForms.NavigationView Initialize<TViewModel>(System.Reactive.Concurrency.IScheduler? mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler? backgroundScheduler = null, ReactiveUI.IViewLocator? viewLocator = null)
             where TViewModel :  class, Sextant.IViewModel { }
-        [System.ObsoleteAttribute("Use the dependency resolver mixins.")]
-        public static void RegisterNavigation<[System.Runtime.CompilerServices.NullableAttribute(0)]  TView, TViewModel>([System.Runtime.CompilerServices.NullableAttribute(2)] System.Reactive.Concurrency.IScheduler mainThreadScheduler = null, [System.Runtime.CompilerServices.NullableAttribute(2)] System.Reactive.Concurrency.IScheduler backgroundScheduler = null, [System.Runtime.CompilerServices.NullableAttribute(2)] ReactiveUI.IViewLocator viewLocator = null)
+        [System.Obsolete("Use the dependency resolver mixins.")]
+        public static void RegisterNavigation<TView, TViewModel>(System.Reactive.Concurrency.IScheduler? mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler? backgroundScheduler = null, ReactiveUI.IViewLocator? viewLocator = null)
             where TView : ReactiveUI.IViewFor
             where TViewModel :  class, Sextant.IViewModel { }
-        [System.ObsoleteAttribute("Use the dependency resolver mixins.")]
-        public static void RegisterView<[System.Runtime.CompilerServices.NullableAttribute(0)]  TView, TViewModel>([System.Runtime.CompilerServices.NullableAttribute(2)] string contract = null)
+        [System.Obsolete("Use the dependency resolver mixins.")]
+        public static void RegisterView<TView, TViewModel>(string? contract = null)
             where TView : ReactiveUI.IViewFor, new ()
             where TViewModel :  class, Sextant.IViewModel { }
     }
