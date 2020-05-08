@@ -17,6 +17,7 @@ namespace System.Reactive.Linq
         /// <typeparam name="T">The current type of the observable.</typeparam>
         /// <param name="observable">The observable to convert.</param>
         /// <returns>The converted observable.</returns>
+        [Obsolete("This extension method causes conflicts in the System.Reactive.Linq namespace")]
         public static IObservable<Unit> ToSignal<T>(this IObservable<T> observable)
         {
             if (observable == null)
