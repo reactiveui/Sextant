@@ -5,7 +5,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Xamarin.Forms" Version="4.5.*" />
-        <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
+        <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
         <PackageReference Include="ReactiveUI.XamForms" Version="11.*" />
         <PackageReference Include="Pharmacist.MsBuild" Version="1.*" PrivateAssets="all" />
         <PackageReference Include="Pharmacist.Common" Version="1.*" />
