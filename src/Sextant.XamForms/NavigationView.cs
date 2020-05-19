@@ -50,15 +50,14 @@ namespace Sextant.XamForms
 
             PagePopped =
                 Observable
-                    .FromEvent<EventHandler<NavigationEventArgs>, NavigationEventArgs>(
+                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
                         handler =>
                         {
-                            void Handler(object sender, NavigationEventArgs args) => handler(args);
+                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
                             return Handler;
                         },
                         x => Popped += x,
                         x => Popped -= x)
-                    .Select(ep => ep.Page.BindingContext)
                     .Cast<IViewModel>();
         }
 
@@ -77,15 +76,14 @@ namespace Sextant.XamForms
 
             PagePopped =
                 Observable
-                    .FromEvent<EventHandler<NavigationEventArgs>, NavigationEventArgs>(
+                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
                         handler =>
                         {
-                            void Handler(object sender, NavigationEventArgs args) => handler(args);
+                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
                             return Handler;
                         },
                         x => Popped += x,
                         x => Popped -= x)
-                    .Select(ep => ep.Page.BindingContext)
                     .Cast<IViewModel>();
         }
 
