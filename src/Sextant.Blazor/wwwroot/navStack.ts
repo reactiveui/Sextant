@@ -105,7 +105,7 @@ function goBack() {
 }
 
 function goBackModal() {
-    notifyNavigationAsync(SextantNavigationType.back, absoluteHref, null);
+    notifyNavigationAsync(SextantNavigationType.back, location.href, null).then(r => { });
 }
 
 function goToRoot(count) {

@@ -14,6 +14,7 @@ const SextantFunctions = {
     getBaseUri: () => document.baseURI,
     getLocationHref: () => location.href,
     goBack,
+    goBackModal,
     goToRoot
 };
 var SextantNavigationType;
@@ -90,6 +91,9 @@ function replaceState(state) {
 }
 function goBack() {
     history.back(); // This will trigger popstate.
+}
+function goBackModal() {
+    notifyNavigationAsync(SextantNavigationType.back, location.href, null).then(r => { });
 }
 function goToRoot(count) {
     if (count >= 0)

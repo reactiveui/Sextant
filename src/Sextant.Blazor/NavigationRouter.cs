@@ -200,8 +200,7 @@ namespace Sextant.Blazor
             //
             //         return Unit.Default;
             //     }).Concat();
-
-            return _navigationManager.GoBackAsync()
+            return Observable.FromAsync(async _ => await _navigationManager.GoBackAsync());
         }
 
         /// <inheritdoc/>
