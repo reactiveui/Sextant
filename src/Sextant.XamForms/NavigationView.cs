@@ -50,9 +50,15 @@ namespace Sextant.XamForms
 
             PagePopped =
                 Observable
-                    .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
-                    .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
-                    .Where(x => x != null);
+                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
+                        handler =>
+                        {
+                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
+                            return Handler;
+                        },
+                        x => Popped += x,
+                        x => Popped -= x)
+                    .Cast<IViewModel>();
         }
 
         /// <summary>
@@ -70,16 +76,22 @@ namespace Sextant.XamForms
 
             PagePopped =
                 Observable
-                    .FromEventPattern<NavigationEventArgs>(x => Popped += x, x => Popped -= x)
-                    .Select(ep => ep.EventArgs.Page.BindingContext as IViewModel)
-                    .Where(x => x != null);
+                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
+                        handler =>
+                        {
+                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
+                            return Handler;
+                        },
+                        x => Popped += x,
+                        x => Popped -= x)
+                    .Cast<IViewModel>();
         }
 
         /// <inheritdoc />
         public IScheduler MainThreadScheduler => _mainScheduler;
 
         /// <inheritdoc />
-        public IObservable<IViewModel?> PagePopped { get; }
+        public IObservable<IViewModel> PagePopped { get; }
 
         /// <inheritdoc />
         public IObservable<Unit> PopModal() =>
