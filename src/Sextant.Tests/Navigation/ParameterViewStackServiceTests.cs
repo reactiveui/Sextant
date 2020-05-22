@@ -127,6 +127,31 @@ namespace Sextant.Tests
                 await viewModel.DidNotReceive().WhenNavigatedFrom(navigationParameter);
             }
 
+            /// <summary>
+            /// Tests to make sure we receive a navigation methods in the correct order.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_In_Order()
+            {
+                // Given
+                var view = Substitute.For<IView>();
+                var viewModel = Substitute.For<INavigable>();
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushPage(viewModel, navigationParameter);
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    viewModel.WhenNavigatingTo(Arg.Any<INavigationParameter>());
+                    view.PushPage(Arg.Any<IViewModel>(), null, Arg.Any<bool>(), Arg.Any<bool>());
+                    viewModel.WhenNavigatedTo(Arg.Any<INavigationParameter>());
+                });
+            }
+
             /// <summary>Tests to make sure we receive a push page notification.</summary>
             /// <param name="contract">The contract.</param>
             /// <param name="reset">Reset the stack.</param>
@@ -581,6 +606,32 @@ namespace Sextant.Tests
 
                 // Then
                 await viewModel.DidNotReceive().WhenNavigatingTo(navigationParameter);
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a navigation methods in the correct order.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_In_Order()
+            {
+                // Given
+                var view = Substitute.For<IView>();
+                var viewModel = Substitute.For<INavigable>();
+                view.PagePopped.Returns(Observable.Return(viewModel));
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view).WithPushed(viewModel);
+
+                // When
+                await sut.PopPage(navigationParameter);
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    view.PopPage(Arg.Any<bool>());
+                    viewModel.WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                    viewModel.WhenNavigatedTo(Arg.Any<INavigationParameter>());
+                });
             }
         }
     }
