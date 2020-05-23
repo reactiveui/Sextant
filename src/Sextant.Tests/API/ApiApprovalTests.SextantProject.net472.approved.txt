@@ -52,7 +52,7 @@ namespace Sextant
     public interface IParameterViewStackService : Sextant.IViewStackService
     {
         System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = true);
-        System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable modal, Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true);
+        System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable navigableModal, Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true);
         System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
             where TViewModel : Sextant.INavigable;
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true);

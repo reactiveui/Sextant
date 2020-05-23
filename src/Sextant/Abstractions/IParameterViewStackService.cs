@@ -39,12 +39,12 @@ namespace Sextant
         /// <summary>
         /// Pushes the <see cref="IViewModel" /> onto the stack.
         /// </summary>
-        /// <param name="modal">The modal.</param>
+        /// <param name="navigableModal">The modal.</param>
         /// <param name="parameter">The parameter.</param>
         /// <param name="contract">The contract.</param>
         /// <param name="withNavigationPage">Value indicating whether to wrap the modal in a navigation page.</param>
         /// <returns>An observable that signals when the push has been completed.</returns>
-        IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true);
+        IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true);
 
         /// <summary>
         /// Pushes the <see cref="IViewModel" /> onto the stack.

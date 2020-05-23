@@ -47,15 +47,17 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(parameter));
             }
 
+            navigableViewModel
+                .WhenNavigatingTo(parameter)
+                .ObserveOn(View.MainThreadScheduler)
+                .Subscribe(navigating =>
+                    Logger.Debug(
+                        $"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
+
             return View
                 .PushPage(navigableViewModel, contract, resetStack, animate)
                 .Do(_ =>
                 {
-                    navigableViewModel
-                        .WhenNavigatingTo(parameter)
-                        .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
-
                     AddToStackAndTick(PageSubject, navigableViewModel, resetStack);
                     Logger.Debug($"Added page '{navigableViewModel.Id}' (contract '{contract}') to stack.");
 
@@ -79,15 +81,16 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(parameter));
             }
 
+            navigableModal
+                .WhenNavigatingTo(parameter)
+                .ObserveOn(View.MainThreadScheduler)
+                .Subscribe(navigating =>
+                    Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"));
+
             return View
                 .PushModal(navigableModal, contract, withNavigationPage)
                 .Do(_ =>
                 {
-                    navigableModal
-                        .WhenNavigatingTo(parameter)
-                        .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigating => Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"));
-
                     AddToStackAndTick(ModalSubject, navigableModal, false);
                     Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
 
