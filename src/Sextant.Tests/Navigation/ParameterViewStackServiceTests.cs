@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -530,6 +532,27 @@ namespace Sextant.Tests
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
+            public async Task Should_Call_Destroy()
+            {
+                // Given
+                var viewModel = Substitute.For<IEverything>();
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(new NavigationViewMock());
+                await sut.PushPage(viewModel);
+                await sut.PushPage(viewModel);
+
+                // When
+                await sut.PopPage(navigationParameter);
+
+                // Then
+                viewModel.Received().Destroy();
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
             public async Task Should_Not_Call_When_Navigated_To()
             {
                 // Given
@@ -609,18 +632,26 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Tests to make sure we receive a navigation methods in the correct order.
+            /// Tests to make sure we receive a push page notification.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
             public async Task Should_Call_In_Order()
             {
                 // Given
-                var view = Substitute.For<IView>();
-                var viewModel = Substitute.For<INavigable>();
-                view.PagePopped.Returns(Observable.Return(viewModel));
+                var viewModel1 = Substitute.For<IEverything>();
+                var viewModel2 = Substitute.For<IEverything>();
+                var subject = new Subject<IViewModel>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view).WithPushed(viewModel);
+                var view = Substitute.For<IView>();
+                view.When(x => x.PopPage())
+                    .Do(_ => subject.OnNext(viewModel2));
+                view
+                    .PagePopped
+                    .Returns(subject.AsObservable());
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
 
                 // When
                 await sut.PopPage(navigationParameter);
@@ -629,8 +660,8 @@ namespace Sextant.Tests
                 Received.InOrder(() =>
                 {
                     view.PopPage(Arg.Any<bool>());
-                    viewModel.WhenNavigatedFrom(Arg.Any<INavigationParameter>());
-                    viewModel.WhenNavigatedTo(Arg.Any<INavigationParameter>());
+                    viewModel2.WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                    viewModel2.Destroy();
                 });
             }
         }

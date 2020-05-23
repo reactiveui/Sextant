@@ -166,6 +166,25 @@ namespace Sextant.Tests
                 result.ShouldBeOfType<InvalidOperationException>();
                 result?.Message.ShouldBe("Stack is empty.");
             }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_Destroy()
+            {
+                // Given
+                var viewModel = Substitute.For<IEverything>();
+                var view = Substitute.For<IView>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view).WithModal(viewModel);
+
+                // When
+                await sut.PopModal();
+
+                // Then
+                viewModel.Received().Destroy();
+            }
         }
 
         /// <summary>
@@ -181,8 +200,8 @@ namespace Sextant.Tests
             public async Task Should_Pop_Page()
             {
                 // Given
-                ViewStackService sut = new ViewStackServiceFixture();
-                await sut.PushModal(new NavigableViewModelMock());
+                ViewStackService sut = new ViewStackServiceFixture().WithView(new NavigationViewMock());
+                await sut.PushPage(new NavigableViewModelMock());
 
                 // When
                 await sut.PopPage();
@@ -201,7 +220,7 @@ namespace Sextant.Tests
             {
                 // Given
                 ViewStackService sut = new ViewStackServiceFixture();
-                await sut.PushModal(new NavigableViewModelMock());
+                await sut.PushPage(new NavigableViewModelMock());
 
                 // When
                 await sut.PopPage();
@@ -226,6 +245,25 @@ namespace Sextant.Tests
 
                 // Then
                 result.ShouldBeOfType<Unit>();
+            }
+
+            /// <summary>
+            /// Tests to make sure we destroy the view model.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_Destroy()
+            {
+                // Given
+                var viewModel = Substitute.For<IEverything>();
+                var view = new NavigationViewMock();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view).WithPushed(viewModel);
+
+                // When
+                await sut.PopPage();
+
+                // Then
+                viewModel.Received().Destroy();
             }
         }
 
@@ -311,6 +349,34 @@ namespace Sextant.Tests
 
                 // Then
                 result.ShouldHaveSingleItem();
+            }
+
+            /// <summary>
+            /// Tests to make sure we destroy the view model.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_Destroy()
+            {
+                // Given
+                var viewModel1 = Substitute.For<IEverything>();
+                var viewModel2 = Substitute.For<IEverything>();
+                var viewModel3 = Substitute.For<IEverything>();
+                var view = Substitute.For<IView>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
+                await sut.PushPage(viewModel3);
+
+                // When
+                await sut.PopToRootPage();
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    viewModel3.Destroy();
+                    viewModel2.Destroy();
+                });
             }
         }
 

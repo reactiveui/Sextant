@@ -42,6 +42,14 @@ namespace Sextant.Tests
             return stack;
         }
 
+        public ParameterViewStackService WithModal<TViewModel>(TViewModel viewModel)
+            where TViewModel : INavigable
+        {
+            var stack = Build();
+            stack.PushModal(viewModel).Subscribe();
+            return stack;
+        }
+
         private ParameterViewStackService Build() => new ParameterViewStackService(_view);
     }
 }

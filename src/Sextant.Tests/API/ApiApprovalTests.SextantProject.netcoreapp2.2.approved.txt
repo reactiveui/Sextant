@@ -36,6 +36,10 @@ namespace Sextant
         public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, T> factory)
             where T : Sextant.IViewStackService { }
     }
+    public interface IDestructible
+    {
+        void Destroy();
+    }
     public interface INavigable : Sextant.INavigated, Sextant.INavigating, Sextant.IViewModel { }
     public interface INavigated
     {
@@ -90,6 +94,13 @@ namespace Sextant
             where TViewModel : Sextant.IViewModel;
         System.IObservable<Sextant.IViewModel> TopModal();
         System.IObservable<Sextant.IViewModel> TopPage();
+    }
+    public static class LifeCycleExtensions
+    {
+        public static object InvokeViewModelAction<T>(this object viewModel, System.Action<T> action)
+            where T :  class { }
+        public static void InvokeViewModelAction<T>(this object viewModel, System.IObserver<T> action)
+            where T :  class { }
     }
     public class NavigationParameter : System.Collections.Generic.Dictionary<string, object>, Sextant.INavigationParameter, System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable
     {
