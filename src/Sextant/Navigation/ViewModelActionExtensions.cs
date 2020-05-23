@@ -37,28 +37,5 @@ namespace Sextant
 
             return viewModel;
         }
-
-        /// <summary>
-        /// This is a thing I lifted from Prism.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="action">An action.</param>
-        /// <typeparam name="T">A type.</typeparam>
-        public static void InvokeViewModelAction<T>(this object viewModel, IObserver<T> action)
-            where T : class
-        {
-            if (action == null)
-            {
-                throw new ArgumentNullException(nameof(action));
-            }
-
-            if (viewModel is IViewModel element)
-            {
-                if (element is T viewModelAsT)
-                {
-                    action.OnNext(viewModelAsT);
-                }
-            }
-        }
     }
 }
