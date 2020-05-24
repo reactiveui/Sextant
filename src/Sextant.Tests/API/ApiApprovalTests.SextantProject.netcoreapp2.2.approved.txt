@@ -95,13 +95,6 @@ namespace Sextant
         System.IObservable<Sextant.IViewModel> TopModal();
         System.IObservable<Sextant.IViewModel> TopPage();
     }
-    public static class LifeCycleExtensions
-    {
-        public static object InvokeViewModelAction<T>(this object viewModel, System.Action<T> action)
-            where T :  class { }
-        public static void InvokeViewModelAction<T>(this object viewModel, System.IObserver<T> action)
-            where T :  class { }
-    }
     public class NavigationParameter : System.Collections.Generic.Dictionary<string, object>, Sextant.INavigationParameter, System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable
     {
         public NavigationParameter() { }
@@ -126,6 +119,11 @@ namespace Sextant
     public static class SextantExtensions
     {
         public static void Initialize(this Sextant.Sextant sextant) { }
+    }
+    public static class ViewModelActionExtensions
+    {
+        public static object InvokeViewModelAction<T>(this object viewModel, System.Action<T> action)
+            where T :  class { }
     }
     public static class ViewModelFactory
     {
