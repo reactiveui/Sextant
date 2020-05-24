@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
@@ -83,13 +82,25 @@ namespace Sextant
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the pop is complete.</returns>
-        public IObservable<Unit> PopModal(bool animate = true) => View.PopModal().Do(_ => PopStackAndTick(ModalSubject));
+        public IObservable<Unit> PopModal(bool animate = true) =>
+            View.PopModal()
+                .Do(_ =>
+                {
+                    var modal = PopStackAndTick(ModalSubject);
+                    modal.InvokeViewModelAction<IDestructible>(x => x.Destroy());
+                });
 
         /// <inheritdoc />
-        public IObservable<Unit> PopPage(bool animate = true) => View.PopPage(animate);
+        public IObservable<Unit> PopPage(bool animate = true)
+        {
+            var top = PageStack.FirstAsync().Wait()[0];
+            return View.PopPage(animate).Do(_ => top.InvokeViewModelAction<IDestructible>(x => x.Destroy()));
+        }
 
         /// <inheritdoc />
-        public IObservable<Unit> PopToRootPage(bool animate = true) => View.PopToRootPage(animate).Do(_ => PopRootAndTick(PageSubject));
+        public IObservable<Unit> PopToRootPage(bool animate = true) =>
+            View.PopToRootPage(animate)
+                .Do(_ => PopRootAndTick(PageSubject));
 
         /// <inheritdoc />
         public IObservable<Unit> PushModal(IViewModel modal, string? contract = null, bool withNavigationPage = true)
@@ -245,6 +256,16 @@ namespace Sextant
                    if (stack.Count > 1)
                    {
                        poppedStack = stack.RemoveRange(stack.IndexOf(stack[1]), stack.Count - 1);
+
+                       foreach (T popped in stack.RemoveRange(poppedStack).Reverse())
+                       {
+                           if (popped == null)
+                           {
+                               continue;
+                           }
+
+                           popped.InvokeViewModelAction<IDestructible>(x => x.Destroy());
+                       }
                    }
                    else
                    {

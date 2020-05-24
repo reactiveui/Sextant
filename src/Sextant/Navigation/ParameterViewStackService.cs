@@ -4,12 +4,8 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading;
-using ReactiveUI;
 
 namespace Sextant
 {
@@ -130,14 +126,13 @@ namespace Sextant
                 .PopPage(animate)
                 .Do(_ =>
                 {
-                    if (poppedPage is INavigable navigable)
-                    {
-                        navigable
-                            .WhenNavigatedFrom(parameter)
-                            .ObserveOn(View.MainThreadScheduler)
-                            .Subscribe(navigatedFrom =>
-                                Logger.Debug($"Called `WhenNavigatedFrom` on '{navigable.Id}' passing parameter {parameter}"));
-                    }
+                    poppedPage
+                            .InvokeViewModelAction<INavigable>(x =>
+                                x.WhenNavigatedFrom(parameter)
+                                    .ObserveOn(View.MainThreadScheduler)
+                                    .Subscribe(navigatedFrom =>
+                                        Logger.Debug($"Called `WhenNavigatedFrom` on '{poppedPage.Id}' passing parameter {parameter}")))
+                            .InvokeViewModelAction<IDestructible>(x => x.Destroy());
 
                     IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait();
                     if (topPage is INavigated navigated)

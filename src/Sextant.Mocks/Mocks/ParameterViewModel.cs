@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using ReactiveUI;
@@ -16,7 +17,7 @@ namespace Sextant.Mocks
     /// View model to test passing parameters.
     /// </summary>
     /// <seealso cref="IViewModel" />
-    public class ParameterViewModel : ReactiveObject, INavigable
+    public class ParameterViewModel : ReactiveObject, INavigable, IDestructible
     {
         private string? _text;
         private int _meaning;
@@ -34,6 +35,11 @@ namespace Sextant.Mocks
         /// </summary>
         public int Meaning { get => _meaning; set => this.RaiseAndSetIfChanged(ref _meaning, value); }
 
+        /// <summary>
+        /// Gets the disposable.
+        /// </summary>
+        public CompositeDisposable Disposable { get; } = new CompositeDisposable();
+
         /// <inheritdoc />
         public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
 
@@ -42,6 +48,12 @@ namespace Sextant.Mocks
 
         /// <inheritdoc />
         public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
+
+        /// <inheritdoc/>
+        public void Destroy()
+        {
+            Disposable?.Dispose();
+        }
 
         private void Unwrap(INavigationParameter parameter)
         {

@@ -36,6 +36,10 @@ namespace Sextant
         public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, T> factory)
             where T : Sextant.IViewStackService { }
     }
+    public interface IDestructible
+    {
+        void Destroy();
+    }
     public interface INavigable : Sextant.INavigated, Sextant.INavigating, Sextant.IViewModel { }
     public interface INavigated
     {
@@ -115,6 +119,11 @@ namespace Sextant
     public static class SextantExtensions
     {
         public static void Initialize(this Sextant.Sextant sextant) { }
+    }
+    public static class ViewModelActionExtensions
+    {
+        public static object InvokeViewModelAction<T>(this object viewModel, System.Action<T> action)
+            where T :  class { }
     }
     public static class ViewModelFactory
     {
