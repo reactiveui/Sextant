@@ -4,4 +4,8 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj" />
+    </ItemGroup>
+
 </Project>
