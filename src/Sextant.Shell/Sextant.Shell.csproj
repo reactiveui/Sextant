@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Xamarin.Forms\Xamarin.Forms.Core\Xamarin.Forms.Core.csproj" />
+      <ProjectReference Include="..\Sextant\Sextant.csproj" />
     </ItemGroup>
 
 </Project>

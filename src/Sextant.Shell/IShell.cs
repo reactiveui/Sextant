@@ -31,6 +31,11 @@ namespace Sextant.Shell
         event EventHandler Disappearing;
 
         /// <summary>
+        /// Structure changed event handler.
+        /// </summary>
+        event EventHandler StructureChanged;
+
+        /// <summary>
         /// Property Changing event handler.
         /// </summary>
         event PropertyChangingEventHandler PropertyChanging;
@@ -39,11 +44,6 @@ namespace Sextant.Shell
         /// Property Changing event handler.
         /// </summary>
         event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Structure changed event handler.
-        /// </summary>
-        event EventHandler StructureChanged;
 
         /// <summary>
         /// Item collection changed.
@@ -90,14 +90,5 @@ namespace Sextant.Shell
         /// <param name="animate">Animate the navigation.</param>
         /// <returns>A completion notification.</returns>
         Task GoToAsync(ShellNavigationState state, bool animate);
-    }
-
-    public interface IShellRouteConverter
-    {
-        ShellNavigationState Convert(IRoute route);
-    }
-
-    public interface IRoute
-    {
     }
 }
