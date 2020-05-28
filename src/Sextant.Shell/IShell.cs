@@ -91,4 +91,13 @@ namespace Sextant.Shell
         /// <returns>A completion notification.</returns>
         Task GoToAsync(ShellNavigationState state, bool animate);
     }
+
+    public interface IShellRouteConverter
+    {
+        ShellNavigationState Convert(IRoute route);
+    }
+
+    public interface IRoute
+    {
+    }
 }
