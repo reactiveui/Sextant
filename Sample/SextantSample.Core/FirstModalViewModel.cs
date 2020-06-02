@@ -3,10 +3,11 @@ using ReactiveUI;
 using Sextant;
 using System;
 using System.Diagnostics;
+using Splat;
 
 namespace SextantSample.ViewModels
 {
-    public class FirstModalViewModel : ViewModelBase
+    public class FirstModalViewModel : ViewModelBase, IDestructible
     {
         public ReactiveCommand<Unit, Unit> OpenModal { get; set; }
 
@@ -27,8 +28,14 @@ namespace SextantSample.ViewModels
                             outputScheduler: RxApp.MainThreadScheduler);
 
             OpenModal.Subscribe(x => Debug.WriteLine("PagePushed"));
-            PopModal.Subscribe(x => Debug.WriteLine("PagePoped"));
+            PopModal.Subscribe(x => Debug.WriteLine("PagePopped"));
             PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+        }
+
+
+        public void Destroy()
+        {
+            Debug.WriteLine($"Destroy: {nameof(FirstModalViewModel)}");
         }
     }
 }

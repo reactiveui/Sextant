@@ -4,7 +4,11 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using NSubstitute;
 using Sextant.Mocks;
+using Sextant.Tests.Mocks;
 using Shouldly;
 using Xunit;
 
@@ -35,6 +39,26 @@ namespace Sextant.Tests
 
                 // Then
                 sut.Disposable.IsDisposed.ShouldBeTrue();
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_When_Page_Popped()
+            {
+                // Given
+                var viewModel = Substitute.For<IDestructibleMock>();
+                var view = new NavigationViewMock();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushPage(viewModel);
+                await sut.PopPage();
+
+                // Then
+                viewModel.Received().Destroy();
             }
         }
     }

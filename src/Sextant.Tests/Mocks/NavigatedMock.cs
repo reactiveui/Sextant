@@ -4,12 +4,10 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
 
-namespace Sextant.Mocks.Mocks
+namespace Sextant.Tests.Mocks
 {
     internal class NavigatedMock : INavigated
     {

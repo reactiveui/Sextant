@@ -41,6 +41,7 @@ namespace Sextant
                     if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
                     {
                         var removedPage = PopStackAndTick(PageSubject);
+                        removedPage.InvokeViewModelAction<IDestructible>(x => x.Destroy());
                         Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
                     }
                 })
