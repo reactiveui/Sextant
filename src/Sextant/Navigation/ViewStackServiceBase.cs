@@ -35,7 +35,7 @@ namespace Sextant
 
             View
                 .PagePopped
-                .Do(poppedPage =>
+                .Subscribe(poppedPage =>
                 {
                     var currentPageStack = PageSubject.Value;
                     if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
@@ -43,8 +43,7 @@ namespace Sextant
                         var removedPage = PopStackAndTick(PageSubject);
                         Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
                     }
-                })
-                .SubscribeSafe();
+                });
         }
 
         /// <summary>
@@ -93,8 +92,11 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PopPage(bool animate = true)
         {
-            var top = PageStack.FirstAsync().Wait()[0];
-            return View.PopPage(animate).Do(_ => top.InvokeViewModelAction<IDestructible>(x => x.Destroy()));
+            var top = TopPage().Wait();
+            return View.PopPage(animate).Do(_ =>
+            {
+                top.InvokeViewModelAction<IDestructible>(x => x.Destroy());
+            });
         }
 
         /// <inheritdoc />

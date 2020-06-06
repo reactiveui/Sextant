@@ -12,4 +12,31 @@
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="IDestructibleMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="IEverything.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NavigableViewModelMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NavigatedMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NavigationViewMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NullViewModelMock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PageView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ParameterViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

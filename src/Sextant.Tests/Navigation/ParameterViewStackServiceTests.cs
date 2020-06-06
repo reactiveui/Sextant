@@ -545,7 +545,7 @@ namespace Sextant.Tests
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                viewModel.Received().Destroy();
+                viewModel.Received(1).Destroy();
             }
 
             /// <summary>
@@ -644,6 +644,7 @@ namespace Sextant.Tests
                 var subject = new Subject<IViewModel>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
                 var view = Substitute.For<IView>();
+
                 view.When(x => x.PopPage())
                     .Do(_ => subject.OnNext(viewModel2));
                 view
