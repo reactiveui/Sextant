@@ -41,7 +41,6 @@ namespace Sextant
                     if (currentPageStack.Count > 0 && poppedPage == currentPageStack[currentPageStack.Count - 1])
                     {
                         var removedPage = PopStackAndTick(PageSubject);
-                        removedPage.InvokeViewModelAction<IDestructible>(x => x.Destroy());
                         Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
                     }
                 });
@@ -91,7 +90,14 @@ namespace Sextant
                 });
 
         /// <inheritdoc />
-        public IObservable<Unit> PopPage(bool animate = true) => View.PopPage(animate);
+        public IObservable<Unit> PopPage(bool animate = true)
+        {
+            var top = TopPage().Wait();
+            return View.PopPage(animate).Do(_ =>
+            {
+                top.InvokeViewModelAction<IDestructible>(x => x.Destroy());
+            });
+        }
 
         /// <inheritdoc />
         public IObservable<Unit> PopToRootPage(bool animate = true) =>

@@ -183,7 +183,40 @@ namespace Sextant.Tests
                 await sut.PopModal();
 
                 // Then
-                viewModel.Received().Destroy();
+                viewModel.Received(1).Destroy();
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_In_Order()
+            {
+                // Given
+                var viewModel1 = Substitute.For<IEverything>();
+                var viewModel2 = Substitute.For<IEverything>();
+                var subject = new Subject<IViewModel>();
+                var view = Substitute.For<IView>();
+
+                view.When(x => x.PopPage())
+                    .Do(_ => subject.OnNext(viewModel2));
+                view
+                    .PagePopped
+                    .Returns(subject.AsObservable());
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                await sut.PushModal(viewModel1);
+                await sut.PushModal(viewModel2);
+
+                // When
+                await sut.PopModal();
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    view.PopModal();
+                    viewModel2.Destroy();
+                });
             }
         }
 
@@ -255,15 +288,52 @@ namespace Sextant.Tests
             public async Task Should_Call_Destroy()
             {
                 // Given
-                var viewModel = Substitute.For<IEverything>();
+                var viewModel1 = Substitute.For<IEverything>();
+                var viewModel2 = Substitute.For<IEverything>();
                 var view = new NavigationViewMock();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view).WithPushed(viewModel);
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
 
                 // When
                 await sut.PopPage();
 
                 // Then
-                viewModel.Received().Destroy();
+                viewModel2.Received(1).Destroy();
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a event notifications in order.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_In_Order()
+            {
+                // Given
+                var viewModel1 = Substitute.For<IEverything>();
+                var viewModel2 = Substitute.For<IEverything>();
+                var subject = new Subject<IViewModel>();
+                var view = Substitute.For<IView>();
+
+                view.When(x => x.PopPage())
+                    .Do(_ => subject.OnNext(viewModel2));
+                view
+                    .PagePopped
+                    .Returns(subject.AsObservable());
+
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
+
+                // When
+                await sut.PopPage();
+
+                // Then
+                Received.InOrder(() =>
+                {
+                    view.PopPage();
+                    viewModel2.Destroy();
+                });
             }
         }
 

@@ -8,7 +8,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
 using Sextant.Mocks;
-using Sextant.Tests.Mocks;
 using Shouldly;
 using Xunit;
 
@@ -17,7 +16,7 @@ namespace Sextant.Tests
     /// <summary>
     /// Test a <see cref="IDestructible"/> implementation.
     /// </summary>
-    public class DestructibleTests
+    public sealed class DestructibleTests
     {
         /// <summary>
         /// Tests the destroy method.
@@ -49,16 +48,17 @@ namespace Sextant.Tests
             public async Task Should_Call_When_Page_Popped()
             {
                 // Given
-                var viewModel = Substitute.For<IDestructibleMock>();
-                var view = new NavigationViewMock();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                var viewModel1 = Substitute.For<IDestructibleMock>();
+                var viewModel2 = Substitute.For<IDestructibleMock>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(new NavigationViewMock());
 
                 // When
-                await sut.PushPage(viewModel);
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
                 await sut.PopPage();
 
                 // Then
-                viewModel.Received().Destroy();
+                viewModel2.Received(1).Destroy();
             }
         }
     }
