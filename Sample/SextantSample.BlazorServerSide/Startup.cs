@@ -18,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Sextant.Blazor;
 using SextantSample.BlazorServerSide.Data;
 using Splat;
+using Splat.Microsoft.Extensions.DependencyInjection;
 
 namespace SextantSample.BlazorServerSide
 {
@@ -73,6 +74,7 @@ namespace SextantSample.BlazorServerSide
             services.AddServerSideBlazor();
 
             services.AddSingleton<WeatherForecastService>();
+            services.UseMicrosoftDependencyResolver();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

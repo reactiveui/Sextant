@@ -22,6 +22,17 @@ namespace Sextant.Blazor
         /// Registers the <see cref="NavigationRouter"/> for displaying routes.
         /// </summary>
         /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <returns>The mutable dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterNavigationRouter(this IMutableDependencyResolver dependencyResolver)
+        {
+            dependencyResolver.RegisterLazySingleton<IView>(() => new NavigationRouter(), nameof(NavigationRouter));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the <see cref="NavigationRouter"/> for displaying routes.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="navigationRouter">The navigation router.</param>
         /// <returns>The mutable dependency resolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationRouter(this IMutableDependencyResolver dependencyResolver, NavigationRouter navigationRouter)
