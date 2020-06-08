@@ -115,7 +115,7 @@ namespace Sextant.Blazor.Tests
 
             var jsRuntime = Substitute.For<IJSRuntime>();
             jsRuntime
-                .When(x => x.InvokeVoidAsync(SextantFunctions.ReplaceState, Arg.Any<Dictionary<string, object>>()))
+                .When(x => x.InvokeVoidAsync(SextantFunctions.ReplaceState, Arg.Any<object[]>()))
                 .Do(_ => received = true);
 
             // When
@@ -139,7 +139,7 @@ namespace Sextant.Blazor.Tests
 
             var jsRuntime = Substitute.For<IJSRuntime>();
             jsRuntime
-                .When(x => x.InvokeVoidAsync(SextantFunctions.GoToRoot, Arg.Any<int>()))
+                .When(x => x.InvokeVoidAsync(SextantFunctions.GoToRoot, Arg.Any<object[]>()))
                 .Do(_ => received = true);
 
             // When

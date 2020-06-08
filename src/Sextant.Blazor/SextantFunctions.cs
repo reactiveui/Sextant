@@ -8,7 +8,7 @@ namespace Sextant.Blazor
     /// <summary>
     /// Represents the Sextant Functions javascript names in string format.
     /// </summary>
-    public class SextantFunctions
+    public static class SextantFunctions
     {
         /// <summary>
         /// Gets the go back function.

@@ -1,0 +1,175 @@
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sextant.Blazor.Tests")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
+namespace Sextant.Blazor
+{
+    public static class DependencyResolverMixins
+    {
+        public static Splat.IMutableDependencyResolver RegisterNavigationManager(this Splat.IMutableDependencyResolver dependencyResolver) { }
+        public static Splat.IMutableDependencyResolver RegisterNavigationRouter(this Splat.IMutableDependencyResolver dependencyResolver, Sextant.Blazor.NavigationRouter navigationRouter) { }
+        public static Splat.IMutableDependencyResolver RegisterNavigationRouter(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.Blazor.NavigationRouter> factory) { }
+        public static Splat.IMutableDependencyResolver RegisterRoute<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string route, string contract = null)
+            where TView : Microsoft.AspNetCore.Components.IComponent, new ()
+            where TViewModel :  class, Sextant.IViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterRoute<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string route, System.Func<System.Collections.Generic.Dictionary<string, string>, Sextant.IViewModel> generator, string contract = null)
+            where TView : Microsoft.AspNetCore.Components.IComponent, new ()
+            where TViewModel :  class, Sextant.IViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterRouteViewViewModelLocator(this Splat.IMutableDependencyResolver dependencyResolver) { }
+        public static Splat.IMutableDependencyResolver RegisterStackServices(this Splat.IMutableDependencyResolver dependencyResolver, Sextant.IView view) { }
+        public static Splat.IMutableDependencyResolver RegisterUrlParameterViewModelGenerator(this Splat.IMutableDependencyResolver dependencyResolver) { }
+        public static System.Type ResolveView<TViewModel>(this Splat.IReadonlyDependencyResolver dependencyResolver, string contract = null)
+            where TViewModel :  class { }
+        public static System.Type ResolveView<TViewModel>(this Splat.IReadonlyDependencyResolver dependencyResolver, TViewModel viewModel, string contract = null)
+            where TViewModel :  class, Sextant.IViewModel { }
+    }
+    public class DirectRouteViewModel : Sextant.IViewModel
+    {
+        public DirectRouteViewModel(string route) { }
+        public string Id { get; }
+        public string Route { get; set; }
+    }
+    public interface IModalView
+    {
+        System.Threading.Tasks.Task HideAsync();
+        System.Threading.Tasks.Task ShowViewAsync(System.Type viewType, Sextant.IViewModel viewModel);
+    }
+    public interface IRouteViewModel : Sextant.IViewModel
+    {
+        string Route { get; set; }
+    }
+    public static class JavascriptInterop
+    {
+        [Microsoft.JSInterop.JSInvokable]
+        public static System.Threading.Tasks.Task NotifyLocationState(Sextant.Blazor.SextantNavigationType sextantNavigationType, string uri, System.Collections.Generic.Dictionary<string, object> state) { }
+    }
+    public class NavigationActionEventArgs
+    {
+        public NavigationActionEventArgs() { }
+        public NavigationActionEventArgs(Sextant.Blazor.SextantNavigationType sextantNavigationType, string uri, string id) { }
+        public string Id { get; set; }
+        public Sextant.Blazor.SextantNavigationType NavigationType { get; set; }
+        public string Uri { get; set; }
+    }
+    public class NavigationRouter : Microsoft.AspNetCore.Components.ComponentBase, Sextant.IView, Splat.IEnableLogger, System.IDisposable
+    {
+        public NavigationRouter(Sextant.Blazor.SextantNavigationManager navigationManager, Sextant.Blazor.RouteViewViewModelLocator routeViewViewModelLocator, Sextant.Blazor.UrlParameterViewModelGenerator urlParameterVmGenerator) { }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public System.Reflection.Assembly AppAssembly { get; set; }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public Microsoft.AspNetCore.Components.RenderFragment<Microsoft.AspNetCore.Components.RouteData> Found { get; set; }
+        public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public System.Type ModalComponent { get; set; }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public Microsoft.AspNetCore.Components.RenderFragment NotFound { get; set; }
+        public System.IObservable<Sextant.IViewModel> PagePopped { get; set; }
+        protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder) { }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        protected override System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender) { }
+        protected override System.Threading.Tasks.Task OnInitializedAsync() { }
+        public System.IObservable<System.Reactive.Unit> PopModal() { }
+        public System.IObservable<System.Reactive.Unit> PopPage(bool animate = true) { }
+        public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate = true) { }
+        public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string contract, bool withNavigationPage = true) { }
+        public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string contract, bool resetStack, bool animate = true) { }
+    }
+    public class ReactiveAuthorizeRouteView : Sextant.Blazor.ReactiveRouteView
+    {
+        public ReactiveAuthorizeRouteView() { }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public Microsoft.AspNetCore.Components.RenderFragment Authorizing { get; set; }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public Microsoft.AspNetCore.Components.RenderFragment<Microsoft.AspNetCore.Components.Authorization.AuthenticationState> NotAuthorized { get; set; }
+        protected override void Render(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder) { }
+    }
+    public class ReactiveRouteView : Microsoft.AspNetCore.Components.IComponent, Splat.IEnableLogger
+    {
+        public ReactiveRouteView() { }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public System.Type DefaultLayout { get; set; }
+        [Microsoft.AspNetCore.Components.Parameter]
+        public Microsoft.AspNetCore.Components.RouteData RouteData { get; set; }
+        [Microsoft.AspNetCore.Components.CascadingParameter]
+        public Sextant.Blazor.NavigationRouter Router { get; set; }
+        public void Attach(Microsoft.AspNetCore.Components.RenderHandle renderHandle) { }
+        protected virtual void Render(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder) { }
+        public System.Threading.Tasks.Task SetParametersAsync(Microsoft.AspNetCore.Components.ParameterView parameters) { }
+    }
+    public class RouteViewViewModelLocator
+    {
+        public RouteViewViewModelLocator() { }
+        public void Register<TView, TViewModel>(string route, string contract = null)
+            where TView : Microsoft.AspNetCore.Components.IComponent
+            where TViewModel :  class, Sextant.IViewModel { }
+        public string ResolveRoute(System.Type viewModelType) { }
+        public System.Type ResolveViewModelType(string route) { }
+        public System.Type ResolveViewModelType(System.Type viewType) { }
+        public System.Type ResolveViewModelType<TView>()
+            where TView :  class { }
+        public System.Type ResolveViewType(System.Type viewModelType, string contract = null) { }
+        public System.Type ResolveViewType<TViewModel>(string contract = null)
+            where TViewModel :  class { }
+    }
+    public static class SextantExtensions
+    {
+        public static void InitializeBlazor(this Sextant.Sextant sextant) { }
+    }
+    public static class SextantFunctions
+    {
+        public static string ClearHistory { get; }
+        public static string GetBaseUri { get; }
+        public static string GetLocationHref { get; }
+        public static string GoBack { get; }
+        public static string GoToRoot { get; }
+        public static string ReplaceState { get; }
+    }
+    public static class SextantMicrosoftDependencyInjectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddSextant(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) { }
+    }
+    public sealed class SextantNavigationManager : System.IDisposable
+    {
+        public SextantNavigationManager() { }
+        public string AbsoluteUri { get; }
+        public string BaseUri { get; }
+        public System.IObservable<Sextant.Blazor.NavigationActionEventArgs> LocationChanged { get; }
+        public System.Threading.Tasks.ValueTask ClearHistory() { }
+        public void Dispose() { }
+        public System.Threading.Tasks.ValueTask GoBackAsync() { }
+        public System.Threading.Tasks.ValueTask GoBackModalAsync() { }
+        public System.Threading.Tasks.ValueTask GoToRootAsync(int count) { }
+        public System.Threading.Tasks.Task InitializeAsync(Microsoft.JSInterop.IJSRuntime jSRuntime) { }
+        public void NotifyNavigationAction(Sextant.Blazor.SextantNavigationType sextantNavigationType, string uri, string id) { }
+        public System.Threading.Tasks.ValueTask ReplaceStateAsync(string viewModelId) { }
+        public string ToBaseRelativePath(string uri) { }
+    }
+    public enum SextantNavigationType
+    {
+        Forward = 0,
+        Back = 1,
+        Url = 2,
+        Popstate = 3,
+    }
+    public class UrlParameterViewModelGenerator
+    {
+        public UrlParameterViewModelGenerator() { }
+        public Sextant.IViewModel GetViewModel(System.Type viewModelType, System.Collections.Generic.Dictionary<string, string> parameters) { }
+        public Sextant.IViewModel GetViewModel<TViewModel>(System.Collections.Generic.Dictionary<string, string> parameters) { }
+        public void Register<TViewModel>(System.Func<System.Collections.Generic.Dictionary<string, string>, Sextant.IViewModel> func) { }
+    }
+    public class _Imports
+    {
+        public _Imports() { }
+        protected void Execute() { }
+    }
+}
+namespace Sextant.Blazor.Modal
+{
+    public class SimpleModal : Microsoft.AspNetCore.Components.ComponentBase, Sextant.Blazor.IModalView
+    {
+        public SimpleModal() { }
+        protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder builder) { }
+        public System.Threading.Tasks.Task HideAsync() { }
+        public System.Threading.Tasks.Task ShowViewAsync(System.Type viewType, Sextant.IViewModel viewModel) { }
+    }
+}

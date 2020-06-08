@@ -4,20 +4,18 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using PublicApiGenerator;
 using Shouldly;
 using Splat;
 using Xunit;
 
-namespace Sextant.XamForms.Tests
+namespace Sextant.Blazor.Tests
 {
     /// <summary>
     /// Tests to make sure that the API matches the approved ones.
@@ -31,9 +29,9 @@ namespace Sextant.XamForms.Tests
         /// Tests to make sure the splat project is approved.
         /// </summary>
         [Fact]
-        public void SextantXamForms()
+        public void SextantBlazor()
         {
-            CheckApproval(typeof(NavigationView).Assembly);
+            CheckApproval(typeof(NavigationRouter).Assembly);
         }
 
         private static void CheckApproval(Assembly assembly, [CallerMemberName]string memberName = null, [CallerFilePath]string filePath = null)

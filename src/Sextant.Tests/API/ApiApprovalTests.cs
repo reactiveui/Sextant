@@ -31,7 +31,7 @@ namespace Sextant.Tests
         /// Tests to make sure the splat project is approved.
         /// </summary>
         [Fact]
-        public void SextantProject()
+        public void Sextant()
         {
             CheckApproval(typeof(IViewStackService).Assembly);
         }

@@ -37,27 +37,14 @@ namespace Sextant.Blazor
         [JSInvokable]
         public static Task NotifyLocationState(SextantNavigationType sextantNavigationType, string uri, Dictionary<string, object> state)
         {
-            if (state == null)
+            try
             {
-                try
-                {
-                    _navigationManager.NotifyNavigationAction(sextantNavigationType, uri, null);
-                }
-                catch (Exception exception)
-                {
-                    _logger.Debug(exception, exception.Message);
-                }
+                _navigationManager
+                    .NotifyNavigationAction(sextantNavigationType, uri, ((JsonElement?)state?["id"])?.GetString());
             }
-            else
+            catch (Exception exception)
             {
-                try
-                {
-                    _navigationManager.NotifyNavigationAction(sextantNavigationType, uri, ((JsonElement)state["id"]).GetString());
-                }
-                catch (Exception exception)
-                {
-                    _logger.Debug(exception, exception.Message);
-                }
+                _logger.Debug(exception, exception.Message);
             }
 
             return Task.CompletedTask;

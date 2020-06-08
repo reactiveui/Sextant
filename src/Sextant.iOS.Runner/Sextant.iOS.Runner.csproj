@@ -127,6 +127,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ReactiveUI.Testing" Version="11.4.1" />
     <PackageReference Include="Microsoft.Reactive.Testing">
       <Version>4.4.1</Version>
     </PackageReference>

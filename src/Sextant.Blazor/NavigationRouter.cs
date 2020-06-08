@@ -65,7 +65,7 @@ namespace Sextant.Blazor
                     .LocationChanged
                     .Where(args => args.NavigationType == SextantNavigationType.Popstate)
                     .ObserveOn(MainThreadScheduler)
-                    .Select(async args =>
+                    .Select(args =>
                     {
                         List<IViewModel> viewModels = new List<IViewModel>();
                         string id = null;
@@ -125,7 +125,6 @@ namespace Sextant.Blazor
 
                         return viewModels;
                     })
-                    .Concat()
                     .SelectMany(x => x);
         }
 
@@ -387,12 +386,12 @@ namespace Sextant.Blazor
                 if (results.viewModel == null)
                 {
                     // a viewModel wasn't registered for the route... could be a controller on the same server or similar.  Navigate using a generic ViewModel.
-                    await _viewStackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(_navigationManager.AbsoluteUri)), null, true, false);
+                    // await _viewStackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(_navigationManager.AbsoluteUri)), null, true, false);
                 }
                 else
                 {
                     // Push the viewmodel to the sextant stack.
-                    await _viewStackService.PushPage(results.viewModel, results.contract, true, false);
+                    // await _viewStackService.PushPage(results.viewModel, results.contract, true, false);
 
                     // When the blazor app first starts, a page will have already been loaded so it's too late for the page creation logic (in ReactiveRouteView) to set the viewmodel.
                     // We have to do it manually here.
@@ -461,11 +460,11 @@ namespace Sextant.Blazor
                 if (results.viewModel == null)
                 {
                     // a viewModel wasn't registered for the route... this a controller or authentication middleware.  Navigate using a generic ViewModel.
-                    await _viewStackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(e.Uri)), null, true);
+                    // await _viewStackService.PushPage(new DirectRouteViewModel(_navigationManager.ToBaseRelativePath(e.Uri)), null, true);
                 }
                 else
                 {
-                    await _viewStackService.PushPage(results.viewModel, results.contract, false, true);
+                    // await _viewStackService.PushPage(results.viewModel, results.contract, false, true);
                 }
             }
             else
