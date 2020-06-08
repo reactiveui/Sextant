@@ -29,7 +29,7 @@ namespace Sextant.XamForms.Tests
         /// Tests to make sure the splat project is approved.
         /// </summary>
         [Fact]
-        public void SextantProject()
+        public void SextantXamForms()
         {
             CheckApproval(typeof(NavigationView).Assembly);
         }

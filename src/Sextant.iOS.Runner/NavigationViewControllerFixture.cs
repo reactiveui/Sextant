@@ -13,7 +13,7 @@ namespace Sextant.IOS.Runner
     /// <summary>
     /// Navigation view controller fixture.
     /// </summary>
-    public class NavigationViewControllerFixture
+    internal class NavigationViewControllerFixture
     {
         /// <summary>
         /// Performs an implicit conversion from <see cref="NavigationViewControllerFixture"/> to <see cref="NavigationViewController"/>.

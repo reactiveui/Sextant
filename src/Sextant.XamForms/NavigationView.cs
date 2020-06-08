@@ -180,36 +180,16 @@ namespace Sextant.XamForms
                             .ToObservable();
                     });
 
-        private IView LocateNavigationFor(IViewModel viewModel)
-        {
-            var view = _viewLocator.ResolveView(viewModel, "NavigationView");
-            var navigationPage = view as IView;
-
-            if (navigationPage is null)
-            {
-                _logger.Debug($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
-                navigationPage = Locator.Current.GetService<IView>(nameof(NavigationView)) ?? Locator.Current.GetService<IView>();
-            }
-
-            return navigationPage;
-        }
-
         private Page LocatePageFor(object viewModel, string? contract)
         {
             var view = _viewLocator.ResolveView(viewModel, contract);
-            var page = view as Page;
 
             if (view == null)
             {
                 throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
 
-            if (view == null)
-            {
-                throw new InvalidOperationException($"Could not find view for type '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
-            }
-
-            if (page == null)
+            if (!(view is Page page))
             {
                 throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
             }

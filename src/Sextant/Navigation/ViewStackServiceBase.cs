@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Splat;
@@ -45,7 +46,11 @@ namespace Sextant
                         var removedPage = PopStackAndTick(PageSubject);
                         Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
                     }
-                });
+                })
+                .DisposeWith(NavigationDisposables);
+
+            ModalSubject.DisposeWith(NavigationDisposables);
+            PageSubject.DisposeWith(NavigationDisposables);
         }
 
         /// <summary>
@@ -84,6 +89,11 @@ namespace Sextant
         protected BehaviorSubject<IImmutableList<IViewModel>> PageSubject { get; private set; }
 
         /// <summary>
+        /// Gets the navigation disposables.
+        /// </summary>
+        protected CompositeDisposable NavigationDisposables { get; } = new CompositeDisposable();
+
+        /// <summary>
         /// Pops the <see cref="INavigable" /> off the stack.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
@@ -109,7 +119,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PopToRootPage(bool animate = true) =>
             View.PopToRootPage(animate)
-                .Do(_ => PopRootAndTick(PageSubject));
+                .Do(_ => PopRootAndTick(PageSubject, NavigationDisposables));
 
         /// <inheritdoc />
         public IObservable<Unit> PushModal(IViewModel modal, string? contract = null, bool withNavigationPage = true)
@@ -248,11 +258,12 @@ namespace Sextant
         /// </summary>
         /// <typeparam name="T">The view model type.</typeparam>
         /// <param name="stackSubject">The stack subject.</param>
+        /// <param name="disposable">The disposable.</param>
         /// <exception cref="InvalidOperationException">Stack is empty.</exception>
-        protected static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject)
+        protected static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, CompositeDisposable disposable)
         {
             IImmutableList<T> poppedStack = ImmutableList<T>.Empty;
-            if (stackSubject?.Value == null || !stackSubject.Value.Any())
+            if (stackSubject == null || stackSubject.Value.Count == 0)
             {
                 throw new InvalidOperationException("Stack is empty.");
             }
@@ -280,7 +291,8 @@ namespace Sextant
                    {
                        poppedStack = stack;
                    }
-               });
+               })
+               .DisposeWith(disposable);
 
             stackSubject.OnNext(poppedStack);
         }
@@ -293,8 +305,7 @@ namespace Sextant
         {
             if (disposing)
             {
-                ModalSubject?.Dispose();
-                PageSubject?.Dispose();
+                NavigationDisposables.Dispose();
             }
         }
     }

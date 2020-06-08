@@ -100,10 +100,14 @@ namespace Sextant
     {
         public NavigationParameter() { }
     }
-    public sealed class ParameterViewStackService : Sextant.ViewStackServiceBase, Sextant.IParameterViewStackService, Sextant.IViewStackService
+    public sealed class ParameterViewStackService : Sextant.ParameterViewStackServiceBase
     {
         public ParameterViewStackService(Sextant.IView view) { }
         public ParameterViewStackService(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
+    }
+    public abstract class ParameterViewStackServiceBase : Sextant.ViewStackServiceBase, Sextant.IParameterViewStackService, Sextant.IViewStackService
+    {
+        protected ParameterViewStackServiceBase(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
         public System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = true) { }
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable navigableModal, Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true) { }
         public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
@@ -151,6 +155,7 @@ namespace Sextant
         protected Splat.IFullLogger Logger { get; }
         public System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> ModalStack { get; }
         protected System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> ModalSubject { get; }
+        protected System.Reactive.Disposables.CompositeDisposable NavigationDisposables { get; }
         public System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> PageStack { get; }
         protected System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> PageSubject { get; }
         public Sextant.IView View { get; }
@@ -169,7 +174,7 @@ namespace Sextant
         public System.IObservable<Sextant.IViewModel> TopModal() { }
         public System.IObservable<Sextant.IViewModel> TopPage() { }
         protected static void AddToStackAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject, T item, bool reset) { }
-        protected static void PopRootAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject) { }
+        protected static void PopRootAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject, System.Reactive.Disposables.CompositeDisposable disposable) { }
         protected static T PopStackAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject) { }
     }
 }
