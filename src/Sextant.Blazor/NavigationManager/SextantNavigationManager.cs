@@ -56,8 +56,8 @@ namespace Sextant.Blazor
         {
             _jsRuntime = jSRuntime;
 #pragma warning disable RCS1090 // Call 'ConfigureAwait(false)'.
-            _baseUri = await _jsRuntime.InvokeAsync<string>("SextantFunctions.getBaseUri");
-            _absoluteUri = await _jsRuntime.InvokeAsync<string>("SextantFunctions.getLocationHref");
+            _baseUri = await _jsRuntime.InvokeAsync<string>(SextantFunctions.GetBaseUri);
+            _absoluteUri = await _jsRuntime.InvokeAsync<string>(SextantFunctions.GetLocationHref);
 #pragma warning restore RCS1090 // Call 'ConfigureAwait(false)'.
         }
 
@@ -66,7 +66,7 @@ namespace Sextant.Blazor
         /// </summary>
         /// <returns>A notification of completion.</returns>
         public ValueTask ClearHistory() =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.clearHistory");
+            _jsRuntime.InvokeVoidAsync(SextantFunctions.ClearHistory);
 
         /// <summary>
         /// Replace the state in the browser.
@@ -74,21 +74,21 @@ namespace Sextant.Blazor
         /// <param name="viewModelId">The view model id.</param>
         /// <returns>A notification of completion.</returns>
         public ValueTask ReplaceStateAsync(string viewModelId) =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.replaceState", new Dictionary<string, object> { { "id", viewModelId }, { "shouldHandleInternally", false } });
+            _jsRuntime.InvokeVoidAsync(SextantFunctions.ReplaceState, new Dictionary<string, object> { { "id", viewModelId }, { "shouldHandleInternally", false } });
 
         /// <summary>
         /// Go back in the browser.
         /// </summary>
         /// <returns>A notification of completion.</returns>
         public ValueTask GoBackAsync() =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
+            _jsRuntime.InvokeVoidAsync(SextantFunctions.GoBack);
 
         /// <summary>
         /// Go back in the browser.
         /// </summary>
         /// <returns>A notification of completion.</returns>
         public ValueTask GoBackModalAsync() =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.goBack");
+            _jsRuntime.InvokeVoidAsync(SextantFunctions.GoBack);
 
         /// <summary>
         /// Go to the root of the browser navigation history.
@@ -96,7 +96,7 @@ namespace Sextant.Blazor
         /// <param name="count">number of pages to remove.</param>
         /// <returns>A notification of completion.</returns>
         public ValueTask GoToRootAsync(int count) =>
-            _jsRuntime.InvokeVoidAsync("SextantFunctions.goToRoot", count);
+            _jsRuntime.InvokeVoidAsync(SextantFunctions.GoToRoot, count);
 
         /// <summary>
         /// Converts the uri to a relative path.

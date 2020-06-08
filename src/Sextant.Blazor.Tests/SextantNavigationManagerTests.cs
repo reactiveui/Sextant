@@ -67,7 +67,7 @@ namespace Sextant.Blazor.Tests
 
             var jsRuntime = Substitute.For<IJSRuntime>();
             jsRuntime
-                .When(x => x.InvokeVoidAsync("SextantFunctions.goBack"))
+                .When(x => x.InvokeVoidAsync(SextantFunctions.GoBack))
                 .Do(_ => received = true);
 
             // When
@@ -91,7 +91,7 @@ namespace Sextant.Blazor.Tests
 
             var jsRuntime = Substitute.For<IJSRuntime>();
             jsRuntime
-                .When(x => x.InvokeVoidAsync("SextantFunctions.clearHistory"))
+                .When(x => x.InvokeVoidAsync(SextantFunctions.ClearHistory))
                 .Do(_ => received = true);
 
             // When
@@ -115,7 +115,7 @@ namespace Sextant.Blazor.Tests
 
             var jsRuntime = Substitute.For<IJSRuntime>();
             jsRuntime
-                .When(x => x.InvokeVoidAsync("SextantFunctions.replaceState", Arg.Any<Dictionary<string, object>>()))
+                .When(x => x.InvokeVoidAsync(SextantFunctions.ReplaceState, Arg.Any<Dictionary<string, object>>()))
                 .Do(_ => received = true);
 
             // When
@@ -139,7 +139,7 @@ namespace Sextant.Blazor.Tests
 
             var jsRuntime = Substitute.For<IJSRuntime>();
             jsRuntime
-                .When(x => x.InvokeVoidAsync("SextantFunctions.goToRoot", Arg.Any<int>()))
+                .When(x => x.InvokeVoidAsync(SextantFunctions.GoToRoot, Arg.Any<int>()))
                 .Do(_ => received = true);
 
             // When
