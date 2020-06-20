@@ -777,6 +777,26 @@ namespace Sextant.Tests
                 // Then
                 result.Should().ContainSingle();
             }
+
+            /// <summary>
+            /// Tests to make sure we receive an push page notifications.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_Destroy_If_Navigation_Stack_Reset()
+            {
+                // Given
+                var lastViewModel = Substitute.For<IEverything>();
+                ViewStackService sut = new ViewStackServiceFixture().WithView(Substitute.For<IView>());
+
+                // When
+                await sut.PushPage(new NavigableViewModelMock(), pages: 2);
+                await sut.PushPage(lastViewModel);
+                await sut.PushPage(new NavigableViewModelMock(), resetStack: true);
+
+                // Then
+                lastViewModel.Received().Destroy();
+            }
         }
 
         /// <summary>

@@ -212,7 +212,19 @@ namespace Sextant
 
             var stack = stackSubject.Value;
 
-            stack = reset ? new[] { item }.ToImmutableList() : stack.Add(item);
+            if (reset)
+            {
+                foreach (var viewModel in stack)
+                {
+                    viewModel?.InvokeViewModelAction<IDestructible>(x => x.Destroy());
+                }
+
+                stack = new[] { item }.ToImmutableList();
+            }
+            else
+            {
+                stack = stack.Add(item);
+            }
 
             stackSubject.OnNext(stack);
         }
