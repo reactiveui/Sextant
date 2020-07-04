@@ -503,21 +503,25 @@ namespace Sextant.Tests
             /// <summary>
             /// Tests the view model factory is called.
             /// </summary>
+            /// <param name="contract">The contract.</param>
             /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_ViewModel_Factory()
+            [Theory]
+            [InlineData("")]
+            [InlineData(null)]
+            [InlineData("contract")]
+            public async Task Should_Call_ViewModel_Factory(string? contract)
             {
                 // Given
                 var factory = Substitute.For<IViewModelFactory>();
-                factory.Create<NavigableViewModelMock>().Returns(new NavigableViewModelMock());
+                factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
                 var navigationParameter = Substitute.For<INavigationParameter>();
                 ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
 
                 // When
-                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
+                await sut.PushModal<NavigableViewModelMock>(navigationParameter, contract);
 
                 // Then
-                factory.Received().Create<NavigableViewModelMock>();
+                factory.Received().Create<NavigableViewModelMock>(contract);
             }
         }
 

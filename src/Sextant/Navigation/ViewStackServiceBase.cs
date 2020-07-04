@@ -133,7 +133,7 @@ namespace Sextant
         public IObservable<Unit> PushModal<TViewModel>(string? contract = null, bool withNavigationPage = true)
             where TViewModel : IViewModel
         {
-            var viewmodel = Factory.Create<TViewModel>(contract);
+            TViewModel viewmodel = Factory.Create<TViewModel>(contract);
             return PushModal(viewmodel, contract, withNavigationPage);
         }
 

@@ -42,7 +42,8 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ParameterViewStackService(view));
+            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>(NavigationView);
+            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ParameterViewStackService(view, viewModelFactory));
             return dependencyResolver;
         }
 
@@ -59,7 +60,8 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<IParameterViewStackService>(() => new ParameterViewStackService(view));
+            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>(NavigationView);
+            dependencyResolver.RegisterLazySingleton<IParameterViewStackService>(() => new ParameterViewStackService(view, viewModelFactory));
             return dependencyResolver;
         }
 
@@ -70,6 +72,7 @@ namespace Sextant
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="factory">The factory.</param>
         /// <returns>The dependencyResolver.</returns>
+        [Obsolete("Use the Func<IView, IViewModelFactory, T> variant.")]
         public static IMutableDependencyResolver RegisterViewStackService<T>(this IMutableDependencyResolver dependencyResolver, Func<IView, T> factory)
             where T : IViewStackService
         {
@@ -85,6 +88,48 @@ namespace Sextant
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
             dependencyResolver.RegisterLazySingleton(() => factory(view));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the view stack service.
+        /// </summary>
+        /// <typeparam name="T">The view stack service type.</typeparam>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="factory">The factory.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewStackService<T>(this IMutableDependencyResolver dependencyResolver, Func<IView, IViewModelFactory, T> factory)
+            where T : IViewStackService
+        {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
+            if (factory is null)
+            {
+                throw new ArgumentNullException(nameof(factory));
+            }
+
+            IView view = Locator.Current.GetService<IView>(NavigationView);
+            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>(NavigationView);
+            dependencyResolver.RegisterLazySingleton(() => factory(view, viewModelFactory));
+            return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the view model factory.
+        /// </summary>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <returns>The dependencyResolver.</returns>
+        public static IMutableDependencyResolver RegisterViewModelFactory(this IMutableDependencyResolver dependencyResolver)
+        {
+            if (dependencyResolver is null)
+            {
+                throw new ArgumentNullException(nameof(dependencyResolver));
+            }
+
+            dependencyResolver.RegisterLazySingleton<IViewModelFactory>(() => new DefaultViewModelFactory());
             return dependencyResolver;
         }
 

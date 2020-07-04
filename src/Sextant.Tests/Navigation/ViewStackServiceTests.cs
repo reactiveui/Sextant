@@ -625,6 +625,26 @@ namespace Sextant.Tests
                 // Then
                 await view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
             }
+
+            /// <summary>
+            /// Tests that the ViewModelFactory is called.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_ViewModel_Factory()
+            {
+                // Given
+                var factory = Substitute.For<IViewModelFactory>();
+                factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+
+                // When
+                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
+
+                // Then
+                factory.Received().Create<NavigableViewModelMock>();
+            }
         }
 
         /// <summary>
@@ -774,6 +794,26 @@ namespace Sextant.Tests
 
                 // Then
                 await view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
+            }
+
+            /// <summary>
+            /// Tests the view model factory is called.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_ViewModel_Factory()
+            {
+                // Given
+                var factory = Substitute.For<IViewModelFactory>();
+                factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+
+                // When
+                await sut.PushPage<NavigableViewModelMock>(navigationParameter);
+
+                // Then
+                factory.Received().Create<NavigableViewModelMock>();
             }
         }
 

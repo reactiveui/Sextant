@@ -72,6 +72,7 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_Navigation_View()
             {
                 // Given
+                Locator.CurrentMutable.RegisterViewModelFactory();
                 Locator.CurrentMutable.RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current));
 
                 // When
@@ -105,6 +106,7 @@ namespace Sextant.XamForms.Tests
             {
                 // Given
                 Locator.CurrentMutable.RegisterNavigationView();
+                Locator.CurrentMutable.RegisterViewModelFactory();
                 Locator.CurrentMutable.RegisterViewStackService();
 
                 // When
@@ -121,14 +123,16 @@ namespace Sextant.XamForms.Tests
             public void Should_Register_View_Stack_Service_Factory()
             {
                 // Given
+                var viewModelFactory = new DefaultViewModelFactory();
                 Locator.CurrentMutable.RegisterNavigationView();
-                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>(view => new ParameterViewStackService(view));
+                Locator.CurrentMutable.RegisterViewModelFactory(() => viewModelFactory);
+                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>((view) => new ParameterViewStackService(view, viewModelFactory));
 
                 // When
-                var result = Locator.Current.GetService<IViewStackService>();
+                var result = ViewModelFactory.Current;
 
                 // Then
-                result.ShouldBeOfType<ParameterViewStackService>();
+                result.ShouldBe(viewModelFactory);
             }
         }
 
