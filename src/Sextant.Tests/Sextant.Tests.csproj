@@ -5,7 +5,11 @@
     <NoWarn>$(NoWarn);1591;CA1707;SA1633;CA1034;CA2000</NoWarn>
     <IsPackable>false</IsPackable>    
   </PropertyGroup>
-  
+
+  <ItemGroup>
+    <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
     <ProjectReference Include="..\Sextant\Sextant.csproj" />

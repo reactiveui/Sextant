@@ -8,6 +8,8 @@ using System.Reactive;
 using System.Reactive.Linq;
 using NSubstitute;
 using ReactiveUI.Testing;
+using Sextant.Abstractions;
+using Sextant.Mocks;
 
 namespace Sextant.Tests
 {
@@ -17,6 +19,7 @@ namespace Sextant.Tests
     internal sealed class ViewStackServiceFixture : IBuilder
     {
         private IView _view;
+        private IViewModelFactory _viewModelFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewStackServiceFixture"/> class.
@@ -25,6 +28,8 @@ namespace Sextant.Tests
         {
             _view = Substitute.For<IView>();
             _view.PushPage(Arg.Any<IViewModel>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>()).Returns(Observable.Return(Unit.Default));
+            _viewModelFactory = Substitute.For<IViewModelFactory>();
+            _viewModelFactory.Create<NavigableViewModelMock>(Arg.Any<string>()).Returns(new NavigableViewModelMock());
         }
 
         public static implicit operator ViewStackService(ViewStackServiceFixture fixture) => fixture.Build();
@@ -39,6 +44,6 @@ namespace Sextant.Tests
             return stack;
         }
 
-        private ViewStackService Build() => new ViewStackService(_view);
+        private ViewStackService Build() => new ViewStackService(_view, _viewModelFactory);
     }
 }

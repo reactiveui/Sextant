@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Sextant.Abstractions;
 using Splat;
 
 namespace Sextant
@@ -26,10 +27,12 @@ namespace Sextant
         /// Initializes a new instance of the <see cref="ViewStackServiceBase"/> class.
         /// </summary>
         /// <param name="view">The view.</param>
-        protected ViewStackServiceBase(IView view)
+        /// <param name="viewModelFactory">The view model factory.</param>
+        protected ViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
         {
             Logger = this.Log();
             View = view ?? throw new ArgumentNullException(nameof(view));
+            Factory = viewModelFactory ?? ViewModelFactory.Current ?? throw new ArgumentNullException(nameof(viewModelFactory));
             ModalSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
             PageSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 
@@ -65,6 +68,11 @@ namespace Sextant
         /// Gets the logger.
         /// </summary>
         protected IFullLogger Logger { get; private set; }
+
+        /// <summary>
+        /// Gets the view model factory.
+        /// </summary>
+        protected IViewModelFactory Factory { get; }
 
         /// <summary>
         /// Gets the modal subject.
@@ -125,7 +133,7 @@ namespace Sextant
         public IObservable<Unit> PushModal<TViewModel>(string? contract = null, bool withNavigationPage = true)
             where TViewModel : IViewModel
         {
-            var viewmodel = ViewModelFactory.Current.Create<TViewModel>(contract);
+            var viewmodel = Factory.Create<TViewModel>(contract);
             return PushModal(viewmodel, contract, withNavigationPage);
         }
 
@@ -133,7 +141,7 @@ namespace Sextant
         public IObservable<Unit> PushPage<TViewModel>(string? contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : IViewModel
         {
-            TViewModel viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            TViewModel viewModel = Factory.Create<TViewModel>(contract);
 
             return PushPage(viewModel, contract, resetStack, animate);
         }
