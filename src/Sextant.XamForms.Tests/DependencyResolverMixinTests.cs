@@ -126,7 +126,7 @@ namespace Sextant.XamForms.Tests
                 var viewModelFactory = new DefaultViewModelFactory();
                 Locator.CurrentMutable.RegisterNavigationView();
                 Locator.CurrentMutable.RegisterViewModelFactory(() => viewModelFactory);
-                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>((view) => new ParameterViewStackService(view, viewModelFactory));
+                _ = Locator.CurrentMutable.RegisterViewStackService<IViewStackService>((view, factory) => new ParameterViewStackService(view, factory));
 
                 // When
                 var result = ViewModelFactory.Current;

@@ -115,7 +115,7 @@ namespace Sextant
                     // But we want the view that was just removed.  We need to send the old view's viewmodel to IViewStackService so that the ViewModel can be removed from the stack.
                     return _lastPoppedViewModel;
                 })
-                .WhereNotNull();
+                .Where(x => x != null);
 
             BackRequested.Subscribe();
         }
@@ -167,7 +167,7 @@ namespace Sextant
                         ev.Handled = true;
                     }
                 })
-                .ToSignal(),
+                .Select(_ => Unit.Default),
             Observable
                 .FromEvent<PointerEventHandler, PointerRoutedEventArgs>(
                 handler => (_, e) => handler(e),
@@ -182,7 +182,7 @@ namespace Sextant
                         args.Handled = true;
                     }
                 })
-                .ToSignal(),
+                .Select(_ => Unit.Default),
             Observable
                 .FromEvent<RoutedEventHandler, RoutedEventArgs>(
                 handler =>
@@ -199,7 +199,7 @@ namespace Sextant
                         PopPage(true);
                     }
                 })
-                .ToSignal());
+                .Select(_ => Unit.Default));
 
         /// <inheritdoc />
         public IObservable<Unit> PopModal()
