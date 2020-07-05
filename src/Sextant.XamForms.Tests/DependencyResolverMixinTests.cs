@@ -3,14 +3,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NSubstitute;
 using ReactiveUI;
-using Sextant.Abstractions;
 using Sextant.Mocks;
-using Sextant.XamForms;
 using Shouldly;
 using Splat;
 using Xamarin.Forms;

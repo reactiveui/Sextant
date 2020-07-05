@@ -5,8 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Sextant.Mocks;
 using Shouldly;
 using Xunit;

@@ -10,7 +10,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
-using Sextant.Abstractions;
 using Sextant.Mocks;
 using Shouldly;
 using Splat;

@@ -1,15 +1,7 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
-namespace Sextant.Abstractions
-{
-    public interface IViewModelFactory
-    {
-        TViewModel Create<TViewModel>(string? contract = null)
-            where TViewModel : Sextant.IViewModel;
-    }
-}
 namespace Sextant
 {
-    public class DefaultViewModelFactory : Sextant.Abstractions.IViewModelFactory
+    public class DefaultViewModelFactory : Sextant.IViewModelFactory
     {
         public DefaultViewModelFactory() { }
         public TViewModel Create<TViewModel>(string? contract = null)
@@ -32,12 +24,12 @@ namespace Sextant
         public static Splat.IMutableDependencyResolver RegisterViewModel<TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, TViewModel viewModel, string? contract = null)
             where TViewModel :  class, Sextant.IViewModel { }
         public static Splat.IMutableDependencyResolver RegisterViewModelFactory(this Splat.IMutableDependencyResolver dependencyResolver) { }
-        public static Splat.IMutableDependencyResolver RegisterViewModelFactory(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.Abstractions.IViewModelFactory> factory) { }
+        public static Splat.IMutableDependencyResolver RegisterViewModelFactory(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IViewModelFactory> factory) { }
         public static Splat.IMutableDependencyResolver RegisterViewStackService(this Splat.IMutableDependencyResolver dependencyResolver) { }
         [System.Obsolete("Use the Func<IView, IViewModelFactory, T> variant.")]
         public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, T> factory)
             where T : Sextant.IViewStackService { }
-        public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, Sextant.Abstractions.IViewModelFactory, T> factory)
+        public static Splat.IMutableDependencyResolver RegisterViewStackService<T>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<Sextant.IView, Sextant.IViewModelFactory, T> factory)
             where T : Sextant.IViewStackService { }
     }
     public interface IDestructible
@@ -81,6 +73,11 @@ namespace Sextant
     {
         string Id { get; }
     }
+    public interface IViewModelFactory
+    {
+        TViewModel Create<TViewModel>(string? contract = null)
+            where TViewModel : Sextant.IViewModel;
+    }
     public interface IViewStackService
     {
         System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> ModalStack { get; }
@@ -106,7 +103,7 @@ namespace Sextant
     public sealed class ParameterViewStackService : Sextant.ViewStackServiceBase, Sextant.IParameterViewStackService, Sextant.IViewStackService
     {
         public ParameterViewStackService(Sextant.IView view) { }
-        public ParameterViewStackService(Sextant.IView view, Sextant.Abstractions.IViewModelFactory viewModelFactory) { }
+        public ParameterViewStackService(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
         public System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = true) { }
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable navigableModal, Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true) { }
         public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
@@ -132,7 +129,7 @@ namespace Sextant
     }
     public static class ViewModelFactory
     {
-        public static Sextant.Abstractions.IViewModelFactory Current { get; }
+        public static Sextant.IViewModelFactory Current { get; }
     }
     public class ViewModelFactoryNotFoundException : System.Exception
     {
@@ -144,12 +141,12 @@ namespace Sextant
     public sealed class ViewStackService : Sextant.ViewStackServiceBase
     {
         public ViewStackService(Sextant.IView view) { }
-        public ViewStackService(Sextant.IView view, Sextant.Abstractions.IViewModelFactory viewModelFactory) { }
+        public ViewStackService(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
     }
     public abstract class ViewStackServiceBase : Sextant.IViewStackService, Splat.IEnableLogger, System.IDisposable
     {
-        protected ViewStackServiceBase(Sextant.IView view, Sextant.Abstractions.IViewModelFactory viewModelFactory) { }
-        protected Sextant.Abstractions.IViewModelFactory Factory { get; }
+        protected ViewStackServiceBase(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
+        protected Sextant.IViewModelFactory Factory { get; }
         protected Splat.IFullLogger Logger { get; }
         public System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> ModalStack { get; }
         protected System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> ModalSubject { get; }

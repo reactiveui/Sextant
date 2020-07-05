@@ -8,9 +8,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using NSubstitute;
 using ReactiveUI.Testing;
-using Sextant.Abstractions;
 using Sextant.Mocks;
-using Splat;
 
 namespace Sextant.Tests
 {
