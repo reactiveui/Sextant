@@ -32,7 +32,7 @@ namespace Sextant
         {
             Logger = this.Log();
             View = view ?? throw new ArgumentNullException(nameof(view));
-            Factory = viewModelFactory ?? ViewModelFactory.Current ?? throw new ArgumentNullException(nameof(viewModelFactory));
+            Factory = viewModelFactory ?? ViewModelFactory.Current;
             ModalSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
             PageSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 

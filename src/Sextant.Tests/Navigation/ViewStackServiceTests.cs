@@ -24,6 +24,49 @@ namespace Sextant.Tests
     public sealed class ViewStackServiceTests
     {
         /// <summary>
+        /// Tests the construction of the object.
+        /// </summary>
+        public class TheConstructor
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TheConstructor"/> class.
+            /// </summary>
+            public TheConstructor()
+            {
+                Locator.GetLocator().UnregisterAll<IViewModelFactory>();
+            }
+
+            /// <summary>
+            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// </summary>
+            [Fact]
+            public void Should_Throw_If_View_Model_Factory_Current_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+
+                // Then
+                result.ShouldBeOfType<ViewModelFactoryNotFoundException>();
+            }
+
+            /// <summary>
+            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// </summary>
+            [Fact]
+            public void Should_Resolve_View_Model_Factory()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterViewModelFactory();
+
+                // When
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+
+                // Then
+                result.ShouldBeNull();
+            }
+        }
+
+        /// <summary>
         /// Tests associated with the page stack property.
         /// </summary>
         public class ThePageStackProperty

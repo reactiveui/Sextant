@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using NSubstitute;
 using ReactiveUI;
+using Sextant.Abstractions;
 using Sextant.Mocks;
 using Sextant.XamForms;
 using Shouldly;
@@ -95,6 +96,7 @@ namespace Sextant.XamForms.Tests
             {
                 Locator.CurrentMutable.UnregisterAll<IView>();
                 Locator.CurrentMutable.UnregisterAll<IViewStackService>();
+                Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
                 Locator.CurrentMutable.UnregisterAll<IParameterViewStackService>();
             }
 
@@ -117,22 +119,39 @@ namespace Sextant.XamForms.Tests
             }
 
             /// <summary>
-            /// Should register the view stack service factory.
+            /// Tests the view stack service overload.
             /// </summary>
             [Fact]
-            public void Should_Register_View_Stack_Service_Factory()
+            public void Should_Register_View_Stack_Service_With_View()
             {
                 // Given
-                var viewModelFactory = new DefaultViewModelFactory();
                 Locator.CurrentMutable.RegisterNavigationView();
-                Locator.CurrentMutable.RegisterViewModelFactory(() => viewModelFactory);
-                _ = Locator.CurrentMutable.RegisterViewStackService<IViewStackService>((view, factory) => new ParameterViewStackService(view, factory));
+                Locator.CurrentMutable.RegisterViewModelFactory();
+                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>(view => new ParameterViewStackService(view));
 
                 // When
-                var result = ViewModelFactory.Current;
+                var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBe(viewModelFactory);
+                result.ShouldBeOfType<ParameterViewStackService>();
+            }
+
+            /// <summary>
+            /// Tests the view stack service overload.
+            /// </summary>
+            [Fact]
+            public void Should_Register_View_Stack_Service_With_Factory()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterNavigationView();
+                Locator.CurrentMutable.RegisterViewModelFactory();
+                Locator.CurrentMutable.RegisterViewStackService<IViewStackService>((view, factory) => new ParameterViewStackService(view, factory));
+
+                // When
+                var result = Locator.Current.GetService<IViewStackService>();
+
+                // Then
+                result.ShouldBeOfType<ParameterViewStackService>();
             }
         }
 

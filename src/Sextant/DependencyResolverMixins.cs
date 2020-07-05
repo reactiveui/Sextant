@@ -42,7 +42,7 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>(NavigationView);
+            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
             dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ParameterViewStackService(view, viewModelFactory));
             return dependencyResolver;
         }
@@ -60,7 +60,7 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>(NavigationView);
+            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
             dependencyResolver.RegisterLazySingleton<IParameterViewStackService>(() => new ParameterViewStackService(view, viewModelFactory));
             return dependencyResolver;
         }
@@ -87,7 +87,7 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton(() => factory(view));
+            dependencyResolver.RegisterLazySingleton<T>(() => factory(view));
             return dependencyResolver;
         }
 
@@ -112,8 +112,8 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>(NavigationView);
-            dependencyResolver.RegisterLazySingleton(() => factory(view, viewModelFactory));
+            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
+            dependencyResolver.RegisterLazySingleton<T>(() => factory(view, viewModelFactory));
             return dependencyResolver;
         }
 

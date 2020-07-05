@@ -36,13 +36,8 @@ namespace Sextant.Tests
 
         public ViewStackServiceFixture WithView(IView view) => this.With(ref _view, view);
 
-        public ViewStackService Push<TViewModel>(TViewModel viewModel)
-            where TViewModel : IViewModel
-        {
-            var stack = Build();
-            stack.PushPage(viewModel).Subscribe();
-            return stack;
-        }
+        public ViewStackServiceFixture WithFactory(IViewModelFactory viewModelFactory) =>
+            this.With(ref _viewModelFactory, viewModelFactory);
 
         private ViewStackService Build() => new ViewStackService(_view, _viewModelFactory);
     }
