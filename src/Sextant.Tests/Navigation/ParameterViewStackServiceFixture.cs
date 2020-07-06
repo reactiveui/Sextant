@@ -8,6 +8,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using NSubstitute;
 using ReactiveUI.Testing;
+using Sextant.Mocks;
 
 namespace Sextant.Tests
 {
@@ -17,6 +18,7 @@ namespace Sextant.Tests
     internal class ParameterViewStackServiceFixture : IBuilder
     {
         private IView _view;
+        private IViewModelFactory _viewModelFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterViewStackServiceFixture"/> class.
@@ -27,6 +29,8 @@ namespace Sextant.Tests
             _view.PushPage(Arg.Any<INavigable>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>())
                 .Returns(Observable.Return(Unit.Default));
             _view.PopPage().Returns(Observable.Return(Unit.Default));
+            _viewModelFactory = Substitute.For<IViewModelFactory>();
+            _viewModelFactory.Create<NavigableViewModelMock>(Arg.Any<string>()).Returns(new NavigableViewModelMock());
         }
 
         public static implicit operator ParameterViewStackService(ParameterViewStackServiceFixture fixture) =>
@@ -50,6 +54,9 @@ namespace Sextant.Tests
             return stack;
         }
 
-        private ParameterViewStackService Build() => new ParameterViewStackService(_view);
+        public ParameterViewStackService WithFactory(IViewModelFactory viewModelFactory) =>
+            this.With(ref _viewModelFactory, viewModelFactory);
+
+        private ParameterViewStackService Build() => new ParameterViewStackService(_view, _viewModelFactory);
     }
 }

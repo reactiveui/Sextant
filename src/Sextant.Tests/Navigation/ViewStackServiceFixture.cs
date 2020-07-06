@@ -3,11 +3,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System;
 using System.Reactive;
 using System.Reactive.Linq;
 using NSubstitute;
 using ReactiveUI.Testing;
+using Sextant.Mocks;
 
 namespace Sextant.Tests
 {
@@ -17,6 +17,7 @@ namespace Sextant.Tests
     internal sealed class ViewStackServiceFixture : IBuilder
     {
         private IView _view;
+        private IViewModelFactory _viewModelFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewStackServiceFixture"/> class.
@@ -25,20 +26,17 @@ namespace Sextant.Tests
         {
             _view = Substitute.For<IView>();
             _view.PushPage(Arg.Any<IViewModel>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>()).Returns(Observable.Return(Unit.Default));
+            _viewModelFactory = Substitute.For<IViewModelFactory>();
+            _viewModelFactory.Create<NavigableViewModelMock>(Arg.Any<string>()).Returns(new NavigableViewModelMock());
         }
 
         public static implicit operator ViewStackService(ViewStackServiceFixture fixture) => fixture.Build();
 
         public ViewStackServiceFixture WithView(IView view) => this.With(ref _view, view);
 
-        public ViewStackService Push<TViewModel>(TViewModel viewModel)
-            where TViewModel : IViewModel
-        {
-            var stack = Build();
-            stack.PushPage(viewModel).Subscribe();
-            return stack;
-        }
+        public ViewStackServiceFixture WithFactory(IViewModelFactory viewModelFactory) =>
+            this.With(ref _viewModelFactory, viewModelFactory);
 
-        private ViewStackService Build() => new ViewStackService(_view);
+        private ViewStackService Build() => new ViewStackService(_view, _viewModelFactory);
     }
 }

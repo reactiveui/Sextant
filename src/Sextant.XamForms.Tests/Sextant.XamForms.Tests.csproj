@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
     <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
     <ProjectReference Include="..\Sextant\Sextant.csproj" />

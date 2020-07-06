@@ -10,7 +10,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using NSubstitute;
-using Sextant.Abstractions;
 using Sextant.Mocks;
 using Shouldly;
 using Splat;
@@ -23,6 +22,49 @@ namespace Sextant.Tests
     /// </summary>
     public sealed class ViewStackServiceTests
     {
+        /// <summary>
+        /// Tests the construction of the object.
+        /// </summary>
+        public class TheConstructor
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TheConstructor"/> class.
+            /// </summary>
+            public TheConstructor()
+            {
+                Locator.GetLocator().UnregisterAll<IViewModelFactory>();
+            }
+
+            /// <summary>
+            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// </summary>
+            [Fact]
+            public void Should_Throw_If_View_Model_Factory_Current_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+
+                // Then
+                result.ShouldBeOfType<ViewModelFactoryNotFoundException>();
+            }
+
+            /// <summary>
+            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// </summary>
+            [Fact]
+            public void Should_Resolve_View_Model_Factory()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterViewModelFactory();
+
+                // When
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+
+                // Then
+                result.ShouldBeNull();
+            }
+        }
+
         /// <summary>
         /// Tests associated with the page stack property.
         /// </summary>
@@ -625,6 +667,26 @@ namespace Sextant.Tests
                 // Then
                 await view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>());
             }
+
+            /// <summary>
+            /// Tests that the ViewModelFactory is called.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_ViewModel_Factory()
+            {
+                // Given
+                var factory = Substitute.For<IViewModelFactory>();
+                factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+
+                // When
+                await sut.PushModal<NavigableViewModelMock>(navigationParameter);
+
+                // Then
+                factory.Received().Create<NavigableViewModelMock>();
+            }
         }
 
         /// <summary>
@@ -774,6 +836,26 @@ namespace Sextant.Tests
 
                 // Then
                 await view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<bool>());
+            }
+
+            /// <summary>
+            /// Tests the view model factory is called.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_ViewModel_Factory()
+            {
+                // Given
+                var factory = Substitute.For<IViewModelFactory>();
+                factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+
+                // When
+                await sut.PushPage<NavigableViewModelMock>(navigationParameter);
+
+                // Then
+                factory.Received().Create<NavigableViewModelMock>();
             }
         }
 

@@ -4,15 +4,10 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
-using ReactiveUI.Testing;
-using Sextant.Abstractions;
 using Sextant.Mocks;
 using Shouldly;
 using Splat;
@@ -25,6 +20,49 @@ namespace Sextant.Tests
     /// </summary>
     public sealed class ParameterViewStackServiceTests
     {
+        /// <summary>
+        /// Tests the construction of the object.
+        /// </summary>
+        public class TheConstructor
+        {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="TheConstructor"/> class.
+            /// </summary>
+            public TheConstructor()
+            {
+                Locator.GetLocator().UnregisterAll<IViewModelFactory>();
+            }
+
+            /// <summary>
+            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// </summary>
+            [Fact]
+            public void Should_Throw_If_View_Model_Factory_Current_Null()
+            {
+                // Given, When
+                var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null));
+
+                // Then
+                result.ShouldBeOfType<ViewModelFactoryNotFoundException>();
+            }
+
+            /// <summary>
+            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// </summary>
+            [Fact]
+            public void Should_Resolve_View_Model_Factory()
+            {
+                // Given
+                Locator.CurrentMutable.RegisterViewModelFactory();
+
+                // When
+                var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null));
+
+                // Then
+                result.ShouldBeNull();
+            }
+        }
+
         /// <summary>
         /// Tests the push page method that passes parameters.
         /// </summary>
@@ -193,8 +231,6 @@ namespace Sextant.Tests
             public ThePushPageGenericWithParameterMethod()
             {
                 Locator.CurrentMutable.UnregisterAll<NavigableViewModelMock>();
-                Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
-                Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
                 Locator.CurrentMutable.Register(() => new NavigableViewModelMock());
             }
 
@@ -227,7 +263,6 @@ namespace Sextant.Tests
             public async Task Should_Throw_If_Parameter_Null()
             {
                 // Given
-                var viewModel = Substitute.For<INavigable>();
                 ParameterViewStackService sut = new ParameterViewStackServiceFixture();
 
                 // When
@@ -240,7 +275,9 @@ namespace Sextant.Tests
                 result.ParamName.ShouldBe("parameter");
             }
 
-            /// <summary>Tests to make sure we receive a push page notification.</summary>
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
             /// <param name="contract">The contract.</param>
             /// <param name="reset">Reset the stack.</param>
             /// <param name="animate">Animate the navigation.</param>
@@ -264,6 +301,26 @@ namespace Sextant.Tests
 
                 // Then
                 await view.Received().PushPage(Arg.Any<NavigableViewModelMock>(), contract, reset, animate);
+            }
+
+            /// <summary>
+            /// Tests the view model factory is called.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_ViewModel_Factory()
+            {
+                // Given
+                var factory = Substitute.For<IViewModelFactory>();
+                factory.Create<NavigableViewModelMock>().Returns(new NavigableViewModelMock());
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+
+                // When
+                await sut.PushPage<NavigableViewModelMock>(navigationParameter);
+
+                // Then
+                factory.Received().Create<NavigableViewModelMock>();
             }
         }
 
@@ -479,6 +536,30 @@ namespace Sextant.Tests
 
                 // Then
                 await view.Received().PushModal(Arg.Any<NavigableViewModelMock>(), contract, withNavigation);
+            }
+
+            /// <summary>
+            /// Tests the view model factory is called.
+            /// </summary>
+            /// <param name="contract">The contract.</param>
+            /// <returns>A completion notification.</returns>
+            [Theory]
+            [InlineData("")]
+            [InlineData(null)]
+            [InlineData("contract")]
+            public async Task Should_Call_ViewModel_Factory(string? contract)
+            {
+                // Given
+                var factory = Substitute.For<IViewModelFactory>();
+                factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
+                var navigationParameter = Substitute.For<INavigationParameter>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+
+                // When
+                await sut.PushModal<NavigableViewModelMock>(navigationParameter, contract);
+
+                // Then
+                factory.Received().Create<NavigableViewModelMock>(contract);
             }
         }
 

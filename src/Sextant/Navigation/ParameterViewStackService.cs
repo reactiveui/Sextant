@@ -21,7 +21,17 @@ namespace Sextant
         /// </summary>
         /// <param name="view">The view.</param>
         public ParameterViewStackService(IView view)
-            : base(view)
+            : this(view, null!)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="viewModelFactory">The view model factory.</param>
+        public ParameterViewStackService(IView view, IViewModelFactory viewModelFactory)
+            : base(view, viewModelFactory)
         {
         }
 
@@ -101,7 +111,7 @@ namespace Sextant
         public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true)
             where TViewModel : INavigable
         {
-            var viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            TViewModel viewModel = Factory.Create<TViewModel>(contract);
             return PushPage(viewModel, parameter, contract, resetStack, animate);
         }
 
@@ -109,7 +119,7 @@ namespace Sextant
         public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
             where TViewModel : INavigable
         {
-            var viewModel = ViewModelFactory.Current.Create<TViewModel>();
+            TViewModel viewModel = Factory.Create<TViewModel>(contract);
             return PushModal(viewModel, parameter, contract, withNavigationPage);
         }
 
