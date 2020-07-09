@@ -1,6 +1,6 @@
 ## Sextant
 
-[![NuGet Stats](https://img.shields.io/nuget/v/sextant.svg)](https://www.nuget.org/packages/sextant) [![Build Status](https://dev.azure.com/dotnet/ReactiveUI/_apis/build/status/Sextant-CI)](https://dev.azure.com/dotnet/ReactiveUI/_build/latest?definitionId=76) [![Code Coverage](https://codecov.io/gh/reactiveui/sextant/branch/master/graph/badge.svg)](https://codecov.io/gh/reactiveui/sextant)
+[![NuGet Stats](https://img.shields.io/nuget/v/sextant.svg)](https://www.nuget.org/packages/sextant) [![Build Status](https://dev.azure.com/dotnet/ReactiveUI/_apis/build/status/Sextant-CI)](https://dev.azure.com/dotnet/ReactiveUI/_build/latest?definitionId=76) [![Code Coverage](https://codecov.io/gh/reactiveui/sextant/branch/main/graph/badge.svg)](https://codecov.io/gh/reactiveui/sextant)
 <br>
 <a href="https://www.nuget.org/packages/sextant">
         <img src="https://img.shields.io/nuget/dt/sextant.svg">
@@ -146,8 +146,8 @@ The `INavigable` interface exposes view model lifecycle methods that can be subs
 
 ## Samples
 
-- [Sample](https://github.com/reactiveui/Sextant/tree/master/Sample)
-- [Navigation Parameter Sample](https://github.com/reactiveui/ReactiveUI.Samples/tree/master/xamarin-forms/Navigation.Parameters)
+- [Sample](https://github.com/reactiveui/Sextant/tree/main/Sample)
+- [Navigation Parameter Sample](https://github.com/reactiveui/ReactiveUI.Samples/tree/main/xamarin-forms/Navigation.Parameters)
 
 ## Contribute
 
