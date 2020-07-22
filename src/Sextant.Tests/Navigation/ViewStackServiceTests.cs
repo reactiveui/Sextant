@@ -251,11 +251,12 @@ namespace Sextant.Tests
                 await sut.PopModal();
 
                 // Then
-                Received.InOrder(() =>
-                {
-                    view.PopModal();
-                    viewModel2.Destroy();
-                });
+                Received
+                    .InOrder(() =>
+                    {
+                        view.PopModal();
+                        viewModel2.Destroy();
+                    });
             }
         }
 
@@ -368,11 +369,12 @@ namespace Sextant.Tests
                 await sut.PopPage();
 
                 // Then
-                Received.InOrder(() =>
-                {
-                    view.PopPage();
-                    viewModel2.Destroy();
-                });
+                Received
+                    .InOrder(() =>
+                    {
+                        view.PopPage();
+                        viewModel2.Destroy();
+                    });
             }
         }
 
@@ -455,34 +457,6 @@ namespace Sextant.Tests
 
                 // Then
                 result.Should().ContainSingle();
-            }
-
-            /// <summary>
-            /// Tests to make sure we destroy the view model.
-            /// </summary>
-            /// <returns>A completion notification.</returns>
-            [Fact]
-            public async Task Should_Call_Destroy()
-            {
-                // Given
-                var viewModel1 = Substitute.For<IEverything>();
-                var viewModel2 = Substitute.For<IEverything>();
-                var viewModel3 = Substitute.For<IEverything>();
-                var view = Substitute.For<IView>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
-                await sut.PushPage(viewModel1);
-                await sut.PushPage(viewModel2);
-                await sut.PushPage(viewModel3);
-
-                // When
-                await sut.PopToRootPage();
-
-                // Then
-                Received.InOrder(() =>
-                {
-                    viewModel3.Destroy();
-                    viewModel2.Destroy();
-                });
             }
         }
 

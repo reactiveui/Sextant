@@ -45,6 +45,7 @@ namespace Sextant
                     {
                         var removedPage = PopStackAndTick(PageSubject);
                         Logger.Debug(CultureInfo.InvariantCulture, "Removed page '{0}' from stack.", removedPage.Id);
+                        removedPage.InvokeViewModelAction<IDestructible>(x => x.Destroy());
                     }
                 })
                 .DisposeWith(NavigationDisposables);
@@ -102,8 +103,8 @@ namespace Sextant
             View.PopModal()
                 .Do(_ =>
                 {
-                    var modal = PopStackAndTick(ModalSubject);
-                    modal.InvokeViewModelAction<IDestructible>(x => x.Destroy());
+                    PopStackAndTick(ModalSubject)
+                        .InvokeViewModelAction<IDestructible>(x => x.Destroy());
                 });
 
         /// <inheritdoc />

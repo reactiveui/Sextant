@@ -3,7 +3,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
@@ -58,6 +60,58 @@ namespace Sextant.Tests
 
                 // Then
                 viewModel2.Received(1).Destroy();
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_When_Page_Popped_Event()
+            {
+                // Given
+                var subject = new Subject<IViewModel?>();
+                var viewModel1 = Substitute.For<IDestructibleMock>();
+                var viewModel2 = Substitute.For<IDestructibleMock>();
+                var view = new NavigationViewMock(subject);
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+
+                // When
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
+                subject.OnNext(viewModel2);
+
+                // Then
+                viewModel2.Received(1).Destroy();
+            }
+
+            /// <summary>
+            /// Tests to make sure we receive a push page notification.
+            /// </summary>
+            /// <returns>A completion notification.</returns>
+            [Fact]
+            public async Task Should_Call_When_Popped_To_Root()
+            {
+                // Given
+                var viewModel1 = Substitute.For<IEverything>();
+                var viewModel2 = Substitute.For<IEverything>();
+                var viewModel3 = Substitute.For<IEverything>();
+                var view = Substitute.For<IView>();
+                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view);
+                await sut.PushPage(viewModel1);
+                await sut.PushPage(viewModel2);
+                await sut.PushPage(viewModel3);
+
+                // When
+                await sut.PopToRootPage();
+
+                // Then
+                Received
+                    .InOrder(() =>
+                    {
+                        viewModel3.Destroy();
+                        viewModel2.Destroy();
+                    });
             }
         }
     }

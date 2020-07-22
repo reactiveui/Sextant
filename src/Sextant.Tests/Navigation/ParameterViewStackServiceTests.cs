@@ -179,12 +179,13 @@ namespace Sextant.Tests
                 await sut.PushPage(viewModel, navigationParameter);
 
                 // Then
-                Received.InOrder(() =>
-                {
-                    viewModel.WhenNavigatingTo(Arg.Any<INavigationParameter>());
-                    view.PushPage(Arg.Any<IViewModel>(), null, Arg.Any<bool>(), Arg.Any<bool>());
-                    viewModel.WhenNavigatedTo(Arg.Any<INavigationParameter>());
-                });
+                Received
+                    .InOrder(() =>
+                    {
+                        viewModel.WhenNavigatingTo(Arg.Any<INavigationParameter>());
+                        view.PushPage(Arg.Any<IViewModel>(), null, Arg.Any<bool>(), Arg.Any<bool>());
+                        viewModel.WhenNavigatedTo(Arg.Any<INavigationParameter>());
+                    });
             }
 
             /// <summary>Tests to make sure we receive a push page notification.</summary>
@@ -727,12 +728,13 @@ namespace Sextant.Tests
                 await sut.PopPage(navigationParameter);
 
                 // Then
-                Received.InOrder(() =>
-                {
-                    view.PopPage(Arg.Any<bool>());
-                    viewModel2.WhenNavigatedFrom(Arg.Any<INavigationParameter>());
-                    viewModel2.Destroy();
-                });
+                Received
+                    .InOrder(() =>
+                    {
+                        view.PopPage(Arg.Any<bool>());
+                        viewModel2.WhenNavigatedFrom(Arg.Any<INavigationParameter>());
+                        viewModel2.Destroy();
+                    });
             }
         }
     }
