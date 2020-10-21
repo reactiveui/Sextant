@@ -26,7 +26,17 @@ namespace SextantSample.Avalonia
                 .RegisterNavigationView(() => new NavigationView())
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
 
-            Locator.Current.GetService<IViewStackService>().PushPage(new HomeViewModel());
+            Locator
+                .Current
+                .GetService<IViewStackService>()
+                .PushPage(new HomeViewModel());
+
+            Interactions.ErrorMessage.RegisterHandler(context => 
+                MessageBox.Avalonia
+                    .MessageBoxManager
+                    .GetMessageBoxStandardWindow("Notification", context.Input.ToString())
+                    .Show());
+
             new Window { Content = Locator.Current.GetNavigationView() }.Show();
             base.OnFrameworkInitializationCompleted();
         }
