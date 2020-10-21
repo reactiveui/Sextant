@@ -4,9 +4,12 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.ReactiveUI;
 using Avalonia.Styling;
+using DynamicData.Aggregation;
 using DynamicData.Binding;
 using ReactiveUI;
 using Sextant;
@@ -33,7 +36,18 @@ namespace SextantSample.Avalonia.Views
                 Children =
                 {
                     _pageNavigation.Control,
-                    _modalNavigation.Control
+                    new Grid
+                    {
+                        Children =
+                        {
+                            _modalNavigation.Control
+                        },
+                        [!Panel.BackgroundProperty] = 
+                            _modalNavigation
+                                .CountChanged
+                                .Select(count => count > 0 ? new SolidColorBrush(Colors.White) : null)
+                                .ToBinding()
+                    }
                 }
             };
         }
@@ -124,11 +138,24 @@ namespace SextantSample.Avalonia.Views
             /// <summary>
             /// Initializes a new instance of the <see cref="Navigation"/> helper.
             /// </summary>
-            public Navigation() =>
-                _navigationStack
+            public Navigation()
+            {
+                var navigationStackObservable = _navigationStack
                     .ToObservableChangeSet()
+                    .Publish()
+                    .RefCount();
+
+                navigationStackObservable
                     .Select(_ => _navigationStack.LastOrDefault())
                     .Subscribe(page => Control.Content = page);
+
+                CountChanged = navigationStackObservable.Count().AsObservable();
+            }
+
+            /// <summary>
+            /// Publishes new values when page count changes.
+            /// </summary>
+            public IObservable<int> CountChanged { get; }
 
             /// <summary>
             /// The control responsible for rendering the current view.
