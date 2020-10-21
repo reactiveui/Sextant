@@ -3,10 +3,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:SextantSample.ViewModels;assembly=SextantSample.ViewModels"
-             d:DataContext="{d:DesignInstance viewModels:GreenViewModel, IsDesignTimeCreatable=False}"
-             x:Class="SextantSample.Avalonia.Views.GreenView"
+             d:DataContext="{d:DesignInstance viewModels:HomeViewModel, IsDesignTimeCreatable=False}"
+             x:Class="SextantSample.Avalonia.Views.HomeView"
              mc:Ignorable="d">
-    <StackPanel Background="#043927">
+    <StackPanel>
         <Button Content="Open Modal" Command="{Binding OpenModal}" />
+        <Button Content="Push Page" Command="{Binding PushPage}" />
+        <Button Content="Push Generic Page" Command="{Binding PushGenericPage}" />
     </StackPanel>
 </UserControl>

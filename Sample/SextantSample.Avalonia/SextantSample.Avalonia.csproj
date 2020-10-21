@@ -19,6 +19,13 @@
         <Compile Update="Views\FirstModalView.xaml.cs">
           <DependentUpon>FirstModalView.xaml</DependentUpon>
         </Compile>
+        <EmbeddedResource Update="Views\SecondModalView.xaml">
+          <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+        </EmbeddedResource>
+        <Compile Update="Views\SecondModalView.xaml.cs">
+          <DependentUpon>SecondModalView.xaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" />
