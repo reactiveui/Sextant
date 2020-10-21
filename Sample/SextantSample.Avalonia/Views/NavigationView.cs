@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
@@ -35,9 +36,17 @@ namespace SextantSample.Avalonia.Views
             {
                 Children =
                 {
-                    _pageNavigation.Control,
                     new Grid
                     {
+                        ZIndex = 1,
+                        Children =
+                        {
+                            _pageNavigation.Control
+                        }
+                    },
+                    new Grid
+                    {
+                        ZIndex = 2,
                         Children =
                         {
                             _modalNavigation.Control
@@ -78,6 +87,7 @@ namespace SextantSample.Avalonia.Views
             bool animate = true)
         {
             var view = LocateView(viewModel, contract);
+            _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
             _pageNavigation.Push(view, resetStack);
             return Observable.Return(Unit.Default);
         }
@@ -85,6 +95,7 @@ namespace SextantSample.Avalonia.Views
         /// <inheritdoc />
         public IObservable<Unit> PopPage(bool animate = true)
         {
+            _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
             _pageNavigation.Pop();
             return Observable.Return(Unit.Default);
         }
@@ -92,6 +103,7 @@ namespace SextantSample.Avalonia.Views
         /// <inheritdoc />
         public IObservable<Unit> PopToRootPage(bool animate = true)
         {
+            _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
             _pageNavigation.PopToRoot();
             return Observable.Return(Unit.Default);
         }
@@ -134,6 +146,7 @@ namespace SextantSample.Avalonia.Views
         private class Navigation
         {
             private readonly ObservableCollection<IViewFor> _navigationStack = new ObservableCollection<IViewFor>();
+            private readonly IPageTransition _transition;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Navigation"/> helper.
@@ -150,7 +163,19 @@ namespace SextantSample.Avalonia.Views
                     .Subscribe(page => Control.Content = page);
 
                 CountChanged = navigationStackObservable.Count().AsObservable();
+                _transition = Control.PageTransition;
             }
+
+            /// <summary>
+            /// Toggles the animations.
+            /// </summary>
+            /// <param name="enable">Returns true if we are enabling the animations.</param>
+            public void ToggleAnimations(bool enable) => Control.PageTransition = enable ? _transition : null;
+
+            /// <summary>
+            /// Gets a bool indicating whether the control is visible.
+            /// </summary>
+            public bool IsVisible => _navigationStack.Count > 1;
 
             /// <summary>
             /// Publishes new values when page count changes.
