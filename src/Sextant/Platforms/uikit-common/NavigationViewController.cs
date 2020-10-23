@@ -107,19 +107,16 @@ namespace Sextant
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
-            IViewModel pageViewModel,
+            IViewModel viewModel,
             string? contract,
             bool resetStack,
             bool animate = true)
         {
-            UIViewController? viewController = null;
-
             return Observable.Start(
                     () =>
                     {
-                        var page = LocatePageFor(pageViewModel, contract);
-                        SetPageTitle(page, pageViewModel.Id);
-                        viewController = page;
+                        var page = LocatePageFor(viewModel, contract);
+                        SetPageTitle(page, viewModel.Id);
                         return page;
                     },
                     CurrentThreadScheduler.Instance)
@@ -148,7 +145,7 @@ namespace Sextant
                                 CATransaction.Commit();
                             }
 
-                            PushViewController(viewController, animate);
+                            PushViewController(page, animate);
                             CATransaction.Commit();
                             return Disposable.Empty;
                         });
@@ -161,7 +158,7 @@ namespace Sextant
             var poppedController = base.PopViewController(animated);
 
             var view = poppedController as IViewFor;
-            _pagePopped.OnNext(view?.ViewModel as IPageViewModel);
+            _pagePopped.OnNext(view?.ViewModel as IViewModel);
 
             return poppedController;
         }
