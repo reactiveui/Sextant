@@ -3,7 +3,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using Shouldly;
+using FluentAssertions;
 using Splat;
 using Xunit;
 
@@ -34,10 +34,10 @@ namespace Sextant.Tests
             public void Should_Throw_If_Not_Registered()
             {
                 // Given, When
-                var result = Should.Throw<ViewModelFactoryNotFoundException>(() => ViewModelFactory.Current);
+                var result = Record.Exception(() => ViewModelFactory.Current);
 
                 // Then
-                result.Message.ShouldBe("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken");
+                result.Should().BeOfType<ViewModelFactoryNotFoundException>().Which.Message.Should().Be("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken");
             }
 
             /// <summary>
@@ -51,8 +51,8 @@ namespace Sextant.Tests
                 var viewModelFactory = ViewModelFactory.Current;
 
                 // Then
-                viewModelFactory.ShouldBeAssignableTo<IViewModelFactory>();
-                viewModelFactory.ShouldBeOfType<DefaultViewModelFactory>();
+                viewModelFactory.Should().BeAssignableTo<IViewModelFactory>();
+                viewModelFactory.Should().BeOfType<DefaultViewModelFactory>();
             }
         }
     }

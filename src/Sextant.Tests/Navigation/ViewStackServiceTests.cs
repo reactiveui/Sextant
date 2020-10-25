@@ -9,9 +9,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NSubstitute;
 using Sextant.Mocks;
-using Shouldly;
 using Splat;
 using Xunit;
 
@@ -45,7 +45,7 @@ namespace Sextant.Tests
                 var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
 
                 // Then
-                result.ShouldBeOfType<ViewModelFactoryNotFoundException>();
+                result.Should().BeOfType<ViewModelFactoryNotFoundException>();
             }
 
             /// <summary>
@@ -61,7 +61,7 @@ namespace Sextant.Tests
                 var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
 
                 // Then
-                result.ShouldBeNull();
+                result.Should().BeNull();
             }
         }
 
@@ -80,7 +80,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
+                sut.PageStack.Should().NotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
 
             /// <summary>
@@ -93,7 +93,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.PageStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
+                sut.PageStack.Should().NotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
         }
 
@@ -112,7 +112,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
+                sut.ModalStack.Should().NotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
 
             /// <summary>
@@ -125,7 +125,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // Then
-                sut.ModalStack.ShouldNotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
+                sut.ModalStack.Should().NotBeOfType<BehaviorSubject<IImmutableList<IViewModel>>>();
             }
         }
 
@@ -147,12 +147,12 @@ namespace Sextant.Tests
 
                 // When
                 var item = await sut.ModalStack.FirstAsync();
-                item.Count.ShouldBe(1);
+                item.Count.Should().Be(1);
                 await sut.PopModal();
 
                 // Then
                 item = await sut.ModalStack.FirstAsync();
-                item.ShouldBeEmpty();
+                item.Should().BeEmpty();
             }
 
             /// <summary>
@@ -188,7 +188,7 @@ namespace Sextant.Tests
                 var result = await sut.PopModal();
 
                 // Then
-                result.ShouldBeOfType<Unit>();
+                result.Should().BeOfType<Unit>();
             }
 
             /// <summary>
@@ -205,8 +205,8 @@ namespace Sextant.Tests
                 var result = await Record.ExceptionAsync(async () => await sut.PopModal()).ConfigureAwait(false);
 
                 // Then
-                result.ShouldBeOfType<InvalidOperationException>();
-                result?.Message.ShouldBe("Stack is empty.");
+                result.Should().BeOfType<InvalidOperationException>();
+                result?.Message.Should().Be("Stack is empty.");
             }
 
             /// <summary>
@@ -283,7 +283,7 @@ namespace Sextant.Tests
                 var result = await sut.PageStack.FirstAsync();
 
                 // Then
-                result.ShouldBeEmpty();
+                result.Should().BeEmpty();
             }
 
             /// <summary>
@@ -319,7 +319,7 @@ namespace Sextant.Tests
                 var result = await sut.PopPage();
 
                 // Then
-                result.ShouldBeOfType<Unit>();
+                result.Should().BeOfType<Unit>();
             }
 
             /// <summary>
@@ -395,10 +395,10 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Should.ThrowAsync<InvalidOperationException>(async () => await sut.PopToRootPage()).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PopToRootPage()).ConfigureAwait(false);
 
                 // Then
-                result.Message.ShouldBe("Stack is empty.");
+                result.Should().BeOfType<InvalidOperationException>().Which.Message.Should().Be("Stack is empty.");
             }
 
             /// <summary>
@@ -417,7 +417,7 @@ namespace Sextant.Tests
                 var result = await sut.PageStack.FirstOrDefaultAsync();
 
                 // Then
-                result.ShouldHaveSingleItem();
+                result.Should().ContainSingle();
             }
 
             /// <summary>
@@ -441,7 +441,7 @@ namespace Sextant.Tests
                 await sut.PopToRootPage();
 
                 // Then
-                count.ShouldBe(1);
+                count.Should().Be(1);
             }
 
             /// <summary>
@@ -460,7 +460,7 @@ namespace Sextant.Tests
                 var result = await sut.PageStack.FirstOrDefaultAsync();
 
                 // Then
-                result.ShouldHaveSingleItem();
+                result.Should().ContainSingle();
             }
 
             /// <summary>
@@ -511,14 +511,14 @@ namespace Sextant.Tests
                 // Given
                 ViewStackService sut = new ViewStackServiceFixture();
                 await sut.PushModal(new NavigableViewModelMock(), "modal", amount);
-                sut.ModalStack.FirstAsync().Wait().Count.ShouldBe(amount);
+                sut.ModalStack.FirstAsync().Wait().Count.Should().Be(amount);
                 await sut.PopModal(amount);
 
                 // When
                 var result = await sut.ModalStack.FirstAsync();
 
                 // Then
-                result.ShouldBeEmpty();
+                result.Should().BeEmpty();
             }
 
             /// <summary>
@@ -536,8 +536,8 @@ namespace Sextant.Tests
                 var result = await sut.TopModal();
 
                 // Then
-                result.ShouldNotBeNull();
-                result.ShouldBeOfType<NavigableViewModelMock>();
+                result.Should().NotBeNull();
+                result.Should().BeOfType<NavigableViewModelMock>();
             }
 
             /// <summary>
@@ -576,8 +576,8 @@ namespace Sextant.Tests
                 var result = await sut.ModalStack.FirstAsync();
 
                 // Then
-                result.ShouldNotBeEmpty();
-                result.Count.ShouldBe(1);
+                result.Should().NotBeEmpty();
+                result.Count.Should().Be(1);
             }
 
             /// <summary>
@@ -611,7 +611,7 @@ namespace Sextant.Tests
                 var result = await Record.ExceptionAsync(async () => await sut.PushModal(null)).ConfigureAwait(false);
 
                 // Then
-                result.ShouldBeOfType<ArgumentNullException>();
+                result.Should().BeOfType<ArgumentNullException>();
             }
         }
 
@@ -642,12 +642,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NullViewModelMock>())
+                    await Record.ExceptionAsync(async () => await sut.PushModal<NullViewModelMock>())
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("modal");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("modal");
             }
 
             /// <summary>
@@ -705,10 +704,10 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Should.ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(null)).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PushPage(null)).ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("viewModel");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("viewModel");
             }
 
             /// <summary>
@@ -726,8 +725,8 @@ namespace Sextant.Tests
                 var result = await sut.TopPage();
 
                 // Then
-                result.ShouldNotBeNull();
-                result.ShouldBeOfType<NavigableViewModelMock>();
+                result.Should().NotBeNull();
+                result.Should().BeOfType<NavigableViewModelMock>();
             }
 
             /// <summary>
@@ -745,8 +744,8 @@ namespace Sextant.Tests
                 var result = await sut.PageStack.FirstAsync();
 
                 // Then
-                result.ShouldNotBeEmpty();
-                result.Count.ShouldBe(1);
+                result.Should().NotBeEmpty();
+                result.Count.Should().Be(1);
             }
 
             /// <summary>
@@ -782,7 +781,7 @@ namespace Sextant.Tests
                 var result = await sut.PageStack.FirstOrDefaultAsync();
 
                 // Then
-                result.ShouldHaveSingleItem();
+                result.Should().ContainSingle();
             }
         }
 
@@ -812,12 +811,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage<NullViewModelMock>())
+                    await Record.ExceptionAsync(async () => await sut.PushPage<NullViewModelMock>())
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("viewModel");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("viewModel");
             }
 
             /// <summary>
@@ -898,8 +896,8 @@ namespace Sextant.Tests
                 var result = await sut.TopModal();
 
                 // Then
-                result.ShouldBeOfType<NavigableViewModelMock>();
-                result.Id.ShouldBe("2");
+                result.Should().BeOfType<NavigableViewModelMock>();
+                result.Id.Should().Be("2");
             }
 
             /// <summary>
@@ -913,10 +911,10 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Should.ThrowAsync<ArgumentOutOfRangeException>(async () => await sut.TopModal()).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.TopModal()).ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("index");
+                result.Should().BeOfType<ArgumentOutOfRangeException>().Which.ParamName.Should().Be("index");
             }
         }
 
@@ -959,8 +957,8 @@ namespace Sextant.Tests
                 var result = await sut.TopPage();
 
                 // Then
-                result.ShouldBeOfType<NavigableViewModelMock>();
-                result.Id.ShouldBe("2");
+                result.Should().BeOfType<NavigableViewModelMock>();
+                result.Id.Should().Be("2");
             }
 
             /// <summary>
@@ -974,10 +972,10 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Should.ThrowAsync<ArgumentOutOfRangeException>(async () => await sut.TopPage()).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.TopPage()).ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("index");
+                result.Should().BeOfType<ArgumentOutOfRangeException>().Which.ParamName.Should().Be("index");
             }
         }
     }
