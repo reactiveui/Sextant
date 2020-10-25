@@ -31,21 +31,26 @@
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
     <PackageReference Include="Xunit.StaFact" Version="1.0.37" />
-    <PackageReference Include="Shouldly" Version=" 3.0.2" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="ReactiveUI.Testing" Version="11.*" />
-    <PackageReference Include="PublicApiGenerator" Version="10.1.0" />
+    <PackageReference Include="PublicApiGenerator" Version="10.2.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup Condition="$(IsTestProject)">
     <Compile Include="$(MSBuildThisFileDirectory)ApiGeneratorGlobalSuppressions.cs" />
+
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="LICENSE" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="stylecop.analyzers" Version="1.1.118" PrivateAssets="all" />
+    <PackageReference Include="stylecop.analyzers" Version="1.2.0-beta.205" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0" PrivateAssets="all" />
-    <PackageReference Include="Roslynator.Analyzers" Version="2.3.0" PrivateAssets="All" />
+    <PackageReference Include="Roslynator.Analyzers" Version="3.0.0" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
