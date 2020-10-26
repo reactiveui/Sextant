@@ -3,9 +3,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using FluentAssertions;
 using ReactiveUI;
 using Sextant.Mocks;
-using Shouldly;
 using Splat;
 using Xunit;
 
@@ -34,7 +34,7 @@ namespace Sextant.Tests
                 var result = ViewModelFactory.Current;
 
                 // Then
-                result.ShouldBeOfType<DefaultViewModelFactory>();
+                result.Should().BeOfType<DefaultViewModelFactory>();
             }
 
             /// <summary>
@@ -51,7 +51,7 @@ namespace Sextant.Tests
                 var result = ViewModelFactory.Current;
 
                 // Then
-                result.ShouldBe(viewModelFactory);
+                result.Should().Be(viewModelFactory);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Sextant.Tests
                 var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
                 // Then
-                result.ShouldBeOfType<PageView>();
+                result.Should().BeOfType<PageView>();
             }
 
             /// <summary>
@@ -89,7 +89,7 @@ namespace Sextant.Tests
                 var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
                 // Then
-                result.ShouldBeOfType<PageView>();
+                result.Should().BeOfType<PageView>();
             }
         }
     }

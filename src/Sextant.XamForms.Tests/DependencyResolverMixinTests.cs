@@ -3,9 +3,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using FluentAssertions;
 using ReactiveUI;
 using Sextant.Mocks;
-using Shouldly;
 using Splat;
 using Xamarin.Forms;
 using Xunit;
@@ -35,7 +35,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
 
                 // Then
-                result.ShouldBeOfType<NavigationView>();
+                result.Should().BeOfType<NavigationView>();
             }
 
             /// <summary>
@@ -51,7 +51,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
 
                 // Then
-                result.ShouldBeOfType<NavigationView>();
+                result.Should().BeOfType<NavigationView>();
             }
         }
 
@@ -74,7 +74,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IView>(DependencyResolverMixins.NavigationView);
 
                 // Then
-                result.ShouldBeOfType<NavigationView>();
+                result.Should().BeOfType<NavigationView>();
             }
         }
 
@@ -109,7 +109,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ParameterViewStackService>();
+                result.Should().BeOfType<ParameterViewStackService>();
             }
 
             /// <summary>
@@ -127,7 +127,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ParameterViewStackService>();
+                result.Should().BeOfType<ParameterViewStackService>();
             }
 
             /// <summary>
@@ -145,7 +145,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ParameterViewStackService>();
+                result.Should().BeOfType<ParameterViewStackService>();
             }
         }
 
@@ -167,7 +167,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
                 // Then
-                result.ShouldBeOfType<PageView>();
+                result.Should().BeOfType<PageView>();
             }
 
             /// <summary>
@@ -183,7 +183,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
                 // Then
-                result.ShouldBeOfType<PageView>();
+                result.Should().BeOfType<PageView>();
             }
         }
 
@@ -205,9 +205,9 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetNavigationView();
 
                 // Then
-                result.ShouldBeAssignableTo<IView>();
-                result.ShouldBeAssignableTo<Page>();
-                result.ShouldBeAssignableTo<NavigationPage>();
+                result.Should().BeAssignableTo<IView>();
+                result.Should().BeAssignableTo<Page>();
+                result.Should().BeAssignableTo<NavigationPage>();
             }
         }
     }

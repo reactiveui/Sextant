@@ -5,9 +5,9 @@
 
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NSubstitute;
 using Sextant.Mocks;
-using Shouldly;
 using Xunit;
 
 namespace Sextant.Tests
@@ -32,11 +32,11 @@ namespace Sextant.Tests
                 ParameterViewModel sut = new ParameterViewModel();
 
                 // When
-                sut.Disposable.IsDisposed.ShouldBeFalse();
+                sut.Disposable.IsDisposed.Should().BeFalse();
                 sut.Destroy();
 
                 // Then
-                sut.Disposable.IsDisposed.ShouldBeTrue();
+                sut.Disposable.IsDisposed.Should().BeTrue();
             }
 
             /// <summary>

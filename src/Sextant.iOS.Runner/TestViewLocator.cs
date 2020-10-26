@@ -18,7 +18,6 @@ namespace Sextant.IOS.Runner
         : IViewLocator
     {
         public IViewFor ResolveView<T>(T viewModel, string contract = null)
-            where T : class
         {
             return new PageUiViewController();
         }

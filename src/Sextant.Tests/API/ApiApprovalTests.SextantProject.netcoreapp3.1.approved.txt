@@ -131,6 +131,7 @@ namespace Sextant
     {
         public static Sextant.IViewModelFactory Current { get; }
     }
+    [System.Serializable]
     public class ViewModelFactoryNotFoundException : System.Exception
     {
         public ViewModelFactoryNotFoundException() { }

@@ -184,7 +184,7 @@
       <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI">
-      <Version>11.*</Version>
+      <Version>12.*</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

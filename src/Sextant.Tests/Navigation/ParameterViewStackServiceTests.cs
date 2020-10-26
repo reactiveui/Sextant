@@ -7,9 +7,9 @@ using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NSubstitute;
 using Sextant.Mocks;
-using Shouldly;
 using Splat;
 using Xunit;
 
@@ -43,7 +43,7 @@ namespace Sextant.Tests
                 var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null));
 
                 // Then
-                result.ShouldBeOfType<ViewModelFactoryNotFoundException>();
+                result.Should().BeOfType<ViewModelFactoryNotFoundException>();
             }
 
             /// <summary>
@@ -59,7 +59,7 @@ namespace Sextant.Tests
                 var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null));
 
                 // Then
-                result.ShouldBeNull();
+                result.Should().BeNull();
             }
         }
 
@@ -81,12 +81,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(null, navigationParameter))
+                    await Record.ExceptionAsync(async () => await sut.PushPage(null, navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("navigableViewModel");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableViewModel");
             }
 
             /// <summary>
@@ -102,12 +101,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage(viewModel, (INavigationParameter)null))
+                    await Record.ExceptionAsync(async () => await sut.PushPage(viewModel, (INavigationParameter)null))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("parameter");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
             }
 
             /// <summary>
@@ -247,12 +245,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage<NullViewModelMock>(navigationParameter))
+                    await Record.ExceptionAsync(async () => await sut.PushPage<NullViewModelMock>(navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("navigableViewModel");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableViewModel");
             }
 
             /// <summary>
@@ -267,12 +264,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushPage<NavigableViewModelMock>(null))
+                    await Record.ExceptionAsync(async () => await sut.PushPage<NavigableViewModelMock>(null))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("parameter");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
             }
 
             /// <summary>
@@ -342,12 +338,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal(null, navigationParameter))
+                    await Record.ExceptionAsync(async () => await sut.PushModal(null, navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("navigableModal");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableModal");
             }
 
             /// <summary>
@@ -363,12 +358,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal(viewModel, null))
+                    await Record.ExceptionAsync(async () => await sut.PushModal(viewModel, null))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("parameter");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
             }
 
             /// <summary>
@@ -485,12 +479,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NullViewModelMock>(navigationParameter))
+                    await Record.ExceptionAsync(async () => await sut.PushModal<NullViewModelMock>(navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("navigableModal");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableModal");
             }
 
             /// <summary>
@@ -505,12 +498,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                        .ThrowAsync<ArgumentNullException>(async () => await sut.PushModal<NavigableViewModelMock>(null))
+                    await Record.ExceptionAsync(async () => await sut.PushModal<NavigableViewModelMock>(null))
                         .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("parameter");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
             }
 
             /// <summary>
@@ -580,12 +572,11 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Should
-                    .ThrowAsync<ArgumentNullException>(async () => await sut.PopPage(null))
+                    await Record.ExceptionAsync(async () => await sut.PopPage(null))
                     .ConfigureAwait(false);
 
                 // Then
-                result.ParamName.ShouldBe("parameter");
+                result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
             }
 
             /// <summary>
