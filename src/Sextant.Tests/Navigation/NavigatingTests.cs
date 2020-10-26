@@ -5,8 +5,8 @@
 
 using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Sextant.Mocks;
-using Shouldly;
 using Xunit;
 
 namespace Sextant.Tests
@@ -34,8 +34,8 @@ namespace Sextant.Tests
                 sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" }, { "life", 42 } }).Subscribe();
 
                 // Then
-                sut.Text.ShouldBe("world");
-                sut.Meaning.ShouldBe(42);
+                sut.Text.Should().Be("world");
+                sut.Meaning.Should().Be(42);
             }
 
             /// <summary>
@@ -51,7 +51,7 @@ namespace Sextant.Tests
                 sut.WhenNavigatingTo(new NavigationParameter());
 
                 // Then
-                sut.Text.ShouldBeNull();
+                sut.Text.Should().BeNull();
             }
 
             /// <summary>
@@ -64,10 +64,10 @@ namespace Sextant.Tests
                 ParameterViewModel sut = new ParameterViewModel();
 
                 // When
-                var result = Should.Throw<KeyNotFoundException>(() => sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" } }).Subscribe());
+                var result = Record.Exception(() => sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" } }).Subscribe());
 
                 // Then
-                result.ShouldNotBeNull();
+                result.Should().BeOfType<KeyNotFoundException>();
             }
         }
     }

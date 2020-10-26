@@ -3,7 +3,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using Shouldly;
+using FluentAssertions;
 using Splat;
 using Xunit;
 
@@ -32,7 +32,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IView>(nameof(NavigationView));
 
                 // Then
-                result.ShouldBeOfType<NavigationView>();
+                result.Should().BeOfType<NavigationView>();
             }
 
             /// <summary>
@@ -48,7 +48,7 @@ namespace Sextant.XamForms.Tests
                 var result = Locator.Current.GetService<IViewStackService>();
 
                 // Then
-                result.ShouldBeOfType<ParameterViewStackService>();
+                result.Should().BeOfType<ParameterViewStackService>();
             }
 
             /// <summary>
@@ -64,7 +64,7 @@ namespace Sextant.XamForms.Tests
                 var result = ViewModelFactory.Current;
 
                 // Then
-                result.ShouldBeAssignableTo<IViewModelFactory>();
+                result.Should().BeAssignableTo<IViewModelFactory>();
             }
         }
     }
