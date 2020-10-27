@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="0.9.10" />
+        <PackageReference Include="Avalonia.Desktop" Version="0.9.10" />
+        <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.10" />
+        <PackageReference Include="Citrus.Avalonia" Version="1.2.6" />
+        <PackageReference Include="MessageBox.Avalonia" Version="0.9.6.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="**\*.xaml.cs">
+            <DependentUpon>%(Filename)</DependentUpon>
+        </Compile>
+        <EmbeddedResource Include="**\*.xaml">
+            <SubType>Designer</SubType>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" />
+    </ItemGroup>
+</Project>
