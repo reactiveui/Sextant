@@ -27,21 +27,16 @@ jobs:
       with:
         dotnet-version: 3.1.x
 
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
-
-    - name: NuGet restore
-      run: dotnet restore
-      working-directory: src
-
     - name: NBGV
       id: nbgv
       uses: dotnet/nbgv@master
       with:
         setAllVars: true
 
+    - name: NuGet Restore
+      run: dotnet restore
+      working-directory: src
+      
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1
 
@@ -54,7 +49,7 @@ jobs:
       with:
         project-files: '**/*Tests*.csproj'
         no-build: true
-        exclude-filter: '[${{env.productNamespacePrefix}}*Tests.*]*'
+        exclude-filter: '[${{env.productNamespacePrefix}}.*.Tests.*]*'
         include-filter: '[${{env.productNamespacePrefix}}*]*'
         output-format: cobertura
         output: '../../artifacts/'
