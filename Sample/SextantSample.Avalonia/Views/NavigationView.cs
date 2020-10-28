@@ -54,7 +54,7 @@ namespace SextantSample.Avalonia.Views
                         [!Panel.BackgroundProperty] = 
                             _modalNavigation
                                 .CountChanged
-                                .Select(count => count > 0 ? new SolidColorBrush(Colors.White) : null)
+                                .Select(count => count > 0 ? new SolidColorBrush(Colors.Transparent) : null)
                                 .ToBinding()
                     }
                 }
