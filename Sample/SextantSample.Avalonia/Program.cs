@@ -11,6 +11,6 @@ namespace SextantSample.Avalonia
             AppBuilder.Configure<App>()
                 .UseReactiveUI()
                 .UsePlatformDetect()
-                .LogToDebug();
+                .LogToTrace();
     }
 }
