@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.iOS", "Sextan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.XamForms", "..\src\Sextant.XamForms\Sextant.XamForms.csproj", "{4529D741-5B1E-4A05-9FDA-36625C12FC33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SextantSample.ViewModels", "SextantSample.Core\SextantSample.ViewModels.csproj", "{5818A5AF-3FF6-4E68-80FC-604D4AEF156C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -191,6 +193,8 @@ Global
 		{4529D741-5B1E-4A05-9FDA-36625C12FC33}.Sample Release|iPhone.Build.0 = Release|Any CPU
 		{4529D741-5B1E-4A05-9FDA-36625C12FC33}.Sample Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{4529D741-5B1E-4A05-9FDA-36625C12FC33}.Sample Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{5818A5AF-3FF6-4E68-80FC-604D4AEF156C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5818A5AF-3FF6-4E68-80FC-604D4AEF156C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
