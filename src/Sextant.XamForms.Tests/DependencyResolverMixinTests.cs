@@ -199,7 +199,7 @@ namespace Sextant.XamForms.Tests
             public void Should_Return_Navigation_View()
             {
                 // Given
-                Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>();
+                Locator.CurrentMutable.RegisterNavigationView();
 
                 // When
                 var result = Locator.Current.GetNavigationView();

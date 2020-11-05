@@ -4,18 +4,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using Foundation;
-using Sextant;
 using Shouldly;
-using UIKit;
 using Xunit;
 
 namespace Sextant.IOS.Runner
