@@ -23,7 +23,7 @@ namespace Sextant.Mocks
         private int _meaning;
 
         /// <inheritdoc />
-        public string? Id { get; }
+        public string Id { get; } = nameof(ParameterViewModel);
 
         /// <summary>
         /// Gets or sets the text.

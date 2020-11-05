@@ -1,0 +1,66 @@
+[assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
+namespace Sextant.Plugins.Popup
+{
+    public interface IPopupViewStackService : Sextant.IParameterViewStackService, Sextant.IViewStackService
+    {
+        System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popped { get; }
+        System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popping { get; }
+        System.Collections.Generic.IReadOnlyList<Sextant.IViewModel> PopupStack { get; }
+        System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushed { get; }
+        System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushing { get; }
+        System.IObservable<System.Reactive.Unit> PopAllPopups(bool animate = true);
+        System.IObservable<System.Reactive.Unit> PopPopup(bool animate = true);
+        System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel, string? contract = null, bool animate = true);
+        System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract = null, bool animate = true);
+        System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(string? contract = null, bool animate = true)
+            where TViewModel : Sextant.IViewModel;
+        System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter, string? contract = null, bool animate = true)
+            where TViewModel : Sextant.INavigable;
+        System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract = null, bool animate = true);
+    }
+    public class PopupNavigationEvent
+    {
+        public PopupNavigationEvent(ReactiveUI.IViewFor page, bool isAnimated) { }
+        public bool IsAnimated { get; }
+        public Sextant.IViewModel ViewModel { get; }
+    }
+    public sealed class PopupViewStackService : Sextant.Plugins.Popup.PopupViewStackServiceBase
+    {
+        public PopupViewStackService(Sextant.IView view, Rg.Plugins.Popup.Contracts.IPopupNavigation popupNavigation, ReactiveUI.IViewLocator viewLocator, Sextant.IViewModelFactory viewModelFactory) { }
+    }
+    public abstract class PopupViewStackServiceBase : Sextant.ParameterViewStackServiceBase, Sextant.IParameterViewStackService, Sextant.IViewStackService, Sextant.Plugins.Popup.IPopupViewStackService
+    {
+        protected PopupViewStackServiceBase(Sextant.IView view, Rg.Plugins.Popup.Contracts.IPopupNavigation popupNavigation, ReactiveUI.IViewLocator viewLocator, Sextant.IViewModelFactory viewModelFactory) { }
+        public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popped { get; }
+        public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popping { get; }
+        public System.Collections.Generic.IReadOnlyList<Sextant.IViewModel> PopupStack { get; }
+        protected System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> PopupSubject { get; }
+        public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushed { get; }
+        public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushing { get; }
+        public System.IObservable<System.Reactive.Unit> PopAllPopups(bool animate = true) { }
+        public System.IObservable<System.Reactive.Unit> PopPopup(bool animate = true) { }
+        public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel, string? contract = null, bool animate = true) { }
+        public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract = null, bool animate = true) { }
+        public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(string? contract = null, bool animate = true)
+            where TViewModel : Sextant.IViewModel { }
+        public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter, string? contract = null, bool animate = true)
+            where TViewModel : Sextant.INavigable { }
+        public System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract = null, bool animate = true) { }
+    }
+    public abstract class SextantPopupPage : Rg.Plugins.Popup.Pages.PopupPage, ReactiveUI.IActivatableView, ReactiveUI.IViewFor
+    {
+        public static readonly Xamarin.Forms.BindableProperty ViewModelProperty;
+        protected SextantPopupPage() { }
+        public System.IObservable<System.Reactive.Unit> BackgroundClick { get; }
+        public object ViewModel { get; set; }
+        protected override void OnBindingContextChanged() { }
+    }
+    public abstract class SextantPopupPage<TViewModel> : Sextant.Plugins.Popup.SextantPopupPage, ReactiveUI.IActivatableView, ReactiveUI.IViewFor, ReactiveUI.IViewFor<TViewModel>
+        where TViewModel :  class, Sextant.IViewModel
+    {
+        public static readonly Xamarin.Forms.BindableProperty ViewModelProperty;
+        protected SextantPopupPage() { }
+        public new TViewModel ViewModel { get; set; }
+        protected override void OnBindingContextChanged() { }
+    }
+}

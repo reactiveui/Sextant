@@ -15,7 +15,7 @@ using PublicApiGenerator;
 using Splat;
 using Xunit;
 
-namespace Sextant.XamForms.Tests
+namespace Sextant.Plugins.Popup.Tests
 {
     /// <summary>
     /// Tests to make sure that the API matches the approved ones.
@@ -29,9 +29,9 @@ namespace Sextant.XamForms.Tests
         /// Tests to make sure the splat project is approved.
         /// </summary>
         [Fact]
-        public void SextantXamForms()
+        public void SextantPluginsPopup()
         {
-            CheckApproval(typeof(NavigationView).Assembly);
+            CheckApproval(typeof(IPopupViewStackService).Assembly);
         }
 
         private static void CheckApproval(Assembly assembly, [CallerMemberName]string memberName = null, [CallerFilePath]string filePath = null)

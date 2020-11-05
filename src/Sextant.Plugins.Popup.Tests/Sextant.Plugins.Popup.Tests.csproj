@@ -1,10 +1,12 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <NoWarn>$(NoWarn);1591;CA1707;SA1633;CA1034</NoWarn>
     <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <!-- This is needed for Rg.Plugins.Popup on netcoreapp 3.1 -->
+    <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
-    <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
-    <ProjectReference Include="..\Sextant\Sextant.csproj" />
+    <ProjectReference Include="..\Sextant.Plugins.Popup\Sextant.Plugins.Popup.csproj" />
   </ItemGroup>
+
 </Project>
