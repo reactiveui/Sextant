@@ -8,9 +8,10 @@
       <PackageId>Sextant.Plugins.Popup</PackageId>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Rg.Plugins.Popup" Version="2.*" />
   </ItemGroup>
