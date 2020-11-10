@@ -4,7 +4,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using Shouldly;
+using FluentAssertions;
 using Xunit;
 
 namespace Sextant.IOS.Runner
@@ -29,7 +29,7 @@ namespace Sextant.IOS.Runner
             sut.PopPage();
 
             // Then
-            actual.ShouldBeTrue();
+            actual.Should().BeTrue();
         }
     }
 }
