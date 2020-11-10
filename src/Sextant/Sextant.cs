@@ -5,7 +5,10 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Splat;
+
+[assembly: InternalsVisibleTo("Sextant.Plugins.Popup")]
 
 namespace Sextant
 {

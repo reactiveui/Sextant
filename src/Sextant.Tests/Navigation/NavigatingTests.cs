@@ -39,22 +39,6 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Should return null if no values are provided for the parameter.
-            /// </summary>
-            [Fact]
-            public void Should_Return_Null_If_No_Values_Provided()
-            {
-                // Given
-                ParameterViewModel sut = new();
-
-                // When
-                sut.WhenNavigatingTo(new NavigationParameter());
-
-                // Then
-                sut.Text.Should().BeNull();
-            }
-
-            /// <summary>
             /// Should not throw if key not found.
             /// </summary>
             [Fact]

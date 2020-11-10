@@ -47,7 +47,8 @@ namespace Sextant
                 .ObserveOn(View.MainThreadScheduler)
                 .Subscribe(_ =>
                     Logger.Debug(
-                        $"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
+                        $"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"))
+                .DisposeNext(NavigationDisposable);
 
             return View
                 .PushPage(navigableViewModel, contract, resetStack, animate)
@@ -59,7 +60,8 @@ namespace Sextant
                     navigableViewModel
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(_ => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"))
+                        .DisposeNext(NavigationDisposable);
                 });
         }
 
@@ -79,8 +81,9 @@ namespace Sextant
             navigableModal
                 .WhenNavigatingTo(parameter)
                 .ObserveOn(View.MainThreadScheduler)
-                .Subscribe(_ =>
-                    Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"));
+                .Subscribe(navigating =>
+                    Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"))
+                .DisposeNext(NavigationDisposable);
 
             return View
                 .PushModal(navigableModal, contract, withNavigationPage)
@@ -92,7 +95,8 @@ namespace Sextant
                     navigableModal
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(_ => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}"));
+                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}"))
+                        .DisposeNext(NavigationDisposable);
                 });
         }
 
@@ -128,8 +132,9 @@ namespace Sextant
                     poppedPage?.InvokeViewModelAction<INavigable>(x =>
                             x.WhenNavigatedFrom(parameter)
                                 .ObserveOn(View.MainThreadScheduler)
-                                .Subscribe(_ =>
-                                    Logger.Debug($"Called `WhenNavigatedFrom` on '{poppedPage.Id}' passing parameter {parameter}")))
+                                .Subscribe(navigatedFrom =>
+                                    Logger.Debug($"Called `WhenNavigatedFrom` on '{poppedPage.Id}' passing parameter {parameter}"))
+                                .DisposeNext(NavigationDisposable))
                         .InvokeViewModelAction<IDestructible>(x => x.Destroy());
 
                     IViewModel? topPage = TopPage().FirstOrDefaultAsync().Wait();
@@ -138,8 +143,9 @@ namespace Sextant
                         navigated
                             .WhenNavigatedTo(parameter)
                             .ObserveOn(View.MainThreadScheduler)
-                            .Subscribe(_ =>
-                                Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}"));
+                            .Subscribe(navigatedTo =>
+                                Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}"))
+                            .DisposeNext(NavigationDisposable);
                     }
                 });
         }

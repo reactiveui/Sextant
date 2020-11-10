@@ -94,6 +94,11 @@ namespace Sextant
         protected CompositeDisposable NavigationDisposables { get; } = new();
 
         /// <summary>
+        /// Gets the navigation disposables.
+        /// </summary>
+        protected SerialDisposable NavigationDisposable { get; } = new SerialDisposable();
+
+        /// <summary>
         /// Pops the <see cref="INavigable" /> off the stack.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
@@ -297,6 +302,7 @@ namespace Sextant
             if (disposing)
             {
                 NavigationDisposables.Dispose();
+                NavigationDisposable.Dispose();
             }
         }
     }
