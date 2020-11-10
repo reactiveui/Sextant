@@ -139,7 +139,6 @@
     <PackageReference Include="xunit.runner.devices">
       <Version>2.5.25</Version>
     </PackageReference>
-    <PackageReference Include="Shouldly" Version=" 4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj">
