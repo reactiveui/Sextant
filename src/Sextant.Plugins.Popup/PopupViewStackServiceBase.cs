@@ -89,7 +89,7 @@ namespace Sextant.Plugins.Popup
 
             Popped
                 .Subscribe(popped => popped.ViewModel.InvokeViewModelAction<IDestructible>(x => x.Destroy()))
-                .DisposeNext(NavigationDisposable);
+                .DisposeWith(NavigationDisposables);
 
             PopupSubject.DisposeWith(NavigationDisposables);
         }
@@ -172,10 +172,8 @@ namespace Sextant.Plugins.Popup
                 .Do(popup =>
                     popup
                         .ViewModel
-                        .InvokeViewModelAction<INavigating>(x =>
-                            x.WhenNavigatingTo(navigationParameter)
-                                .Subscribe()
-                                .DisposeNext(NavigationDisposable)))
+                        .InvokeViewModelSubscription<INavigable>(x => x.WhenNavigatedTo(navigationParameter))
+                        .Subscribe())
                 .Select(popup =>
                     Observable
                         .FromAsync(() => _popupNavigation.PushAsync(popup, animate))
