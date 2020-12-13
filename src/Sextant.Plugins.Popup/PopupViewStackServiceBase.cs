@@ -154,40 +154,56 @@ namespace Sextant.Plugins.Popup
             INavigable viewModel,
             INavigationParameter navigationParameter,
             string? contract = null,
-            bool animate = true)
-        {
-            if (viewModel is null)
+            bool animate = true) =>
+            Observable.Create<Unit>(observer =>
             {
-                throw new ArgumentNullException(nameof(viewModel));
-            }
-
-            if (navigationParameter is null)
-            {
-                throw new ArgumentNullException(nameof(navigationParameter));
-            }
-
-            return Observable
-                .Start(() => LocatePopupFor(viewModel, contract), CurrentThreadScheduler.Instance)
-                .ObserveOn(CurrentThreadScheduler.Instance)
-                .Do(popup =>
-                    popup
-                        .ViewModel
-                        .InvokeViewModelSubscription<INavigable>(x => x.WhenNavigatedTo(navigationParameter))
-                        .Subscribe())
-                .Select(popup =>
-                    Observable
-                        .FromAsync(() => _popupNavigation.PushAsync(popup, animate))
-                        .Do(_ => popup.ViewModel.InvokeViewModelAction<INavigated>(x =>
-                            x.WhenNavigatedTo(navigationParameter)
-                                .Subscribe()
-                                .DisposeNext(NavigationDisposable))))
-                .Switch()
-                .Do(_ =>
+                if (viewModel == null)
                 {
-                    AddToStackAndTick(PopupSubject, viewModel, false);
-                    Logger.Debug($"Added page '{viewModel.Id}' (contract '{contract}') to stack.");
-                });
-        }
+                    throw new ArgumentNullException(nameof(viewModel));
+                }
+
+                if (navigationParameter == null)
+                {
+                    throw new ArgumentNullException(nameof(navigationParameter));
+                }
+
+                var compositeDisposable = new CompositeDisposable();
+
+                Observable
+                    .Start(() => LocatePopupFor(viewModel, contract), CurrentThreadScheduler.Instance)
+                    .ObserveOn(CurrentThreadScheduler.Instance)
+                    .Select(popup =>
+                    {
+                        popup
+                            .ViewModel
+                            .InvokeViewModelAction<INavigating>(x =>
+                                x.WhenNavigatingTo(navigationParameter)
+                                    .Subscribe()
+                                    .DisposeWith(compositeDisposable));
+                        return popup;
+                    })
+                    .Select(popup =>
+                        Observable
+                            .FromAsync(() => _popupNavigation.PushAsync(popup, animate))
+                            .Select(_ =>
+                                popup
+                                    .ViewModel
+                                    .InvokeViewModelAction<INavigated>(x =>
+                                        x.WhenNavigatedTo(navigationParameter)
+                                            .Subscribe()
+                                            .DisposeWith(compositeDisposable))))
+                    .Switch()
+                    .Do(_ =>
+                    {
+                        AddToStackAndTick(PopupSubject, viewModel, false);
+                        Logger.Debug($"Added page '{viewModel.Id}' (contract '{contract}') to stack.");
+                    })
+                    .Select(_ => Unit.Default)
+                    .Subscribe(observer)
+                    .DisposeWith(compositeDisposable);
+
+                return Disposable.Create(() => compositeDisposable.Dispose());
+            });
 
         /// <inheritdoc/>
         public IObservable<Unit> PushPopup<TViewModel>(
