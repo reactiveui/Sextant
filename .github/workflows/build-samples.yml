@@ -3,12 +3,8 @@ name: Sample Build
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'Sample/**'
   pull_request:
     branches: [ main ]
-    paths:
-      - 'Sample/**'
 
 jobs:
   build-samples:
