@@ -4,12 +4,10 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
-using NSubstitute.Extensions;
 using ReactiveUI;
 using Rg.Plugins.Popup.Contracts;
 using Rg.Plugins.Popup.Events;

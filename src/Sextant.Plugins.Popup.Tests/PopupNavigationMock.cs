@@ -19,7 +19,7 @@ namespace Sextant.Plugins.Popup.Tests
     /// </summary>
     public class PopupNavigationMock : IPopupNavigation
     {
-        private Stack<PopupPage> _stack;
+        private readonly Stack<PopupPage> _stack;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupNavigationMock"/> class.

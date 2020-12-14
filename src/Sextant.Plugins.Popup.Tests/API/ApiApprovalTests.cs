@@ -57,7 +57,7 @@ namespace Sextant.Plugins.Popup.Tests
 
             var approvedPublicApi = File.ReadAllText(approvedFileName);
 
-            var receivedPublicApi = Filter(ApiGenerator.GeneratePublicApi(assembly, null));
+            var receivedPublicApi = Filter(assembly.GeneratePublicApi(null));
 
             if (!string.Equals(receivedPublicApi, approvedPublicApi, StringComparison.InvariantCulture))
             {

@@ -15,7 +15,6 @@ namespace Sextant.Mocks
     /// </summary>
     public class NavigableViewModelMock : INavigable
     {
-        private readonly string _id;
         private readonly ISubject<Unit> _navigatedTo;
         private readonly ISubject<Unit> _navigatingTo;
         private readonly ISubject<Unit> _navigatedFrom;
@@ -26,7 +25,7 @@ namespace Sextant.Mocks
         /// <param name="id">The id of the page.</param>
         public NavigableViewModelMock(string? id = null)
         {
-            _id = id ?? string.Empty;
+            Id = id ?? string.Empty;
             _navigatedTo = new Subject<Unit>();
             _navigatedFrom = new Subject<Unit>();
             _navigatingTo = new Subject<Unit>();
@@ -35,7 +34,7 @@ namespace Sextant.Mocks
         /// <summary>
         /// Gets the ID of the page.
         /// </summary>
-        public string Id => _id ?? nameof(NavigableViewModelMock);
+        public string Id { get; }
 
         /// <inheritdoc/>
         public virtual IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter) =>

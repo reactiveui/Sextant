@@ -15,7 +15,7 @@ namespace Sextant.Plugins.Popup.Tests
 {
     internal class PopupViewStackServiceFixture : IBuilder
     {
-        private IView _view;
+        private readonly IView _view;
         private IPopupNavigation _popupNavigation;
         private IViewLocator _viewLocator;
         private IViewModelFactory _viewModelFactory;

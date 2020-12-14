@@ -57,7 +57,7 @@ namespace Sextant.XamForms.Tests
 
             var approvedPublicApi = File.ReadAllText(approvedFileName);
 
-            var receivedPublicApi = Filter(assembly.GeneratePublicApi(null));
+            var receivedPublicApi = Filter(assembly.GeneratePublicApi());
 
             if (!string.Equals(receivedPublicApi, approvedPublicApi, StringComparison.InvariantCulture))
             {
