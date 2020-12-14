@@ -51,7 +51,6 @@ namespace Sextant
 
             ModalSubject.DisposeWith(NavigationDisposables);
             PageSubject.DisposeWith(NavigationDisposables);
-            NavigationDisposable = new SerialDisposable();
         }
 
         /// <summary>
@@ -93,11 +92,6 @@ namespace Sextant
         /// Gets the navigation disposables.
         /// </summary>
         protected CompositeDisposable NavigationDisposables { get; } = new();
-
-        /// <summary>
-        /// Gets the navigation disposables.
-        /// </summary>
-        protected SerialDisposable NavigationDisposable { get; }
 
         /// <summary>
         /// Pops the <see cref="INavigable" /> off the stack.
@@ -303,7 +297,6 @@ namespace Sextant
             if (disposing)
             {
                 NavigationDisposables.Dispose();
-                NavigationDisposable.Dispose();
             }
         }
     }
