@@ -3,10 +3,16 @@ name: Build
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'version.json'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches: [ main ]
-
+    paths:
+      - 'src/**'
+      - 'version.json'
+          
 env:
   configuration: Release
   productNamespacePrefix: "Sextant"
@@ -21,11 +27,24 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
+        lfs: true
 
-    - name: Install .NET Core
+    - name: Install .NET Core 3.1.x
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.x
+
+    - name: Install .NET 5.0.x
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Add MSBuild to PATH
+      uses: glennawatson/setup-msbuild@v1.0.3
+
+    - name: Update VS2019
+      shell: powershell
+      run: Start-Process -Wait -PassThru -FilePath "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" -ArgumentList "update --passive --norestart --installpath ""C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise"""
 
     - name: NBGV
       id: nbgv
@@ -36,9 +55,6 @@ jobs:
     - name: NuGet Restore
       run: dotnet restore
       working-directory: src
-      
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1
 
     - name: Build
       run: msbuild /t:build,pack /maxcpucount /p:NoPackageAnalysis=true /verbosity:minimal /p:Configuration=${{ env.configuration }}
@@ -120,3 +136,4 @@ jobs:
         SOURCE_URL: https://api.nuget.org/v3/index.json
       run: |
         dotnet nuget push -s ${{ env.SOURCE_URL }} -k ${{ env.NUGET_AUTH_TOKEN }} **/*.nupkg
+
