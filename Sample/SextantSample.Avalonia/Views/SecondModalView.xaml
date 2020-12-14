@@ -5,7 +5,7 @@
              xmlns:viewModels="clr-namespace:SextantSample.ViewModels;assembly=SextantSample.ViewModels"
              d:DataContext="{d:DesignInstance viewModels:SecondModalViewModel, IsDesignTimeCreatable=False}"
              x:Class="SextantSample.Avalonia.Views.SecondModalView"
-             mc:Ignorable="d" Background="#ffffff">
+             mc:Ignorable="d" Background="#000000">
     <StackPanel>
         <Button Content="Push Page" Command="{Binding PushPage}" />
         <Button Content="Pop Modal" Command="{Binding PopModal}" />

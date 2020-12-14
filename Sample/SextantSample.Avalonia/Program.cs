@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Logging.Serilog;
 using Avalonia.ReactiveUI;
 
 namespace SextantSample.Avalonia
@@ -12,6 +11,6 @@ namespace SextantSample.Avalonia
             AppBuilder.Configure<App>()
                 .UseReactiveUI()
                 .UsePlatformDetect()
-                .LogToDebug();
+                .LogToTrace();
     }
 }
