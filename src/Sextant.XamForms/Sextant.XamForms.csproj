@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI" Version="12.*" />
+    <PackageReference Include="ReactiveUI" Version="13.*" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
 
