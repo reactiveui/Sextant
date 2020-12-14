@@ -19,7 +19,7 @@ namespace System.Reactive.Linq
         [Obsolete("This extension method causes conflicts in the System.Reactive.Linq namespace")]
         public static IObservable<T> WhereNotNull<T>(this IObservable<T> observable)
         {
-            return observable.Where(x => x != null);
+            return observable.Where(x => x is not null);
         }
     }
 }

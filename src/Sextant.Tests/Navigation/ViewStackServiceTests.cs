@@ -42,7 +42,7 @@ namespace Sextant.Tests
             public void Should_Throw_If_View_Model_Factory_Current_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null!));
 
                 // Then
                 result.Should().BeOfType<ViewModelFactoryNotFoundException>();
@@ -58,7 +58,7 @@ namespace Sextant.Tests
                 Locator.CurrentMutable.RegisterViewModelFactory();
 
                 // When
-                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null!));
 
                 // Then
                 result.Should().BeNull();
@@ -608,7 +608,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await sut.PushModal(null)).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PushModal(null!)).ConfigureAwait(false);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>();
@@ -704,7 +704,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await sut.PushPage(null)).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PushPage(null!)).ConfigureAwait(false);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("viewModel");

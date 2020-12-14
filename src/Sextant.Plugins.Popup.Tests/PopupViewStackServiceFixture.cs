@@ -48,6 +48,6 @@ namespace Sextant.Plugins.Popup.Tests
             this.With(ref _viewLocator, viewLocator);
 
         private PopupViewStackService Build() =>
-            new PopupViewStackService(_view, _popupNavigation, _viewLocator, _viewModelFactory);
+            new(_view, _popupNavigation, _viewLocator, _viewModelFactory);
     }
 }

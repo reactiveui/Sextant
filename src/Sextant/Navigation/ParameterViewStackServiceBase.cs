@@ -32,12 +32,12 @@ namespace Sextant
             bool resetStack = false,
             bool animate = true)
         {
-            if (navigableViewModel == null)
+            if (navigableViewModel is null)
             {
                 throw new ArgumentNullException(nameof(navigableViewModel));
             }
 
-            if (parameter == null)
+            if (parameter is null)
             {
                 throw new ArgumentNullException(nameof(parameter));
             }
@@ -45,7 +45,7 @@ namespace Sextant
             navigableViewModel
                 .WhenNavigatingTo(parameter)
                 .ObserveOn(View.MainThreadScheduler)
-                .Subscribe(navigating =>
+                .Subscribe(_ =>
                     Logger.Debug(
                         $"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
 
@@ -59,19 +59,19 @@ namespace Sextant
                     navigableViewModel
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
+                        .Subscribe(_ => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}"));
                 });
         }
 
         /// <inheritdoc />
         public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
         {
-            if (navigableModal == null)
+            if (navigableModal is null)
             {
                 throw new ArgumentNullException(nameof(navigableModal));
             }
 
-            if (parameter == null)
+            if (parameter is null)
             {
                 throw new ArgumentNullException(nameof(parameter));
             }
@@ -92,7 +92,7 @@ namespace Sextant
                     navigableModal
                         .WhenNavigatedTo(parameter)
                         .ObserveOn(View.MainThreadScheduler)
-                        .Subscribe(navigated => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}"));
+                        .Subscribe(_ => Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}"));
                 });
         }
 
@@ -115,31 +115,30 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PopPage(INavigationParameter parameter, bool animate = true)
         {
-            if (parameter == null)
+            if (parameter is null)
             {
                 throw new ArgumentNullException(nameof(parameter));
             }
 
-            IViewModel poppedPage = TopPage().FirstOrDefaultAsync().Wait();
+            IViewModel? poppedPage = TopPage().FirstOrDefaultAsync().Wait();
             return View
                 .PopPage(animate)
                 .Do(_ =>
                 {
-                    poppedPage
-                        .InvokeViewModelAction<INavigable>(x =>
+                    poppedPage?.InvokeViewModelAction<INavigable>(x =>
                             x.WhenNavigatedFrom(parameter)
                                 .ObserveOn(View.MainThreadScheduler)
-                                .Subscribe(navigatedFrom =>
+                                .Subscribe(_ =>
                                     Logger.Debug($"Called `WhenNavigatedFrom` on '{poppedPage.Id}' passing parameter {parameter}")))
                         .InvokeViewModelAction<IDestructible>(x => x.Destroy());
 
-                    IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait();
+                    IViewModel? topPage = TopPage().FirstOrDefaultAsync().Wait();
                     if (topPage is INavigated navigated)
                     {
                         navigated
                             .WhenNavigatedTo(parameter)
                             .ObserveOn(View.MainThreadScheduler)
-                            .Subscribe(navigatedTo =>
+                            .Subscribe(_ =>
                                 Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}"));
                     }
                 });

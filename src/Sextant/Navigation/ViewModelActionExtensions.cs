@@ -22,7 +22,7 @@ namespace Sextant
         public static object InvokeViewModelAction<T>(this object viewModel, Action<T> action)
             where T : class
         {
-            if (action == null)
+            if (action is null)
             {
                 throw new ArgumentNullException(nameof(action));
             }

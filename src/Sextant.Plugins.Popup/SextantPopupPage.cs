@@ -26,24 +26,24 @@ namespace Sextant.Plugins.Popup
         /// <summary>
         /// The view model property.
         /// </summary>
-        public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
+        public static new readonly BindableProperty ViewModelProperty = BindableProperty.Create(
             nameof(ViewModel),
             typeof(TViewModel),
             typeof(IViewFor<TViewModel>),
-            (IViewFor<TViewModel>)null,
+            null,
             BindingMode.OneWay,
-            (BindableProperty.ValidateValueDelegate)null,
+            null,
             new BindableProperty.BindingPropertyChangedDelegate(OnViewModelChanged),
-            (BindableProperty.BindingPropertyChangingDelegate)null,
-            (BindableProperty.CoerceValueDelegate)null,
-            (BindableProperty.CreateDefaultValueDelegate)null);
+            null,
+            null,
+            null);
 
         /// <summary>
         /// Gets or sets the ViewModel to display.
         /// </summary>
-        public new TViewModel ViewModel
+        public new TViewModel? ViewModel
         {
-            get => (TViewModel)GetValue(ViewModelProperty);
+            get => (TViewModel?)GetValue(ViewModelProperty);
             set => SetValue(ViewModelProperty, value);
         }
 
@@ -51,10 +51,10 @@ namespace Sextant.Plugins.Popup
         /// Gets or sets the ViewModel corresponding to this specific View.
         /// This should be a BindableProperty if you're using XAML.
         /// </summary>
-        object IViewFor.ViewModel
+        object? IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (TViewModel)value;
+            set => ViewModel = (TViewModel?)value;
         }
 
         /// <inheritdoc/>
@@ -82,13 +82,13 @@ namespace Sextant.Plugins.Popup
             nameof(ViewModel),
             typeof(object),
             typeof(IViewFor<object>),
-            (object)null,
+            null,
             BindingMode.OneWay,
-            (BindableProperty.ValidateValueDelegate)null,
+            null,
             new BindableProperty.BindingPropertyChangedDelegate(OnViewModelChanged),
-            (BindableProperty.BindingPropertyChangingDelegate)null,
-            (BindableProperty.CoerceValueDelegate)null,
-            (BindableProperty.CreateDefaultValueDelegate)null);
+            null,
+            null,
+            null);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SextantPopupPage"/> class.
@@ -99,7 +99,7 @@ namespace Sextant.Plugins.Popup
                 Observable.FromEvent<EventHandler, Unit>(
                         handler =>
                         {
-                            void EventHandler(object sender, EventArgs args) => handler(Unit.Default);
+                            void EventHandler(object? sender, EventArgs args) => handler(Unit.Default);
                             return EventHandler;
                         },
                         x => BackgroundClicked += x,
@@ -115,7 +115,7 @@ namespace Sextant.Plugins.Popup
         /// <summary>
         /// Gets or sets the ViewModel to display.
         /// </summary>
-        public object ViewModel
+        public object? ViewModel
         {
             get => GetValue(ViewModelProperty);
             set => SetValue(ViewModelProperty, value);

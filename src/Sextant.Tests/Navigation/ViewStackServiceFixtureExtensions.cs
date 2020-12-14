@@ -34,7 +34,7 @@ namespace Sextant.Tests
             return Observable.Return(Unit.Default);
         }
 
-        public static IObservable<Unit> PushModal(this ViewStackService viewStackService, IViewModel viewModel, string contract = null, int pages = 1)
+        public static IObservable<Unit> PushModal(this ViewStackService viewStackService, IViewModel viewModel, string? contract = null, int pages = 1)
         {
             for (var i = 0; i < pages; i++)
             {
@@ -44,7 +44,7 @@ namespace Sextant.Tests
             return Observable.Return(Unit.Default);
         }
 
-        public static IObservable<Unit> PushPage(this ViewStackService viewStackService, INavigable viewModel, string contract = null, int pages = 1)
+        public static IObservable<Unit> PushPage(this ViewStackService viewStackService, INavigable viewModel, string? contract = null, int pages = 1)
         {
             for (var i = 0; i < pages; i++)
             {

@@ -40,7 +40,7 @@ namespace Sextant.Tests
             public void Should_Throw_If_View_Model_Factory_Current_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null));
+                var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null!));
 
                 // Then
                 result.Should().BeOfType<ViewModelFactoryNotFoundException>();
@@ -56,7 +56,7 @@ namespace Sextant.Tests
                 Locator.CurrentMutable.RegisterViewModelFactory();
 
                 // When
-                var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null));
+                var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null!));
 
                 // Then
                 result.Should().BeNull();
@@ -81,7 +81,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PushPage(null, navigationParameter))
+                    await Record.ExceptionAsync(async () => await sut.PushPage(null!, navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
@@ -101,7 +101,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PushPage(viewModel, (INavigationParameter)null))
+                    await Record.ExceptionAsync(async () => await sut.PushPage(viewModel, null!))
                         .ConfigureAwait(false);
 
                 // Then
@@ -264,7 +264,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PushPage<NavigableViewModelMock>(null))
+                    await Record.ExceptionAsync(async () => await sut.PushPage<NavigableViewModelMock>(null!))
                         .ConfigureAwait(false);
 
                 // Then
@@ -338,7 +338,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PushModal(null, navigationParameter))
+                    await Record.ExceptionAsync(async () => await sut.PushModal(null!, navigationParameter))
                         .ConfigureAwait(false);
 
                 // Then
@@ -358,7 +358,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PushModal(viewModel, null))
+                    await Record.ExceptionAsync(async () => await sut.PushModal(viewModel, null!))
                         .ConfigureAwait(false);
 
                 // Then
@@ -498,7 +498,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PushModal<NavigableViewModelMock>(null))
+                    await Record.ExceptionAsync(async () => await sut.PushModal<NavigableViewModelMock>(null!))
                         .ConfigureAwait(false);
 
                 // Then
@@ -572,7 +572,7 @@ namespace Sextant.Tests
 
                 // When
                 var result =
-                    await Record.ExceptionAsync(async () => await sut.PopPage(null))
+                    await Record.ExceptionAsync(async () => await sut.PopPage(null!))
                     .ConfigureAwait(false);
 
                 // Then

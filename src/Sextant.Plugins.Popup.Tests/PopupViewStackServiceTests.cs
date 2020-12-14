@@ -36,7 +36,7 @@ namespace Sextant.Plugins.Popup.Tests
             public void Should_Observe_Pushing()
             {
                 // Given
-                PopupNavigationEvent pushing = null;
+                PopupNavigationEvent? pushing = null;
                 var viewModel = new NavigableViewModelMock();
                 var popup = new PopupMock
                 {
@@ -48,6 +48,11 @@ namespace Sextant.Plugins.Popup.Tests
 
                 // When
                 navigation.Pushing += Raise.EventWith(new PopupNavigationEventArgs(popup, true));
+
+                if (pushing is null)
+                {
+                    throw new InvalidOperationException("pushing should not be null.");
+                }
 
                 // Then
                 pushing.ViewModel.Should().Be(viewModel);
@@ -67,7 +72,7 @@ namespace Sextant.Plugins.Popup.Tests
             public async Task Should_Observe_Pushed()
             {
                 // Given
-                PopupNavigationEvent pushing = null;
+                PopupNavigationEvent? pushing = null;
                 var viewModel = new NavigableViewModelMock();
                 var popup = new PopupMock
                 {
@@ -82,6 +87,11 @@ namespace Sextant.Plugins.Popup.Tests
                 // When
                 await sut.PushPopup(viewModel);
                 navigation.Pushed += Raise.EventWith(new PopupNavigationEventArgs(popup, true));
+
+                if (pushing is null)
+                {
+                    throw new InvalidOperationException("pushing should not be null");
+                }
 
                 // Then
                 pushing.ViewModel.Should().Be(viewModel);
@@ -100,7 +110,7 @@ namespace Sextant.Plugins.Popup.Tests
             public void Should_Observe_Pushing()
             {
                 // Given
-                PopupNavigationEvent pushing = null;
+                PopupNavigationEvent? pushing = null;
                 var viewModel = new NavigableViewModelMock();
                 var popup = new PopupMock
                 {
@@ -112,6 +122,11 @@ namespace Sextant.Plugins.Popup.Tests
 
                 // When
                 navigation.Popping += Raise.EventWith(new PopupNavigationEventArgs(popup, true));
+
+                if (pushing is null)
+                {
+                    throw new InvalidOperationException("pushing should not be null");
+                }
 
                 // Then
                 pushing.ViewModel.Should().Be(viewModel);
@@ -130,7 +145,7 @@ namespace Sextant.Plugins.Popup.Tests
             public void Should_Observe_Popped()
             {
                 // Given
-                PopupNavigationEvent pushing = null;
+                PopupNavigationEvent? pushing = null;
                 var viewModel = new NavigableViewModelMock();
                 var popup = new PopupMock
                 {
@@ -143,6 +158,11 @@ namespace Sextant.Plugins.Popup.Tests
                 // When
                 navigation.Popped += Raise.EventWith(new PopupNavigationEventArgs(popup, true));
 
+                if (pushing is null)
+                {
+                    throw new InvalidOperationException("pushing should not be null");
+                }
+
                 // Then
                 pushing.ViewModel.Should().Be(viewModel);
             }
@@ -154,7 +174,7 @@ namespace Sextant.Plugins.Popup.Tests
             public void Should_Call_Destroy()
             {
                 // Given
-                PopupNavigationEvent pushing = null;
+                PopupNavigationEvent? pushing = null;
                 var viewModel = Substitute.For<IEverything>();
                 var popup = new PopupMock
                 {

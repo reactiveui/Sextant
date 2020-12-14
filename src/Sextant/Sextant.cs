@@ -14,13 +14,13 @@ namespace Sextant
     /// </summary>
     public class Sextant
     {
-        private static readonly Lazy<Sextant> _sextant = new Lazy<Sextant>();
+        private static readonly Lazy<Sextant> _sextant = new();
 
         static Sextant()
         {
             Locator.RegisterResolverCallbackChanged(() =>
             {
-                if (Locator.CurrentMutable == null)
+                if (Locator.CurrentMutable is null)
                 {
                     return;
                 }

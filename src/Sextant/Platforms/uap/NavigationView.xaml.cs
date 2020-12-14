@@ -5,22 +5,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Runtime.InteropServices.WindowsRuntime;
+
 using ReactiveUI;
+
 using Splat;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
@@ -101,7 +97,7 @@ namespace Sextant
                 .Select(ep =>
                 {
                     var view = ep.Content as IViewFor;
-                    if (view == null)
+                    if (view is null)
                     {
                         _logger.Debug($"The view ({ep.Content.GetType()}) does not implement IViewFor<>.  Cannot set ViewModel from a back navigation.");
                     }
@@ -115,7 +111,7 @@ namespace Sextant
                     // But we want the view that was just removed.  We need to send the old view's viewmodel to IViewStackService so that the ViewModel can be removed from the stack.
                     return _lastPoppedViewModel;
                 })
-                .Where(x => x != null);
+                .Where(x => x is not null);
 
             BackRequested.Subscribe();
         }
@@ -128,7 +124,7 @@ namespace Sextant
             get
             {
                 var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
-                return popups.FirstOrDefault(x => x.Child is ContentDialog) != null;
+                return popups.FirstOrDefault(x => x.Child is ContentDialog) is not null;
             }
         }
 
@@ -187,12 +183,12 @@ namespace Sextant
                 .FromEvent<RoutedEventHandler, RoutedEventArgs>(
                 handler =>
                 {
-                    void RoutedHandler(object sender, RoutedEventArgs e) => handler(e);
+                    void RoutedHandler(object? sender, RoutedEventArgs e) => handler(e);
                     return RoutedHandler;
                 },
                 x => backButton.Click += x,
                 x => backButton.Click -= x)
-                .Do(args =>
+                .Do(_ =>
                 {
                     if (mainFrame.CanGoBack)
                     {
@@ -204,14 +200,14 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PopModal()
         {
-            if (_contentDialog != null)
+            if (_contentDialog is not null)
             {
                 _mirroredModalStack.TryPop(out _);
                 _contentDialog.Hide();
 
                 if (_mirroredModalStack.TryPeek(out var modal))
                 {
-                    if (modal == null)
+                    if (modal is null)
                     {
                         return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
                     }
@@ -245,7 +241,7 @@ namespace Sextant
             _mirroredPageStack.Pop();
 
             var view = mainFrame.Content as IViewFor;
-            if (view == null)
+            if (view is null)
             {
                 _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
                 return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
@@ -282,7 +278,7 @@ namespace Sextant
             }
 
             var view = mainFrame.Content as IViewFor;
-            if (view == null)
+            if (view is null)
             {
                 _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
                 return Observable.Return(Unit.Default).ObserveOn(_mainScheduler);
@@ -311,7 +307,7 @@ namespace Sextant
                     {
                         _mirroredModalStack.Push(modalViewModel);
 
-                        if (_contentDialog != null && ModalVisible)
+                        if (_contentDialog is not null && ModalVisible)
                         {
                             _contentDialog.Hide();
                         }
@@ -412,7 +408,7 @@ namespace Sextant
 
             var viewType = uwpViewTypeResolver.ResolveViewType(viewModel.GetType());
 
-            if (viewType == null)
+            if (viewType is null)
             {
                 throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
@@ -425,17 +421,17 @@ namespace Sextant
             var view = _viewLocator.ResolveView(viewModel, contract);
             var page = view as Page;
 
-            if (view == null)
+            if (view is null)
             {
                 throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
 
-            if (view == null)
+            if (view is null)
             {
                 throw new InvalidOperationException($"Cannot find view for '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
             }
 
-            if (page == null)
+            if (page is null)
             {
                 throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
             }

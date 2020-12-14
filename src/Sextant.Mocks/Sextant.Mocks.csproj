@@ -1,9 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <NoWarn>$(NoWarn);1591;CA1707;SA1633;CA1034</NoWarn>
-    <WarningsAsErrors>CS8625;CS8604;CS8600;CS8614;CS8603;CS8618;CS8619</WarningsAsErrors>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -11,32 +9,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="IDestructibleMock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="IEverything.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NavigableViewModelMock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NavigatedMock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NavigationViewMock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="NullViewModelMock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="PageView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="ParameterViewModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

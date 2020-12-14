@@ -74,7 +74,7 @@ namespace Sextant.XamForms
             Locator.CurrentMutable.Register<IViewStackService>(() => viewStackService);
             var instance = Activator.CreateInstance(typeof(TViewModel), viewStackService) as TViewModel;
 
-            if (instance == null)
+            if (instance is null)
             {
                 throw new InvalidOperationException($"Could not initialize a view for view model {typeof(TViewModel)}");
             }

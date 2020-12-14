@@ -14,15 +14,7 @@ namespace Sextant
     /// </summary>
     public class ViewTypeResolver
     {
-        private Dictionary<(string vmTypeName, string? contract), Type> _typeDictionary;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewTypeResolver"/> class.
-        /// </summary>
-        public ViewTypeResolver()
-        {
-            _typeDictionary = new Dictionary<(string vmTypeName, string? contract), Type>();
-        }
+        private readonly Dictionary<(string VmTypeName, string? Contract), Type> _typeDictionary = new();
 
         /// <summary>
         /// Register view Type with viewmodel Type.

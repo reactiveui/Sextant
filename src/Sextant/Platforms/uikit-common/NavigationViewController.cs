@@ -30,8 +30,8 @@ namespace Sextant
         private readonly IScheduler _backgroundScheduler;
         private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
-        private readonly Stack<UIViewController> _navigationPages = new Stack<UIViewController>();
-        private readonly Subject<IViewModel?> _pagePopped = new Subject<IViewModel?>();
+        private readonly Stack<UIViewController> _navigationPages = new();
+        private readonly Subject<IViewModel?> _pagePopped = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationViewController" /> class.
@@ -168,13 +168,13 @@ namespace Sextant
             var viewFor = _viewLocator.ResolveView(viewModel, contract);
             var page = viewFor as UIViewController;
 
-            if (viewFor == null)
+            if (viewFor is null)
             {
                 throw new InvalidOperationException(
                     $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
 
-            if (page == null)
+            if (page is null)
             {
                 throw new InvalidOperationException(
                     $"Resolved view '{viewFor.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");

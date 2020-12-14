@@ -4,7 +4,6 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -50,15 +49,21 @@ namespace Sextant.XamForms
 
             PagePopped =
                 Observable
-                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
+                    .FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
                         handler =>
                         {
-                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
+                            void Handler(object? sender, NavigationEventArgs args)
+                            {
+                                if (args.Page.BindingContext is IViewModel viewModel)
+                                {
+                                    handler(viewModel);
+                                }
+                            }
+
                             return Handler;
                         },
                         x => Popped += x,
-                        x => Popped -= x)
-                    .Cast<IViewModel>();
+                        x => Popped -= x);
         }
 
         /// <summary>
@@ -76,15 +81,21 @@ namespace Sextant.XamForms
 
             PagePopped =
                 Observable
-                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
+                    .FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
                         handler =>
                         {
-                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
+                            void Handler(object? sender, NavigationEventArgs args)
+                            {
+                                if (args.Page.BindingContext is IViewModel viewModel)
+                                {
+                                    handler(viewModel);
+                                }
+                            }
+
                             return Handler;
                         },
                         x => Popped += x,
-                        x => Popped -= x)
-                    .Cast<IViewModel>();
+                        x => Popped -= x);
         }
 
         /// <inheritdoc />
@@ -184,7 +195,7 @@ namespace Sextant.XamForms
         {
             var view = _viewLocator.ResolveView(viewModel, contract);
 
-            if (view == null)
+            if (view is null)
             {
                 throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }

@@ -124,7 +124,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushModal(IViewModel modal, string? contract = null, bool withNavigationPage = true)
         {
-            if (modal == null)
+            if (modal is null)
             {
                 throw new ArgumentNullException(nameof(modal));
             }
@@ -158,7 +158,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushPage(IViewModel viewModel, string? contract = null, bool resetStack = false, bool animate = true)
         {
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 throw new ArgumentNullException(nameof(viewModel));
             }
@@ -263,14 +263,14 @@ namespace Sextant
         protected static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, CompositeDisposable disposable)
         {
             IImmutableList<T> poppedStack = ImmutableList<T>.Empty;
-            if (stackSubject == null || stackSubject.Value.Count == 0)
+            if (stackSubject is null || stackSubject.Value.Count == 0)
             {
                 throw new InvalidOperationException("Stack is empty.");
             }
 
             stackSubject
                .Take(1)
-               .Where(stack => stack != null)
+               .Where(stack => stack is not null)
                .Subscribe(stack =>
                {
                    if (stack.Count > 1)
@@ -279,7 +279,7 @@ namespace Sextant
 
                        foreach (T popped in stack.RemoveRange(poppedStack).Reverse())
                        {
-                           if (popped == null)
+                           if (popped is null)
                            {
                                continue;
                            }

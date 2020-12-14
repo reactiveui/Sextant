@@ -29,7 +29,7 @@ namespace Sextant.Tests
             public void Should_Destroy()
             {
                 // Given
-                ParameterViewModel sut = new ParameterViewModel();
+                ParameterViewModel sut = new();
 
                 // When
                 sut.Disposable.IsDisposed.Should().BeFalse();

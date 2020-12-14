@@ -30,16 +30,16 @@ namespace Sextant.Plugins.Popup.Tests
         }
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Pushing;
+        public event EventHandler<PopupNavigationEventArgs>? Pushing;
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Pushed;
+        public event EventHandler<PopupNavigationEventArgs>? Pushed;
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Popping;
+        public event EventHandler<PopupNavigationEventArgs>? Popping;
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Popped;
+        public event EventHandler<PopupNavigationEventArgs>? Popped;
 
         /// <inheritdoc/>
         public IReadOnlyList<PopupPage> PopupStack => _stack.ToList();

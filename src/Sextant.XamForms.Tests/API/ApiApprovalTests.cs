@@ -23,7 +23,7 @@ namespace Sextant.XamForms.Tests
     [ExcludeFromCodeCoverage]
     public class ApiApprovalTests
     {
-        private static readonly Regex _removeCoverletSectionRegex = new Regex(@"^namespace Coverlet\.Core\.Instrumentation\.Tracker.*?^}", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
+        private static readonly Regex _removeCoverletSectionRegex = new(@"^namespace Coverlet\.Core\.Instrumentation\.Tracker.*?^}", RegexOptions.Singleline | RegexOptions.Multiline | RegexOptions.Compiled);
 
         /// <summary>
         /// Tests to make sure the splat project is approved.
@@ -34,11 +34,16 @@ namespace Sextant.XamForms.Tests
             CheckApproval(typeof(NavigationView).Assembly);
         }
 
-        private static void CheckApproval(Assembly assembly, [CallerMemberName]string memberName = null, [CallerFilePath]string filePath = null)
+        private static void CheckApproval(Assembly assembly, [CallerMemberName]string? memberName = null, [CallerFilePath]string? filePath = null)
         {
             var targetFrameworkName = Assembly.GetExecutingAssembly().GetTargetFrameworkName();
 
             var sourceDirectory = Path.GetDirectoryName(filePath);
+
+            if (sourceDirectory is null)
+            {
+                throw new ArgumentException("The directory name is empty for path: " + filePath);
+            }
 
             var approvedFileName = Path.Combine(sourceDirectory, $"ApiApprovalTests.{memberName}.{targetFrameworkName}.approved.txt");
             var receivedFileName = Path.Combine(sourceDirectory, $"ApiApprovalTests.{memberName}.{targetFrameworkName}.received.txt");
