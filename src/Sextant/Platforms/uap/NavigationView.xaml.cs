@@ -74,10 +74,7 @@ namespace Sextant
 
             PagePopped = Observable
                 .FromEvent<NavigatedEventHandler, NavigationEventArgs>(
-                    handler =>
-                    {
-                        return (_, e) => handler(e);
-                    },
+                    handler => (_, e) => handler(e),
                     x => mainFrame.Navigated += x,
                     x => mainFrame.Navigated -= x)
                 .Do(_ => IsBackButtonVisible = mainFrame.CanGoBack)
@@ -141,10 +138,7 @@ namespace Sextant
         public IObservable<Unit> BackRequested => Observable.Merge(
             Observable
                 .FromEvent<EventHandler<BackRequestedEventArgs>, BackRequestedEventArgs>(
-                    handler =>
-                    {
-                        return (_, e) => handler(e);
-                    },
+                    handler => (_, e) => handler(e),
                     x => SystemNavigationManager.GetForCurrentView().BackRequested += x,
                     x => SystemNavigationManager.GetForCurrentView().BackRequested -= x)
                 .Do(ev =>

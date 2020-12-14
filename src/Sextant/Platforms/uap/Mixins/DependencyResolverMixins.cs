@@ -136,7 +136,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(dependencyResolver));
             }
 
-            var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
+            var uwpViewTypeResolver = dependencyResolver.GetService<ViewTypeResolver>(contract);
             return uwpViewTypeResolver.ResolveViewType<TViewModel>();
         }
 
@@ -161,7 +161,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(viewModel));
             }
 
-            var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
+            var uwpViewTypeResolver = dependencyResolver.GetService<ViewTypeResolver>(contract);
             return uwpViewTypeResolver.ResolveViewType<TViewModel>();
         }
     }
