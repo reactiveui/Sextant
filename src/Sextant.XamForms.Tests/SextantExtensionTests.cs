@@ -15,7 +15,7 @@ namespace Sextant.XamForms.Tests
     public sealed class SextantExtensionTests
     {
         /// <summary>
-        /// Tests the Sextant Initalize Forms method.
+        /// Tests the Sextant Initialize Forms method.
         /// </summary>
         public sealed class TheInitializeFormsMethod
         {

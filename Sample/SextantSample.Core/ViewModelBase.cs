@@ -9,10 +9,7 @@ namespace SextantSample.ViewModels
     {
         protected readonly IViewStackService ViewStackService;
 
-        protected ViewModelBase(IViewStackService viewStackService)
-        {
-            ViewStackService = viewStackService;
-        }
+        protected ViewModelBase(IViewStackService viewStackService) => ViewStackService = viewStackService;
 
         public virtual string Id { get; }
     }

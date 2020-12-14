@@ -79,7 +79,7 @@ namespace Sextant
             navigableModal
                 .WhenNavigatingTo(parameter)
                 .ObserveOn(View.MainThreadScheduler)
-                .Subscribe(navigating =>
+                .Subscribe(_ =>
                     Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}"));
 
             return View

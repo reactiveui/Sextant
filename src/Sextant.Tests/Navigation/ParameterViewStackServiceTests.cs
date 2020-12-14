@@ -28,10 +28,7 @@ namespace Sextant.Tests
             /// <summary>
             /// Initializes a new instance of the <see cref="TheConstructor"/> class.
             /// </summary>
-            public TheConstructor()
-            {
-                Locator.GetLocator().UnregisterAll<IViewModelFactory>();
-            }
+            public TheConstructor() => Locator.GetLocator().UnregisterAll<IViewModelFactory>();
 
             /// <summary>
             /// Test that the object constructed uses the static instance of ViewModelFactory.

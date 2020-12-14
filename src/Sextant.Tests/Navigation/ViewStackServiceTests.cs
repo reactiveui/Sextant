@@ -30,10 +30,7 @@ namespace Sextant.Tests
             /// <summary>
             /// Initializes a new instance of the <see cref="TheConstructor"/> class.
             /// </summary>
-            public TheConstructor()
-            {
-                Locator.GetLocator().UnregisterAll<IViewModelFactory>();
-            }
+            public TheConstructor() => Locator.GetLocator().UnregisterAll<IViewModelFactory>();
 
             /// <summary>
             /// Test that the object constructed uses the static instance of ViewModelFactory.
@@ -402,7 +399,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Tests to verify the navigatino stack is cleared.
+            /// Tests to verify the navigation stack is cleared.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -421,7 +418,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Tests to verify the navigatino stack is cleared.
+            /// Tests to verify the navigation stack is cleared.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -432,10 +429,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
                 await sut.PushPage(new NavigableViewModelMock(), pages: 3);
 
-                sut.View.PagePopped.Subscribe(_ =>
-                {
-                    count++;
-                });
+                sut.View.PagePopped.Subscribe(_ => count++);
 
                 // When
                 await sut.PopToRootPage();
@@ -762,7 +756,7 @@ namespace Sextant.Tests
                 await sut.PushPage(new NavigableViewModelMock());
 
                 // Then
-                await sut.View.Received().PushPage(Arg.Any<IViewModel>(), null, false, true);
+                await sut.View.Received().PushPage(Arg.Any<IViewModel>(), null, false);
             }
 
             /// <summary>

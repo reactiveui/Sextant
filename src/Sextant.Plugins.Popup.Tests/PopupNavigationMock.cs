@@ -24,10 +24,7 @@ namespace Sextant.Plugins.Popup.Tests
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupNavigationMock"/> class.
         /// </summary>
-        public PopupNavigationMock()
-        {
-            _stack = new Stack<PopupPage>();
-        }
+        public PopupNavigationMock() => _stack = new Stack<PopupPage>();
 
         /// <inheritdoc/>
         public event EventHandler<PopupNavigationEventArgs>? Pushing;

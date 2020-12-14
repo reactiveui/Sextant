@@ -16,8 +16,7 @@ namespace Sextant
     {
         private static readonly Lazy<Sextant> _sextant = new();
 
-        static Sextant()
-        {
+        static Sextant() =>
             Locator.RegisterResolverCallbackChanged(() =>
             {
                 if (Locator.CurrentMutable is null)
@@ -27,7 +26,6 @@ namespace Sextant
 
                 Instance.Initialize();
             });
-        }
 
         /// <summary>
         /// Gets the instance of <see cref="Sextant"/>.

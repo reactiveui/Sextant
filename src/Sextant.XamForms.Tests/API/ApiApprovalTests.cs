@@ -29,10 +29,7 @@ namespace Sextant.XamForms.Tests
         /// Tests to make sure the splat project is approved.
         /// </summary>
         [Fact]
-        public void SextantXamForms()
-        {
-            CheckApproval(typeof(NavigationView).Assembly);
-        }
+        public void SextantXamForms() => CheckApproval(typeof(NavigationView).Assembly);
 
         private static void CheckApproval(Assembly assembly, [CallerMemberName]string? memberName = null, [CallerFilePath]string? filePath = null)
         {
@@ -60,7 +57,7 @@ namespace Sextant.XamForms.Tests
 
             var approvedPublicApi = File.ReadAllText(approvedFileName);
 
-            var receivedPublicApi = Filter(ApiGenerator.GeneratePublicApi(assembly, null));
+            var receivedPublicApi = Filter(assembly.GeneratePublicApi(null));
 
             if (!string.Equals(receivedPublicApi, approvedPublicApi, StringComparison.InvariantCulture))
             {

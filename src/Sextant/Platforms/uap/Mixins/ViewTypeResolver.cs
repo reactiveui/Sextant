@@ -43,12 +43,9 @@ namespace Sextant
         public Type? ResolveViewType<TViewModel>(string? contract = null)
             where TViewModel : class
         {
-            if (_typeDictionary.ContainsKey((typeof(TViewModel).AssemblyQualifiedName, contract)))
-            {
-                return _typeDictionary[(typeof(TViewModel).AssemblyQualifiedName, contract)];
-            }
+            _typeDictionary.TryGetValue((typeof(TViewModel).AssemblyQualifiedName, contract), out var value);
 
-            return null;
+            return value;
         }
 
         /// <summary>
@@ -64,12 +61,9 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(viewModelType));
             }
 
-            if (_typeDictionary.ContainsKey((viewModelType.AssemblyQualifiedName, contract)))
-            {
-                return _typeDictionary[(viewModelType.AssemblyQualifiedName, contract)];
-            }
+            _typeDictionary.TryGetValue((viewModelType.AssemblyQualifiedName, contract), out var value);
 
-            return null;
+            return value;
         }
     }
 }

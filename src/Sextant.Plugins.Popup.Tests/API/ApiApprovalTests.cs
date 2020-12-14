@@ -29,10 +29,7 @@ namespace Sextant.Plugins.Popup.Tests
         /// Tests to make sure the splat project is approved.
         /// </summary>
         [Fact]
-        public void SextantPluginsPopup()
-        {
-            CheckApproval(typeof(IPopupViewStackService).Assembly);
-        }
+        public void SextantPluginsPopup() => CheckApproval(typeof(IPopupViewStackService).Assembly);
 
         private static void CheckApproval(Assembly assembly, [CallerMemberName]string? memberName = null, [CallerFilePath]string? filePath = null)
         {

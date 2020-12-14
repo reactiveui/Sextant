@@ -110,9 +110,8 @@ namespace Sextant
             IViewModel viewModel,
             string? contract,
             bool resetStack,
-            bool animate = true)
-        {
-            return Observable.Start(
+            bool animate = true) =>
+            Observable.Start(
                     () =>
                     {
                         var page = LocatePageFor(viewModel, contract);
@@ -150,7 +149,6 @@ namespace Sextant
                             return Disposable.Empty;
                         });
                 });
-        }
 
         /// <inheritdoc/>
         public override UIViewController PopViewController(bool animated)
@@ -185,9 +183,6 @@ namespace Sextant
             return page;
         }
 
-        private void SetPageTitle(UIViewController page, string resourceKey)
-        {
-            page.Title = resourceKey;
-        }
+        private void SetPageTitle(UIViewController page, string resourceKey) => page.Title = resourceKey;
     }
 }

@@ -19,12 +19,11 @@ namespace Sextant.IOS.Runner
         /// Defines the entry point of the application.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        private static void Main(string[] args)
-        {
+        private static void Main(string[] args) =>
+
             // if you want to use a different Application Delegate class from "AppDelegate"
             // you can specify it here.
             UIApplication.Main(args, null, "AppDelegate");
-        }
     }
 }
 #pragma warning restore SA1649 // File name should match first type name

@@ -33,9 +33,6 @@ namespace SextantSample.ViewModels
         }
 
 
-        public void Destroy()
-        {
-            Debug.WriteLine($"Destroy: {nameof(FirstModalViewModel)}");
-        }
+        public void Destroy() => Debug.WriteLine($"Destroy: {nameof(FirstModalViewModel)}");
     }
 }

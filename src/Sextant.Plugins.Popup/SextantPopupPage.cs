@@ -6,7 +6,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using ReactiveUI;
 using Rg.Plugins.Popup.Pages;
@@ -33,10 +32,7 @@ namespace Sextant.Plugins.Popup
             null,
             BindingMode.OneWay,
             null,
-            new BindableProperty.BindingPropertyChangedDelegate(OnViewModelChanged),
-            null,
-            null,
-            null);
+            OnViewModelChanged);
 
         /// <summary>
         /// Gets or sets the ViewModel to display.
@@ -64,10 +60,7 @@ namespace Sextant.Plugins.Popup
             ViewModel = (BindingContext as TViewModel)!;
         }
 
-        private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue)
-        {
-            bindableObject.BindingContext = newValue;
-        }
+        private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue) => bindableObject.BindingContext = newValue;
     }
 
     /// <summary>
@@ -85,26 +78,21 @@ namespace Sextant.Plugins.Popup
             null,
             BindingMode.OneWay,
             null,
-            new BindableProperty.BindingPropertyChangedDelegate(OnViewModelChanged),
-            null,
-            null,
-            null);
+            OnViewModelChanged);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SextantPopupPage"/> class.
         /// </summary>
-        protected SextantPopupPage()
-        {
+        protected SextantPopupPage() =>
             BackgroundClick =
                 Observable.FromEvent<EventHandler, Unit>(
-                        handler =>
-                        {
-                            void EventHandler(object? sender, EventArgs args) => handler(Unit.Default);
-                            return EventHandler;
-                        },
-                        x => BackgroundClicked += x,
-                        x => BackgroundClicked -= x);
-        }
+                    handler =>
+                    {
+                        void EventHandler(object? sender, EventArgs args) => handler(Unit.Default);
+                        return EventHandler;
+                    },
+                    x => BackgroundClicked += x,
+                    x => BackgroundClicked -= x);
 
         /// <summary>
         /// Gets the background click observable signal.
@@ -128,9 +116,6 @@ namespace Sextant.Plugins.Popup
             ViewModel = BindingContext;
         }
 
-        private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue)
-        {
-            bindableObject.BindingContext = newValue;
-        }
+        private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue) => bindableObject.BindingContext = newValue;
     }
 }

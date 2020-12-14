@@ -17,9 +17,6 @@ namespace Sextant.IOS.Runner
     internal class TestViewLocator
         : IViewLocator
     {
-        public IViewFor ResolveView<T>(T viewModel, string contract = null)
-        {
-            return new PageUiViewController();
-        }
+        public IViewFor ResolveView<T>(T viewModel, string contract = null) => new PageUiViewController();
     }
 }

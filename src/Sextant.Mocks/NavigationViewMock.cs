@@ -17,19 +17,13 @@ namespace Sextant.Mocks
     /// </summary>
     public class NavigationViewMock : IView, IDisposable
     {
-        private Subject<IViewModel> _pagePoppedSubject;
-        private Stack<IViewModel> _pageStack;
+        private readonly Subject<IViewModel> _pagePoppedSubject = new();
+        private readonly Stack<IViewModel> _pageStack = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationViewMock"/> class.
         /// </summary>
-        public NavigationViewMock()
-        {
-            _pagePoppedSubject = new Subject<IViewModel>();
-            _pageStack = new Stack<IViewModel>();
-
-            PagePopped = _pagePoppedSubject.AsObservable();
-        }
+        public NavigationViewMock() => PagePopped = _pagePoppedSubject.AsObservable();
 
         /// <inheritdoc/>
         public IScheduler MainThreadScheduler { get; } = CurrentThreadScheduler.Instance;
@@ -73,7 +67,7 @@ namespace Sextant.Mocks
         {
             if (disposing)
             {
-                _pagePoppedSubject?.Dispose();
+                _pagePoppedSubject.Dispose();
             }
         }
     }

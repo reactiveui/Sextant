@@ -22,10 +22,7 @@ namespace Sextant.Tests
             /// <summary>
             /// Initializes a new instance of the <see cref="CurrentPropertyTests"/> class.
             /// </summary>
-            public CurrentPropertyTests()
-            {
-                Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
-            }
+            public CurrentPropertyTests() => Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
 
             /// <summary>
             /// Should throw if the IViewFactory is not registered.
@@ -47,7 +44,7 @@ namespace Sextant.Tests
             public void Should_Return_View_Model_Factory()
             {
                 // Given, When
-                Splat.Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
+                Locator.CurrentMutable.Register(() => new DefaultViewModelFactory(), typeof(IViewModelFactory));
                 var viewModelFactory = ViewModelFactory.Current;
 
                 // Then

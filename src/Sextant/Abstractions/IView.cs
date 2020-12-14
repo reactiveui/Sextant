@@ -38,7 +38,7 @@ namespace Sextant
         IObservable<Unit> PopPage(bool animate = true);
 
         /// <summary>
-        /// Pops the the root page.
+        /// Pops the root page.
         /// </summary>
         /// <param name="animate">if set to <c>true</c> [animate].</param>
         /// <returns>An observable that signals when the pop has been completed.</returns>
