@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Reactive.Concurrency;
+
 using ReactiveUI;
-using Sextant;
+
 using Sextant.XamForms;
 using Xamarin.Forms;
 
@@ -12,8 +12,8 @@ namespace SextantSample.Views
         public BlueNavigationView()
             : base(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
         {
-            this.BarBackgroundColor = Color.Blue;
-            this.BarTextColor = Color.White;
+            BarBackgroundColor = Color.Blue;
+            BarTextColor = Color.White;
         }
 
         public object ViewModel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

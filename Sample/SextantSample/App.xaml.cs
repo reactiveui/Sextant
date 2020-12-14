@@ -12,7 +12,7 @@ using static Sextant.Sextant;
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace SextantSample
 {
-    public partial class App : Application
+    public partial class App
     {
         public App()
         {

@@ -27,7 +27,7 @@ namespace Sextant
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public partial class NavigationView : Page, IView, IEnableLogger
+    public partial class NavigationView : IView, IEnableLogger
     {
         /// <summary>
         /// A dependency property for the back button.
@@ -35,7 +35,6 @@ namespace Sextant
         public static readonly DependencyProperty IsBackButtonVisibleProperty =
             DependencyProperty.Register("IsBackButtonVisible", typeof(bool), typeof(NavigationView), new PropertyMetadata(true));
 
-        private readonly IScheduler _backgroundScheduler;
         private readonly IViewLocator _viewLocator;
         private readonly IFullLogger _logger;
         private readonly Stack<IViewModel?> _mirroredPageStack;
@@ -64,7 +63,7 @@ namespace Sextant
 
             _logger = this.Log();
 
-            _backgroundScheduler = backgroundScheduler;
+            BackgroundScheduler = backgroundScheduler;
             MainThreadScheduler = mainScheduler;
             _viewLocator = viewLocator;
 
@@ -115,6 +114,11 @@ namespace Sextant
                 return popups.FirstOrDefault(x => x.Child is ContentDialog) is not null;
             }
         }
+
+        /// <summary>
+        /// Gets the background scheduler.
+        /// </summary>
+        public IScheduler BackgroundScheduler { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the default back button is visible.
@@ -237,7 +241,8 @@ namespace Sextant
 
             if (!(mainFrame.Content is IViewFor view))
             {
-                _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
+                var contentTypeName = mainFrame.Content?.GetType().ToString() ?? "Unknown Type";
+                _logger.Debug($"The view ({contentTypeName}) does not implement IViewFor<>.  Cannot get ViewModel.");
                 return Observable.Return(Unit.Default).ObserveOn(MainThreadScheduler);
             }
 
@@ -273,7 +278,8 @@ namespace Sextant
 
             if (!(mainFrame.Content is IViewFor view))
             {
-                _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot get ViewModel.");
+                var contentTypeName = mainFrame.Content?.GetType().ToString() ?? "Unknown Type";
+                _logger.Debug($"The view ({contentTypeName}) does not implement IViewFor<>.  Cannot get ViewModel.");
                 return Observable.Return(Unit.Default).ObserveOn(MainThreadScheduler);
             }
 
@@ -340,7 +346,8 @@ namespace Sextant
                             }
                             else
                             {
-                               _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot set ViewModel of type, {viewModel.GetType()}, on view.");
+                                var contentTypeName = mainFrame.Content?.GetType().ToString() ?? "Unknown Type";
+                                _logger.Debug($"The view ({contentTypeName}) does not implement IViewFor<>.  Cannot set ViewModel of type, {viewModel.GetType()}, on view.");
                             }
 
                             mainFrame.BackStack.Clear();
@@ -367,7 +374,8 @@ namespace Sextant
                         }
                         else
                         {
-                            _logger.Debug($"The view ({mainFrame.Content.GetType()}) does not implement IViewFor<>.  Cannot set ViewModel of type, {viewModel.GetType()}, on view.");
+                            var contentTypeName = mainFrame.Content?.GetType().ToString() ?? "Unknown Type";
+                            _logger.Debug($"The view ({contentTypeName}) does not implement IViewFor<>.  Cannot set ViewModel of type, {viewModel.GetType()}, on view.");
                         }
 
                         return Observable.Return(Unit.Default);
@@ -385,21 +393,6 @@ namespace Sextant
             }
 
             return viewType;
-        }
-
-        private IViewModel? CurrentViewModel() => (IViewModel?)(mainFrame.Content as IViewFor)?.ViewModel;
-
-        private IView LocateNavigationFor(IViewModel viewModel)
-        {
-            var view = _viewLocator.ResolveView(viewModel, "NavigationView");
-
-            if (!(view is IView navigationPage))
-            {
-                _logger.Debug($"No navigation view could be located for type '{viewModel.GetType().FullName}', using the default navigation page.");
-                navigationPage = Locator.Current.GetService<IView>(nameof(NavigationView)) ?? Locator.Current.GetService<IView>();
-            }
-
-            return navigationPage;
         }
 
         private Page LocatePageFor(object viewModel, string? contract)

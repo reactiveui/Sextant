@@ -1,12 +1,10 @@
 ﻿using ReactiveUI;
-using ReactiveUI.XamForms;
-using Sextant;
+
 using SextantSample.ViewModels;
-using Xamarin.Forms;
 
 namespace SextantSample.Views
 {
-    public partial class FirstModalView : ReactiveContentPage<FirstModalViewModel>
+    public partial class FirstModalView
     {
 		public FirstModalView()
         {

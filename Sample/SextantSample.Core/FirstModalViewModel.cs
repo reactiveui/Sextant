@@ -3,7 +3,6 @@ using ReactiveUI;
 using Sextant;
 using System;
 using System.Diagnostics;
-using Splat;
 
 namespace SextantSample.ViewModels
 {

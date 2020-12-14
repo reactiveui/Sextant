@@ -1,3 +1,4 @@
+[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/reactiveui/sextant")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
 namespace Sextant.Plugins.Popup
 {
@@ -52,7 +53,7 @@ namespace Sextant.Plugins.Popup
         public static readonly Xamarin.Forms.BindableProperty ViewModelProperty;
         protected SextantPopupPage() { }
         public System.IObservable<System.Reactive.Unit> BackgroundClick { get; }
-        public object ViewModel { get; set; }
+        public object? ViewModel { get; set; }
         protected override void OnBindingContextChanged() { }
     }
     public abstract class SextantPopupPage<TViewModel> : Sextant.Plugins.Popup.SextantPopupPage, ReactiveUI.IActivatableView, ReactiveUI.IViewFor, ReactiveUI.IViewFor<TViewModel>

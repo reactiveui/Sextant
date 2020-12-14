@@ -3,7 +3,6 @@ using ReactiveUI;
 using System;
 using System.Diagnostics;
 using Sextant;
-using System.Reactive.Linq;
 
 namespace SextantSample.ViewModels
 {
@@ -28,7 +27,7 @@ namespace SextantSample.ViewModels
                     outputScheduler: RxApp.MainThreadScheduler);
 
             PushPage.Subscribe(x => Debug.WriteLine("PagePushed"));
-            PopModal.Subscribe(x => Debug.WriteLine("PagePoped"));
+            PopModal.Subscribe(x => Debug.WriteLine("PagePopped"));
 
             PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
             PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
