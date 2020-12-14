@@ -6,7 +6,6 @@
     <PackageProjectUrl>https://github.com/reactiveui/sextant/</PackageProjectUrl>
     <PackageIconUrl>https://github.com/reactiveui/styleguide/blob/master/logo_sextant/logo.png?raw=true</PackageIconUrl>
     <Authors>.NET Foundation and Contributors</Authors>
-    <Owners>xpaulbettsx;ghuntley</Owners>
     <PackageTags>mvvm;reactiveui;Rx;Reactive Extensions;Observable;xamarin;xamarin ios;xamarin mac;android;monodroid;uwp;net461</PackageTags>
     <Description>A ReactiveUI navigation library for Xamarin.Forms</Description>
     <PackageReleaseNotes>https://github.com/reactiveui/sextant/releases</PackageReleaseNotes>
@@ -46,8 +45,8 @@
     <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="LICENSE" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="stylecop.analyzers" Version="1.2.0-beta.261" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1" PrivateAssets="all" />
+    <PackageReference Include="stylecop.analyzers" Version="1.2.0-beta.312" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1" PrivateAssets="all" />
     <PackageReference Include="Roslynator.Analyzers" Version="3.0.0" PrivateAssets="All" />
   </ItemGroup>
 
