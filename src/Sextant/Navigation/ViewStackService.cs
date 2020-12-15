@@ -17,7 +17,7 @@ namespace Sextant
         /// </summary>
         /// <param name="view">The view.</param>
         public ViewStackService(IView view)
-            : this(view, null!)
+            : this(view, null)
         {
         }
 
@@ -26,7 +26,7 @@ namespace Sextant
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
-        public ViewStackService(IView view, IViewModelFactory viewModelFactory)
+        public ViewStackService(IView view, IViewModelFactory? viewModelFactory)
             : base(view, viewModelFactory)
         {
         }

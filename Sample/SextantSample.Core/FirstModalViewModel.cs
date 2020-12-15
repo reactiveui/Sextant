@@ -3,7 +3,6 @@ using ReactiveUI;
 using Sextant;
 using System;
 using System.Diagnostics;
-using Splat;
 
 namespace SextantSample.ViewModels
 {
@@ -33,9 +32,6 @@ namespace SextantSample.ViewModels
         }
 
 
-        public void Destroy()
-        {
-            Debug.WriteLine($"Destroy: {nameof(FirstModalViewModel)}");
-        }
+        public void Destroy() => Debug.WriteLine($"Destroy: {nameof(FirstModalViewModel)}");
     }
 }

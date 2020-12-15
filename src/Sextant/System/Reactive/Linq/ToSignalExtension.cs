@@ -20,7 +20,7 @@ namespace System.Reactive.Linq
         [Obsolete("This extension method causes conflicts in the System.Reactive.Linq namespace")]
         public static IObservable<Unit> ToSignal<T>(this IObservable<T> observable)
         {
-            if (observable == null)
+            if (observable is null)
             {
                 throw new ArgumentNullException(nameof(observable));
             }

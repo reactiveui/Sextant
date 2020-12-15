@@ -28,7 +28,7 @@ namespace Sextant
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
-        protected ViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
+        protected ViewStackServiceBase(IView view, IViewModelFactory? viewModelFactory)
         {
             Logger = this.Log();
             View = view ?? throw new ArgumentNullException(nameof(view));
@@ -66,12 +66,12 @@ namespace Sextant
         /// <summary>
         /// Gets the current view on the stack.
         /// </summary>
-        public IView View { get; private set; }
+        public IView View { get; }
 
         /// <summary>
         /// Gets the logger.
         /// </summary>
-        protected IFullLogger Logger { get; private set; }
+        protected IFullLogger Logger { get; }
 
         /// <summary>
         /// Gets the view model factory.
@@ -81,17 +81,17 @@ namespace Sextant
         /// <summary>
         /// Gets the modal subject.
         /// </summary>
-        protected BehaviorSubject<IImmutableList<IViewModel>> ModalSubject { get; private set; }
+        protected BehaviorSubject<IImmutableList<IViewModel>> ModalSubject { get; }
 
         /// <summary>
         /// Gets the page subject.
         /// </summary>
-        protected BehaviorSubject<IImmutableList<IViewModel>> PageSubject { get; private set; }
+        protected BehaviorSubject<IImmutableList<IViewModel>> PageSubject { get; }
 
         /// <summary>
         /// Gets the navigation disposables.
         /// </summary>
-        protected CompositeDisposable NavigationDisposables { get; } = new CompositeDisposable();
+        protected CompositeDisposable NavigationDisposables { get; } = new();
 
         /// <summary>
         /// Pops the <see cref="INavigable" /> off the stack.
@@ -110,10 +110,8 @@ namespace Sextant
         public IObservable<Unit> PopPage(bool animate = true)
         {
             var top = TopPage().Wait();
-            return View.PopPage(animate).Do(_ =>
-            {
-                top.InvokeViewModelAction<IDestructible>(x => x.Destroy());
-            });
+            return View.PopPage(animate)
+                .Do(_ => top.InvokeViewModelAction<IDestructible>(x => x.Destroy()));
         }
 
         /// <inheritdoc />
@@ -124,7 +122,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushModal(IViewModel modal, string? contract = null, bool withNavigationPage = true)
         {
-            if (modal == null)
+            if (modal is null)
             {
                 throw new ArgumentNullException(nameof(modal));
             }
@@ -158,7 +156,7 @@ namespace Sextant
         /// <inheritdoc />
         public IObservable<Unit> PushPage(IViewModel viewModel, string? contract = null, bool resetStack = false, bool animate = true)
         {
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 throw new ArgumentNullException(nameof(viewModel));
             }
@@ -214,14 +212,7 @@ namespace Sextant
 
             var stack = stackSubject.Value;
 
-            if (reset)
-            {
-                stack = new[] { item }.ToImmutableList();
-            }
-            else
-            {
-                stack = stack.Add(item);
-            }
+            stack = reset ? new[] { item }.ToImmutableList() : stack.Add(item);
 
             stackSubject.OnNext(stack);
         }
@@ -263,14 +254,14 @@ namespace Sextant
         protected static void PopRootAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, CompositeDisposable disposable)
         {
             IImmutableList<T> poppedStack = ImmutableList<T>.Empty;
-            if (stackSubject == null || stackSubject.Value.Count == 0)
+            if (stackSubject is null || stackSubject.Value.Count == 0)
             {
                 throw new InvalidOperationException("Stack is empty.");
             }
 
             stackSubject
                .Take(1)
-               .Where(stack => stack != null)
+               .Where(stack => stack is not null)
                .Subscribe(stack =>
                {
                    if (stack.Count > 1)
@@ -279,7 +270,7 @@ namespace Sextant
 
                        foreach (T popped in stack.RemoveRange(poppedStack).Reverse())
                        {
-                           if (popped == null)
+                           if (popped is null)
                            {
                                continue;
                            }

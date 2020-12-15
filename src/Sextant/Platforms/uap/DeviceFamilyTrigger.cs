@@ -4,10 +4,6 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
 namespace Sextant
@@ -25,10 +21,7 @@ namespace Sextant
         /// </summary>
         public string? DeviceFamily
         {
-            get
-            {
-                return _queriedDeviceFamily;
-            }
+            get => _queriedDeviceFamily;
 
             set
             {

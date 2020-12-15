@@ -83,7 +83,7 @@ namespace Sextant
             }
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton<T>(() => factory(view));
+            dependencyResolver.RegisterLazySingleton(() => factory(view));
             return dependencyResolver;
         }
 
@@ -109,7 +109,7 @@ namespace Sextant
 
             IView view = Locator.Current.GetService<IView>(NavigationView);
             IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
-            dependencyResolver.RegisterLazySingleton<T>(() => factory(view, viewModelFactory));
+            dependencyResolver.RegisterLazySingleton(() => factory(view, viewModelFactory));
             return dependencyResolver;
         }
 
@@ -158,7 +158,7 @@ namespace Sextant
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="contract">The contract.</param>
-        /// <returns>The dependencyResovler.</returns>
+        /// <returns>The dependency resolver to use.</returns>
         public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string? contract = null)
             where TView : IViewFor<TViewModel>, new()
             where TViewModel : class, IViewModel

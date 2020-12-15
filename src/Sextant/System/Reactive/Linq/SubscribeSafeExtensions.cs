@@ -28,9 +28,8 @@ namespace System.Reactive.Linq
             this IObservable<T> observable,
             [CallerMemberName]string? callerMemberName = null,
             [CallerFilePath]string? callerFilePath = null,
-            [CallerLineNumber]int callerLineNumber = 0)
-        {
-            return observable
+            [CallerLineNumber]int callerLineNumber = 0) =>
+            observable
                 .Subscribe(
                     _ => { },
                     ex =>
@@ -40,6 +39,5 @@ namespace System.Reactive.Linq
 
                         Debugger.Break();
                     });
-        }
     }
 }

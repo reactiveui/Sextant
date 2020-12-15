@@ -13,10 +13,7 @@ namespace SextantSample.UWP.Views
     /// </summary>
     public sealed partial class HomeView : Page, ReactiveUI.IViewFor<HomeViewModel>
     {
-        public HomeView()
-        {
-            this.InitializeComponent();
-        }
+        public HomeView() => this.InitializeComponent();
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty
             .Register(nameof(ViewModel), typeof(HomeViewModel), typeof(HomeView), null);

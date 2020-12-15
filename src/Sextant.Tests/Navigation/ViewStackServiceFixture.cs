@@ -37,6 +37,6 @@ namespace Sextant.Tests
         public ViewStackServiceFixture WithFactory(IViewModelFactory viewModelFactory) =>
             this.With(ref _viewModelFactory, viewModelFactory);
 
-        private ViewStackService Build() => new ViewStackService(_view, _viewModelFactory);
+        private ViewStackService Build() => new(_view, _viewModelFactory);
     }
 }

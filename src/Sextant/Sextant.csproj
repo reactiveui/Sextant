@@ -1,20 +1,19 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;Xamarin.iOS10</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net461;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.TVOS10;net5.0</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net461;net472;uap10.0.16299</TargetFrameworks>
     <AssemblyName>Sextant</AssemblyName>
     <RootNamespace>Sextant</RootNamespace>
     <PackageId>Sextant</PackageId>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <WarningsAsErrors>CS8625;CS8604;CS8600;CS8614;CS8603;CS8618;CS8619</WarningsAsErrors>
   </PropertyGroup>
   
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs" />
     <None Include="Platforms\**\*.cs" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-    <PackageReference Include="ReactiveUI" Version="12.*" />
+    <PackageReference Include="ReactiveUI" Version="13.*" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
@@ -24,8 +23,29 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('net461')) ">
-    <Compile Include="Platforms\net461\**\*.cs" />
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.WatchOS')) ">
+    <Compile Include="Platforms\apple-common\**\*.cs" />
+    <Compile Include="Platforms\ios\**\*.cs" />
+    <Compile Include="Platforms\uikit-common\**\*.cs" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.TVOS')) ">
+    <Compile Include="Platforms\apple-common\**\*.cs" />
+    <Compile Include="Platforms\ios\**\*.cs" />
+    <Compile Include="Platforms\uikit-common\**\*.cs" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.Mac')) ">
+    <Compile Include="Platforms\apple-common\**\*.cs" />
+    <Compile Include="Platforms\ios\**\*.cs" />
+    <Compile Include="Platforms\uikit-common\**\*.cs" />
+    <Reference Include="System.Runtime.Serialization" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
+    <Compile Include="Platforms\net4\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
@@ -35,6 +55,10 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">
     <Compile Include="Platforms\netstandard2.0\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('net5')) ">
+    <Compile Include="Platforms\net5\**\*.cs" />
   </ItemGroup>
 
 </Project>

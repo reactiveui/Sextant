@@ -17,9 +17,6 @@ namespace System.Reactive.Linq
         /// <param name="observable">The observable to add the condition to.</param>
         /// <returns>An observable which will not signal unless the value is not null.</returns>
         [Obsolete("This extension method causes conflicts in the System.Reactive.Linq namespace")]
-        public static IObservable<T> WhereNotNull<T>(this IObservable<T> observable)
-        {
-            return observable.Where(x => x != null);
-        }
+        public static IObservable<T> WhereNotNull<T>(this IObservable<T?> observable) => observable.Where(x => x is not null).Select(x => x!);
     }
 }

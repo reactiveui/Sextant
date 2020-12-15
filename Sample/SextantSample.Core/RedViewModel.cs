@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reactive;
-using System.Reactive.Linq;
-using System.Windows.Input;
 using ReactiveUI;
 using Sextant;
 
 namespace SextantSample.ViewModels
 {
-    public class RedViewModel : ViewModelBase, IViewModel
+    public class RedViewModel : ViewModelBase
     {
         public ReactiveCommand<Unit, Unit> PopModal { get; set; }
 

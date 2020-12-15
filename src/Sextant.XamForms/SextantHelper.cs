@@ -24,10 +24,8 @@ namespace Sextant.XamForms
         [Obsolete("Use the dependency resolver mixins.")]
         public static void RegisterView<TView, TViewModel>(string? contract = null)
             where TView : IViewFor, new()
-            where TViewModel : class, IViewModel
-        {
+            where TViewModel : class, IViewModel =>
             Locator.CurrentMutable.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
-        }
 
         /// <summary>
         /// Registers a value for navigation.
@@ -72,9 +70,8 @@ namespace Sextant.XamForms
             var viewStackService = new ViewStackService(navigationView);
 
             Locator.CurrentMutable.Register<IViewStackService>(() => viewStackService);
-            var instance = Activator.CreateInstance(typeof(TViewModel), viewStackService) as TViewModel;
 
-            if (instance == null)
+            if (!(Activator.CreateInstance(typeof(TViewModel), viewStackService) is TViewModel instance))
             {
                 throw new InvalidOperationException($"Could not initialize a view for view model {typeof(TViewModel)}");
             }
@@ -94,9 +91,7 @@ namespace Sextant.XamForms
         /// <returns>The navigation view.</returns>
         [Obsolete("Use the " + nameof(Initialize) + " method.")]
         public static NavigationView Initialise<TViewModel>(IScheduler? mainThreadScheduler = null, IScheduler? backgroundScheduler = null, IViewLocator? viewLocator = null)
-            where TViewModel : class, IViewModel
-        {
-            return Initialize<TViewModel>(mainThreadScheduler, backgroundScheduler, viewLocator);
-        }
+            where TViewModel : class, IViewModel =>
+            Initialize<TViewModel>(mainThreadScheduler, backgroundScheduler, viewLocator);
     }
 }

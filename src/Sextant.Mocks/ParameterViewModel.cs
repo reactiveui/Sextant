@@ -4,11 +4,9 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
 using ReactiveUI;
 
 namespace Sextant.Mocks
@@ -38,7 +36,7 @@ namespace Sextant.Mocks
         /// <summary>
         /// Gets the disposable.
         /// </summary>
-        public CompositeDisposable Disposable { get; } = new CompositeDisposable();
+        public CompositeDisposable Disposable { get; } = new();
 
         /// <inheritdoc />
         public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
@@ -50,10 +48,7 @@ namespace Sextant.Mocks
         public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
 
         /// <inheritdoc/>
-        public void Destroy()
-        {
-            Disposable?.Dispose();
-        }
+        public void Destroy() => Disposable.Dispose();
 
         private void Unwrap(INavigationParameter parameter)
         {

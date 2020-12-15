@@ -8,12 +8,12 @@ using System;
 namespace Sextant
 {
     /// <summary>
-    /// Extension methods interact with <see cref="Sextant"/>.
+    /// Extensions methods to setup the <see cref="Sextant"/> instance.
     /// </summary>
     public static class SextantExtensions
     {
         /// <summary>
-        /// Initializes the sextant.
+        /// Initializes the specified sextant.
         /// </summary>
         /// <param name="sextant">The sextant.</param>
         public static void Initialize(this Sextant sextant)
@@ -23,13 +23,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(sextant));
             }
 
-            sextant
-                .MutableLocator
-                .RegisterUWPViewLocator()
-                .RegisterNavigationView()
-                .RegisterViewStackService()
-                .RegisterParameterViewStackService()
-                .RegisterViewModelFactory(() => new DefaultViewModelFactory());
+            sextant.MutableLocator.RegisterViewStackService();
         }
     }
 }

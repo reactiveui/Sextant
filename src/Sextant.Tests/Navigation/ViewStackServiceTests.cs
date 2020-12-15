@@ -30,10 +30,7 @@ namespace Sextant.Tests
             /// <summary>
             /// Initializes a new instance of the <see cref="TheConstructor"/> class.
             /// </summary>
-            public TheConstructor()
-            {
-                Locator.GetLocator().UnregisterAll<IViewModelFactory>();
-            }
+            public TheConstructor() => Locator.GetLocator().UnregisterAll<IViewModelFactory>();
 
             /// <summary>
             /// Test that the object constructed uses the static instance of ViewModelFactory.
@@ -42,7 +39,7 @@ namespace Sextant.Tests
             public void Should_Throw_If_View_Model_Factory_Current_Null()
             {
                 // Given, When
-                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null!));
 
                 // Then
                 result.Should().BeOfType<ViewModelFactoryNotFoundException>();
@@ -58,7 +55,7 @@ namespace Sextant.Tests
                 Locator.CurrentMutable.RegisterViewModelFactory();
 
                 // When
-                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null));
+                var result = Record.Exception(() => (ViewStackService)new ViewStackServiceFixture().WithFactory(null!));
 
                 // Then
                 result.Should().BeNull();
@@ -402,7 +399,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Tests to verify the navigatino stack is cleared.
+            /// Tests to verify the navigation stack is cleared.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -421,7 +418,7 @@ namespace Sextant.Tests
             }
 
             /// <summary>
-            /// Tests to verify the navigatino stack is cleared.
+            /// Tests to verify the navigation stack is cleared.
             /// </summary>
             /// <returns>A completion notification.</returns>
             [Fact]
@@ -432,10 +429,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
                 await sut.PushPage(new NavigableViewModelMock(), pages: 3);
 
-                sut.View.PagePopped.Subscribe(_ =>
-                {
-                    count++;
-                });
+                sut.View.PagePopped.Subscribe(_ => count++);
 
                 // When
                 await sut.PopToRootPage();
@@ -608,7 +602,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await sut.PushModal(null)).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PushModal(null!)).ConfigureAwait(false);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>();
@@ -704,7 +698,7 @@ namespace Sextant.Tests
                 ViewStackService sut = new ViewStackServiceFixture();
 
                 // When
-                var result = await Record.ExceptionAsync(async () => await sut.PushPage(null)).ConfigureAwait(false);
+                var result = await Record.ExceptionAsync(async () => await sut.PushPage(null!)).ConfigureAwait(false);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("viewModel");
@@ -762,7 +756,7 @@ namespace Sextant.Tests
                 await sut.PushPage(new NavigableViewModelMock());
 
                 // Then
-                await sut.View.Received().PushPage(Arg.Any<IViewModel>(), null, false, true);
+                await sut.View.Received().PushPage(Arg.Any<IViewModel>(), null, false);
             }
 
             /// <summary>

@@ -4,7 +4,7 @@ using SextantSample.ViewModels;
 
 namespace SextantSample.Views
 {
-    public partial class RedView : ReactiveContentPage<RedViewModel>
+    public partial class RedView
     {
         public RedView()
         {

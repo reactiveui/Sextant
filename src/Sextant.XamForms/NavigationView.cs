@@ -4,7 +4,6 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -21,7 +20,6 @@ namespace Sextant.XamForms
     public class NavigationView : NavigationPage, IView, IEnableLogger
     {
         private readonly IScheduler _backgroundScheduler;
-        private readonly IScheduler _mainScheduler;
         private readonly IViewLocator _viewLocator;
         private readonly IFullLogger _logger;
 
@@ -44,21 +42,27 @@ namespace Sextant.XamForms
             : base(rootPage)
         {
             _backgroundScheduler = backgroundScheduler;
-            _mainScheduler = mainScheduler;
+            MainThreadScheduler = mainScheduler;
             _viewLocator = viewLocator;
             _logger = this.Log();
 
             PagePopped =
                 Observable
-                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
+                    .FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
                         handler =>
                         {
-                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
+                            void Handler(object? sender, NavigationEventArgs args)
+                            {
+                                if (args.Page.BindingContext is IViewModel viewModel)
+                                {
+                                    handler(viewModel);
+                                }
+                            }
+
                             return Handler;
                         },
                         x => Popped += x,
-                        x => Popped -= x)
-                    .Cast<IViewModel>();
+                        x => Popped -= x);
         }
 
         /// <summary>
@@ -70,25 +74,31 @@ namespace Sextant.XamForms
         public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator)
         {
             _backgroundScheduler = backgroundScheduler;
-            _mainScheduler = mainScheduler;
+            MainThreadScheduler = mainScheduler;
             _viewLocator = viewLocator;
             _logger = this.Log();
 
             PagePopped =
                 Observable
-                    .FromEvent<EventHandler<NavigationEventArgs>, object>(
+                    .FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
                         handler =>
                         {
-                            void Handler(object sender, NavigationEventArgs args) => handler(args.Page.BindingContext);
+                            void Handler(object? sender, NavigationEventArgs args)
+                            {
+                                if (args.Page.BindingContext is IViewModel viewModel)
+                                {
+                                    handler(viewModel);
+                                }
+                            }
+
                             return Handler;
                         },
                         x => Popped += x,
-                        x => Popped -= x)
-                    .Cast<IViewModel>();
+                        x => Popped -= x);
         }
 
         /// <inheritdoc />
-        public IScheduler MainThreadScheduler => _mainScheduler;
+        public IScheduler MainThreadScheduler { get; }
 
         /// <inheritdoc />
         public IObservable<IViewModel> PagePopped { get; }
@@ -99,7 +109,7 @@ namespace Sextant.XamForms
                 .PopModalAsync()
                 .ToObservable()
                 .Select(_ => Unit.Default)
-                .ObserveOn(_mainScheduler); // XF completes the pop operation on a background thread :/
+                .ObserveOn(MainThreadScheduler); // XF completes the pop operation on a background thread :/
 
         /// <inheritdoc />
         public IObservable<Unit> PopPage(bool animate) =>
@@ -107,7 +117,7 @@ namespace Sextant.XamForms
                 .PopAsync(animate)
                 .ToObservable()
                 .Select(_ => Unit.Default)
-                .ObserveOn(_mainScheduler); // XF completes the pop operation on a background thread :/
+                .ObserveOn(MainThreadScheduler); // XF completes the pop operation on a background thread :/
 
         /// <inheritdoc />
         public IObservable<Unit> PopToRootPage(bool animate) =>
@@ -115,7 +125,7 @@ namespace Sextant.XamForms
                 .PopToRootAsync(animate)
                 .ToObservable()
                 .Select(_ => Unit.Default)
-                .ObserveOn(_mainScheduler);
+                .ObserveOn(MainThreadScheduler);
 
         /// <inheritdoc />
         public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) =>
@@ -125,12 +135,7 @@ namespace Sextant.XamForms
                     {
                         var page = LocatePageFor(modalViewModel, contract);
                         SetPageTitle(page, modalViewModel.Id);
-                        if (withNavigationPage)
-                        {
-                            return new NavigationPage(page);
-                        }
-
-                        return page;
+                        return withNavigationPage ? new NavigationPage(page) : page;
                     },
                     CurrentThreadScheduler.Instance)
                 .ObserveOn(CurrentThreadScheduler.Instance)
@@ -180,11 +185,17 @@ namespace Sextant.XamForms
                             .ToObservable();
                     });
 
+        private static void SetPageTitle(Page page, string resourceKey) =>
+
+            // var title = Localize.GetString(resourceKey);
+            // TODO: ensure resourceKey isn't null and is localized.
+            page.Title = resourceKey;
+
         private Page LocatePageFor(object viewModel, string? contract)
         {
             var view = _viewLocator.ResolveView(viewModel, contract);
 
-            if (view == null)
+            if (view is null)
             {
                 throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
@@ -197,13 +208,6 @@ namespace Sextant.XamForms
             view.ViewModel = viewModel;
 
             return page;
-        }
-
-        private void SetPageTitle(Page page, string resourceKey)
-        {
-            // var title = Localize.GetString(resourceKey);
-            // TODO: ensure resourceKey isn't null and is localized.
-            page.Title = resourceKey;
         }
     }
 }

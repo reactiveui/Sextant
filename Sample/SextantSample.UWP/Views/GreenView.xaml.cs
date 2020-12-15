@@ -12,10 +12,7 @@ namespace SextantSample.UWP.Views
     /// </summary>
     public sealed partial class GreenView : Page, IViewFor<GreenViewModel>
     {
-        public GreenView()
-        {
-            this.InitializeComponent();
-        }
+        public GreenView() => this.InitializeComponent();
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty
            .Register(nameof(ViewModel), typeof(GreenViewModel), typeof(GreenView), null);

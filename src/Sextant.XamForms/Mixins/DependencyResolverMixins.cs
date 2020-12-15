@@ -4,12 +4,9 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
-using System.Text;
 using ReactiveUI;
-using Sextant.XamForms;
 using Splat;
 
 namespace Sextant.XamForms

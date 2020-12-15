@@ -1,22 +1,21 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
     <AssemblyName>Sextant.XamForms</AssemblyName>
-    <RootNamespace>Sextant</RootNamespace>
+    <RootNamespace>Sextant.XamForms</RootNamespace>
     <PackageId>Sextant.XamForms</PackageId>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <WarningsAsErrors>CS8625;CS8604;CS8600;CS8614;CS8603;CS8618;CS8619</WarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI" Version="12.*" />
+    <PackageReference Include="ReactiveUI" Version="13.*" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
   </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
-    <PackageReference Include="Xamarin.Forms" Version="4.5.*" />
+  
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="4.6.*" />
   </ItemGroup>
 
   <ItemGroup>

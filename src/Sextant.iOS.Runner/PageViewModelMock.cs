@@ -18,10 +18,7 @@ namespace Sextant.IOS.Runner
         /// Initializes a new instance of the <see cref="PageViewModelMock"/> class.
         /// </summary>
         /// <param name="id">The id of the page.</param>
-        public PageViewModelMock(string id = null)
-        {
-            _id = id;
-        }
+        public PageViewModelMock(string id = null) => _id = id;
 
         /// <summary>
         /// Gets the ID of the page.

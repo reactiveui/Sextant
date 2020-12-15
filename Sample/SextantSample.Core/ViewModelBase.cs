@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive;
 using ReactiveUI;
 using Sextant;
 
@@ -9,10 +8,7 @@ namespace SextantSample.ViewModels
     {
         protected readonly IViewStackService ViewStackService;
 
-        protected ViewModelBase(IViewStackService viewStackService)
-        {
-            ViewStackService = viewStackService;
-        }
+        protected ViewModelBase(IViewStackService viewStackService) => ViewStackService = viewStackService;
 
         public virtual string Id { get; }
     }

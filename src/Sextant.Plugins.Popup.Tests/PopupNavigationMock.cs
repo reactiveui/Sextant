@@ -19,27 +19,24 @@ namespace Sextant.Plugins.Popup.Tests
     /// </summary>
     public class PopupNavigationMock : IPopupNavigation
     {
-        private Stack<PopupPage> _stack;
+        private readonly Stack<PopupPage> _stack;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopupNavigationMock"/> class.
         /// </summary>
-        public PopupNavigationMock()
-        {
-            _stack = new Stack<PopupPage>();
-        }
+        public PopupNavigationMock() => _stack = new Stack<PopupPage>();
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Pushing;
+        public event EventHandler<PopupNavigationEventArgs>? Pushing;
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Pushed;
+        public event EventHandler<PopupNavigationEventArgs>? Pushed;
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Popping;
+        public event EventHandler<PopupNavigationEventArgs>? Popping;
 
         /// <inheritdoc/>
-        public event EventHandler<PopupNavigationEventArgs> Popped;
+        public event EventHandler<PopupNavigationEventArgs>? Popped;
 
         /// <inheritdoc/>
         public IReadOnlyList<PopupPage> PopupStack => _stack.ToList();

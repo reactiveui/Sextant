@@ -15,9 +15,9 @@ namespace Sextant.Mocks
     /// </summary>
     public class NullViewModelMock : INavigable
     {
-        private ISubject<Unit> _navigatedTo;
-        private ISubject<Unit> _navigatingTo;
-        private ISubject<Unit> _navigatedFrom;
+        private readonly ISubject<Unit> _navigatedTo;
+        private readonly ISubject<Unit> _navigatingTo;
+        private readonly ISubject<Unit> _navigatedFrom;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NullViewModelMock"/> class.

@@ -26,7 +26,7 @@ namespace Sextant
             get
             {
                 var locator = Locator.Current.GetService<IViewModelFactory>();
-                if (locator == null)
+                if (locator is null)
                 {
                     throw new ViewModelFactoryNotFoundException("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken");
                 }

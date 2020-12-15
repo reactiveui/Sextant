@@ -28,7 +28,7 @@ namespace Sextant.Tests
             public void Should_Unwrap_Parameters()
             {
                 // Given
-                ParameterViewModel sut = new ParameterViewModel();
+                ParameterViewModel sut = new();
 
                 // When
                 sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" }, { "life", 42 } }).Subscribe();
@@ -45,7 +45,7 @@ namespace Sextant.Tests
             public void Should_Return_Null_If_No_Values_Provided()
             {
                 // Given
-                ParameterViewModel sut = new ParameterViewModel();
+                ParameterViewModel sut = new();
 
                 // When
                 sut.WhenNavigatingTo(new NavigationParameter());
@@ -61,7 +61,7 @@ namespace Sextant.Tests
             public void Should_Throw_If_Key_Not_Found()
             {
                 // Given
-                ParameterViewModel sut = new ParameterViewModel();
+                ParameterViewModel sut = new();
 
                 // When
                 var result = Record.Exception(() => sut.WhenNavigatingTo(new NavigationParameter { { "hello", "world" } }).Subscribe());

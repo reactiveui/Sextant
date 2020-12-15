@@ -57,6 +57,6 @@ namespace Sextant.Tests
         public ParameterViewStackService WithFactory(IViewModelFactory viewModelFactory) =>
             this.With(ref _viewModelFactory, viewModelFactory);
 
-        private ParameterViewStackService Build() => new ParameterViewStackService(_view, _viewModelFactory);
+        private ParameterViewStackService Build() => new(_view, _viewModelFactory);
     }
 }

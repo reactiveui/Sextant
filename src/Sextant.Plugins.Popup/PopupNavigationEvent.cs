@@ -20,12 +20,12 @@ namespace Sextant.Plugins.Popup
         /// <param name="isAnimated">Is the page animated.</param>
         public PopupNavigationEvent(IViewFor page, bool isAnimated)
         {
-            if (page == null)
+            if (page is null)
             {
                 throw new ArgumentNullException(nameof(page));
             }
 
-            if (page.ViewModel == null)
+            if (page.ViewModel is null)
             {
                 throw new InvalidOperationException($"{nameof(page.ViewModel)} cannot be null.");
             }
