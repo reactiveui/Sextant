@@ -32,10 +32,10 @@ namespace Sextant.Tests
 
         public static implicit operator ViewStackService(ViewStackServiceFixture fixture) => fixture.Build();
 
-        public ViewStackServiceFixture WithView(IView view) => this.With(ref _view, view);
+        public ViewStackServiceFixture WithView(IView view) => this.With(out _view, view);
 
         public ViewStackServiceFixture WithFactory(IViewModelFactory viewModelFactory) =>
-            this.With(ref _viewModelFactory, viewModelFactory);
+            this.With(out _viewModelFactory, viewModelFactory);
 
         private ViewStackService Build() => new(_view, _viewModelFactory);
     }

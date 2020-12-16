@@ -36,7 +36,7 @@ namespace Sextant.Tests
         public static implicit operator ParameterViewStackService(ParameterViewStackServiceFixture fixture) =>
             fixture.Build();
 
-        public ParameterViewStackServiceFixture WithView(IView view) => this.With(ref _view, view);
+        public ParameterViewStackServiceFixture WithView(IView view) => this.With(out _view, view);
 
         public ParameterViewStackService WithPushed<TViewModel>(TViewModel viewModel)
             where TViewModel : INavigable
@@ -55,7 +55,7 @@ namespace Sextant.Tests
         }
 
         public ParameterViewStackService WithFactory(IViewModelFactory viewModelFactory) =>
-            this.With(ref _viewModelFactory, viewModelFactory);
+            this.With(out _viewModelFactory, viewModelFactory);
 
         private ParameterViewStackService Build() => new(_view, _viewModelFactory);
     }
