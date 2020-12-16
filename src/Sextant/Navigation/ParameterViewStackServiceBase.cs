@@ -144,7 +144,7 @@ namespace Sextant
                     throw new ArgumentNullException(nameof(parameter));
                 }
 
-                IViewModel poppedPage = TopPage().FirstOrDefaultAsync().Wait();
+                IViewModel poppedPage = TopPage().FirstOrDefaultAsync().Wait()!;
                 var composite = new CompositeDisposable();
 
                 View
@@ -161,7 +161,7 @@ namespace Sextant
                                     .DisposeWith(composite))
                             .InvokeViewModelAction<IDestructible>(x => x.Destroy());
 
-                        IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait();
+                        IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait()!;
                         if (topPage is INavigated navigated)
                         {
                             navigated

@@ -175,7 +175,7 @@ namespace Sextant.Plugins.Popup
                     .Select(popup =>
                     {
                         popup
-                            .ViewModel
+                            .ViewModel?
                             .InvokeViewModelAction<INavigating>(x =>
                                 x.WhenNavigatingTo(navigationParameter)
                                     .Subscribe()
@@ -187,7 +187,7 @@ namespace Sextant.Plugins.Popup
                             .FromAsync(() => _popupNavigation.PushAsync(popup, animate))
                             .Select(_ =>
                                 popup
-                                    .ViewModel
+                                    .ViewModel?
                                     .InvokeViewModelAction<INavigated>(x =>
                                         x.WhenNavigatedTo(navigationParameter)
                                             .Subscribe()
