@@ -1,7 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <NoWarn>$(NoWarn);1591;CA1707;SA1633;CA1034</NoWarn>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -9,9 +8,9 @@
     <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
