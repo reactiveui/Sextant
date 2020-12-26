@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Sextant
 {
@@ -17,5 +18,28 @@ namespace Sextant
     [SuppressMessage("Design", "CA2237: Mark ISerializable types with SerializableAttribute.", Justification = "Deliberate usage")]
     public class NavigationParameter : Dictionary<string, object>, INavigationParameter
     {
+        /// <inheritdoc />
+        public T GetValue<T>(string key)
+        {
+            if (TryGetValue(key, out var result))
+            {
+                return (T)result;
+            }
+
+            return default!;
+        }
+
+        /// <inheritdoc />
+        public bool TryGetValue<T>(string key, out T value)
+        {
+            if (TryGetValue(key, out var result))
+            {
+                value = (T)result;
+                return true;
+            }
+
+            value = default!;
+            return false;
+        }
     }
 }
