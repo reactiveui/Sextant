@@ -47,7 +47,11 @@ namespace Sextant
     {
         System.IObservable<System.Reactive.Unit> WhenNavigatingTo(Sextant.INavigationParameter parameter);
     }
-    public interface INavigationParameter : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable { }
+    public interface INavigationParameter : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable
+    {
+        T GetValue<T>(string key);
+        bool TryGetValue<T>(string key, out T value);
+    }
     [System.Obsolete("Please use the IViewModel interface.")]
     public interface IPageViewModel : Sextant.IViewModel { }
     public interface IParameterViewStackService : Sextant.IViewStackService
@@ -100,6 +104,8 @@ namespace Sextant
     public class NavigationParameter : System.Collections.Generic.Dictionary<string, object>, Sextant.INavigationParameter, System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable
     {
         public NavigationParameter() { }
+        public T GetValue<T>(string key) { }
+        public bool TryGetValue<T>(string key, out T value) { }
     }
     public sealed class ParameterViewStackService : Sextant.ParameterViewStackServiceBase
     {
