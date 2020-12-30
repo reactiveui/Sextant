@@ -8,7 +8,7 @@ namespace Sextant
     /// <summary>
     /// Interface that represents an element that is navigable.
     /// </summary>
-    public interface INavigable : IViewModel, INavigated, INavigating
+    public interface INavigable : IViewModel, INavigated, INavigating, ISextantViewModel
     {
     }
 }
