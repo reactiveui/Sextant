@@ -153,11 +153,11 @@ namespace Sextant
     public sealed class ViewStackService : Sextant.ViewStackServiceBase
     {
         public ViewStackService(Sextant.IView view) { }
-        public ViewStackService(Sextant.IView view, Sextant.IViewModelFactory? viewModelFactory) { }
+        public ViewStackService(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
     }
     public abstract class ViewStackServiceBase : Sextant.IViewStackService, Splat.IEnableLogger, System.IDisposable
     {
-        protected ViewStackServiceBase(Sextant.IView view, Sextant.IViewModelFactory? viewModelFactory) { }
+        protected ViewStackServiceBase(Sextant.IView view, Sextant.IViewModelFactory viewModelFactory) { }
         protected Sextant.IViewModelFactory Factory { get; }
         protected Splat.IFullLogger Logger { get; }
         public System.IObservable<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> ModalStack { get; }

@@ -28,11 +28,11 @@ namespace Sextant
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
-        protected ViewStackServiceBase(IView view, IViewModelFactory? viewModelFactory)
+        protected ViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
         {
             Logger = this.Log();
             View = view ?? throw new ArgumentNullException(nameof(view));
-            Factory = viewModelFactory ?? ViewModelFactory.Current;
+            Factory = viewModelFactory;
             ModalSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
             PageSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 

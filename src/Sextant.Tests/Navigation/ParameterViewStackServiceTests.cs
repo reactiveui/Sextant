@@ -31,16 +31,16 @@ namespace Sextant.Tests
             public TheConstructor() => Locator.GetLocator().UnregisterAll<IViewModelFactory>();
 
             /// <summary>
-            /// Test that the object constructed uses the static instance of ViewModelFactory.
+            /// Test that the object constructed uses a new instance of ViewModelFactory.
             /// </summary>
             [Fact]
-            public void Should_Throw_If_View_Model_Factory_Current_Null()
+            public void Should_Not_Throw_If_View_Model_Factory_Current_Null()
             {
                 // Given, When
                 var result = Record.Exception(() => new ParameterViewStackServiceFixture().WithFactory(null!));
 
                 // Then
-                result.Should().BeOfType<ViewModelFactoryNotFoundException>();
+                result.Should().BeNull();
             }
 
             /// <summary>

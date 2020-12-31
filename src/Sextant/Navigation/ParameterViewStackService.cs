@@ -17,7 +17,7 @@ namespace Sextant
         /// </summary>
         /// <param name="view">The view.</param>
         public ParameterViewStackService(IView view)
-            : this(view, null!)
+            : this(view, new DefaultViewModelFactory())
         {
         }
 
