@@ -26,44 +26,6 @@ namespace Sextant
         public static string NavigationView => nameof(NavigationView);
 
         /// <summary>
-        /// Registers a navigation view into the container.
-        /// </summary>
-        /// <param name="dependencyResolver"></param>
-        /// <param name="navigationViewFactory"></param>
-        /// <typeparam name="TView"></typeparam>
-        /// <returns></returns>
-        public static IMutableDependencyResolver RegisterNavigationView<TView>(
-            this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
-            where TView : IView
-        {
-            var navigationView = navigationViewFactory();
-            var viewStackService = new ViewStackService(navigationView);
-
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);
-            dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, "NavigationView");
-            return dependencyResolver;
-        }
-
-        /// <summary>
-        /// Resolves navigation view from a dependency resolver.
-        /// </summary>
-        /// <param name="dependencyResolver"></param>
-        /// <param name="contract"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static IView GetNavigationView(
-            this IReadonlyDependencyResolver dependencyResolver,
-            string? contract = null)
-        {
-            if (dependencyResolver is null)
-            {
-                throw new ArgumentNullException(nameof(dependencyResolver));
-            }
-
-            return dependencyResolver.GetService<IView>(contract ?? "NavigationView");
-        }
-
-        /// <summary>
         /// Registers the view stack service.
         /// </summary>
         /// <param name="dependencyResolver">The dependency resolver.</param>
