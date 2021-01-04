@@ -21,5 +21,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" />
+        <ProjectReference Include="..\..\src\Sextant.Avalonia\Sextant.Avalonia.csproj" />
     </ItemGroup>
 </Project>
