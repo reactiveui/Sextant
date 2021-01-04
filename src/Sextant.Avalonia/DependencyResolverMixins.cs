@@ -40,7 +40,7 @@ namespace Sextant.Avalonia
         /// <returns>The dependency resolver.</returns>
         public static IView GetNavigationView(
             this IReadonlyDependencyResolver dependencyResolver,
-            string contract = null) =>
+            string? contract = null) =>
             dependencyResolver.GetService<IView>(contract ?? "NavigationView");
     }
 }

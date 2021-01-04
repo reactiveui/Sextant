@@ -4,6 +4,7 @@
     <AssemblyName>Sextant.Avalonia</AssemblyName>
     <RootNamespace>Sextant.Avalonia</RootNamespace>
     <PackageId>Sextant.Avalonia</PackageId>
+    <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>

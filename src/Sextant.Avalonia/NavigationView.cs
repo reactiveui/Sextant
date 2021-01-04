@@ -87,7 +87,7 @@ namespace Sextant.Avalonia
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             IViewModel viewModel,
-            string contract,
+            string? contract,
             bool resetStack,
             bool animate = true)
         {
@@ -116,7 +116,7 @@ namespace Sextant.Avalonia
         /// <inheritdoc />
         public IObservable<Unit> PushModal(
             IViewModel modalViewModel,
-            string contract,
+            string? contract,
             bool withNavigationPage = true)
         {
             var view = LocateView(modalViewModel, contract);
@@ -131,7 +131,7 @@ namespace Sextant.Avalonia
             return Observable.Return(Unit.Default);
         }
 
-        private IViewFor LocateView(IViewModel viewModel, string contract)
+        private IViewFor LocateView(IViewModel viewModel, string? contract)
         {
             var view = ViewLocator.ResolveView(viewModel, contract);
             if (view is null)
