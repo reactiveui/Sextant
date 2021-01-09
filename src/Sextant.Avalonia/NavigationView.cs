@@ -1,4 +1,9 @@
-﻿using System;
+﻿// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for full license information.
+
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
@@ -15,7 +20,7 @@ using DynamicData.Binding;
 using ReactiveUI;
 using Sextant;
 
-namespace SextantSample.Avalonia.Views
+namespace Sextant.Avalonia
 {
     /// <summary>
     /// The <see cref="IView"/> implementation for Avalonia.
@@ -82,7 +87,7 @@ namespace SextantSample.Avalonia.Views
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
             IViewModel viewModel,
-            string contract,
+            string? contract,
             bool resetStack,
             bool animate = true)
         {
@@ -111,7 +116,7 @@ namespace SextantSample.Avalonia.Views
         /// <inheritdoc />
         public IObservable<Unit> PushModal(
             IViewModel modalViewModel,
-            string contract,
+            string? contract,
             bool withNavigationPage = true)
         {
             var view = LocateView(modalViewModel, contract);
@@ -126,7 +131,7 @@ namespace SextantSample.Avalonia.Views
             return Observable.Return(Unit.Default);
         }
 
-        private IViewFor LocateView(IViewModel viewModel, string contract)
+        private IViewFor LocateView(IViewModel viewModel, string? contract)
         {
             var view = ViewLocator.ResolveView(viewModel, contract);
             if (view is null)

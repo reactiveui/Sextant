@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Sextant;
+using Sextant.Avalonia;
 using SextantSample.Avalonia.Views;
 using SextantSample.ViewModels;
 using Splat;
@@ -39,33 +40,6 @@ namespace SextantSample.Avalonia
 
             new Window { Content = Locator.Current.GetNavigationView() }.Show();
             base.OnFrameworkInitializationCompleted();
-        }
-    }
-
-    public static class Workarounds
-    {
-        public static IMutableDependencyResolver RegisterNavigationView<TView>(
-            this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
-            where TView : IView
-        {
-            var navigationView = navigationViewFactory();
-            var viewStackService = new ViewStackService(navigationView);
-
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);
-            dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, "NavigationView");
-            return dependencyResolver;
-        }
-
-        public static IView GetNavigationView(
-            this IReadonlyDependencyResolver dependencyResolver,
-            string contract = null)
-        {
-            if (dependencyResolver is null)
-            {
-                throw new ArgumentNullException(nameof(dependencyResolver));
-            }
-
-            return dependencyResolver.GetService<IView>(contract ?? "NavigationView");
         }
     }
 }
