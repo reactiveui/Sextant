@@ -2,6 +2,16 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
 namespace Sextant.XamForms
 {
+    public abstract class BehaviorBase<T> : Xamarin.Forms.Behavior<T>, System.IDisposable
+        where T : Xamarin.Forms.BindableObject
+    {
+        protected BehaviorBase() { }
+        protected System.Reactive.Disposables.CompositeDisposable BehaviorDisposable { get; }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        protected override void OnAttachedTo(T bindable) { }
+        protected override void OnDetachingFrom(T bindable) { }
+    }
     public static class DependencyResolverMixins
     {
         public static string NavigationView { get; }

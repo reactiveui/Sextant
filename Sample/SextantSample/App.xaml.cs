@@ -19,9 +19,7 @@ namespace SextantSample
             InitializeComponent();
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
-
             Instance.InitializeForms();
-
             Locator
                 .CurrentMutable
                 .RegisterView<HomeView, HomeViewModel>()
