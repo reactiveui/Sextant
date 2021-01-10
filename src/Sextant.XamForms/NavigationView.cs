@@ -185,6 +185,13 @@ namespace Sextant.XamForms
                             .ToObservable();
                     });
 
+        /// <inheritdoc />
+        protected override bool OnBackButtonPressed()
+        {
+            // TODO: [rlittlesii: January 09, 2021] Do the thing.
+            return base.OnBackButtonPressed();
+        }
+
         private static void SetPageTitle(Page page, string resourceKey) =>
 
             // var title = Localize.GetString(resourceKey);
