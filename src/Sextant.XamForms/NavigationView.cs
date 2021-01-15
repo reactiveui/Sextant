@@ -95,6 +95,7 @@ namespace Sextant.XamForms
                         },
                         x => Popped += x,
                         x => Popped -= x);
+            Behaviors.Add(new NavigationPageSystemPopBehavior());
         }
 
         /// <inheritdoc />
