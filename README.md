@@ -1,19 +1,7 @@
 ## Sextant
 
 [![NuGet Stats](https://img.shields.io/nuget/v/sextant.svg)](https://www.nuget.org/packages/sextant) ![Build](https://github.com/reactiveui/Sextant/workflows/Build/badge.svg) [![Code Coverage](https://codecov.io/gh/reactiveui/sextant/branch/main/graph/badge.svg)](https://codecov.io/gh/reactiveui/sextant)
-<br>
-<a href="https://www.nuget.org/packages/sextant">
-        <img src="https://img.shields.io/nuget/dt/sextant.svg">
-</a>
-<a href="#backers">
-        <img src="https://opencollective.com/reactiveui/backers/badge.svg">
-</a>
-<a href="#sponsors">
-        <img src="https://opencollective.com/reactiveui/sponsors/badge.svg">
-</a>
-<a href="https://reactiveui.net/slack">
-        <img src="https://img.shields.io/badge/chat-slack-blue.svg">
-</a>
+[![](https://img.shields.io/nuget/dt/sextant.svg) ](https://www.nuget.org/packages/sextant) [![](https://img.shields.io/badge/chat-slack-blue.svg)](https://reactiveui.net/slack)
 
 <p align="left"><img src="https://github.com/reactiveui/styleguide/blob/master/logo_sextant/vertical.png?raw=true" alt="Sextant" height="180px"></p>
 
