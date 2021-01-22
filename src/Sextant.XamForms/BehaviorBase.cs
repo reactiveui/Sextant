@@ -38,7 +38,7 @@ namespace Sextant.XamForms
                     handler =>
                     {
                         void Handler(object sender, EventArgs args) => handler(args);
-                        return Handler;
+                        return Handler!;
                     },
                     x => bindable.BindingContextChanged += x,
                     x => bindable.BindingContextChanged -= x)

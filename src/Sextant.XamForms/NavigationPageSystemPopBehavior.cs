@@ -23,7 +23,7 @@ namespace Sextant.XamForms
                     handler =>
                     {
                         void Handler(object sender, NavigationEventArgs args) => handler(args);
-                        return Handler;
+                        return Handler!;
                     },
                     x => bindable.Popped += x,
                     x => bindable.Popped -= x)
