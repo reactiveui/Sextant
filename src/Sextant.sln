@@ -32,6 +32,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Plugins.Popup", "Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Plugins.Popup.Tests", "Sextant.Plugins.Popup.Tests\Sextant.Plugins.Popup.Tests.csproj", "{BD186721-EE51-40B2-A546-91EDDE122998}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant.Avalonia", "Sextant.Avalonia\Sextant.Avalonia.csproj", "{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{BD186721-EE51-40B2-A546-91EDDE122998}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD186721-EE51-40B2-A546-91EDDE122998}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD186721-EE51-40B2-A546-91EDDE122998}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
