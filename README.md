@@ -31,7 +31,7 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 | UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core]     |
 | Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]       |
 | Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core]     |
-| Avalonia          | [Sextant][AvaloniaDoc]           | [![CoreBadge]][Avalonia] |
+| Avalonia          | [Sextant.Avalonia][AvaloniaDoc]  | [![CoreBadge]][Avalonia] |
 
 [Core]: https://www.nuget.org/packages/Sextant/
 [CoreBadge]: https://img.shields.io/nuget/v/Sextant.svg
