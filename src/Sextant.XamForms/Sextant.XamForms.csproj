@@ -12,10 +12,7 @@
   <ItemGroup>
     <PackageReference Include="ReactiveUI" Version="13.*" />
     <PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.6.*" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.*" />
   </ItemGroup>
 
   <ItemGroup>

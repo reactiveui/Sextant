@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveUI.XamForms" Version="13.*" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.*" />    
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
