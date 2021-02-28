@@ -26,21 +26,24 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 
 ### NuGet
 
-| Platform          | Sextant Package                  | NuGet                |
-| ----------------- | -------------------------------- | -------------------- |
-| UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core] |
-| Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]   |
-| Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core] |
+| Platform          | Sextant Package                  | NuGet                    |
+| ----------------- | -------------------------------- | ------------------------ |
+| UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core]     |
+| Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]       |
+| Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core]     |
+| Avalonia          | [Sextant][AvaloniaDoc]           | [![CoreBadge]][Avalonia] |
 
 [Core]: https://www.nuget.org/packages/Sextant/
 [CoreBadge]: https://img.shields.io/nuget/v/Sextant.svg
 [CoreDoc]: https://reactiveui.net/docs/getting-started/installation/
 [IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
 [UwpDoc]: https://reactiveui.net/docs/getting-started/installation/universal-windows-platform
+[AvaloniaDoc]: https://www.reactiveui.net/docs/getting-started/installation/avalonia
 
 [Xam]: https://www.nuget.org/packages/Sextant.XamForms/
 [XamBadge]: https://img.shields.io/nuget/v/Sextant.XamForms.svg
 [XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
+[Avalonia]: https://www.nuget.org/packages/Sextant.Avalonia/
 
 ### Target Platform Versions
 
