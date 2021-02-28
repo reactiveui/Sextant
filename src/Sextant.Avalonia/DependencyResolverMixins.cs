@@ -4,6 +4,7 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
+
 using Splat;
 
 namespace Sextant.Avalonia
@@ -19,7 +20,7 @@ namespace Sextant.Avalonia
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="navigationViewFactory">The navigation view factory.</param>
         /// <typeparam name="TView">The view type.</typeparam>
-        /// <returns>The dependency resolver.</returns>
+        /// <returns>The dependency resolver for builder use.</returns>
         public static IMutableDependencyResolver RegisterNavigationView<TView>(
             this IMutableDependencyResolver dependencyResolver,
             Func<TView> navigationViewFactory)
@@ -35,9 +36,9 @@ namespace Sextant.Avalonia
         /// <summary>
         /// Resolves navigation view from a dependency resolver.
         /// </summary>
-        /// <param name="dependencyResolver"></param>
-        /// <param name="contract"></param>
-        /// <returns>The dependency resolver.</returns>
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="contract">Optional contract.</param>
+        /// <returns>The dependency resolver for builder use.</returns>
         public static IView GetNavigationView(
             this IReadonlyDependencyResolver dependencyResolver,
             string? contract = null) =>
