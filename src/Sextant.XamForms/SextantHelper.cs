@@ -65,8 +65,17 @@ namespace Sextant.XamForms
             var bgScheduler = mainThreadScheduler ?? RxApp.TaskpoolScheduler;
             var mScheduler = backgroundScheduler ?? RxApp.MainThreadScheduler;
             var vLocator = viewLocator ?? Locator.Current.GetService<IViewLocator>();
+            if (vLocator is null)
+            {
+                throw new InvalidOperationException("IViewLocator not registered.");
+            }
+
             Locator.CurrentMutable.RegisterViewModelFactory();
             var viewFactory = Locator.Current.GetService<IViewModelFactory>();
+            if (viewFactory is null)
+            {
+                throw new InvalidOperationException("IViewModelFactory not registered.");
+            }
 
             var navigationView = new NavigationView(mScheduler, bgScheduler, vLocator);
             var viewStackService = new ViewStackService(navigationView, viewFactory);
