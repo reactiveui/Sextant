@@ -41,7 +41,15 @@ namespace Sextant.Avalonia
         /// <returns>The dependency resolver for builder use.</returns>
         public static IView GetNavigationView(
             this IReadonlyDependencyResolver dependencyResolver,
-            string? contract = null) =>
-            dependencyResolver.GetService<IView>(contract ?? "NavigationView");
+            string? contract = null)
+        {
+            var view = dependencyResolver.GetService<IView>(contract ?? "NavigationView");
+            if (view is null)
+            {
+                throw new InvalidOperationException("NavigationView not registered.");
+            }
+
+            return view;
+        }
     }
 }

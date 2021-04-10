@@ -37,9 +37,10 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(dependencyResolver));
             }
 
-            IView view = Locator.Current.GetService<IView>(NavigationView);
-            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
-            dependencyResolver.RegisterLazySingleton<IViewStackService>(() => new ParameterViewStackService(view, viewModelFactory));
+            dependencyResolver.RegisterLazySingleton<IViewStackService>(
+                () => new ParameterViewStackService(
+                    Locator.Current.GetService<IView>(NavigationView) ?? throw new InvalidOperationException("IView not registered."),
+                    Locator.Current.GetService<IViewModelFactory>() ?? new DefaultViewModelFactory()));
             return dependencyResolver;
         }
 
@@ -55,9 +56,10 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(dependencyResolver));
             }
 
-            IView view = Locator.Current.GetService<IView>(NavigationView);
-            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
-            dependencyResolver.RegisterLazySingleton<IParameterViewStackService>(() => new ParameterViewStackService(view, viewModelFactory));
+            dependencyResolver.RegisterLazySingleton<IParameterViewStackService>(
+                () => new ParameterViewStackService(
+                    Locator.Current.GetService<IView>(NavigationView) ?? throw new InvalidOperationException("IView not registered."),
+                    Locator.Current.GetService<IViewModelFactory>() ?? new DefaultViewModelFactory()));
             return dependencyResolver;
         }
 
@@ -82,8 +84,8 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(factory));
             }
 
-            IView view = Locator.Current.GetService<IView>(NavigationView);
-            dependencyResolver.RegisterLazySingleton(() => factory(view));
+            dependencyResolver.RegisterLazySingleton(() => factory(
+                Locator.Current.GetService<IView>(NavigationView) ?? throw new InvalidOperationException("IView not registered.")));
             return dependencyResolver;
         }
 
@@ -107,9 +109,9 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(factory));
             }
 
-            IView view = Locator.Current.GetService<IView>(NavigationView);
-            IViewModelFactory viewModelFactory = Locator.Current.GetService<IViewModelFactory>();
-            dependencyResolver.RegisterLazySingleton(() => factory(view, viewModelFactory));
+            dependencyResolver.RegisterLazySingleton(() => factory(
+                Locator.Current.GetService<IView>(NavigationView) ?? throw new InvalidOperationException("IView not registered."),
+                Locator.Current.GetService<IViewModelFactory>() ?? new DefaultViewModelFactory()));
             return dependencyResolver;
         }
 
@@ -147,7 +149,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(factory));
             }
 
-            dependencyResolver.RegisterLazySingleton(factory);
+            dependencyResolver.RegisterLazySingleton(factory, typeof(IViewModelFactory));
             return dependencyResolver;
         }
 

@@ -379,7 +379,7 @@ namespace Sextant
         {
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
 
-            var viewType = uwpViewTypeResolver.ResolveViewType(viewModel.GetType());
+            var viewType = uwpViewTypeResolver?.ResolveViewType(viewModel.GetType());
 
             if (viewType is null)
             {
