@@ -116,6 +116,11 @@ namespace Sextant
             }
 
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>();
+            if (uwpViewTypeResolver)
+            {
+                throw new InvalidOperationException("UWP view type resolver not registered.");
+            }
+
             uwpViewTypeResolver.Register<TView, TViewModel>();
             dependencyResolver.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;
@@ -137,7 +142,7 @@ namespace Sextant
             }
 
             var uwpViewTypeResolver = dependencyResolver.GetService<ViewTypeResolver>(contract);
-            return uwpViewTypeResolver.ResolveViewType<TViewModel>();
+            return uwpViewTypeResolver?.ResolveViewType<TViewModel>();
         }
 
         /// <summary>
@@ -162,7 +167,7 @@ namespace Sextant
             }
 
             var uwpViewTypeResolver = dependencyResolver.GetService<ViewTypeResolver>(contract);
-            return uwpViewTypeResolver.ResolveViewType<TViewModel>();
+            return uwpViewTypeResolver?.ResolveViewType<TViewModel>();
         }
     }
 }
