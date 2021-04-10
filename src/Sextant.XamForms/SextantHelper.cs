@@ -45,7 +45,7 @@ namespace Sextant.XamForms
             var vLocator = viewLocator ?? Locator.Current.GetService<IViewLocator>();
 
             Locator.CurrentMutable.Register(
-                () => Activator.CreateInstance(typeof(TView), mScheduler, bgScheduler, vLocator),
+                () => Activator.CreateInstance(typeof(TView), mScheduler, bgScheduler, vLocator)!,
                 typeof(IViewFor<TViewModel>),
                 "NavigationView");
         }
