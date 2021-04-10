@@ -29,13 +29,13 @@ namespace Sextant.XamForms
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver)
         {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-            if (vLocator is null)
-            {
-                throw new InvalidOperationException("IViewLocator not registered.");
-            }
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(
+                () => new NavigationView(
+                    RxApp.MainThreadScheduler,
+                    RxApp.TaskpoolScheduler,
+                    Locator.Current.GetService<IViewLocator>() ?? throw new InvalidOperationException("IViewLocator not registered.")),
+                typeof(IView),
+                NavigationView);
             return dependencyResolver;
         }
 
@@ -48,13 +48,13 @@ namespace Sextant.XamForms
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainThreadScheduler, IScheduler backgroundScheduler)
         {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-            if (vLocator is null)
-            {
-                throw new InvalidOperationException("IViewLocator not registered.");
-            }
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(
+                () => new NavigationView(
+                    mainThreadScheduler,
+                    backgroundScheduler,
+                    Locator.Current.GetService<IViewLocator>() ?? throw new InvalidOperationException("IViewLocator not registered.")),
+                typeof(IView),
+                NavigationView);
             return dependencyResolver;
         }
 
