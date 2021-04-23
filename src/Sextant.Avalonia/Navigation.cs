@@ -29,7 +29,7 @@ namespace Sextant.Avalonia
         private class Navigation
         {
             private readonly ObservableCollection<IViewFor> _navigationStack = new ObservableCollection<IViewFor>();
-            private readonly IPageTransition _transition;
+            private readonly IPageTransition? _transition;
 
             /// <summary>
             /// Initializes a new instance of the <see cref="Navigation"/> class.
