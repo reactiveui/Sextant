@@ -2,6 +2,16 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
 namespace Sextant.XamForms
 {
+    public abstract class BehaviorBase<T> : Xamarin.Forms.Behavior<T>, System.IDisposable
+        where T : Xamarin.Forms.BindableObject
+    {
+        protected BehaviorBase() { }
+        protected System.Reactive.Disposables.CompositeDisposable BehaviorDisposable { get; }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        protected override void OnAttachedTo(T bindable) { }
+        protected override void OnDetachingFrom(T bindable) { }
+    }
     public static class DependencyResolverMixins
     {
         public static string NavigationView { get; }
@@ -10,6 +20,16 @@ namespace Sextant.XamForms
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainThreadScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
             where TView : Sextant.IView { }
+    }
+    public sealed class NavigationPageSystemPopBehavior : Sextant.XamForms.BehaviorBase<Xamarin.Forms.NavigationPage>
+    {
+        public NavigationPageSystemPopBehavior(System.IObservable<Sextant.XamForms.NavigationSource> navigationSource) { }
+        protected override void OnAttachedTo(Xamarin.Forms.NavigationPage bindable) { }
+    }
+    public enum NavigationSource
+    {
+        Device = 0,
+        NavigationService = 1,
     }
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
     {

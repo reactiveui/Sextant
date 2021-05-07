@@ -7,6 +7,7 @@ using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using ReactiveUI;
 using Splat;
@@ -19,6 +20,9 @@ namespace Sextant.XamForms
     /// </summary>
     public class NavigationView : NavigationPage, IView, IEnableLogger
     {
+        private readonly ISubject<NavigationSource> _navigationSource =
+            new BehaviorSubject<NavigationSource>(NavigationSource.Device);
+
         private readonly IScheduler _backgroundScheduler;
         private readonly IViewLocator _viewLocator;
         private readonly IFullLogger _logger;
@@ -63,6 +67,8 @@ namespace Sextant.XamForms
                         },
                         x => Popped += x,
                         x => Popped -= x);
+
+            Behaviors.Add(new NavigationPageSystemPopBehavior(_navigationSource.AsObservable()));
         }
 
         /// <summary>
@@ -73,8 +79,8 @@ namespace Sextant.XamForms
         /// <param name="viewLocator">The view locator which will find views associated with view models.</param>
         public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator)
         {
-            _backgroundScheduler = backgroundScheduler;
             MainThreadScheduler = mainScheduler;
+            _backgroundScheduler = backgroundScheduler;
             _viewLocator = viewLocator;
             _logger = this.Log();
 
@@ -95,6 +101,8 @@ namespace Sextant.XamForms
                         },
                         x => Popped += x,
                         x => Popped -= x);
+
+            Behaviors.Add(new NavigationPageSystemPopBehavior(_navigationSource.AsObservable()));
         }
 
         /// <inheritdoc />
@@ -112,16 +120,21 @@ namespace Sextant.XamForms
                 .ObserveOn(MainThreadScheduler); // XF completes the pop operation on a background thread :/
 
         /// <inheritdoc />
-        public IObservable<Unit> PopPage(bool animate) =>
-            Navigation
+        public IObservable<Unit> PopPage(bool animate)
+        {
+            _navigationSource.OnNext(NavigationSource.NavigationService);
+
+            return Navigation
                 .PopAsync(animate)
                 .ToObservable()
                 .Select(_ => Unit.Default)
-                .ObserveOn(MainThreadScheduler); // XF completes the pop operation on a background thread :/
+                .ObserveOn(MainThreadScheduler)
+                .Finally(() => _navigationSource.OnNext(NavigationSource.Device));
+        }
 
         /// <inheritdoc />
         public IObservable<Unit> PopToRootPage(bool animate) =>
-             Navigation
+            Navigation
                 .PopToRootAsync(animate)
                 .ToObservable()
                 .Select(_ => Unit.Default)
@@ -197,12 +210,14 @@ namespace Sextant.XamForms
 
             if (view is null)
             {
-                throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
+                throw new InvalidOperationException(
+                    $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
 
             if (!(view is Page page))
             {
-                throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
+                throw new InvalidOperationException(
+                    $"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
             }
 
             view.ViewModel = viewModel;

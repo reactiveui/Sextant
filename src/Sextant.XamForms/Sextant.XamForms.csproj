@@ -19,4 +19,13 @@
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Behaviors\NavigationPageSystemPopBehavior.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Behaviors\BehaviorBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

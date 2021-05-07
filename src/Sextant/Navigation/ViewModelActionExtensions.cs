@@ -30,12 +30,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(action));
             }
 
-            if (viewModel is not IViewModel element)
-            {
-                return viewModel;
-            }
-
-            if (element is T viewModelAsT)
+            if (viewModel is T viewModelAsT)
             {
                 action(viewModelAsT);
             }
