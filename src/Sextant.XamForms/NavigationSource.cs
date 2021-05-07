@@ -5,9 +5,19 @@
 
 namespace Sextant.XamForms
 {
-    internal enum NavigationSource
+    /// <summary>
+    /// An enumeration of where navigation signals are sent from.
+    /// </summary>
+    public enum NavigationSource
     {
+        /// <summary>
+        /// Navigation sourced from the device.
+        /// </summary>
         Device,
+
+        /// <summary>
+        /// Navigation sourced from the service.
+        /// </summary>
         NavigationService
     }
 }

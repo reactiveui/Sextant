@@ -21,6 +21,16 @@ namespace Sextant.XamForms
         public static Splat.IMutableDependencyResolver RegisterNavigationView<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
             where TView : Sextant.IView { }
     }
+    public sealed class NavigationPageSystemPopBehavior : Sextant.XamForms.BehaviorBase<Xamarin.Forms.NavigationPage>
+    {
+        public NavigationPageSystemPopBehavior(System.IObservable<Sextant.XamForms.NavigationSource> navigationSource) { }
+        protected override void OnAttachedTo(Xamarin.Forms.NavigationPage bindable) { }
+    }
+    public enum NavigationSource
+    {
+        Device = 0,
+        NavigationService = 1,
+    }
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
     {
         public NavigationView() { }

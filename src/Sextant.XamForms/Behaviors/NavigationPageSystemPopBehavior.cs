@@ -13,7 +13,7 @@ namespace Sextant.XamForms
     /// <summary>
     /// Represents a <see cref="BehaviorBase{T}"/> that intercepts the backwards navigation.
     /// </summary>
-    internal class NavigationPageSystemPopBehavior : BehaviorBase<NavigationPage>
+    public sealed class NavigationPageSystemPopBehavior : BehaviorBase<NavigationPage>
     {
         private readonly IObservable<NavigationSource> _navigationSource;
 
@@ -44,6 +44,8 @@ namespace Sextant.XamForms
                     INavigationParameter navigationParameter = new NavigationParameter();
 
                     navigated
+                        .Page
+                        .BindingContext
                         .InvokeViewModelAction<INavigated>(x =>
                             x.WhenNavigatedFrom(navigationParameter)
                                 .Subscribe()
@@ -58,6 +60,8 @@ namespace Sextant.XamForms
                                 .DisposeWith(BehaviorDisposable));
 
                     navigated
+                        .Page
+                        .BindingContext
                         .InvokeViewModelAction<IDestructible>(x => x.Destroy());
                 })
                 .DisposeWith(BehaviorDisposable);

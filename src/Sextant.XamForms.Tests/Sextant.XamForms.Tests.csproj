@@ -9,10 +9,18 @@
   <ItemGroup>
     <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="4.8.*" />
+    <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
     <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Behaviors\NavigationPageSystemPopBehaviorTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>
