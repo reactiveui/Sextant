@@ -32,6 +32,14 @@ namespace Sextant.Mocks
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="NavigableViewModelMock"/> class.
+        /// </summary>
+        public NavigableViewModelMock()
+            : this(string.Empty)
+        {
+        }
+
+        /// <summary>
         /// Gets the ID of the page.
         /// </summary>
         public string Id { get; }
