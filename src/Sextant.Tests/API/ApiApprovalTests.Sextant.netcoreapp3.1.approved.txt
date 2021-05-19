@@ -24,7 +24,7 @@ namespace Sextant
             where TView :  class, ReactiveUI.IViewFor<TViewModel>
             where TViewModel :  class, Sextant.IViewModel { }
         public static Splat.IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this Splat.IMutableDependencyResolver resolver, TView view, TViewModel viewModel)
-            where TView : ReactiveUI.IViewFor<TViewModel>
+            where TView :  class, ReactiveUI.IViewFor<TViewModel>
             where TViewModel :  class, Sextant.IViewModel { }
         [System.Obsolete("Use of new makes this method undesirable.")]
         public static Splat.IMutableDependencyResolver RegisterViewModel<TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string? contract = null)
