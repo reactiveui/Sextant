@@ -286,7 +286,7 @@ namespace Sextant
             where TView : class, IViewFor<TViewModel>
             where TViewModel : class, IViewModel
         {
-            resolver.Register(viewFactory, typeof(TView));
+            resolver.Register(viewFactory, typeof(IViewFor<TViewModel>));
             resolver.Register(viewModelFactory, typeof(TViewModel));
             return resolver;
         }
@@ -301,10 +301,10 @@ namespace Sextant
         /// <typeparam name="TViewModel">The view model.</typeparam>
         /// <returns>The dependency resolver.</returns>
         public static IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this IMutableDependencyResolver resolver, TView view, TViewModel viewModel)
-            where TView : IViewFor<TViewModel>
+            where TView : class, IViewFor<TViewModel>
             where TViewModel : class, IViewModel
         {
-            resolver.Register(() => view, typeof(TView));
+            resolver.Register(() => view, typeof(IViewFor<TViewModel>));
             resolver.Register(() => viewModel, typeof(TViewModel));
             return resolver;
         }
