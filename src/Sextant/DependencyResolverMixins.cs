@@ -161,6 +161,7 @@ namespace Sextant
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The dependency resolver to use.</returns>
+        [Obsolete("Use RegisterViewForNavigation")]
         public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string? contract = null)
             where TView : IViewFor<TViewModel>, new()
             where TViewModel : class, IViewModel
@@ -183,8 +184,9 @@ namespace Sextant
         /// <param name="viewFactory">The view factory.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The dependencyResolver.</returns>
-        public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<IViewFor<TViewModel>> viewFactory, string? contract = null)
-            where TView : IViewFor
+        [Obsolete("Use RegisterViewForNavigation")]
+        public static IMutableDependencyResolver RegisterView<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, Func<TView> viewFactory, string? contract = null)
+            where TView : class, IViewFor
             where TViewModel : class, IViewModel
         {
             if (dependencyResolver is null)
@@ -208,6 +210,7 @@ namespace Sextant
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <param name="contract">The contract.</param>
         /// <returns>The dependencyResolver.</returns>
+        [Obsolete("Use of new makes this method undesirable.")]
         public static IMutableDependencyResolver RegisterViewModel<TViewModel>(this IMutableDependencyResolver dependencyResolver, string? contract = null)
             where TViewModel : IViewModel, new()
         {
@@ -268,6 +271,42 @@ namespace Sextant
 
             dependencyResolver.Register(() => viewModel, typeof(TViewModel), contract);
             return dependencyResolver;
+        }
+
+        /// <summary>
+        /// Registers the provided <see cref="IViewFor{T}"/> to the <see cref="TViewModel"/> for navigation.
+        /// </summary>
+        /// <param name="resolver">The resolver.</param>
+        /// <param name="viewFactory">The view factory.</param>
+        /// <param name="viewModelFactory">The view model factory.</param>
+        /// <typeparam name="TView">The view.</typeparam>
+        /// <typeparam name="TViewModel">The view model.</typeparam>
+        /// <returns>The dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this IMutableDependencyResolver resolver, Func<TView> viewFactory, Func<TViewModel> viewModelFactory)
+            where TView : class, IViewFor<TViewModel>
+            where TViewModel : class, IViewModel
+        {
+            resolver.Register(viewFactory, typeof(IViewFor<TViewModel>));
+            resolver.Register(viewModelFactory, typeof(TViewModel));
+            return resolver;
+        }
+
+        /// <summary>
+        /// Registers the provided <see cref="IViewFor{T}"/> to the <see cref="TViewModel"/> for navigation.
+        /// </summary>
+        /// <param name="resolver">The resolver.</param>
+        /// <param name="view">The view factory.</param>
+        /// <param name="viewModel">The view model factory.</param>
+        /// <typeparam name="TView">The view.</typeparam>
+        /// <typeparam name="TViewModel">The view model.</typeparam>
+        /// <returns>The dependency resolver.</returns>
+        public static IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this IMutableDependencyResolver resolver, TView view, TViewModel viewModel)
+            where TView : class, IViewFor<TViewModel>
+            where TViewModel : class, IViewModel
+        {
+            resolver.Register(() => view, typeof(IViewFor<TViewModel>));
+            resolver.Register(() => viewModel, typeof(TViewModel));
+            return resolver;
         }
     }
 }

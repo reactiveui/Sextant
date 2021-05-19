@@ -12,12 +12,21 @@ namespace Sextant
     {
         public static string NavigationView { get; }
         public static Splat.IMutableDependencyResolver RegisterParameterViewStackService(this Splat.IMutableDependencyResolver dependencyResolver) { }
+        [System.Obsolete("Use RegisterViewForNavigation")]
         public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string? contract = null)
             where TView : ReactiveUI.IViewFor<TViewModel>, new ()
             where TViewModel :  class, Sextant.IViewModel { }
-        public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<ReactiveUI.IViewFor<TViewModel>> viewFactory, string? contract = null)
-            where TView : ReactiveUI.IViewFor
+        [System.Obsolete("Use RegisterViewForNavigation")]
+        public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> viewFactory, string? contract = null)
+            where TView :  class, ReactiveUI.IViewFor
             where TViewModel :  class, Sextant.IViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this Splat.IMutableDependencyResolver resolver, System.Func<TView> viewFactory, System.Func<TViewModel> viewModelFactory)
+            where TView :  class, ReactiveUI.IViewFor<TViewModel>
+            where TViewModel :  class, Sextant.IViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this Splat.IMutableDependencyResolver resolver, TView view, TViewModel viewModel)
+            where TView :  class, ReactiveUI.IViewFor<TViewModel>
+            where TViewModel :  class, Sextant.IViewModel { }
+        [System.Obsolete("Use of new makes this method undesirable.")]
         public static Splat.IMutableDependencyResolver RegisterViewModel<TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, string? contract = null)
             where TViewModel : Sextant.IViewModel, new () { }
         public static Splat.IMutableDependencyResolver RegisterViewModel<TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TViewModel> viewModelFactory, string? contract = null)
