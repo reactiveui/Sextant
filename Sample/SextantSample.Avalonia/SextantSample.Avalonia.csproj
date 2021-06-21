@@ -9,7 +9,7 @@
         <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.4" />
         <PackageReference Include="Citrus.Avalonia" Version="1.4.3" />
         <PackageReference Include="MessageBox.Avalonia" Version="1.5.1" />
-        <PackageReference Include="ReactiveUI" Version="13.*" />
+        <PackageReference Include="ReactiveUI" Version="14.*" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="**\*.xaml.cs">
