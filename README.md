@@ -30,7 +30,7 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 | ----------------- | -------------------------------- | ------------------------ |
 | UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core]     |
 | Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]       |
-| Xamarin.Forms     | [Sextant.Plugin.Popup][XamDoc]   | [![PopupBadge]][Popup]   |
+| Xamarin.Forms     | [Sextant.Plugins.Popup][XamDoc]   | [![PopupBadge]][Popup]   |
 | Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core]     |
 | Avalonia          | [Sextant.Avalonia][AvaloniaDoc]  | [![CoreBadge]][Avalonia] |
 
