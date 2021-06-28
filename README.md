@@ -30,6 +30,7 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 | ----------------- | -------------------------------- | ------------------------ |
 | UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core]     |
 | Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]       |
+| Xamarin.Forms     | [Sextant.Plugin.Popup][XamDoc]   | [![XamBadge]][Xam]       |
 | Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core]     |
 | Avalonia          | [Sextant.Avalonia][AvaloniaDoc]  | [![CoreBadge]][Avalonia] |
 
@@ -42,6 +43,7 @@ Pre release packages are available at https://nuget.pkg.github.com/reactiveui/in
 
 [Xam]: https://www.nuget.org/packages/Sextant.XamForms/
 [XamBadge]: https://img.shields.io/nuget/v/Sextant.XamForms.svg
+[PopupBadge]: https://img.shields.io/nuget/v/Sextant.Plugins.Popup.svg
 [XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
 [Avalonia]: https://www.nuget.org/packages/Sextant.Avalonia/
 
