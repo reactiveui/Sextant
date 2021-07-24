@@ -3,16 +3,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-namespace Sextant
+namespace Sextant.XamForms
 {
     /// <summary>
-    /// Interface representing an object capable of being destroyed.
+    /// An enumeration of where navigation signals are sent from.
     /// </summary>
-    public interface IDestructible
+    public enum NavigationSource
     {
         /// <summary>
-        /// Destroy the destructible object.
+        /// Navigation sourced from the device.
         /// </summary>
-        public void Destroy();
+        Device,
+
+        /// <summary>
+        /// Navigation sourced from the service.
+        /// </summary>
+        NavigationService
     }
 }

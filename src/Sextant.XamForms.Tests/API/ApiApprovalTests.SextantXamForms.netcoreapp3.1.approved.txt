@@ -2,6 +2,16 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.0", FrameworkDisplayName="")]
 namespace Sextant.XamForms
 {
+    public abstract class BehaviorBase<T> : Xamarin.Forms.Behavior<T>, System.IDisposable
+        where T : Xamarin.Forms.BindableObject
+    {
+        protected BehaviorBase() { }
+        protected System.Reactive.Disposables.CompositeDisposable BehaviorDisposable { get; }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
+        protected override void OnAttachedTo(T bindable) { }
+        protected override void OnDetachingFrom(T bindable) { }
+    }
     public static class DependencyResolverMixins
     {
         public static string NavigationView { get; }
@@ -10,6 +20,16 @@ namespace Sextant.XamForms
         public static Splat.IMutableDependencyResolver RegisterNavigationView(this Splat.IMutableDependencyResolver dependencyResolver, System.Reactive.Concurrency.IScheduler mainThreadScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler) { }
         public static Splat.IMutableDependencyResolver RegisterNavigationView<TView>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> navigationViewFactory)
             where TView : Sextant.IView { }
+    }
+    public sealed class NavigationPageSystemPopBehavior : Sextant.XamForms.BehaviorBase<Xamarin.Forms.NavigationPage>
+    {
+        public NavigationPageSystemPopBehavior(System.IObservable<Sextant.XamForms.NavigationSource> navigationSource) { }
+        protected override void OnAttachedTo(Xamarin.Forms.NavigationPage bindable) { }
+    }
+    public enum NavigationSource
+    {
+        Device = 0,
+        NavigationService = 1,
     }
     public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
     {
@@ -27,22 +47,5 @@ namespace Sextant.XamForms
     public static class SextantExtensions
     {
         public static void InitializeForms(this Sextant.Sextant sextant) { }
-    }
-    public static class SextantHelper
-    {
-        [System.Obsolete("Use the Initialize method.")]
-        public static Sextant.XamForms.NavigationView Initialise<TViewModel>(System.Reactive.Concurrency.IScheduler? mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler? backgroundScheduler = null, ReactiveUI.IViewLocator? viewLocator = null)
-            where TViewModel :  class, Sextant.IViewModel { }
-        [System.Obsolete("Use the dependency resolver mixins.")]
-        public static Sextant.XamForms.NavigationView Initialize<TViewModel>(System.Reactive.Concurrency.IScheduler? mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler? backgroundScheduler = null, ReactiveUI.IViewLocator? viewLocator = null)
-            where TViewModel :  class, Sextant.IViewModel { }
-        [System.Obsolete("Use the dependency resolver mixins.")]
-        public static void RegisterNavigation<TView, TViewModel>(System.Reactive.Concurrency.IScheduler? mainThreadScheduler = null, System.Reactive.Concurrency.IScheduler? backgroundScheduler = null, ReactiveUI.IViewLocator? viewLocator = null)
-            where TView : ReactiveUI.IViewFor
-            where TViewModel :  class, Sextant.IViewModel { }
-        [System.Obsolete("Use the dependency resolver mixins.")]
-        public static void RegisterView<TView, TViewModel>(string? contract = null)
-            where TView : ReactiveUI.IViewFor, new ()
-            where TViewModel :  class, Sextant.IViewModel { }
     }
 }

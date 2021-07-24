@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+﻿// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -29,9 +29,13 @@ namespace Sextant.XamForms
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver)
         {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(
+                () => new NavigationView(
+                    RxApp.MainThreadScheduler,
+                    RxApp.TaskpoolScheduler,
+                    Locator.Current.GetService<IViewLocator>() ?? throw new InvalidOperationException("IViewLocator not registered.")),
+                typeof(IView),
+                NavigationView);
             return dependencyResolver;
         }
 
@@ -44,9 +48,13 @@ namespace Sextant.XamForms
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainThreadScheduler, IScheduler backgroundScheduler)
         {
-            var vLocator = Locator.Current.GetService<IViewLocator>();
-
-            dependencyResolver.RegisterLazySingleton(() => new NavigationView(mainThreadScheduler, backgroundScheduler, vLocator), typeof(IView), NavigationView);
+            dependencyResolver.RegisterLazySingleton(
+                () => new NavigationView(
+                    mainThreadScheduler,
+                    backgroundScheduler,
+                    Locator.Current.GetService<IViewLocator>() ?? throw new InvalidOperationException("IViewLocator not registered.")),
+                typeof(IView),
+                NavigationView);
             return dependencyResolver;
         }
 

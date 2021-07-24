@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+﻿// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -116,6 +116,11 @@ namespace Sextant
             }
 
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>();
+            if (uwpViewTypeResolver is null)
+            {
+                throw new InvalidOperationException("UWP view type resolver not registered.");
+            }
+
             uwpViewTypeResolver.Register<TView, TViewModel>();
             dependencyResolver.Register(() => new TView(), typeof(IViewFor<TViewModel>), contract);
             return dependencyResolver;
@@ -137,7 +142,7 @@ namespace Sextant
             }
 
             var uwpViewTypeResolver = dependencyResolver.GetService<ViewTypeResolver>(contract);
-            return uwpViewTypeResolver.ResolveViewType<TViewModel>();
+            return uwpViewTypeResolver?.ResolveViewType<TViewModel>();
         }
 
         /// <summary>
@@ -162,7 +167,7 @@ namespace Sextant
             }
 
             var uwpViewTypeResolver = dependencyResolver.GetService<ViewTypeResolver>(contract);
-            return uwpViewTypeResolver.ResolveViewType<TViewModel>();
+            return uwpViewTypeResolver?.ResolveViewType<TViewModel>();
         }
     }
 }

@@ -1,8 +1,9 @@
-// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
+using System;
 using Splat;
 
 namespace Sextant
@@ -14,6 +15,15 @@ namespace Sextant
     {
         /// <inheritdoc />
         public TViewModel Create<TViewModel>(string? contract = null)
-            where TViewModel : IViewModel => Locator.Current.GetService<TViewModel>(contract);
+            where TViewModel : IViewModel
+        {
+            var viewModel = Locator.Current.GetService<TViewModel>(contract);
+            if (viewModel is null)
+            {
+                throw new InvalidOperationException($"ViewModel of type {typeof(TViewModel).Name} {contract} not registered.");
+            }
+
+            return viewModel;
+        }
     }
 }

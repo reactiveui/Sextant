@@ -1,4 +1,4 @@
-// Copyright (c) 2019 .NET Foundation and Contributors. All rights reserved.
+// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -30,12 +30,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(action));
             }
 
-            if (viewModel is not IViewModel element)
-            {
-                return viewModel;
-            }
-
-            if (element is T viewModelAsT)
+            if (viewModel is T viewModelAsT)
             {
                 action(viewModelAsT);
             }
