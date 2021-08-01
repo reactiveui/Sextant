@@ -16,6 +16,7 @@ namespace Sextant
 #if WINDOWS_UWP
     public static partial class DependencyResolverMixins
 #else
+
     public static class DependencyResolverMixins
 #endif
     {
@@ -274,14 +275,16 @@ namespace Sextant
         }
 
         /// <summary>
-        /// Registers the provided <see cref="IViewFor{T}"/> to the <see cref="TViewModel"/> for navigation.
+        /// Registers the provided <see cref="IViewFor{T}" /> to the TViewModel for navigation.
         /// </summary>
+        /// <typeparam name="TView">The view.</typeparam>
+        /// <typeparam name="TViewModel">The view model.</typeparam>
         /// <param name="resolver">The resolver.</param>
         /// <param name="viewFactory">The view factory.</param>
         /// <param name="viewModelFactory">The view model factory.</param>
-        /// <typeparam name="TView">The view.</typeparam>
-        /// <typeparam name="TViewModel">The view model.</typeparam>
-        /// <returns>The dependency resolver.</returns>
+        /// <returns>
+        /// The dependency resolver.
+        /// </returns>
         public static IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this IMutableDependencyResolver resolver, Func<TView> viewFactory, Func<TViewModel> viewModelFactory)
             where TView : class, IViewFor<TViewModel>
             where TViewModel : class, IViewModel
@@ -292,7 +295,7 @@ namespace Sextant
         }
 
         /// <summary>
-        /// Registers the provided <see cref="IViewFor{T}"/> to the <see cref="TViewModel"/> for navigation.
+        /// Registers the provided <see cref="IViewFor{T}"/> to the TViewModel for navigation.
         /// </summary>
         /// <param name="resolver">The resolver.</param>
         /// <param name="view">The view factory.</param>
