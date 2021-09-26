@@ -1,4 +1,4 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI.Maui" Version="16.2.6" />
+    <PackageReference Include="ReactiveUI.Maui" Version="16.*" />
   </ItemGroup>
 
   <ItemGroup>
