@@ -1,0 +1,26 @@
+<Project Sdk="MSBuild.Sdk.Extras">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Sextant.Maui</AssemblyName>
+    <RootNamespace>Sextant.Maui</RootNamespace>
+    <PackageId>Sextant.Maui</PackageId>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.Maui" Version="16.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sextant\Sextant.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mixins\" />
+    <Folder Include="Behaviors\" />
+  </ItemGroup>
+
+</Project>
