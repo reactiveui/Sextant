@@ -141,7 +141,7 @@
     <PackageReference Include="xunit.runner.devices">
       <Version>2.5.25</Version>
     </PackageReference>
-    <PackageReference Include="FluentAssertions" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="6.1.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj">
