@@ -384,12 +384,6 @@ namespace Sextant.WinUI
                     $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
             }
 
-            if (view is null)
-            {
-                throw new InvalidOperationException(
-                    $"Cannot find view for '{viewModel.GetType().FullName}', contract '{contract}' does not implement IViewFor.");
-            }
-
             if (page is null)
             {
                 throw new InvalidOperationException(

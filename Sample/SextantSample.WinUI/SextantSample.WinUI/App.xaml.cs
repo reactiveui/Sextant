@@ -21,6 +21,7 @@ using SextantSample.ViewModels;
 using Splat;
 using SextantSample.WinUI.Views;
 using Sextant.WinUI;
+using System.Reflection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -41,14 +42,17 @@ namespace SextantSample.WinUI
             this.InitializeComponent();
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
+            Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
             Locator
                 .CurrentMutable
-                .RegisterView<HomeView, HomeViewModel>()
-                .RegisterView<FirstModalView, FirstModalViewModel>()
-                .RegisterView<SecondModalView, SecondModalViewModel>()
-                .RegisterView<RedView, RedViewModel>()
-                .RegisterView<GreenView, GreenViewModel>()
+                .RegisterWinUIViewLocator()
+                .RegisterParameterViewStackService()
                 .RegisterNavigationView(() => new BlueNavigationView())
+                .RegisterViewWinUI<HomeView, HomeViewModel>()
+                .RegisterViewWinUI<FirstModalView, FirstModalViewModel>()
+                .RegisterViewWinUI<SecondModalView, SecondModalViewModel>()
+                .RegisterViewWinUI<RedView, RedViewModel>()
+                .RegisterViewWinUI<GreenView, GreenViewModel>()
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
         }
 

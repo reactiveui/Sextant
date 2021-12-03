@@ -97,7 +97,7 @@ namespace Sextant.WinUI
             dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
 
         /// <summary>
-        /// Initializes UWP-specific view locator.
+        /// Initializes WinUI-specific view locator.
         /// </summary>
         /// <param name="dependencyResolver">The dependency resolver.</param>
         /// <returns>The dependencyResolver.</returns>
@@ -114,7 +114,7 @@ namespace Sextant.WinUI
         }
 
         /// <summary>
-        /// Register view for viewmodel, but only return view type for UWP frame.
+        /// Register view for viewmodel, but only return view type for WinUI frame.
         /// </summary>
         /// <typeparam name="TView">The view type.</typeparam>
         /// <typeparam name="TViewModel">The viewmodel type.</typeparam>
@@ -136,7 +136,7 @@ namespace Sextant.WinUI
             var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>();
             if (uwpViewTypeResolver is null)
             {
-                throw new InvalidOperationException("UWP view type resolver not registered.");
+                throw new InvalidOperationException("WinUI view type resolver not registered.");
             }
 
             uwpViewTypeResolver.Register<TView, TViewModel>();

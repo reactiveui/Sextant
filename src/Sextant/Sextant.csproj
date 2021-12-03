@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.TVOS10;net5.0</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net461;net472;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net461;net472</TargetFrameworks>
     <AssemblyName>Sextant</AssemblyName>
     <RootNamespace>Sextant</RootNamespace>
     <PackageId>Sextant</PackageId>
@@ -46,11 +46,6 @@
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
     <Compile Include="Platforms\net4\**\*.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
-    <Compile Include="Platforms\uap\**\*.cs" />
-    <Page Include="Platforms\uap\**\*.xaml" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">

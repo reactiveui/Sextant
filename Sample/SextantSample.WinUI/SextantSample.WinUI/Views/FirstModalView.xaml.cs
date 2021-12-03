@@ -3,7 +3,7 @@ using SextantSample.ViewModels;
 
 namespace SextantSample.WinUI.Views
 {
-    public class ReactivePageFirstModalView2: ReactivePage<FirstModalViewModel>
+    public class ReactivePageFirstModalView: ReactivePage<FirstModalViewModel>
     {
 
     }
