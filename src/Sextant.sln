@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29521.150
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant", "Sextant\Sextant.csproj", "{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}"
 EndProject
@@ -32,7 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Plugins.Popup", "Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Plugins.Popup.Tests", "Sextant.Plugins.Popup.Tests\Sextant.Plugins.Popup.Tests.csproj", "{BD186721-EE51-40B2-A546-91EDDE122998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant.Avalonia", "Sextant.Avalonia\Sextant.Avalonia.csproj", "{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Avalonia", "Sextant.Avalonia\Sextant.Avalonia.csproj", "{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.WinUI", "Sextant.WinUI\Sextant.WinUI.csproj", "{334E3441-1385-4053-98D7-9B5D3382084D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,10 @@ Global
 		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{334E3441-1385-4053-98D7-9B5D3382084D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{334E3441-1385-4053-98D7-9B5D3382084D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{334E3441-1385-4053-98D7-9B5D3382084D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{334E3441-1385-4053-98D7-9B5D3382084D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

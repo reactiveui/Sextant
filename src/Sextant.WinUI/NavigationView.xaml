@@ -1,0 +1,17 @@
+﻿<Page
+    x:Class="Sextant.WinUI.NavigationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:Sextant.WinUI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid>
+        <Frame x:Name="mainFrame" />
+        <Button
+            x:Name="backButton"
+            VerticalAlignment="Top"
+            Style="{ThemeResource NavigationBackButtonNormalStyle}"
+            Visibility="{x:Bind IsBackButtonVisible, Mode=OneWay}" />
+    </Grid>
+</Page>
