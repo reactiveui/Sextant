@@ -5,7 +5,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Citrus.Avalonia" Version="1.5.1" />
-        <PackageReference Include="MessageBox.Avalonia" Version="1.7.0" />
+        <PackageReference Include="MessageBox.Avalonia" Version="1.7.1" />
     </ItemGroup>
     <ItemGroup>
         <Compile Update="**\*.xaml.cs">
