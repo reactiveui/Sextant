@@ -23,14 +23,14 @@
     <WarningsAsErrors>CS8600;CS8602;CS8603;CS8604;CS8605;CS8606;CS8607;CS8608;CS8609;CS8610;CS8611;CS8612;CS8613;CS8614;CS8615;CS8616;CS8617;CS8618;CS8619;CS8620;CS8621;CS8622;CS8623;CS8624;CS8625;CS8626;CS8627;CS8628;CS8629;CS8630;CS8634;CS8766;CS8767</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup Condition="$(IsTestProject)">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
     <PackageReference Include="Xunit.StaFact" Version="1.0.37" />
     <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
-    <PackageReference Include="DiffEngine" Version="7.1.0" />
-    <PackageReference Include="FluentAssertions" Version="6.0.0" />
-    <PackageReference Include="ReactiveUI.Testing" Version="16.*" />
+    <PackageReference Include="DiffEngine" Version="8.5.2" />
+    <PackageReference Include="FluentAssertions" Version="6.2.0" />
+    <PackageReference Include="ReactiveUI.Testing" Version="17.*" />
     <PackageReference Include="PublicApiGenerator" Version="10.2.0" />
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="coverlet.msbuild" Version="3.1.0">
@@ -44,13 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="stylecop.analyzers" Version="1.2.0-beta.321" PrivateAssets="all" />
-    <!-- <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3" PrivateAssets="all" /> -->
-    <PackageReference Include="Roslynator.Analyzers" Version="3.2.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Roslynator.Analyzers" Version="3.3.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.231" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.244" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
