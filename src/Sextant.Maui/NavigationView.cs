@@ -9,9 +9,6 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using ReactiveUI;
-using Splat;
 
 namespace Sextant.Maui
 {

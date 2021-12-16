@@ -3,8 +3,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System;
-
 namespace Sextant.Maui
 {
     /// <summary>
@@ -16,7 +14,7 @@ namespace Sextant.Maui
         /// Initializes the sextant.
         /// </summary>
         /// <param name="sextant">The sextant.</param>
-        public static void InitializeForms(this Sextant sextant)
+        public static void InitializeMaui(this Sextant sextant)
         {
             if (sextant is null)
             {
