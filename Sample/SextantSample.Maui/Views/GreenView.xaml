@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xamForms:ReactiveContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xamForms="clr-namespace:ReactiveUI.Maui;assembly=ReactiveUI.Maui"
+             xmlns:viewModels="clr-namespace:SextantSample.ViewModels;assembly=SextantSample.ViewModels"
+             x:TypeArguments="viewModels:GreenViewModel"
+             x:Class="SextantSample.Maui.Views.GreenView">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="#043927">
+            <Button x:Name="Modal" Text="Open Modal" />
+        </StackLayout>
+    </ContentPage.Content>
+</xamForms:ReactiveContentPage>
+
