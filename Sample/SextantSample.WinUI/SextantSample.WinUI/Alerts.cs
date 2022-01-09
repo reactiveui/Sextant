@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Sextant.WinUI;
+using Splat;
+using WinRT.Interop;
 
 namespace SextantSample.WinUI
 {
@@ -12,8 +12,10 @@ namespace SextantSample.WinUI
         public static async Task DisplayAlert(string title, string content, string defaultButtonContent, string cancelButtonContent = "Cancel")
         {
             // Create the message dialog and set its content
-            var messageDialog = new MessageDialog(title);
+            var messageDialog = new MessageDialog(content, title);
 
+            // Associate the HWND with the folder picker
+            InitializeWithWindow.Initialize(messageDialog, Locator.Current.GetService<IWindowManager>()!.GetHandleOfCurrentWindow());
 
             var handler = new UICommandInvokedHandler((_) => { });
 

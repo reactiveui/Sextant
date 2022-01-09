@@ -1,27 +1,12 @@
-﻿using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Microsoft.UI.Xaml.Shapes;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+﻿using System.Reflection;
+using Microsoft.UI.Xaml;
 using ReactiveUI;
 using Sextant;
-using SextantSample.ViewModels;
-using Splat;
-using SextantSample.WinUI.Views;
 using Sextant.WinUI;
-using System.Reflection;
+using Sextant.WinUI.Mixins;
+using SextantSample.ViewModels;
+using SextantSample.WinUI.Views;
+using Splat;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -39,12 +24,13 @@ namespace SextantSample.WinUI
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
             Locator
                 .CurrentMutable
+                .RegisterWindowManager()
                 .RegisterWinUIViewLocator()
                 .RegisterParameterViewStackService()
                 .RegisterNavigationView(() => new BlueNavigationView())
@@ -53,6 +39,9 @@ namespace SextantSample.WinUI
                 .RegisterViewWinUI<SecondModalView, SecondModalViewModel>()
                 .RegisterViewWinUI<RedView, RedViewModel>()
                 .RegisterViewWinUI<GreenView, GreenViewModel>()
+                .RegisterViewForNavigation(() => new FirstModalView(), () => new FirstModalViewModel(Locator.Current.GetService<IParameterViewStackService>()))
+                .RegisterViewForNavigation(() => new SecondModalView(), () => new SecondModalViewModel(
+                    Locator.Current.GetService<IParameterViewStackService>()))
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
         }
 
@@ -61,12 +50,15 @@ namespace SextantSample.WinUI
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            m_window = new MainWindow();
-            m_window.Activate();
+            _window = new MainWindow();
+
+            Locator.Current.GetService<IWindowManager>()!.CurrentWindow = _window;
+            
+            _window.Activate();
         }
 
-        private Window m_window;
+        private Window _window;
     }
 }

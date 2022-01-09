@@ -3,8 +3,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
@@ -34,6 +32,7 @@ namespace Sextant.WinUI
         private readonly IFullLogger _logger;
         private readonly Stack<IViewModel?> _mirroredPageStack;
         private readonly Stack<IViewModel?> _mirroredModalStack;
+        private readonly IWindowManager _windowManager;
 
         private ContentDialog? _contentDialog;
         private IViewModel? _lastPoppedViewModel;
@@ -41,18 +40,11 @@ namespace Sextant.WinUI
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
         /// </summary>
-        public NavigationView()
-            : this(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationView"/> class.
-        /// </summary>
         /// <param name="mainScheduler">The main scheduler to scheduler UI tasks on.</param>
         /// <param name="backgroundScheduler">The background scheduler.</param>
         /// <param name="viewLocator">The view locator which will find views associated with view models.</param>
-        public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator)
+        /// <param name="windowManager">The window manager.</param>
+        public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator, IWindowManager windowManager)
         {
             InitializeComponent();
 
@@ -61,6 +53,7 @@ namespace Sextant.WinUI
             BackgroundScheduler = backgroundScheduler;
             MainThreadScheduler = mainScheduler;
             _viewLocator = viewLocator;
+            _windowManager = windowManager;
 
             _mirroredPageStack = new Stack<IViewModel?>();
             _mirroredModalStack = new Stack<IViewModel?>();
@@ -99,11 +92,11 @@ namespace Sextant.WinUI
         /// <summary>
         /// Gets a value indicating whether a modal (ContentDialog) is visible.
         /// </summary>
-        public static bool ModalVisible
+        public bool ModalVisible
         {
             get
             {
-                var popups = VisualTreeHelper.GetOpenPopups(Window.Current);
+                var popups = VisualTreeHelper.GetOpenPopupsForXamlRoot(_windowManager.CurrentWindow!.Content.XamlRoot);
                 return popups.FirstOrDefault(x => x.Child is ContentDialog) is not null;
             }
         }
@@ -279,16 +272,19 @@ namespace Sextant.WinUI
 
                         if (_contentDialog is not null && ModalVisible)
                         {
-                            _contentDialog.Hide();
+                            // _contentDialog.Hide();
+                            // See https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.controls.contentdialog?view=winrt-20348#contentdialog-in-appwindow-or-xaml-islands
+                            throw new Exception("Only a single ContentDialog can be open at any time.");
                         }
 
                         _contentDialog = new ContentDialog
-                        {
-                            FullSizeDesired = true,
-                            IsPrimaryButtonEnabled = false,
-                            IsSecondaryButtonEnabled = false,
-                            Content = page
-                        };
+                            {
+                                FullSizeDesired = false,
+                                IsPrimaryButtonEnabled = false,
+                                IsSecondaryButtonEnabled = false,
+                                Content = page,
+                                XamlRoot = _windowManager.CurrentWindow!.Content.XamlRoot
+                            };
 
                         _ = _contentDialog.ShowAsync();
 
