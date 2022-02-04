@@ -63,8 +63,8 @@ Locator
     .CurrentMutable
     .RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current))
     .RegisterParameterViewStackService()
-    .RegisterView<RedPage, RedViewModel>()
-    .RegisterView<FirstPage, FirstViewModel>();
+    .RegisterViewForNavigation(() => new RedPage(), () => new RedViewModel())
+    .RegisterViewForNavigation(() => new FirstPage(), () => new FirstViewModel());
 ```
 
 Set the initial page:
@@ -72,7 +72,7 @@ Set the initial page:
 Locator
     .Current
     .GetService<IParameterViewStackService>()
-    .PushPage(new PassViewModel(), null, true, false)
+    .PushPage<PassViewModel>()
     .Subscribe();
 
 MainPage = Locator.Current.GetNavigationView("NavigationView");
