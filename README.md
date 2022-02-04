@@ -119,19 +119,19 @@ IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool res
 ```csharp
 public class ViewModel
 {
-	private readonly IViewStackServicen _viewStackService; // or IParameterViewStackServicen
+    private readonly IViewStackServicen _viewStackService; // or IParameterViewStackServicen
 
-	public ViewModel(IViewStackServicen viewStackService)
-	{
-		_viewStackService = viewStackService;
+    public ViewModel(IViewStackServicen viewStackService)
+    {
+        _viewStackService = viewStackService;
 
-		OpenModal = ReactiveCommand
-			// FirstModalViewModel must implement IViewModel or INavigable
-    		.CreateFromObservable(() => viewStackService.PushModal<FirstModalViewModel>(),
-				outputScheduler: RxApp.MainThreadScheduler);
-	}
+        OpenModal = ReactiveCommand
+            // FirstModalViewModel must implement IViewModel or INavigable
+            .CreateFromObservable(() => viewStackService.PushModal<FirstModalViewModel>(),
+                outputScheduler: RxApp.MainThreadScheduler);
+    }
 
-	public ReactiveCommand<Unit, Unit> OpenModal { get; }
+    public ReactiveCommand<Unit, Unit> OpenModal { get; }
 }
 ```
 
@@ -144,23 +144,46 @@ Version 2.0 added support for passing parameters when navigating.
 ```csharp
 public class ViewModel
 {
-	private readonly IParameterViewStackServicen _viewStackService;
+    private readonly IParameterViewStackServicen _viewStackService;
 
-	public ViewModel(IParameterViewStackServicen viewStackService)
-	{
-		_viewStackService = viewStackService;
+    public ViewModel(IParameterViewStackServicen viewStackService)
+    {
+        _viewStackService = viewStackService;
 
-		Navigate = ReactiveCommand
-			// NavigableViewModel must implement INavigable
-    		.CreateFromObservable(() => viewStackService.PushModal<NavigableViewModel>(new NavigationParameter { { "parameter", parameter } }),
-				outputScheduler: RxApp.MainThreadScheduler);
-	}
+        Navigate = ReactiveCommand
+            // NavigableViewModel must implement INavigable
+            .CreateFromObservable(() => viewStackService.PushModal<NavigableViewModel>(new NavigationParameter { { "parameter", parameter } }),
+                outputScheduler: RxApp.MainThreadScheduler);
+    }
 
-	public ReactiveCommand<Unit, Unit> Navigate { get; }
+    public ReactiveCommand<Unit, Unit> Navigate { get; }
 }
 ```
 
 The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object. Implementing the interface allows you to assign values to the View Model during Navigation.
+
+```csharp
+public class NavigableViewModel : INavigable
+{
+        public string? _parameter;
+
+        public IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter)
+        {
+            return Observable.Return(Unit.Default)
+        }
+
+        public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter)
+        {
+            parameter.TryGetValue("parameter", out _parameter);
+            return Observable.Return(Unit.Default);
+        }
+
+        public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter)
+        {
+            return Observable.Return(Unit.Default);
+        }
+}
+```
 
 ## Samples
 
