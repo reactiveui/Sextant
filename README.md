@@ -63,8 +63,8 @@ Locator
     .CurrentMutable
     .RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current))
     .RegisterParameterViewStackService()
-    .RegisterViewForNavigation(() => new RedPage(), () => new RedViewModel())
-    .RegisterViewForNavigation(() => new FirstPage(), () => new FirstViewModel());
+    .RegisterViewForNavigation(() => new PassPage(), () => new PassViewModel())
+    .RegisterViewForNavigation(() => new ReceivedPage(), () => new ReceivedViewModel());
 ```
 
 Set the initial page:
@@ -119,14 +119,14 @@ IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool res
 ```csharp
 public class ViewModel
 {
-	private readonly IParameterViewStackServicen _viewStackService;
+	private readonly IViewStackServicen _viewStackService; // or IParameterViewStackServicen
 
-	public ViewModel(IParameterViewStackServicen viewStackService)
+	public ViewModel(IViewStackServicen viewStackService)
 	{
 		_viewStackService = viewStackService;
 
 		OpenModal = ReactiveCommand
-			// FirstModalViewModel must implement IViewModel
+			// FirstModalViewModel must implement IViewModel or INavigable
     		.CreateFromObservable(() => viewStackService.PushModal<FirstModalViewModel>(),
 				outputScheduler: RxApp.MainThreadScheduler);
 	}
