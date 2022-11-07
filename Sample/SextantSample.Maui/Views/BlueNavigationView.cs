@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using ReactiveUI;
-using Sextant.Maui;
-
-namespace SextantSample.Maui.Views
+﻿namespace SextantSample.Maui.Views
 {
     public class BlueNavigationView : NavigationView, IViewFor
     {

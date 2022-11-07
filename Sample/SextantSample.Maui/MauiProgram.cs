@@ -1,14 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls.Compatibility;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
-using ReactiveUI;
-using Sextant;
-using Sextant.Maui;
-using SextantSample.Maui.Views;
-using SextantSample.ViewModels;
-using Splat;
-using static Sextant.Sextant;
+﻿using static Sextant.Sextant;
 
 namespace SextantSample.Maui
 {
@@ -16,16 +6,17 @@ namespace SextantSample.Maui
     {
         public static MauiApp CreateMauiApp()
         {
-            var builder = MauiApp.CreateBuilder();
+            MauiAppBuilder builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
             RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
-            var resolver = Locator.CurrentMutable;
+            IMutableDependencyResolver resolver = Locator.CurrentMutable;
             resolver.InitializeSplat();
             resolver.InitializeReactiveUI();
             Instance.InitializeMaui();
@@ -38,6 +29,10 @@ namespace SextantSample.Maui
                 .RegisterView<GreenView, GreenViewModel>()
                 .RegisterNavigationView(() => new BlueNavigationView())
                 .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
+
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
 
             return builder.Build();
         }

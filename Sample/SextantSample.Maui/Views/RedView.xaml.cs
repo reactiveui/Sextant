@@ -1,8 +1,4 @@
-﻿using ReactiveUI;
-using ReactiveUI.Maui;
-using SextantSample.ViewModels;
-
-namespace SextantSample.Maui.Views
+﻿namespace SextantSample.Maui.Views
 {
     public partial class RedView : ReactiveContentPage<RedViewModel>
     {

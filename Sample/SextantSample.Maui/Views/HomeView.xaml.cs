@@ -1,7 +1,4 @@
 ﻿using System.Reactive.Disposables;
-using ReactiveUI;
-using ReactiveUI.Maui;
-using SextantSample.ViewModels;
 
 namespace SextantSample.Maui.Views
 {
