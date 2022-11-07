@@ -8,10 +8,11 @@
     <PackageId>Sextant.Maui</PackageId>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <UseMaui>true</UseMaui>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI.Maui" Version="17.*" />
+    <PackageReference Include="ReactiveUI.Maui" Version="18.*" />
   </ItemGroup>
 
   <ItemGroup>
