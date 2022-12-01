@@ -20,6 +20,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="DiffEngine" Version="8.5.3" />
+    <PackageReference Update="DiffEngine" Version="11.0.0" />
   </ItemGroup>
 </Project>
