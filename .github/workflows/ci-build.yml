@@ -55,7 +55,7 @@ jobs:
       working-directory: src
 
     - name: Run Unit Tests and Generate Coverage
-      uses: glennawatson/coverlet-msbuild@v1
+      uses: glennawatson/coverlet-msbuild@v2
       with:
         project-files: '**/*Tests*.csproj'
         no-build: true
