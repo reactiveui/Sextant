@@ -21,5 +21,5 @@ jobs:
       configuration: Release
       productNamespacePrefix: "Sextant"
       useVisualStudioPreview: false
-      useMauiCheckDotNetTool: true
+      useMauiCheckDotNetTool: false
       solutionFile: "Sextant.sln"
