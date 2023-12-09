@@ -4,7 +4,7 @@
   <style name="MainTheme" parent="MainTheme.Base">
   </style>
   <!-- Base theme applied no matter what API -->
-  <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="MainTheme.Base" parent="Theme.MaterialComponents.Light.DarkActionBar">
     <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette -->
     <!-- colorPrimary is used for the default action bar background -->
     <item name="colorPrimary">#2196F3</item>
@@ -20,7 +20,7 @@
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
   </style>
 
-  <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+  <style name="AppCompatDialogStyle" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
     <item name="colorAccent">#FF4081</item>
   </style>
 </resources>
