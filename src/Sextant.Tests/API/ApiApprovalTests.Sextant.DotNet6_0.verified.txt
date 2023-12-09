@@ -1,5 +1,4 @@
-[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/reactiveui/sextant")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
+﻿[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName=".NET 6.0")]
 namespace Sextant
 {
     public class DefaultViewModelFactory : Sextant.IViewModelFactory
@@ -193,10 +192,4 @@ namespace Sextant
         protected static void PopRootAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject, System.Reactive.Disposables.CompositeDisposable disposable) { }
         protected static T PopStackAndTick<T>(System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<T>> stackSubject) { }
     }
-}
-namespace System.Reactive.Linq
-{
-    public static class SubscribeSafeExtensions { }
-    public static class ToSignalExtension { }
-    public static class WhereNotNullExtension { }
 }
