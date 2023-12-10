@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Sextant.Maui</AssemblyName>
+    <RootNamespace>Sextant.Maui</RootNamespace>
+    <PackageId>Sextant.Maui</PackageId>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <UseMaui>true</UseMaui>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.Maui" Version="19.*" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sextant\Sextant.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mixins\" />
+    <Folder Include="Behaviors\" />
+  </ItemGroup>
+
+</Project>

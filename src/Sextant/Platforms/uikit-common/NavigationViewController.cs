@@ -25,6 +25,8 @@ namespace Sextant
     /// <seealso cref="UINavigationController" />
     /// <seealso cref="IView" />
     [SuppressMessage("Design", "CA1010: Implement generic IEnumerable", Justification = "Base class declared IEnumerable.")]
+    [SuppressMessage("Usage", "CA2213:Disposable fields should be disposed", Justification = "Previous usage did not throw an error.")]
+
     public class NavigationViewController : UINavigationController, IView
     {
         private readonly IScheduler _backgroundScheduler;
