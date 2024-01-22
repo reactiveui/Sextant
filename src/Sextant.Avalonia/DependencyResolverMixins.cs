@@ -44,12 +44,11 @@ namespace Sextant.Avalonia
             string? contract = null)
         {
             var view = dependencyResolver.GetService<IView>(contract ?? "NavigationView");
-            if (view is null)
+            return view switch
             {
-                throw new InvalidOperationException("NavigationView not registered.");
-            }
-
-            return view;
+                null => throw new InvalidOperationException("NavigationView not registered."),
+                _ => view
+            };
         }
     }
 }

@@ -21,10 +21,10 @@ namespace Sextant.Avalonia
     /// <summary>
     /// The <see cref="IView"/> implementation for Avalonia.
     /// </summary>
-    public sealed partial class NavigationView : ContentControl, IStyleable, IView
+    public sealed partial class NavigationView : ContentControl, IView
     {
-        private readonly Navigation _modalNavigation = new Navigation();
-        private readonly Navigation _pageNavigation = new Navigation();
+        private readonly Navigation _modalNavigation = new();
+        private readonly Navigation _pageNavigation = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
@@ -63,11 +63,6 @@ namespace Sextant.Avalonia
         }
 
         /// <summary>
-        /// Gets the style key of a <see cref="ContentControl"/>.
-        /// </summary>
-        Type IStyleable.StyleKey => typeof(ContentControl);
-
-        /// <summary>
         /// Gets or sets the scheduler used by the <see cref="NavigationView"/>.
         /// </summary>
         public IScheduler MainThreadScheduler { get; set; }
@@ -79,6 +74,18 @@ namespace Sextant.Avalonia
 
         /// <inheritdoc />
         public IObservable<IViewModel> PagePopped { get; } = Observable.Never<IViewModel>();
+
+        /// <summary>
+        /// Gets the type by which the element is styled.
+        /// </summary>
+        /// <remarks>
+        /// Usually controls are styled by their own type, but there are instances where you want
+        /// an element to be styled by its base type, e.g. creating SpecialButton that
+        /// derives from Button and adds extra functionality but is still styled as a regular
+        /// Button. Override this property to change the style for a control class, returning the
+        /// type that you wish the elements to be styled as.
+        /// </remarks>
+        protected override Type StyleKeyOverride => typeof(ContentControl);
 
         /// <inheritdoc />
         public IObservable<Unit> PushPage(
@@ -129,14 +136,9 @@ namespace Sextant.Avalonia
 
         private IViewFor LocateView(IViewModel viewModel, string? contract)
         {
-            var view = ViewLocator.ResolveView(viewModel, contract);
-            if (view is null)
-            {
-                throw new InvalidOperationException(
+            var view = ViewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException(
                     $"No view could be located for type '{viewModel.GetType().FullName}', " +
                     $"contract '{contract}'. Be sure Splat has an appropriate registration.");
-            }
-
             view.ViewModel = viewModel;
             return view;
         }

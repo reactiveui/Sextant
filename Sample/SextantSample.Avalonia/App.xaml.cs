@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using MsBox.Avalonia;
 using Sextant;
 using Sextant.Avalonia;
 using SextantSample.Avalonia.Views;
@@ -32,11 +33,9 @@ namespace SextantSample.Avalonia
                 .GetService<IViewStackService>()
                 .PushPage(new HomeViewModel());
 
-            Interactions.ErrorMessage.RegisterHandler(context => 
-                MessageBox.Avalonia
-                    .MessageBoxManager
-                    .GetMessageBoxStandardWindow("Notification", context.Input.ToString())
-                    .Show());
+            Interactions.ErrorMessage.RegisterHandler(async context =>
+               await MessageBoxManager.GetMessageBoxStandard("Notification", context.Input.ToString())
+                    .ShowAsync());
 
             new Window { Content = Locator.Current.GetNavigationView() }.Show();
             base.OnFrameworkInitializationCompleted();

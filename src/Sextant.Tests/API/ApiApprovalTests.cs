@@ -6,7 +6,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Sextant.APITests;
-using VerifyXunit;
 using Xunit;
 
 namespace Sextant.Tests
@@ -15,7 +14,6 @@ namespace Sextant.Tests
     /// Tests to make sure that the API matches the approved ones.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    [UsesVerify]
     public class ApiApprovalTests
     {
         /// <summary>

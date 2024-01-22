@@ -18,14 +18,13 @@ namespace Sextant.XamForms
     /// <summary>
     /// The main navigation view.
     /// </summary>
-    public class NavigationView : NavigationPage, IView, IEnableLogger
+    public class NavigationView : NavigationPage, IView, IEnableLogger, IDisposable
     {
-        private readonly ISubject<NavigationSource> _navigationSource =
-            new BehaviorSubject<NavigationSource>(NavigationSource.Device);
-
+        private readonly BehaviorSubject<NavigationSource> _navigationSource = new(NavigationSource.Device);
         private readonly IScheduler _backgroundScheduler;
         private readonly IViewLocator _viewLocator;
         private readonly IFullLogger _logger;
+        private bool _disposedValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationView"/> class.
@@ -198,6 +197,32 @@ namespace Sextant.XamForms
                             .ToObservable();
                     });
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _navigationSource.Dispose();
+                }
+
+                _disposedValue = true;
+            }
+        }
+
         private static void SetPageTitle(Page page, string resourceKey) =>
 
             // var title = Localize.GetString(resourceKey);
@@ -206,15 +231,9 @@ namespace Sextant.XamForms
 
         private Page LocatePageFor(object viewModel, string? contract)
         {
-            var view = _viewLocator.ResolveView(viewModel, contract);
-
-            if (view is null)
-            {
-                throw new InvalidOperationException(
+            var view = _viewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException(
                     $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
-            }
-
-            if (!(view is Page page))
+            if (view is not Page page)
             {
                 throw new InvalidOperationException(
                     $"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");

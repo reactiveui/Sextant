@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI.WPF" Version="13.0.38" />
-    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1821" />
+    <PackageReference Include="ReactiveUI.WPF" Version="19.*" />
+    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="5.0.0.2622" />
   </ItemGroup>
 
   <ItemGroup>
