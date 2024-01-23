@@ -31,13 +31,15 @@ namespace Sextant.XamForms
         Device = 0,
         NavigationService = 1,
     }
-    public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger
+    public class NavigationView : Xamarin.Forms.NavigationPage, Sextant.IView, Splat.IEnableLogger, System.IDisposable
     {
         public NavigationView() { }
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator) { }
         public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, System.Reactive.Concurrency.IScheduler backgroundScheduler, ReactiveUI.IViewLocator viewLocator, Xamarin.Forms.Page rootPage) { }
         public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
         public System.IObservable<Sextant.IViewModel> PagePopped { get; }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
         public System.IObservable<System.Reactive.Unit> PopModal() { }
         public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
         public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate) { }
