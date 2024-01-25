@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reactive.Linq;
 
 using Avalonia.Animation;
-using Avalonia.ReactiveUI;
+using Avalonia.Controls;
 
 using DynamicData.Aggregation;
 using DynamicData.Binding;
@@ -62,7 +62,7 @@ namespace Sextant.Avalonia
             /// <summary>
             /// Gets the control responsible for rendering the current view.
             /// </summary>
-            public TransitioningContentControl Control { get; } = new TransitioningContentControl();
+            public TransitioningContentControl Control { get; } = new();
 
             /// <summary>
             /// Toggles the animations.

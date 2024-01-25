@@ -1,15 +1,9 @@
-﻿using System;
-using Sextant;
+﻿using Sextant;
 
 namespace SextantSample.ViewModels
 {
-    public class FirstModalNavigationViewModel : ViewModelBase
+    public class FirstModalNavigationViewModel(IViewStackService viewStackService) : ViewModelBase(viewStackService)
     {
-        public FirstModalNavigationViewModel(IViewStackService viewStackService)
-            : base(viewStackService)
-        {
-
-        }
         public override string Id => nameof(FirstModalNavigationViewModel);
     }
 }

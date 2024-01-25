@@ -11,7 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.*" />
-    <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />

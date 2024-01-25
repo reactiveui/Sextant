@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net462;net8.0</TargetFrameworks>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
     <NoWarn>;1591;1701;1702;1705;CA1822</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="*" />
-    <PackageReference Include="System.Reactive" Version="4.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />

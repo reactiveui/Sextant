@@ -13,17 +13,12 @@ namespace Sextant.XamForms
     /// <summary>
     /// Represents a <see cref="BehaviorBase{T}"/> that intercepts the backwards navigation.
     /// </summary>
-    public sealed class NavigationPageSystemPopBehavior : BehaviorBase<NavigationPage>
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="NavigationPageSystemPopBehavior"/> class.
+    /// </remarks>
+    /// <param name="navigationSource">A value indicating whether the back button was pressed.</param>
+    public sealed class NavigationPageSystemPopBehavior(IObservable<NavigationSource> navigationSource) : BehaviorBase<NavigationPage>
     {
-        private readonly IObservable<NavigationSource> _navigationSource;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationPageSystemPopBehavior"/> class.
-        /// </summary>
-        /// <param name="navigationSource">A value indicating whether the back button was pressed.</param>
-        public NavigationPageSystemPopBehavior(IObservable<NavigationSource> navigationSource) =>
-            _navigationSource = navigationSource;
-
         /// <inheritdoc/>
         protected override void OnAttachedTo(NavigationPage bindable)
         {
@@ -36,7 +31,7 @@ namespace Sextant.XamForms
                     },
                     x => bindable.Popped += x,
                     x => bindable.Popped -= x)
-                .WithLatestFrom(_navigationSource, (navigated, navigationSource) => (navigated, navigationSource))
+                .WithLatestFrom(navigationSource, (navigated, navigationSource) => (navigated, navigationSource))
                 .Where(result => result.navigationSource == NavigationSource.Device)
                 .Select(x => x.navigated)
                 .Subscribe(navigated =>
