@@ -9,9 +9,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveUI" Version="19.*" />
-    <PackageReference Include="Avalonia" Version="11.0.7" />
+    <PackageReference Include="Avalonia" Version="11.0.9" />
     <PackageReference Include="Avalonia.Desktop" Version="11.0.7" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.7" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
