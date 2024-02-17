@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap'))">
-    <PackageReference Include="ReactiveUI" Version="[18.4.1]" />
+    <PackageReference Include="ReactiveUI" Version="[19.5.41]" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('uap')) != true">
