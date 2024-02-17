@@ -27,7 +27,7 @@
     <PackageVersion Include="ReactiveUI.Testing" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.XamForms" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="Rg.Plugins.Popup" Version="2.1.0" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.9.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.10.0" />
     <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.507" />
     <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
     <PackageVersion Include="System.Reactive" Version="$(RxVersion)" />
