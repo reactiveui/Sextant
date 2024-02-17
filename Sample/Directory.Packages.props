@@ -1,0 +1,50 @@
+﻿<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AvaloniaVersion>11.0.9</AvaloniaVersion>
+    <ReactiveUIVersion>19.5.41</ReactiveUIVersion>
+    <XUnitVersion>1.7.0.1540</XUnitVersion>
+    <XamarinFormsVersion>5.0.0.2622</XamarinFormsVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="Avalonia.ReactiveUI" Version="$(AvaloniaVersion)" />
+    <PackageVersion Include="Citrus.Avalonia" Version="2.1.1" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.0" />
+    <PackageVersion Include="DiffEngine" Version="15.2.0" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="3.1.5.1" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
+    <PackageVersion Include="NSubstitute" Version="5.1.0" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.1.0" />
+    <PackageVersion Include="ReactiveUI" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="ReactiveUI.Testing" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="ReactiveUI.XamForms" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="ReactiveUI.WPF" Version="$(ReactiveUIVersion)" /> 
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.10.0" />
+    <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.556" />
+    <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageVersion Include="Verify.Xunit" Version="23.2.0" />
+    <PackageVersion Include="Xamarin.Forms" Version="$(XamarinFormsVersion)" />
+    <PackageVersion Include="Xamarin.Forms.Platform.WPF" Version="$(XamarinFormsVersion)" />
+    <PackageVersion Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
+    <PackageVersion Include="xunit" Version="$(XUnitVersion)" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.7" />
+    <PackageVersion Include="Xunit.StaFact" Version="1.1.11" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseMaui)' != 'true'">
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231115000" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+  </ItemGroup>
+</Project>
