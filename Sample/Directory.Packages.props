@@ -41,7 +41,7 @@
     <PackageVersion Include="Xunit.StaFact" Version="1.1.11" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseMaui)' != 'true'">
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231219000" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.240211001" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
     <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
