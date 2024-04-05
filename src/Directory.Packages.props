@@ -32,7 +32,7 @@
     <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
     <PackageVersion Include="System.Reactive" Version="$(RxVersion)" />
     <PackageVersion Include="Verify.Xunit" Version="23.2.0" />
-    <PackageVersion Include="Xamarin.Forms" Version="5.0.0.2622" />
+    <PackageVersion Include="Xamarin.Forms" Version="5.0.0.2662" />
     <PackageVersion Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
     <PackageVersion Include="xunit" Version="$(XUnitVersion)" />
     <PackageVersion Include="xunit.runner.devices" Version="2.5.25" />
