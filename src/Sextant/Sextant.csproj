@@ -11,7 +11,6 @@
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs" />
     <None Include="Platforms\**\*.cs" />
-    <PackageReference Include="System.Collections.Immutable" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap'))">
     <PackageReference Include="ReactiveUI" />
@@ -63,6 +62,7 @@
     <Compile Include="Platforms\mac\**\*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <PackageReference Include="System.Collections.Immutable" />
     <Compile Include="Platforms\android\**\*.cs" />
     <Compile Include="Platforms\xamarin-common\**\*.cs" />
     <Reference Include="System.Runtime.Serialization" />
@@ -71,13 +71,16 @@
     <Compile Include="Platforms\android\**\*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net4')) ">
+    <PackageReference Include="System.Collections.Immutable" />
     <Compile Include="Platforms\net4\**\*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('uap')) ">
+    <PackageReference Include="System.Collections.Immutable" />
     <Compile Include="Platforms\uap\**\*.cs" />
     <Page Include="Platforms\uap\**\*.xaml" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">
+    <PackageReference Include="System.Collections.Immutable" />
     <Compile Include="Platforms\netstandard2.0\**\*.cs" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' or '$(TargetFramework)' == 'net7.0' or '$(TargetFramework)' == 'net8.0' or $(TargetFramework.EndsWith('-windows10.0.17763.0')) or $(TargetFramework.EndsWith('-windows10.0.19041.0'))  ">
