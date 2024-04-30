@@ -6,6 +6,7 @@
   <PropertyGroup>
     <AvaloniaVersion>11.0.10</AvaloniaVersion>
     <ReactiveUIVersion>20.1.1</ReactiveUIVersion>
+    <MauiVersion>8.0.21</MauiVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
