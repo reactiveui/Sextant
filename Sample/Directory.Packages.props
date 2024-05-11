@@ -28,7 +28,7 @@
     <PackageVersion Include="ReactiveUI.Testing" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.XamForms" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.WPF" Version="$(ReactiveUIVersion)" /> 
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.0" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.2" />
     <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
