@@ -1,5 +1,4 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
-
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
     <AssemblyName>Sextant.XamForms</AssemblyName>
@@ -8,16 +7,13 @@
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="ReactiveUI.XamForms" Version="19.6.12" />
-    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageReference Include="ReactiveUI.XamForms" />
+    <PackageReference Include="System.Collections.Immutable" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Behaviors\NavigationPageSystemPopBehavior.cs">
       <SubType>Code</SubType>
@@ -26,5 +22,4 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-
 </Project>
