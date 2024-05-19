@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.UI.Xaml;
-using Windows.ApplicationModel;
-
-// To learn more about WinUI, the WinUI project structure,
+﻿// To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace SextantSample.Maui.WinUI
@@ -18,7 +14,7 @@ namespace SextantSample.Maui.WinUI
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();

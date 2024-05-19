@@ -24,32 +24,25 @@ namespace Sextant
     /// </summary>
     /// <seealso cref="UINavigationController" />
     /// <seealso cref="IView" />
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="NavigationViewController" /> class.
+    /// </remarks>
+    /// <param name="mainScheduler">The main scheduler.</param>
+    /// <param name="backgroundScheduler">The background scheduler.</param>
+    /// <param name="viewLocator">The view locator.</param>
     [SuppressMessage("Design", "CA1010: Implement generic IEnumerable", Justification = "Base class declared IEnumerable.")]
     [SuppressMessage("Usage", "CA2213:Disposable fields should be disposed", Justification = "Previous usage did not throw an error.")]
 
-    public class NavigationViewController : UINavigationController, IView
+    public class NavigationViewController(
+        IScheduler? mainScheduler = null,
+        IScheduler? backgroundScheduler = null,
+        IViewLocator? viewLocator = null) : UINavigationController, IView
     {
-        private readonly IScheduler _backgroundScheduler;
-        private readonly IScheduler _mainScheduler;
-        private readonly IViewLocator _viewLocator;
+        private readonly IScheduler _backgroundScheduler = backgroundScheduler ?? RxApp.TaskpoolScheduler;
+        private readonly IScheduler _mainScheduler = mainScheduler ?? RxApp.MainThreadScheduler;
+        private readonly IViewLocator _viewLocator = viewLocator ?? ViewLocator.Current;
         private readonly Stack<UIViewController> _navigationPages = new();
         private readonly Subject<IViewModel?> _pagePopped = new();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationViewController" /> class.
-        /// </summary>
-        /// <param name="mainScheduler">The main scheduler.</param>
-        /// <param name="backgroundScheduler">The background scheduler.</param>
-        /// <param name="viewLocator">The view locator.</param>
-        public NavigationViewController(
-            IScheduler? mainScheduler = null,
-            IScheduler? backgroundScheduler = null,
-            IViewLocator? viewLocator = null)
-        {
-            _mainScheduler = mainScheduler ?? RxApp.MainThreadScheduler;
-            _backgroundScheduler = backgroundScheduler ?? RxApp.TaskpoolScheduler;
-            _viewLocator = viewLocator ?? ViewLocator.Current;
-        }
 
         /// <inheritdoc />
         public IScheduler MainThreadScheduler => _mainScheduler;

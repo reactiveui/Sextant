@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReactiveUI.Maui" Version="19.*" />
+    <PackageReference Include="ReactiveUI.Maui" Version="$(ReactiveUIVersion)" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">

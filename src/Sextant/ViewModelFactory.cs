@@ -26,12 +26,11 @@ namespace Sextant
             get
             {
                 var locator = Locator.Current.GetService<IViewModelFactory>();
-                if (locator is null)
+                return locator switch
                 {
-                    throw new ViewModelFactoryNotFoundException("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken");
-                }
-
-                return locator;
+                    null => throw new ViewModelFactoryNotFoundException("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken"),
+                    _ => locator
+                };
             }
         }
     }

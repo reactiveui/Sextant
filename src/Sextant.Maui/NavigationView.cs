@@ -203,15 +203,9 @@ namespace Sextant.Maui
 
         private Page LocatePageFor(object viewModel, string? contract)
         {
-            var view = _viewLocator.ResolveView(viewModel, contract);
-
-            if (view is null)
-            {
-                throw new InvalidOperationException(
+            var view = _viewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException(
                     $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
-            }
-
-            if (!(view is Page page))
+            if (view is not Page page)
             {
                 throw new InvalidOperationException(
                     $"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");

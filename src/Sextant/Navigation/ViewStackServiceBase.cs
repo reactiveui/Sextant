@@ -91,7 +91,7 @@ namespace Sextant
         /// <summary>
         /// Gets the navigation disposables.
         /// </summary>
-        protected CompositeDisposable NavigationDisposables { get; } = new();
+        protected CompositeDisposable NavigationDisposables { get; } = [];
 
         /// <summary>
         /// Pops the <see cref="INavigable" /> off the stack.

@@ -10,7 +10,12 @@ namespace Sextant
     /// </summary>
     /// <seealso cref="ViewStackServiceBase" />
     /// <seealso cref="IViewStackService" />
-    public sealed class ParameterViewStackService : ParameterViewStackServiceBase
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
+    /// </remarks>
+    /// <param name="view">The view.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    public sealed class ParameterViewStackService(IView view, IViewModelFactory viewModelFactory) : ParameterViewStackServiceBase(view, viewModelFactory)
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
@@ -18,16 +23,6 @@ namespace Sextant
         /// <param name="view">The view.</param>
         public ParameterViewStackService(IView view)
             : this(view, new DefaultViewModelFactory())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <param name="viewModelFactory">The view model factory.</param>
-        public ParameterViewStackService(IView view, IViewModelFactory viewModelFactory)
-            : base(view, viewModelFactory)
         {
         }
     }

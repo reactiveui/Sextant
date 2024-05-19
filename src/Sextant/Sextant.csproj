@@ -15,12 +15,8 @@
     <PackageReference Include="System.Collections.Immutable" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap'))">
-    <PackageReference Include="ReactiveUI" Version="[18.4.1]" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.StartsWith('uap')) != true">
-    <PackageReference Include="ReactiveUI" Version="19.*" />
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI" Version="$(ReactiveUIVersion)" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">

@@ -21,7 +21,7 @@ namespace Sextant.XamForms
         /// <summary>
         /// Gets the disposables for this behavior.
         /// </summary>
-        protected CompositeDisposable BehaviorDisposable { get; } = new();
+        protected CompositeDisposable BehaviorDisposable { get; } = [];
 
         /// <inheritdoc/>
         public void Dispose()

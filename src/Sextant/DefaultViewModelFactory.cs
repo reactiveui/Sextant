@@ -18,12 +18,11 @@ namespace Sextant
             where TViewModel : IViewModel
         {
             var viewModel = Locator.Current.GetService<TViewModel>(contract);
-            if (viewModel is null)
+            return viewModel switch
             {
-                throw new InvalidOperationException($"ViewModel of type {typeof(TViewModel).Name} {contract} not registered.");
-            }
-
-            return viewModel;
+                null => throw new InvalidOperationException($"ViewModel of type {typeof(TViewModel).Name} {contract} not registered."),
+                _ => viewModel
+            };
         }
     }
 }
