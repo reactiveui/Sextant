@@ -8,52 +8,51 @@ using System.Diagnostics;
 using System.Reactive.Concurrency;
 using ReactiveUI;
 
-namespace SextantSample.ViewModels
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// SextantDefaultExceptionHandler.
+/// </summary>
+public class SextantDefaultExceptionHandler : IObserver<Exception>
 {
     /// <summary>
-    /// SextantDefaultExceptionHandler.
+    /// Called when [next].
     /// </summary>
-    public class SextantDefaultExceptionHandler : IObserver<Exception>
+    /// <param name="value">The ex.</param>
+    public void OnNext(Exception value)
     {
-        /// <summary>
-        /// Called when [next].
-        /// </summary>
-        /// <param name="value">The ex.</param>
-        public void OnNext(Exception value)
+        if (Debugger.IsAttached)
         {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
-
-            RxApp.MainThreadScheduler.Schedule(() => throw value);
+            Debugger.Break();
         }
 
-        /// <summary>
-        /// Called when [error].
-        /// </summary>
-        /// <param name="error">The ex.</param>
-        public void OnError(Exception error)
-        {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
+        RxApp.MainThreadScheduler.Schedule(() => throw value);
+    }
 
-            RxApp.MainThreadScheduler.Schedule(() => throw error);
+    /// <summary>
+    /// Called when [error].
+    /// </summary>
+    /// <param name="error">The ex.</param>
+    public void OnError(Exception error)
+    {
+        if (Debugger.IsAttached)
+        {
+            Debugger.Break();
         }
 
-        /// <summary>
-        /// Notifies the observer that the provider has finished sending push-based notifications.
-        /// </summary>
-        public void OnCompleted()
-        {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
+        RxApp.MainThreadScheduler.Schedule(() => throw error);
+    }
 
-            RxApp.MainThreadScheduler.Schedule(() => throw new NotImplementedException());
+    /// <summary>
+    /// Notifies the observer that the provider has finished sending push-based notifications.
+    /// </summary>
+    public void OnCompleted()
+    {
+        if (Debugger.IsAttached)
+        {
+            Debugger.Break();
         }
+
+        RxApp.MainThreadScheduler.Schedule(() => throw new NotImplementedException());
     }
 }

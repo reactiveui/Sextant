@@ -20,6 +20,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="$(RxVersion)" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.1.0" />
@@ -27,14 +28,17 @@
     <PackageVersion Include="ReactiveUI.Maui" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.Testing" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.XamForms" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="ReactiveUI.WPF" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.2" />
     <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.Reactive" Version="$(RxVersion)" />
     <PackageVersion Include="Verify.Xunit" Version="23.2.0" />
     <PackageVersion Include="Xamarin.Forms" Version="5.0.0.2662" />
     <PackageVersion Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
+    <PackageVersion Include="Xamarin.Forms.Platform.WPF" Version="5.0.0.2662" />
     <PackageVersion Include="xunit" Version="2.8.0" />
     <PackageVersion Include="xunit.runner.devices" Version="2.5.25" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />

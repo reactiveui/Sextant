@@ -6,23 +6,22 @@
 using System;
 using Splat;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// Default View Model Factory.
+/// </summary>
+public class DefaultViewModelFactory : IViewModelFactory
 {
-    /// <summary>
-    /// Default View Model Factory.
-    /// </summary>
-    public class DefaultViewModelFactory : IViewModelFactory
+    /// <inheritdoc />
+    public TViewModel Create<TViewModel>(string? contract = null)
+        where TViewModel : IViewModel
     {
-        /// <inheritdoc />
-        public TViewModel Create<TViewModel>(string? contract = null)
-            where TViewModel : IViewModel
+        var viewModel = Locator.Current.GetService<TViewModel>(contract);
+        return viewModel switch
         {
-            var viewModel = Locator.Current.GetService<TViewModel>(contract);
-            return viewModel switch
-            {
-                null => throw new InvalidOperationException($"ViewModel of type {typeof(TViewModel).Name} {contract} not registered."),
-                _ => viewModel
-            };
-        }
+            null => throw new InvalidOperationException($"ViewModel of type {typeof(TViewModel).Name} {contract} not registered."),
+            _ => viewModel
+        };
     }
 }

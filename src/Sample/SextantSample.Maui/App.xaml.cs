@@ -1,20 +1,19 @@
 ﻿[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
-namespace SextantSample.Maui
+namespace SextantSample.Maui;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
+        InitializeComponent();
 
-            Locator
-                .Current
-                .GetService<IViewStackService>()
-                .PushPage(new HomeViewModel(), null, true, false)
-                .Subscribe();
+        Locator
+            .Current
+            .GetService<IViewStackService>()
+            .PushPage(new HomeViewModel(), null, true, false)
+            .Subscribe();
 
-            MainPage = Locator.Current.GetNavigationView();
-        }
+        MainPage = Locator.Current.GetNavigationView();
     }
 }

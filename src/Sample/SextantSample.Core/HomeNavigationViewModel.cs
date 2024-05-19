@@ -5,11 +5,10 @@
 
 using ReactiveUI;
 
-namespace SextantSample.ViewModels
-{
-    /// <summary>
-    /// HomeNavigationViewModel.
-    /// </summary>
-    /// <seealso cref="ReactiveUI.ReactiveObject" />
-    public class HomeNavigationViewModel : ReactiveObject;
-}
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// HomeNavigationViewModel.
+/// </summary>
+/// <seealso cref="ReactiveUI.ReactiveObject" />
+public class HomeNavigationViewModel : ReactiveObject;

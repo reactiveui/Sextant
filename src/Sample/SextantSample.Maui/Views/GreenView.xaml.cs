@@ -1,13 +1,12 @@
-namespace SextantSample.Maui.Views
-{
-    public partial class GreenView : ReactiveContentPage<GreenViewModel>
-    {
-        public GreenView()
-        {
-            InitializeComponent();
+namespace SextantSample.Maui.Views;
 
-            this.BindCommand(ViewModel, x => x.OpenModal, x => x.Modal);
-        }
+public partial class GreenView : ReactiveContentPage<GreenViewModel>
+{
+    public GreenView()
+    {
+        InitializeComponent();
+
+        this.BindCommand(ViewModel, x => x.OpenModal, x => x.Modal);
     }
 }
 

@@ -5,20 +5,19 @@
 
 using Sextant;
 
-namespace SextantSample.ViewModels
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// FirstModalNavigationViewModel.
+/// </summary>
+/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
+public class FirstModalNavigationViewModel(IViewStackService viewStackService) : ViewModelBase(viewStackService)
 {
     /// <summary>
-    /// FirstModalNavigationViewModel.
+    /// Gets the identifier.
     /// </summary>
-    /// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
-    public class FirstModalNavigationViewModel(IViewStackService viewStackService) : ViewModelBase(viewStackService)
-    {
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public override string Id => nameof(FirstModalNavigationViewModel);
-    }
+    /// <value>
+    /// The identifier.
+    /// </value>
+    public override string Id => nameof(FirstModalNavigationViewModel);
 }

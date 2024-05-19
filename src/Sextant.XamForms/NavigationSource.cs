@@ -3,21 +3,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-namespace Sextant.XamForms
+namespace Sextant.XamForms;
+
+/// <summary>
+/// An enumeration of where navigation signals are sent from.
+/// </summary>
+public enum NavigationSource
 {
     /// <summary>
-    /// An enumeration of where navigation signals are sent from.
+    /// Navigation sourced from the device.
     /// </summary>
-    public enum NavigationSource
-    {
-        /// <summary>
-        /// Navigation sourced from the device.
-        /// </summary>
-        Device,
+    Device,
 
-        /// <summary>
-        /// Navigation sourced from the service.
-        /// </summary>
-        NavigationService
-    }
+    /// <summary>
+    /// Navigation sourced from the service.
+    /// </summary>
+    NavigationService
 }

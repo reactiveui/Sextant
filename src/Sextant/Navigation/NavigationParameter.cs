@@ -7,39 +7,38 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// Represents parameters that can be passed during navigation.
+/// </summary>
+/// <seealso cref="object" />
+/// <seealso cref="INavigationParameter" />
+[SuppressMessage("Design", "CA1710: Identifiers should have correct suffix.", Justification = "Deliberate usage")]
+[SuppressMessage("Design", "CA2237: Mark ISerializable types with SerializableAttribute.", Justification = "Deliberate usage")]
+public class NavigationParameter : Dictionary<string, object>, INavigationParameter
 {
-    /// <summary>
-    /// Represents parameters that can be passed during navigation.
-    /// </summary>
-    /// <seealso cref="object" />
-    /// <seealso cref="INavigationParameter" />
-    [SuppressMessage("Design", "CA1710: Identifiers should have correct suffix.", Justification = "Deliberate usage")]
-    [SuppressMessage("Design", "CA2237: Mark ISerializable types with SerializableAttribute.", Justification = "Deliberate usage")]
-    public class NavigationParameter : Dictionary<string, object>, INavigationParameter
+    /// <inheritdoc />
+    public T GetValue<T>(string key)
     {
-        /// <inheritdoc />
-        public T GetValue<T>(string key)
+        if (TryGetValue(key, out var result))
         {
-            if (TryGetValue(key, out var result))
-            {
-                return (T)result;
-            }
-
-            return default!;
+            return (T)result;
         }
 
-        /// <inheritdoc />
-        public bool TryGetValue<T>(string key, out T value)
-        {
-            if (TryGetValue(key, out var result))
-            {
-                value = (T)result;
-                return true;
-            }
+        return default!;
+    }
 
-            value = default!;
-            return false;
+    /// <inheritdoc />
+    public bool TryGetValue<T>(string key, out T value)
+    {
+        if (TryGetValue(key, out var result))
+        {
+            value = (T)result;
+            return true;
         }
+
+        value = default!;
+        return false;
     }
 }

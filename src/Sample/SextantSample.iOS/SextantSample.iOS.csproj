@@ -211,7 +211,7 @@
       <Project>{AB35E5EE-24AE-479A-909E-1FD941E152EF}</Project>
       <Name>SextantSample</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Sextant\Sextant.csproj">
+    <ProjectReference Include="..\..\Sextant\Sextant.csproj">
       <Project>{4CF5E8D0-BB2C-4790-9AD5-03AEC069C3C3}</Project>
       <Name>Sextant</Name>
     </ProjectReference>

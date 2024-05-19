@@ -6,11 +6,10 @@
 using System;
 using ReactiveUI;
 
-namespace SextantSample.ViewModels
-{
-    /// <summary>
-    /// SecondModalNavigationViewModel.
-    /// </summary>
-    /// <seealso cref="ReactiveUI.ReactiveObject" />
-    public class SecondModalNavigationViewModel : ReactiveObject;
-}
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// SecondModalNavigationViewModel.
+/// </summary>
+/// <seealso cref="ReactiveUI.ReactiveObject" />
+public class SecondModalNavigationViewModel : ReactiveObject;

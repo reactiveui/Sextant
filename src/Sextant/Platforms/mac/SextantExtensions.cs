@@ -9,22 +9,21 @@ using System.Reactive.Concurrency;
 using System.Text;
 using Splat;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// Extensions methods to setup the <see cref="Sextant"/> instance.
+/// </summary>
+public static class SextantExtensions
 {
     /// <summary>
-    /// Extensions methods to setup the <see cref="Sextant"/> instance.
+    /// Initializes the specified sextant.
     /// </summary>
-    public static class SextantExtensions
+    /// <param name="sextant">The sextant.</param>
+    public static void Initialize(this Sextant sextant)
     {
-        /// <summary>
-        /// Initializes the specified sextant.
-        /// </summary>
-        /// <param name="sextant">The sextant.</param>
-        public static void Initialize(this Sextant sextant)
-        {
-            ArgumentNullException.ThrowIfNull(sextant);
+        ArgumentNullException.ThrowIfNull(sextant);
 
-            sextant.MutableLocator.RegisterViewStackService();
-        }
+        sextant.MutableLocator.RegisterViewStackService();
     }
 }

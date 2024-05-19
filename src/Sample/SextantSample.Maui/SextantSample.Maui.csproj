@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net8.0-ios;net8.0-android;net8.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
@@ -36,15 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <MauiAsset Remove="Resources\Raw\AboutAssets.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <MauiFont Remove="Resources\Fonts\OpenSans-Regular.ttf" />
     <MauiFont Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
-  </ItemGroup>
-  <ItemGroup>
     <MauiImage Remove="Resources\Images\dotnet_bot.svg" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Platforms\Android\AndroidManifest.xml" />
     <None Remove="Resources\AppIcon\appicon.svg" />
     <None Remove="Resources\AppIcon\appiconfg.svg" />
     <None Remove="Resources\Fonts\OpenSans-Semibold.ttf" />
@@ -62,8 +57,7 @@
     <BundleResource Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Sextant.Maui\Sextant.Maui.csproj" />
-    <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" AdditionalProperties="TargetFramework=net6.0" />
+    <Content Include="Platforms\Android\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework.StartsWith('net8'))">
     <PackageReference Include="Microsoft.Maui.Controls" />
@@ -86,5 +80,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sextant.Maui\Sextant.Maui.csproj" />
+    <ProjectReference Include="..\SextantSample.Core\SextantSample.ViewModels.csproj" />
   </ItemGroup>
 </Project>

@@ -135,8 +135,8 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Sextant\Sextant.csproj">
-      <Project>{D6B84899-4AFC-4E6C-9C3F-005F21DF5A52}</Project>
+    <ProjectReference Include="..\..\Sextant\Sextant.csproj">
+      <Project>{4cf5e8d0-bb2c-4790-9ad5-03aec069c3c3}</Project>
       <Name>Sextant</Name>
     </ProjectReference>
     <ProjectReference Include="..\SextantSample\SextantSample.csproj">

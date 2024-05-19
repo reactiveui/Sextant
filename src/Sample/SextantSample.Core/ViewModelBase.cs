@@ -7,27 +7,26 @@ using System;
 using ReactiveUI;
 using Sextant;
 
-namespace SextantSample.ViewModels
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// ViewModelBase.
+/// </summary>
+/// <seealso cref="ReactiveUI.ReactiveObject" />
+/// <seealso cref="Sextant.IViewModel" />
+/// <remarks>
+/// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+/// </remarks>
+/// <param name="viewStackService">The view stack service.</param>
+public abstract class ViewModelBase(IViewStackService viewStackService) : ReactiveObject, IViewModel
 {
     /// <summary>
-    /// ViewModelBase.
+    /// Gets the ID of the page.
     /// </summary>
-    /// <seealso cref="ReactiveUI.ReactiveObject" />
-    /// <seealso cref="Sextant.IViewModel" />
-    /// <remarks>
-    /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
-    /// </remarks>
-    /// <param name="viewStackService">The view stack service.</param>
-    public abstract class ViewModelBase(IViewStackService viewStackService) : ReactiveObject, IViewModel
-    {
-        /// <summary>
-        /// Gets the ID of the page.
-        /// </summary>
-        public virtual string Id { get; }
+    public virtual string Id { get; }
 
-        /// <summary>
-        /// Gets the view stack service.
-        /// </summary>
-        protected IViewStackService ViewStackService { get; } = viewStackService;
-    }
+    /// <summary>
+    /// Gets the view stack service.
+    /// </summary>
+    protected IViewStackService ViewStackService { get; } = viewStackService;
 }

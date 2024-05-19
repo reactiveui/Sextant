@@ -9,56 +9,55 @@ using System.Reactive;
 using ReactiveUI;
 using Sextant;
 
-namespace SextantSample.ViewModels
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// SecondModalViewModel.
+/// </summary>
+/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
+public class SecondModalViewModel : ViewModelBase
 {
     /// <summary>
-    /// SecondModalViewModel.
+    /// Initializes a new instance of the <see cref="SecondModalViewModel"/> class.
     /// </summary>
-    /// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
-    public class SecondModalViewModel : ViewModelBase
+    /// <param name="viewStackService">The view stack service.</param>
+    public SecondModalViewModel(IViewStackService viewStackService)
+        : base(viewStackService)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SecondModalViewModel"/> class.
-        /// </summary>
-        /// <param name="viewStackService">The view stack service.</param>
-        public SecondModalViewModel(IViewStackService viewStackService)
-            : base(viewStackService)
-        {
-            PushPage = ReactiveCommand
-                .CreateFromObservable(() => ViewStackService.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
+        PushPage = ReactiveCommand
+            .CreateFromObservable(() => ViewStackService.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
 
-            PopModal = ReactiveCommand
-                .CreateFromObservable(() => ViewStackService.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
+        PopModal = ReactiveCommand
+            .CreateFromObservable(() => ViewStackService.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
 
-            PushPage.Subscribe(_ => Debug.WriteLine("PagePushed"));
-            PopModal.Subscribe(_ => Debug.WriteLine("PagePopped"));
+        PushPage.Subscribe(_ => Debug.WriteLine("PagePushed"));
+        PopModal.Subscribe(_ => Debug.WriteLine("PagePopped"));
 
-            PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
-            PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
-        }
-
-        /// <summary>
-        /// Gets or sets the push page.
-        /// </summary>
-        /// <value>
-        /// The push page.
-        /// </value>
-        public ReactiveCommand<Unit, Unit> PushPage { get; set; }
-
-        /// <summary>
-        /// Gets or sets the pop modal.
-        /// </summary>
-        /// <value>
-        /// The pop modal.
-        /// </value>
-        public ReactiveCommand<Unit, Unit> PopModal { get; set; }
-
-        /// <summary>
-        /// Gets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        public override string Id => nameof(SecondModalViewModel);
+        PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
+        PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
     }
+
+    /// <summary>
+    /// Gets or sets the push page.
+    /// </summary>
+    /// <value>
+    /// The push page.
+    /// </value>
+    public ReactiveCommand<Unit, Unit> PushPage { get; set; }
+
+    /// <summary>
+    /// Gets or sets the pop modal.
+    /// </summary>
+    /// <value>
+    /// The pop modal.
+    /// </value>
+    public ReactiveCommand<Unit, Unit> PopModal { get; set; }
+
+    /// <summary>
+    /// Gets the identifier.
+    /// </summary>
+    /// <value>
+    /// The identifier.
+    /// </value>
+    public override string Id => nameof(SecondModalViewModel);
 }

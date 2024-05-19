@@ -6,16 +6,15 @@
 using System;
 using ReactiveUI;
 
-namespace SextantSample.ViewModels
+namespace SextantSample.ViewModels;
+
+/// <summary>
+/// Interactions.
+/// </summary>
+public static class Interactions
 {
     /// <summary>
-    /// Interactions.
+    /// The error message.
     /// </summary>
-    public static class Interactions
-    {
-        /// <summary>
-        /// The error message.
-        /// </summary>
-        public static readonly Interaction<Exception, bool> ErrorMessage = new();
-    }
+    public static readonly Interaction<Exception, bool> ErrorMessage = new();
 }
