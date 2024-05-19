@@ -21,7 +21,7 @@ jobs:
     with:
       configuration: Release
       productNamespacePrefix: "Sextant"
-      srcFolder: "src\Sample"
+      srcFolder: "src/Sample"
       useVisualStudioPreview: false
       useMauiCheckDotNetTool: false
       solutionFile: "SextantSample.sln"
