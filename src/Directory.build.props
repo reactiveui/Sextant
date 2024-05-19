@@ -29,8 +29,6 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <AvaloniaVersion>11.0.7</AvaloniaVersion>
-    <ReactiveUIVersion>19.6.12</ReactiveUIVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>

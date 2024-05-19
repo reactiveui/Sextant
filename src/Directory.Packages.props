@@ -4,10 +4,9 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <AvaloniaVersion>11.0.9</AvaloniaVersion>
-    <ReactiveUIVersion>19.5.41</ReactiveUIVersion>
+    <AvaloniaVersion>11.0.10</AvaloniaVersion>
+    <ReactiveUIVersion>19.6.12</ReactiveUIVersion>
     <RxVersion>6.0.0</RxVersion>
-    <XUnitVersion>2.6.6</XUnitVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
@@ -34,7 +33,7 @@
     <PackageVersion Include="Verify.Xunit" Version="23.2.0" />
     <PackageVersion Include="Xamarin.Forms" Version="5.0.0.2662" />
     <PackageVersion Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
-    <PackageVersion Include="xunit" Version="$(XUnitVersion)" />
+    <PackageVersion Include="xunit" Version="2.8.0" />
     <PackageVersion Include="xunit.runner.devices" Version="2.5.25" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />
     <PackageVersion Include="Xunit.StaFact" Version="1.1.11" />
