@@ -23,7 +23,6 @@ namespace Sextant
         /// <summary>
         /// Gets the navigation view key.
         /// </summary>
-        [SuppressMessage("Design", "CA1721: Confusing name, should be method.", Justification = "Deliberate usage.")]
         public static string NavigationView => nameof(NavigationView);
 
         /// <summary>
