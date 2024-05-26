@@ -1,0 +1,27 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/SolutionConfig/">
+    <File Path="..\..\.editorconfig" />
+    <File Path="..\..\nuget.config" />
+    <File Path="..\..\README.md" />
+    <File Path="..\..\version.json" />
+    <File Path="..\Directory.build.props" />
+    <File Path="..\Directory.build.targets" />
+    <File Path="..\Directory.Packages.props" />
+    <File Path="..\global.json" />
+    <File Path="..\stylecop.json" />
+    <File Path="..\xunit.runner.json" />
+  </Folder>
+  <Folder Name="/Libs/">
+    <Project Path="..\Sextant.Maui\Sextant.Maui.csproj" />
+    <Project Path="..\Sextant\Sextant.csproj" />
+  </Folder>
+  <Project Path="..\..\Samples\SextantSample.Maui\SextantSample.Maui.csproj">
+    <Configuration Solution="*|*" Project="*|x64" />
+    <Configuration Solution="*|x64" Project="*|x64" />
+    <Configuration Solution="Debug|*" Project="*|*|Deploy" />
+  </Project>
+  <Project Path="SextantSample.Core\SextantSample.ViewModels.csproj" />
+</Solution>
