@@ -85,7 +85,7 @@ namespace Sextant
     }
     public interface IViewModel
     {
-        string Id { get; }
+        string? Id { get; }
     }
     public interface IViewModelFactory
     {
