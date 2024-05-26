@@ -17,4 +17,4 @@ jobs:
       productNamespacePrefix: "Sextant"
       dotNetBuild: true
       srcFolder: "src/Sample"
-      solutionFile: "SextantSample.sln"
+      solutionFile: "SextantSample.slnx"
