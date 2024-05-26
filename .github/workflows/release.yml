@@ -16,6 +16,7 @@ jobs:
     uses: reactiveui/actions-common/.github/workflows/workflow-common-release.yml@main
     with:
       productNamespacePrefix: "Sextant"
+      dotNetBuild: true
       solutionFile: "Sextant.sln"
     secrets:
       SIGN_CLIENT_USER_ID: ${{ secrets.SIGN_CLIENT_USER_ID }}
