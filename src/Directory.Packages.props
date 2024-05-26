@@ -35,7 +35,7 @@
     <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     <PackageVersion Include="System.Reactive" Version="$(RxVersion)" />
-    <PackageVersion Include="Verify.Xunit" Version="23.7.2" />
+    <PackageVersion Include="Verify.Xunit" Version="24.2.0" />
     <PackageVersion Include="Xamarin.Forms" Version="5.0.0.2662" />
     <PackageVersion Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
     <PackageVersion Include="Xamarin.Forms.Platform.WPF" Version="5.0.0.2662" />
