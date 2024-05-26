@@ -31,20 +31,19 @@ public class App : Application
     /// </summary>
     public override void OnFrameworkInitializationCompleted()
     {
-        Locator
-            .CurrentMutable
-            .RegisterView<HomeView, HomeViewModel>()
-            .RegisterView<FirstModalView, FirstModalViewModel>()
-            .RegisterView<SecondModalView, SecondModalViewModel>()
-            .RegisterView<RedView, RedViewModel>()
-            .RegisterView<GreenView, GreenViewModel>()
-            .RegisterViewModelFactory(() => new DefaultViewModelFactory())
-            .RegisterNavigationView(() => new NavigationView())
-            .RegisterViewModel(() => new GreenViewModel(Locator.Current.GetService<IViewStackService>()));
+        IViewStackService viewStackService = default!;
 
         Locator
-            .Current
-            .GetService<IViewStackService>()
+                .CurrentMutable
+                .RegisterViewForNavigation<HomeView, HomeViewModel>()
+                .RegisterViewForNavigation<FirstModalView, FirstModalViewModel>(() => new(), () => new(viewStackService))
+                .RegisterViewForNavigation<SecondModalView, SecondModalViewModel>(() => new(), () => new(viewStackService))
+                .RegisterViewForNavigation<RedView, RedViewModel>(() => new(), () => new(viewStackService))
+                .RegisterViewForNavigation<GreenView, GreenViewModel>(() => new(), () => new(viewStackService))
+                .RegisterViewModelFactory(() => new DefaultViewModelFactory())
+                .RegisterNavigationView(() => new NavigationView());
+        viewStackService = Locator.Current.GetService<IViewStackService>()!;
+        viewStackService
             .PushPage(new HomeViewModel());
 
         Interactions.ErrorMessage.RegisterHandler(async context =>

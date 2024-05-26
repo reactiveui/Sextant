@@ -10,5 +10,5 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// HomeNavigationViewModel.
 /// </summary>
-/// <seealso cref="ReactiveUI.ReactiveObject" />
+/// <seealso cref="ReactiveObject" />
 public class HomeNavigationViewModel : ReactiveObject;

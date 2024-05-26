@@ -333,8 +333,8 @@ public static class DependencyResolverMixins
             throw new ArgumentNullException(nameof(resolver));
         }
 
-        resolver.Register<TView>(() => new());
-        resolver.Register<TViewModel>(() => new());
+        resolver.Register(() => new TView(), typeof(IViewFor<TViewModel>));
+        resolver.Register(() => new TViewModel(), typeof(TViewModel));
         return resolver;
     }
 }

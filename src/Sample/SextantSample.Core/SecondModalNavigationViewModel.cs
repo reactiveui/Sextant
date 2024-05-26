@@ -11,5 +11,5 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// SecondModalNavigationViewModel.
 /// </summary>
-/// <seealso cref="ReactiveUI.ReactiveObject" />
+/// <seealso cref="ReactiveObject" />
 public class SecondModalNavigationViewModel : ReactiveObject;

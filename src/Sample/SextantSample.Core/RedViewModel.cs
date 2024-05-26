@@ -14,7 +14,7 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// RedViewModel.
 /// </summary>
-/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
+/// <seealso cref="ViewModelBase" />
 public class RedViewModel : ViewModelBase
 {
     /// <summary>
@@ -25,16 +25,16 @@ public class RedViewModel : ViewModelBase
         : base(viewStackService)
     {
         PopModal = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
 
         PopPage = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PopPage(), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PopPage(), outputScheduler: RxApp.MainThreadScheduler);
 
         PushPage = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
 
         PopToRoot = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PopToRootPage(), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PopToRootPage(), outputScheduler: RxApp.MainThreadScheduler);
 
         PopModal.Subscribe(_ => Debug.WriteLine("PagePushed"));
         PopModal.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());

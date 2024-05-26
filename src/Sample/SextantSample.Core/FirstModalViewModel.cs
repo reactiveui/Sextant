@@ -14,8 +14,8 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// FirstModalViewModel.
 /// </summary>
-/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
-/// <seealso cref="Sextant.IDestructible" />
+/// <seealso cref="ViewModelBase" />
+/// <seealso cref="IDestructible" />
 public class FirstModalViewModel : ViewModelBase, IDestructible
 {
     /// <summary>
@@ -26,10 +26,10 @@ public class FirstModalViewModel : ViewModelBase, IDestructible
         : base(viewStackService)
     {
         OpenModal = ReactiveCommand
-                    .CreateFromObservable(() => ViewStackService.PushModal(new SecondModalViewModel(viewStackService)), outputScheduler: RxApp.MainThreadScheduler);
+                    .CreateFromObservable(() => ViewStackService!.PushModal(new SecondModalViewModel(viewStackService)), outputScheduler: RxApp.MainThreadScheduler);
 
         PopModal = ReactiveCommand
-                    .CreateFromObservable(() => ViewStackService.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
+                    .CreateFromObservable(() => ViewStackService!.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
 
         OpenModal.Subscribe(_ => Debug.WriteLine("PagePushed"));
         PopModal.Subscribe(_ => Debug.WriteLine("PagePopped"));

@@ -149,7 +149,7 @@ public class NavigationViewController(
         return poppedController;
     }
 
-    private static void SetPageTitle(UIViewController page, string resourceKey) => page.Title = resourceKey;
+    private static void SetPageTitle(UIViewController page, string? resourceKey) => page.Title = resourceKey;
 
     private UIViewController LocatePageFor(object viewModel, string? contract)
     {
