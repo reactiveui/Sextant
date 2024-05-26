@@ -2,26 +2,18 @@ name: Sample Build
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    branches-ignore:
+      - main
 
 env:
   productNamespacePrefix: "Sextant"
 
-permissions:
-  contents: read
-
 jobs:
   build:
     permissions:
-      contents: none
+      contents: read
     uses: reactiveui/actions-common/.github/workflows/workflow-common-setup-and-build.yml@main
     with:
-      configuration: Release
       productNamespacePrefix: "Sextant"
       srcFolder: "src/Sample"
-      useVisualStudioPreview: false
-      useMauiCheckDotNetTool: false
       solutionFile: "SextantSample.sln"

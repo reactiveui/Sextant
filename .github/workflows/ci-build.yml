@@ -2,24 +2,17 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches-ignore:
+      - main
 
 env:
   productNamespacePrefix: "Sextant"
 
-permissions:
-  contents: read
-
 jobs:
   build:
     permissions:
-      contents: none
+      contents: read
     uses: reactiveui/actions-common/.github/workflows/workflow-common-setup-and-build.yml@main
     with:
-      configuration: Release
       productNamespacePrefix: "Sextant"
-      useVisualStudioPreview: false
-      useMauiCheckDotNetTool: false
       solutionFile: "Sextant.sln"
