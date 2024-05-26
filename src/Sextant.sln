@@ -76,17 +76,3 @@ Global
 		SolutionGuid = {5DD8FF23-E55B-4675-A15F-2E0DB2E10CC3}
 	EndGlobalSection
 EndGlobal
-275C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{80A96B52-6758-4BDB-B0B4-CEA4CA155C60} = {42173B56-0F72-4E8E-828F-4289222C8BB4}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5DD8FF23-E55B-4675-A15F-2E0DB2E10CC3}
-	EndGlobalSection
-EndGlobal
