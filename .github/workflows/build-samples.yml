@@ -2,68 +2,18 @@ name: Sample Build
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    branches-ignore:
+      - main
+
+env:
+  productNamespacePrefix: "Sextant"
 
 jobs:
-  build-samples:
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
-
-    runs-on: windows-2022
-
-    steps:
-    - name: Install Windows SDK 10.0.16299
-      shell: pwsh
-      run: |
-        Invoke-WebRequest -Uri https://go.microsoft.com/fwlink/p/?linkid=864422 -OutFile winsdk.exe
-        $startInfo = New-Object System.Diagnostics.ProcessStartInfo
-        $startInfo.FileName = "winsdk.exe"
-        $startInfo.Arguments = "/norestart /quiet"
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo = $startInfo
-        $process.Start()
-        $process.WaitForExit()
-
-    - name: Setup Java JDK
-      uses: actions/setup-java@v4.2.1
-      with:
-        distribution: 'microsoft'
-        java-version: '11'
-
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        lfs: true
-
-    # Install the .NET workload
-    - name: Setup .NET 6/7/8
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: |
-            6.0.x
-            7.0.x
-            8.0.x
-
-    - name: Install DotNet workloads
-      shell: bash
-      run: |
-        dotnet workload install android
-        dotnet workload install ios
-        dotnet workload install tvos
-        dotnet workload install macos
-        dotnet workload install maui
-
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2.0.0
-
-    - name: Restore/Build the sample
-      run: msbuild SextantSample.sln /t:restore,build /maxcpucount /p:NoPackageAnalysis=true /verbosity:minimal /p:Configuration=$env:Configuration
-      working-directory: Sample
-      env:
-        Configuration: ${{ matrix.configuration }}
+  build:
+    permissions:
+      contents: read
+    uses: reactiveui/actions-common/.github/workflows/workflow-common-setup-and-build.yml@main
+    with:
+      productNamespacePrefix: "Sextant"
+      srcFolder: "src/Sample"
+      solutionFile: "SextantSample.sln"

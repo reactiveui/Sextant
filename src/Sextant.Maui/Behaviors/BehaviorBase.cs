@@ -6,61 +6,60 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
-namespace Sextant.Maui
+namespace Sextant.Maui;
+
+/// <summary>
+/// Represents and abstract <see cref="Behavior{T}"/>.
+/// </summary>
+/// <typeparam name="T">The bindable object type.
+/// </typeparam>
+public abstract class BehaviorBase<T> : Behavior<T>, IDisposable
+    where T : BindableObject
 {
     /// <summary>
-    /// Represents and abstract <see cref="Behavior{T}"/>.
+    /// Gets the disposables for this behavior.
     /// </summary>
-    /// <typeparam name="T">The bindable object type.
-    /// </typeparam>
-    public abstract class BehaviorBase<T> : Behavior<T>, IDisposable
-        where T : BindableObject
+    protected CompositeDisposable BehaviorDisposable { get; } = new();
+
+    /// <inheritdoc/>
+    public void Dispose()
     {
-        /// <summary>
-        /// Gets the disposables for this behavior.
-        /// </summary>
-        protected CompositeDisposable BehaviorDisposable { get; } = new();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+    /// <inheritdoc/>
+    protected override void OnAttachedTo(T bindable)
+    {
+        base.OnAttachedTo(bindable);
+        Observable.FromEvent<EventHandler, EventArgs>(
+                handler =>
+                {
+                    void Handler(object sender, EventArgs args) => handler(args);
+                    return Handler!;
+                },
+                x => bindable.BindingContextChanged += x,
+                x => bindable.BindingContextChanged -= x)
+            .Subscribe(_ => BindingContext = bindable.BindingContext)
+            .DisposeWith(BehaviorDisposable);
+    }
 
-        /// <inheritdoc/>
-        protected override void OnAttachedTo(T bindable)
-        {
-            base.OnAttachedTo(bindable);
-            Observable.FromEvent<EventHandler, EventArgs>(
-                    handler =>
-                    {
-                        void Handler(object sender, EventArgs args) => handler(args);
-                        return Handler!;
-                    },
-                    x => bindable.BindingContextChanged += x,
-                    x => bindable.BindingContextChanged -= x)
-                .Subscribe(_ => BindingContext = bindable.BindingContext)
-                .DisposeWith(BehaviorDisposable);
-        }
+    /// <inheritdoc/>
+    protected override void OnDetachingFrom(T bindable)
+    {
+        base.OnDetachingFrom(bindable);
+        Dispose();
+    }
 
-        /// <inheritdoc/>
-        protected override void OnDetachingFrom(T bindable)
+    /// <summary>
+    /// Disposes of resources.
+    /// </summary>
+    /// <param name="disposing">A value indicating where this instance is disposing.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            base.OnDetachingFrom(bindable);
-            Dispose();
-        }
-
-        /// <summary>
-        /// Disposes of resources.
-        /// </summary>
-        /// <param name="disposing">A value indicating where this instance is disposing.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                BehaviorDisposable.Dispose();
-            }
+            BehaviorDisposable.Dispose();
         }
     }
 }

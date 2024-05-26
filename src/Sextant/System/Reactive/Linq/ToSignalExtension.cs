@@ -3,29 +3,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-namespace System.Reactive.Linq
+namespace System.Reactive.Linq;
+
+/// <summary>
+/// Extension methods for the IObservable.
+/// </summary>
+public static class ToSignalExtension
 {
     /// <summary>
-    /// Extension methods for the IObservable.
+    /// Will convert an observable so that it's value is ignored and converted into just returning <see cref="Unit"/>.
+    /// This allows us just to be notified when the observable signals.
     /// </summary>
-    public static class ToSignalExtension
+    /// <typeparam name="T">The current type of the observable.</typeparam>
+    /// <param name="observable">The observable to convert.</param>
+    /// <returns>The converted observable.</returns>
+    [Obsolete("This extension method causes conflicts in the System.Reactive.Linq namespace")]
+    public static IObservable<Unit> ToSignal<T>(this IObservable<T> observable)
     {
-        /// <summary>
-        /// Will convert an observable so that it's value is ignored and converted into just returning <see cref="Unit"/>.
-        /// This allows us just to be notified when the observable signals.
-        /// </summary>
-        /// <typeparam name="T">The current type of the observable.</typeparam>
-        /// <param name="observable">The observable to convert.</param>
-        /// <returns>The converted observable.</returns>
-        [Obsolete("This extension method causes conflicts in the System.Reactive.Linq namespace")]
-        public static IObservable<Unit> ToSignal<T>(this IObservable<T> observable)
+        if (observable is null)
         {
-            if (observable is null)
-            {
-                throw new ArgumentNullException(nameof(observable));
-            }
-
-            return observable.Select(_ => Unit.Default);
+            throw new ArgumentNullException(nameof(observable));
         }
+
+        return observable.Select(_ => Unit.Default);
     }
 }

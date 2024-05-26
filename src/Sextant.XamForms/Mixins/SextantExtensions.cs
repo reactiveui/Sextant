@@ -5,30 +5,29 @@
 
 using System;
 
-namespace Sextant.XamForms
+namespace Sextant.XamForms;
+
+/// <summary>
+/// Extension methods interact with <see cref="Sextant"/>.
+/// </summary>
+public static class SextantExtensions
 {
     /// <summary>
-    /// Extension methods interact with <see cref="Sextant"/>.
+    /// Initializes the sextant.
     /// </summary>
-    public static class SextantExtensions
+    /// <param name="sextant">The sextant.</param>
+    public static void InitializeForms(this Sextant sextant)
     {
-        /// <summary>
-        /// Initializes the sextant.
-        /// </summary>
-        /// <param name="sextant">The sextant.</param>
-        public static void InitializeForms(this Sextant sextant)
+        if (sextant is null)
         {
-            if (sextant is null)
-            {
-                throw new ArgumentNullException(nameof(sextant));
-            }
-
-            sextant
-                .MutableLocator
-                .RegisterNavigationView()
-                .RegisterViewStackService()
-                .RegisterParameterViewStackService()
-                .RegisterViewModelFactory(() => new DefaultViewModelFactory());
+            throw new ArgumentNullException(nameof(sextant));
         }
+
+        sextant
+            .MutableLocator
+            .RegisterNavigationView()
+            .RegisterViewStackService()
+            .RegisterParameterViewStackService()
+            .RegisterViewModelFactory(() => new DefaultViewModelFactory());
     }
 }

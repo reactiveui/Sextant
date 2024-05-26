@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;Xamarin.iOS10;Xamarin.TVOS10;MonoAndroid13.0;net6.0;net7.0;net8.0;net7.0-android;net7.0-ios;net7.0-tvos;net7.0-macos;net7.0-maccatalyst;net8.0-android;net8.0-ios;net8.0-tvos;net8.0-macos;net8.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">$(TargetFrameworks);net462;net472;net6.0-windows10.0.17763.0;net7.0-windows10.0.17763.0;net8.0-windows10.0.17763.0;net6.0-windows10.0.19041.0;net7.0-windows10.0.19041.0;net8.0-windows10.0.19041.0</TargetFrameworks>
@@ -13,10 +13,8 @@
     <None Include="Platforms\**\*.cs" />
     <PackageReference Include="System.Collections.Immutable" />
   </ItemGroup>
-  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap'))">
-    <PackageReference Include="ReactiveUI" />
-  </ItemGroup>
-  <ItemGroup Condition="$(TargetFramework.StartsWith('uap')) != true">
+
+  <ItemGroup>
     <PackageReference Include="ReactiveUI" />
   </ItemGroup>
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
