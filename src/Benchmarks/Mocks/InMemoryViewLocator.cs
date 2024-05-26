@@ -16,17 +16,16 @@ namespace Sextant.Benchmarks
     /// A view locator that holds everything in a static dictionary.
     /// </summary>
     /// <seealso cref="IViewLocator" />
-    /// <seealso cref="IEnableLogger" />
-    public class InMemoryViewLocator : IViewLocator, IEnableLogger
+    public class InMemoryViewLocator : IViewLocator
     {
-        private static Dictionary<Type, IViewFor> _views = new Dictionary<Type, IViewFor>();
+        private static readonly Dictionary<Type, IViewFor> _views = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InMemoryViewLocator"/> class.
         /// </summary>
         /// <param name="viewModelToViewFunc">The method which will convert a ViewModel name into a View.</param>
         [SuppressMessage("Globalization", "CA1307: operator could change based on locale settings", Justification = "Replace() does not have third parameter on all platforms")]
-        public InMemoryViewLocator(Func<string, string> viewModelToViewFunc = null)
+        public InMemoryViewLocator(Func<string, string>? viewModelToViewFunc = null)
         {
             _views.Add(typeof(TestView), new TestView());
 
@@ -49,10 +48,9 @@ namespace Sextant.Benchmarks
         public Func<string, string> ViewModelToViewFunc { get; set; }
 
         /// <inheritdoc />
-        public IViewFor ResolveView<T>(T viewModel, string contract = null)
-            where T : class
+        public IViewFor? ResolveView<T>(T? viewModel, string? contract = null)
         {
-            var view = AttemptViewResolutionFor(viewModel.GetType(), contract);
+            var view = AttemptViewResolutionFor(viewModel?.GetType(), contract);
 
             if (view != null)
             {
@@ -66,7 +64,7 @@ namespace Sextant.Benchmarks
                 return view;
             }
 
-            view = AttemptViewResolutionFor(ToggleViewModelType(viewModel.GetType()), contract);
+            view = AttemptViewResolutionFor(ToggleViewModelType(viewModel?.GetType()), contract);
 
             if (view != null)
             {
@@ -84,13 +82,13 @@ namespace Sextant.Benchmarks
             return null;
         }
 
-        private static Type ToggleViewModelType(Type viewModelType)
+        private static Type? ToggleViewModelType(Type? viewModelType)
         {
-            var viewModelTypeName = viewModelType.AssemblyQualifiedName;
+            var viewModelTypeName = viewModelType?.AssemblyQualifiedName;
 
-            if (viewModelType.GetTypeInfo().IsInterface)
+            if (viewModelType?.GetTypeInfo().IsInterface == true)
             {
-                if (viewModelType.Name.StartsWith("I", StringComparison.InvariantCulture))
+                if (viewModelType!.Name.StartsWith("I", StringComparison.InvariantCulture))
                 {
                     var toggledTypeName = DeinterfaceifyTypeName(viewModelTypeName);
                     return Reflection.ReallyFindType(toggledTypeName, throwOnFailure: false);
@@ -105,21 +103,21 @@ namespace Sextant.Benchmarks
             return null;
         }
 
-        private static string DeinterfaceifyTypeName(string typeName)
+        private static string? DeinterfaceifyTypeName(string? typeName)
         {
-            var idxComma = typeName.IndexOf(",", 0, StringComparison.InvariantCulture);
-            var idxPeriod = typeName.LastIndexOf('.', idxComma - 1);
-            return typeName.Substring(0, idxPeriod + 1) + typeName.Substring(idxPeriod + 2);
+            var idxComma = typeName?.IndexOf(",", 0, StringComparison.InvariantCulture);
+            var idxPeriod = typeName?.LastIndexOf('.', idxComma!.Value - 1);
+            return typeName?.Substring(0, idxPeriod!.Value + 1) + typeName?.Substring(idxPeriod!.Value + 2);
         }
 
-        private static string InterfaceifyTypeName(string typeName)
+        private static string? InterfaceifyTypeName(string? typeName)
         {
-            var idxComma = typeName.IndexOf(",", 0, StringComparison.InvariantCulture);
-            var idxPeriod = typeName.LastIndexOf(".", idxComma - 1, StringComparison.InvariantCulture);
-            return typeName.Insert(idxPeriod + 1, "I");
+            var idxComma = typeName?.IndexOf(",", 0, StringComparison.InvariantCulture);
+            var idxPeriod = typeName?.LastIndexOf(".", idxComma!.Value - 1, StringComparison.InvariantCulture);
+            return typeName?.Insert(idxPeriod!.Value + 1, "I");
         }
 
-        private IViewFor AttemptViewResolutionFor(Type viewModelType, string contract)
+        private IViewFor? AttemptViewResolutionFor(Type? viewModelType, string? contract)
         {
             if (viewModelType == null)
             {
@@ -127,7 +125,7 @@ namespace Sextant.Benchmarks
             }
 
             var viewModelTypeName = viewModelType.AssemblyQualifiedName;
-            var proposedViewTypeName = ViewModelToViewFunc(viewModelTypeName);
+            var proposedViewTypeName = ViewModelToViewFunc(viewModelTypeName!);
             var view = AttemptViewResolution(proposedViewTypeName, contract);
 
             if (view != null)
@@ -136,7 +134,7 @@ namespace Sextant.Benchmarks
             }
 
             proposedViewTypeName = typeof(IViewFor<>).MakeGenericType(viewModelType).AssemblyQualifiedName;
-            view = AttemptViewResolution(proposedViewTypeName, contract);
+            view = AttemptViewResolution(proposedViewTypeName!, contract);
 
             if (view != null)
             {
@@ -146,7 +144,7 @@ namespace Sextant.Benchmarks
             return null;
         }
 
-        private IViewFor AttemptViewResolution(string viewTypeName, string contract)
+        private IViewFor? AttemptViewResolution(string viewTypeName, string? contract)
         {
             try
             {

@@ -8,35 +8,34 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Splat;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// The main registration point for Sextant.
+/// </summary>
+public class Sextant
 {
-    /// <summary>
-    /// The main registration point for Sextant.
-    /// </summary>
-    public class Sextant
-    {
-        private static readonly Lazy<Sextant> _sextant = new();
+    private static readonly Lazy<Sextant> _sextant = new();
 
-        static Sextant() =>
-            Locator.RegisterResolverCallbackChanged(() =>
+    static Sextant() =>
+        Locator.RegisterResolverCallbackChanged(() =>
+        {
+            if (Locator.CurrentMutable is null)
             {
-                if (Locator.CurrentMutable is null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                Instance.Initialize();
-            });
+            Instance.Initialize();
+        });
 
-        /// <summary>
-        /// Gets the instance of <see cref="Sextant"/>.
-        /// </summary>
-        public static Sextant Instance => _sextant.Value;
+    /// <summary>
+    /// Gets the instance of <see cref="Sextant"/>.
+    /// </summary>
+    public static Sextant Instance => _sextant.Value;
 
-        /// <summary>
-        /// Gets the mutable dependency resolver.
-        /// </summary>
-        [SuppressMessage("Design", "CA1822: Implement statically", Justification = "Existing API.")]
-        public IMutableDependencyResolver MutableLocator => Locator.CurrentMutable;
-    }
+    /// <summary>
+    /// Gets the mutable dependency resolver.
+    /// </summary>
+    [SuppressMessage("Design", "CA1822: Implement statically", Justification = "Existing API.")]
+    public IMutableDependencyResolver MutableLocator => Locator.CurrentMutable;
 }

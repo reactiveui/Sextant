@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.WPF" />
+    <PackageReference Include="Xamarin.Forms.Platform.WPF" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SextantSample\SextantSample.csproj" />
+  </ItemGroup>
+  <!-- Workaround for Xamarin.Forms + WPF build issue -->
+  <!-- See also: https://github.com/xamarin/Xamarin.Forms/issues/13217 -->
+  <ItemGroup>
+    <EmbeddedResource Remove="**/*.xaml" />
+  </ItemGroup>
+</Project>

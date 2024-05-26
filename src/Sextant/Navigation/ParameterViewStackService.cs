@@ -3,32 +3,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// <see cref="IViewStackService"/> implementation that passes <see cref="INavigationParameter"/> when navigating.
+/// </summary>
+/// <seealso cref="ViewStackServiceBase" />
+/// <seealso cref="IViewStackService" />
+/// <remarks>
+/// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
+/// </remarks>
+/// <param name="view">The view.</param>
+/// <param name="viewModelFactory">The view model factory.</param>
+public sealed class ParameterViewStackService(IView view, IViewModelFactory viewModelFactory) : ParameterViewStackServiceBase(view, viewModelFactory)
 {
     /// <summary>
-    /// <see cref="IViewStackService"/> implementation that passes <see cref="INavigationParameter"/> when navigating.
+    /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
     /// </summary>
-    /// <seealso cref="ViewStackServiceBase" />
-    /// <seealso cref="IViewStackService" />
-    public sealed class ParameterViewStackService : ParameterViewStackServiceBase
+    /// <param name="view">The view.</param>
+    public ParameterViewStackService(IView view)
+        : this(view, new DefaultViewModelFactory())
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        public ParameterViewStackService(IView view)
-            : this(view, new DefaultViewModelFactory())
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <param name="viewModelFactory">The view model factory.</param>
-        public ParameterViewStackService(IView view, IViewModelFactory viewModelFactory)
-            : base(view, viewModelFactory)
-        {
-        }
     }
 }

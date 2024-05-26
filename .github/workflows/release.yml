@@ -11,12 +11,11 @@ env:
 
 jobs:
   release:
+    permissions:
+      contents: read
     uses: reactiveui/actions-common/.github/workflows/workflow-common-release.yml@main
     with:
-      configuration: Release
       productNamespacePrefix: "Sextant"
-      useVisualStudioPreview: true
-      useMauiCheckDotNetTool: false
       solutionFile: "Sextant.sln"
     secrets:
       SIGN_CLIENT_USER_ID: ${{ secrets.SIGN_CLIENT_USER_ID }}

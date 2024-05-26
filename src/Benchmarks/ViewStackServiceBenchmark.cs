@@ -4,12 +4,9 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
 
 namespace Sextant.Benchmarks
 {
@@ -17,8 +14,8 @@ namespace Sextant.Benchmarks
     /// <summary>
     /// Benchmarks for the ViewStackService.
     /// </summary>
-    [ClrJob]
-    [CoreJob]
+    [SimpleJob(runtimeMoniker: RuntimeMoniker.Net462)]
+    [SimpleJob(runtimeMoniker: RuntimeMoniker.Net80)]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
     public class ViewStackServiceBenchmark
@@ -28,7 +25,7 @@ namespace Sextant.Benchmarks
         /// </summary>
         public class PopModalBenchmark
         {
-            private IViewStackService _viewStackService;
+            private IViewStackService? _viewStackService;
 
             /// <summary>
             /// Setup method for when running all bench marks.
@@ -45,7 +42,7 @@ namespace Sextant.Benchmarks
             [IterationSetup]
             public void BenchmarkSetup()
             {
-                _viewStackService.PushModal(new ViewModel());
+                _viewStackService?.PushModal(new ViewModel());
             }
 
             /// <summary>
@@ -53,14 +50,14 @@ namespace Sextant.Benchmarks
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PopModal() => _viewStackService.PopModal();
+            public IObservable<Unit> PopModal() => _viewStackService!.PopModal();
 
             /// <summary>
             /// Benchmarks pushing a page onto the view stack service.
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PopModalWithoutAnimation() => _viewStackService.PopModal(false);
+            public IObservable<Unit> PopModalWithoutAnimation() => _viewStackService!.PopModal(false);
         }
 
         /// <summary>
@@ -68,7 +65,7 @@ namespace Sextant.Benchmarks
         /// </summary>
         public class PopPageBenchmark
         {
-            private IViewStackService _viewStackService;
+            private IViewStackService? _viewStackService;
 
             /// <summary>
             /// Setup method for when running all bench marks.
@@ -85,7 +82,7 @@ namespace Sextant.Benchmarks
             [IterationSetup]
             public void BenchmarkSetup()
             {
-                _viewStackService.PushPage(new ViewModel());
+                _viewStackService?.PushPage(new ViewModel());
             }
 
             /// <summary>
@@ -93,14 +90,14 @@ namespace Sextant.Benchmarks
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PopPage() => _viewStackService.PopPage();
+            public IObservable<Unit> PopPage() => _viewStackService!.PopPage();
 
             /// <summary>
             /// Benchmarks pushing a page onto the view stack service.
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PopPageWithoutAnimation() => _viewStackService.PopPage(false);
+            public IObservable<Unit> PopPageWithoutAnimation() => _viewStackService!.PopPage(false);
         }
 
         /// <summary>
@@ -108,7 +105,7 @@ namespace Sextant.Benchmarks
         /// </summary>
         public class PopToRootPageBenchmark
         {
-            private IViewStackService _viewStackService;
+            private IViewStackService? _viewStackService;
 
             /// <summary>
             /// Setup method for when running all bench marks.
@@ -127,7 +124,7 @@ namespace Sextant.Benchmarks
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PopToRootPage() => _viewStackService.PopToRootPage();
+            public IObservable<Unit> PopToRootPage() => _viewStackService!.PopToRootPage();
         }
 
         /// <summary>
@@ -135,8 +132,8 @@ namespace Sextant.Benchmarks
         /// </summary>
         public class PushModalBenchmark
         {
-            private IViewStackService _viewStackService;
-            private ViewModel _viewModel;
+            private IViewStackService? _viewStackService;
+            private ViewModel? _viewModel;
 
             /// <summary>
             /// Setup method for when running all bench marks.
@@ -162,7 +159,7 @@ namespace Sextant.Benchmarks
             [IterationCleanup]
             public void BenchmarkCleanup()
             {
-                _viewStackService.PopModal();
+                _viewStackService?.PopModal();
                 _viewModel = null;
             }
 
@@ -171,7 +168,7 @@ namespace Sextant.Benchmarks
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PushModal() => _viewStackService.PushModal(_viewModel);
+            public IObservable<Unit> PushModal() => _viewStackService!.PushModal(_viewModel!);
 
             /// <summary>
             /// Benchmarks pushing a modal onto the view stack service.
@@ -179,7 +176,7 @@ namespace Sextant.Benchmarks
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
             public IObservable<Unit> PushModalWithContract() =>
-                _viewStackService.PushModal(_viewModel, nameof(ViewModel));
+                _viewStackService!.PushModal(_viewModel!, nameof(ViewModel));
         }
 
         /// <summary>
@@ -187,8 +184,8 @@ namespace Sextant.Benchmarks
         /// </summary>
         public class PushPageBenchmark
         {
-            private IViewStackService _viewStackService;
-            private ViewModel _viewModel;
+            private IViewStackService? _viewStackService;
+            private ViewModel? _viewModel;
 
             /// <summary>
             /// Setup method for when running all bench marks.
@@ -214,7 +211,7 @@ namespace Sextant.Benchmarks
             [IterationCleanup]
             public void BenchmarkCleanup()
             {
-                _viewStackService.PopToRootPage();
+                _viewStackService?.PopToRootPage();
                 _viewModel = null;
             }
 
@@ -223,21 +220,21 @@ namespace Sextant.Benchmarks
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PushPage() => _viewStackService.PushPage(_viewModel);
+            public IObservable<Unit> PushPage() => _viewStackService!.PushPage(_viewModel!);
 
             /// <summary>
             /// Benchmarks pushing a page onto the view stack service.
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PushPageWithContract() => _viewStackService.PushPage(_viewModel, nameof(ViewModel));
+            public IObservable<Unit> PushPageWithContract() => _viewStackService!.PushPage(_viewModel!, nameof(ViewModel));
 
             /// <summary>
             /// Benchmarks pushing a page onto the view stack service.
             /// </summary>
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
-            public IObservable<Unit> PushPageAndAnimate() => _viewStackService.PushPage(_viewModel);
+            public IObservable<Unit> PushPageAndAnimate() => _viewStackService!.PushPage(_viewModel!);
 
             /// <summary>
             /// Benchmarks pushing a page onto the view stack service.
@@ -245,7 +242,7 @@ namespace Sextant.Benchmarks
             /// <returns>The dependency resolver.</returns>
             [Benchmark]
             public IObservable<Unit> PushPageAndResetStack() =>
-                _viewStackService.PushPage(_viewModel, resetStack: true);
+                _viewStackService!.PushPage(_viewModel!, resetStack: true);
         }
     }
 #pragma warning restore CA1001 // Types that own disposable fields should be disposable

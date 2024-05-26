@@ -10,23 +10,23 @@ namespace Sextant.Benchmarks
     /// <summary>
     /// View for the locator.
     /// </summary>
-    /// <seealso cref="ReactiveUI.IViewFor{Benchmarks.ViewModel}" />
+    /// <seealso cref="IViewFor{ViewModel}" />
     public class TestView : IViewFor<ViewModel>
     {
         /// <summary>
         /// Gets or sets the ViewModel corresponding to this specific View. This should be
         /// a DependencyProperty if you're using XAML.
         /// </summary>
-        object IViewFor.ViewModel
+        object? IViewFor.ViewModel
         {
             get => ViewModel;
-            set => ViewModel = (ViewModel)value;
+            set => ViewModel = (ViewModel?)value;
         }
 
         /// <summary>
         /// Gets or sets the ViewModel corresponding to this specific View. This should be
         /// a DependencyProperty if you're using XAML.
         /// </summary>
-        public ViewModel ViewModel { get; set; }
+        public ViewModel? ViewModel { get; set; }
     }
 }

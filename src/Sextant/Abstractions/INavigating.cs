@@ -6,18 +6,17 @@
 using System;
 using System.Reactive;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// An interface that defines methods for when an object is navigating.
+/// </summary>
+public interface INavigating
 {
     /// <summary>
-    /// An interface that defines methods for when an object is navigating.
+    /// Whens the navigating to.
     /// </summary>
-    public interface INavigating
-    {
-        /// <summary>
-        /// Whens the navigating to.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>An observable sequence.</returns>
-        IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter);
-    }
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>An observable sequence.</returns>
+    IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter);
 }

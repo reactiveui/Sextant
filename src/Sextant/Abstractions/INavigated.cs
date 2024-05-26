@@ -6,25 +6,24 @@
 using System;
 using System.Reactive;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// An interface that defines methods for when a view mode is navigated to.
+/// </summary>
+public interface INavigated
 {
     /// <summary>
-    /// An interface that defines methods for when a view mode is navigated to.
+    /// An observable sequence that notifies subscribers this item was navigated to.
     /// </summary>
-    public interface INavigated
-    {
-        /// <summary>
-        /// An observable sequence that notifies subscribers this item was navigated to.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>An observable sequence. </returns>
-        IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter);
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>An observable sequence. </returns>
+    IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter);
 
-        /// <summary>
-        /// An observable sequence that notifies subscribers this item was navigated from.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>An observable sequence. </returns>
-        IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter);
-    }
+    /// <summary>
+    /// An observable sequence that notifies subscribers this item was navigated from.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    /// <returns>An observable sequence. </returns>
+    IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter);
 }

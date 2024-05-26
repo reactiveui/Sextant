@@ -7,69 +7,68 @@ using System;
 using System.Reactive.Concurrency;
 using Splat;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// Extensions methods to setup the <see cref="Sextant"/> instance.
+/// </summary>
+public static class SextantExtensions
 {
     /// <summary>
-    /// Extensions methods to setup the <see cref="Sextant"/> instance.
+    /// Initializes the specified sextant.
     /// </summary>
-    public static class SextantExtensions
+    /// <param name="sextant">The sextant.</param>
+    public static void Initialize(this Sextant sextant)
     {
-        /// <summary>
-        /// Initializes the specified sextant.
-        /// </summary>
-        /// <param name="sextant">The sextant.</param>
-        public static void Initialize(this Sextant sextant)
+        if (sextant is null)
         {
-            if (sextant is null)
-            {
-                throw new ArgumentNullException(nameof(sextant));
-            }
-
-            sextant.MutableLocator.RegisterNavigationController().RegisterViewStackService();
+            throw new ArgumentNullException(nameof(sextant));
         }
 
-        /// <summary>
-        /// Registers the navigation controller.
-        /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <returns>The mutable dependency resolver.</returns>
-        public static IMutableDependencyResolver RegisterNavigationController(
-            this IMutableDependencyResolver dependencyResolver)
-        {
-            dependencyResolver.RegisterLazySingleton(() => new NavigationViewController());
-            return dependencyResolver;
-        }
+        sextant.MutableLocator.RegisterNavigationController().RegisterViewStackService();
+    }
 
-        /// <summary>
-        /// Registers the navigation controller.
-        /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="mainScheduler">The main scheduler.</param>
-        /// <param name="backgroundScheduler">The background scheduler.</param>
-        /// <returns>
-        /// The mutable dependency resolver.
-        /// </returns>
-        public static IMutableDependencyResolver RegisterNavigationController(
-            this IMutableDependencyResolver dependencyResolver,
-            IScheduler mainScheduler,
-            IScheduler backgroundScheduler)
-        {
-            dependencyResolver.RegisterLazySingleton(() => new NavigationViewController(mainScheduler, backgroundScheduler));
-            return dependencyResolver;
-        }
+    /// <summary>
+    /// Registers the navigation controller.
+    /// </summary>
+    /// <param name="dependencyResolver">The dependency resolver.</param>
+    /// <returns>The mutable dependency resolver.</returns>
+    public static IMutableDependencyResolver RegisterNavigationController(
+        this IMutableDependencyResolver dependencyResolver)
+    {
+        dependencyResolver.RegisterLazySingleton(() => new NavigationViewController());
+        return dependencyResolver;
+    }
 
-        /// <summary>
-        /// Registers the navigation controller.
-        /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="factory">The factory.</param>
-        /// <returns>The mutable dependency resolver.</returns>
-        public static IMutableDependencyResolver RegisterNavigationController(
-            this IMutableDependencyResolver dependencyResolver,
-            Func<NavigationViewController> factory)
-        {
-            dependencyResolver.RegisterLazySingleton(() => factory);
-            return dependencyResolver;
-        }
+    /// <summary>
+    /// Registers the navigation controller.
+    /// </summary>
+    /// <param name="dependencyResolver">The dependency resolver.</param>
+    /// <param name="mainScheduler">The main scheduler.</param>
+    /// <param name="backgroundScheduler">The background scheduler.</param>
+    /// <returns>
+    /// The mutable dependency resolver.
+    /// </returns>
+    public static IMutableDependencyResolver RegisterNavigationController(
+        this IMutableDependencyResolver dependencyResolver,
+        IScheduler mainScheduler,
+        IScheduler backgroundScheduler)
+    {
+        dependencyResolver.RegisterLazySingleton(() => new NavigationViewController(mainScheduler, backgroundScheduler));
+        return dependencyResolver;
+    }
+
+    /// <summary>
+    /// Registers the navigation controller.
+    /// </summary>
+    /// <param name="dependencyResolver">The dependency resolver.</param>
+    /// <param name="factory">The factory.</param>
+    /// <returns>The mutable dependency resolver.</returns>
+    public static IMutableDependencyResolver RegisterNavigationController(
+        this IMutableDependencyResolver dependencyResolver,
+        Func<NavigationViewController> factory)
+    {
+        dependencyResolver.RegisterLazySingleton(() => factory);
+        return dependencyResolver;
     }
 }

@@ -3,20 +3,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// Interface that represents a view model factory.
+/// </summary>
+public interface IViewModelFactory
 {
     /// <summary>
-    /// Interface that represents a view model factory.
+    /// Creates an instance of the specified view model.
     /// </summary>
-    public interface IViewModelFactory
-    {
-        /// <summary>
-        /// Creates an instance of the specified view model.
-        /// </summary>
-        /// <param name="contract">The contract.</param>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <returns>A view model instance.</returns>
-        TViewModel Create<TViewModel>(string? contract = null)
-            where TViewModel : IViewModel;
-    }
+    /// <param name="contract">The contract.</param>
+    /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+    /// <returns>A view model instance.</returns>
+    TViewModel Create<TViewModel>(string? contract = null)
+        where TViewModel : IViewModel;
 }

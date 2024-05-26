@@ -5,25 +5,24 @@
 
 using System;
 
-namespace Sextant
+namespace Sextant;
+
+/// <summary>
+/// Extensions methods to setup the <see cref="Sextant"/> instance.
+/// </summary>
+public static class SextantExtensions
 {
     /// <summary>
-    /// Extensions methods to setup the <see cref="Sextant"/> instance.
+    /// Initializes the specified sextant.
     /// </summary>
-    public static class SextantExtensions
+    /// <param name="sextant">The sextant.</param>
+    public static void Initialize(this Sextant sextant)
     {
-        /// <summary>
-        /// Initializes the specified sextant.
-        /// </summary>
-        /// <param name="sextant">The sextant.</param>
-        public static void Initialize(this Sextant sextant)
+        if (sextant is null)
         {
-            if (sextant is null)
-            {
-                throw new ArgumentNullException(nameof(sextant));
-            }
-
-            sextant.MutableLocator.RegisterViewStackService();
+            throw new ArgumentNullException(nameof(sextant));
         }
+
+        sextant.MutableLocator.RegisterViewStackService();
     }
 }
