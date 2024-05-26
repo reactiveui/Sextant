@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34321.82
@@ -24,10 +23,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.XamForms.Tests", "Sextant.XamForms.Tests\Sextant.XamForms.Tests.csproj", "{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Mocks", "Sextant.Mocks\Sextant.Mocks.csproj", "{07C90E5B-858E-4EB2-948B-8D0A698F439B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{42173B56-0F72-4E8E-828F-4289222C8BB4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant.iOS.Runner", "Sextant.iOS.Runner\Sextant.iOS.Runner.csproj", "{80A96B52-6758-4BDB-B0B4-CEA4CA155C60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Plugins.Popup", "Sextant.Plugins.Popup\Sextant.Plugins.Popup.csproj", "{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}"
 EndProject
@@ -61,8 +56,6 @@ Global
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80A96B52-6758-4BDB-B0B4-CEA4CA155C60}.Debug|Any CPU.ActiveCfg = Debug|iPhone
-		{80A96B52-6758-4BDB-B0B4-CEA4CA155C60}.Release|Any CPU.ActiveCfg = Release|iPhone
 		{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,6 +66,17 @@ Global
 		{A91CDEEB-C4D5-402B-9B42-D91E0151F30E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5DD8FF23-E55B-4675-A15F-2E0DB2E10CC3}
+	EndGlobalSection
+EndGlobal
+275C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFD457DB-C7FC-446C-AD85-3F22493C275C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
