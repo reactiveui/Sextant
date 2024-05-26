@@ -6,42 +6,38 @@
 using System;
 using ReactiveUI;
 
-namespace Sextant.Plugins.Popup
+namespace Sextant.Plugins.Popup;
+
+/// <summary>
+/// Represents a popup navigation event.
+/// </summary>
+public class PopupNavigationEvent
 {
     /// <summary>
-    /// Represents a popup navigation event.
+    /// Initializes a new instance of the <see cref="PopupNavigationEvent"/> class.
     /// </summary>
-    public class PopupNavigationEvent
+    /// <param name="page">The view model.</param>
+    /// <param name="isAnimated">Is the page animated.</param>
+    public PopupNavigationEvent(IViewFor page, bool isAnimated)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopupNavigationEvent"/> class.
-        /// </summary>
-        /// <param name="page">The view model.</param>
-        /// <param name="isAnimated">Is the page animated.</param>
-        public PopupNavigationEvent(IViewFor page, bool isAnimated)
+        ArgumentNullException.ThrowIfNull(page);
+
+        if (page.ViewModel is null)
         {
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
-
-            if (page.ViewModel is null)
-            {
-                throw new InvalidOperationException($"{nameof(page.ViewModel)} cannot be null.");
-            }
-
-            ViewModel = (IViewModel)page.ViewModel;
-            IsAnimated = isAnimated;
+            throw new InvalidOperationException($"{nameof(page.ViewModel)} cannot be null.");
         }
 
-        /// <summary>
-        /// Gets the view model for the event.
-        /// </summary>
-        public IViewModel ViewModel { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the page is animated.
-        /// </summary>
-        public bool IsAnimated { get; }
+        ViewModel = (IViewModel)page.ViewModel;
+        IsAnimated = isAnimated;
     }
+
+    /// <summary>
+    /// Gets the view model for the event.
+    /// </summary>
+    public IViewModel ViewModel { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether the page is animated.
+    /// </summary>
+    public bool IsAnimated { get; }
 }

@@ -12,7 +12,7 @@ namespace Sextant.Tests
     /// <summary>
     /// Tests <see cref="NavigationParameter"/> and extensions.
     /// </summary>
-    public class NavigationParameterTests
+    public static class NavigationParameterTests
     {
         /// <summary>
         /// Tests the get value method.

@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Tests", "Sextant.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1DD0155-5421-430D-B1F3-270EFCD5EE04}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
 		analyzers.ruleset = analyzers.ruleset
 		ApiGeneratorGlobalSuppressions.cs = ApiGeneratorGlobalSuppressions.cs
 		..\.github\workflows\ci-build.yml = ..\.github\workflows\ci-build.yml
@@ -16,18 +17,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.build.targets = Directory.build.targets
 		Directory.Packages.props = Directory.Packages.props
 		global.json = global.json
+		..\README.md = ..\README.md
 		stylecop.json = stylecop.json
+		..\version.json = ..\version.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.XamForms", "Sextant.XamForms\Sextant.XamForms.csproj", "{91D39618-AF73-4A28-9145-2DAC63437762}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.XamForms.Tests", "Sextant.XamForms.Tests\Sextant.XamForms.Tests.csproj", "{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Mocks", "Sextant.Mocks\Sextant.Mocks.csproj", "{07C90E5B-858E-4EB2-948B-8D0A698F439B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{42173B56-0F72-4E8E-828F-4289222C8BB4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sextant.iOS.Runner", "Sextant.iOS.Runner\Sextant.iOS.Runner.csproj", "{80A96B52-6758-4BDB-B0B4-CEA4CA155C60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sextant.Plugins.Popup", "Sextant.Plugins.Popup\Sextant.Plugins.Popup.csproj", "{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}"
 EndProject
@@ -49,20 +44,10 @@ Global
 		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA6A30AC-CCA5-40BA-94A1-93E142E06515}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91D39618-AF73-4A28-9145-2DAC63437762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91D39618-AF73-4A28-9145-2DAC63437762}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91D39618-AF73-4A28-9145-2DAC63437762}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91D39618-AF73-4A28-9145-2DAC63437762}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A8F7E6B-F9EE-46A7-ABB2-F09E7784B1BD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07C90E5B-858E-4EB2-948B-8D0A698F439B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{80A96B52-6758-4BDB-B0B4-CEA4CA155C60}.Debug|Any CPU.ActiveCfg = Debug|iPhone
-		{80A96B52-6758-4BDB-B0B4-CEA4CA155C60}.Release|Any CPU.ActiveCfg = Release|iPhone
 		{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C863B0F3-46AF-46A3-93E9-5B1CEFA18896}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,9 +63,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{80A96B52-6758-4BDB-B0B4-CEA4CA155C60} = {42173B56-0F72-4E8E-828F-4289222C8BB4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5DD8FF23-E55B-4675-A15F-2E0DB2E10CC3}

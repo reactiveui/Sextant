@@ -45,16 +45,14 @@ public static class SextantExtensions
     /// </summary>
     /// <param name="dependencyResolver">The dependency resolver.</param>
     /// <param name="mainScheduler">The main scheduler.</param>
-    /// <param name="backgroundScheduler">The background scheduler.</param>
     /// <returns>
     /// The mutable dependency resolver.
     /// </returns>
     public static IMutableDependencyResolver RegisterNavigationController(
         this IMutableDependencyResolver dependencyResolver,
-        IScheduler mainScheduler,
-        IScheduler backgroundScheduler)
+        IScheduler mainScheduler)
     {
-        dependencyResolver.RegisterLazySingleton(() => new NavigationViewController(mainScheduler, backgroundScheduler));
+        dependencyResolver.RegisterLazySingleton(() => new NavigationViewController(mainScheduler));
         return dependencyResolver;
     }
 

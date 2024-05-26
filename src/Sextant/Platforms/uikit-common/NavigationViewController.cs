@@ -28,24 +28,20 @@ namespace Sextant;
 /// Initializes a new instance of the <see cref="NavigationViewController" /> class.
 /// </remarks>
 /// <param name="mainScheduler">The main scheduler.</param>
-/// <param name="backgroundScheduler">The background scheduler.</param>
 /// <param name="viewLocator">The view locator.</param>
 [SuppressMessage("Design", "CA1010: Implement generic IEnumerable", Justification = "Base class declared IEnumerable.")]
 [SuppressMessage("Usage", "CA2213:Disposable fields should be disposed", Justification = "Previous usage did not throw an error.")]
 
 public class NavigationViewController(
     IScheduler? mainScheduler = null,
-    IScheduler? backgroundScheduler = null,
     IViewLocator? viewLocator = null) : UINavigationController, IView
 {
-    private readonly IScheduler _backgroundScheduler = backgroundScheduler ?? RxApp.TaskpoolScheduler;
-    private readonly IScheduler _mainScheduler = mainScheduler ?? RxApp.MainThreadScheduler;
     private readonly IViewLocator _viewLocator = viewLocator ?? ViewLocator.Current;
     private readonly Stack<UIViewController> _navigationPages = new();
     private readonly Subject<IViewModel?> _pagePopped = new();
 
     /// <inheritdoc />
-    public IScheduler MainThreadScheduler => _mainScheduler;
+    public IScheduler MainThreadScheduler { get; } = mainScheduler ?? RxApp.MainThreadScheduler;
 
     /// <inheritdoc />
     public IObservable<IViewModel?> PagePopped => _pagePopped;
@@ -55,7 +51,7 @@ public class NavigationViewController(
         DismissViewControllerAsync(true)
             .ToObservable()
             .Select(_ => Unit.Default)
-            .ObserveOn(_mainScheduler);
+            .ObserveOn(MainThreadScheduler);
 
     /// <inheritdoc />
     public IObservable<Unit> PopPage(bool animate = true) =>
@@ -115,9 +111,7 @@ public class NavigationViewController(
                 },
                 CurrentThreadScheduler.Instance)
             .ObserveOn(CurrentThreadScheduler.Instance)
-            .SelectMany(page =>
-            {
-                return Observable.Create<Unit>(
+            .SelectMany(page => Observable.Create<Unit>(
                     observer =>
                     {
                         CATransaction.Begin();
@@ -142,8 +136,7 @@ public class NavigationViewController(
                         PushViewController(page, animate);
                         CATransaction.Commit();
                         return Disposable.Empty;
-                    });
-            });
+                    }));
 
     /// <inheritdoc/>
     public override UIViewController PopViewController(bool animated)
@@ -156,18 +149,13 @@ public class NavigationViewController(
         return poppedController;
     }
 
+    private static void SetPageTitle(UIViewController page, string resourceKey) => page.Title = resourceKey;
+
     private UIViewController LocatePageFor(object viewModel, string? contract)
     {
-        var viewFor = _viewLocator.ResolveView(viewModel, contract);
-        var page = viewFor as UIViewController;
-
-        if (viewFor is null)
-        {
-            throw new InvalidOperationException(
+        var viewFor = _viewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException(
                 $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
-        }
-
-        if (page is null)
+        if (viewFor is not UIViewController page)
         {
             throw new InvalidOperationException(
                 $"Resolved view '{viewFor.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
@@ -177,6 +165,4 @@ public class NavigationViewController(
 
         return page;
     }
-
-    private void SetPageTitle(UIViewController page, string resourceKey) => page.Title = resourceKey;
 }

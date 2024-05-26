@@ -13,18 +13,13 @@ namespace Sextant;
 /// <summary>
 /// Abstract base class for view stack services.
 /// </summary>
-public abstract class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterViewStackService
+/// <remarks>
+/// Initializes a new instance of the <see cref="ParameterViewStackServiceBase"/> class.
+/// </remarks>
+/// <param name="view">The view.</param>
+/// <param name="viewModelFactory">The view model factory.</param>
+public abstract class ParameterViewStackServiceBase(IView view, IViewModelFactory viewModelFactory) : ViewStackServiceBase(view, viewModelFactory), IParameterViewStackService
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ParameterViewStackServiceBase"/> class.
-    /// </summary>
-    /// <param name="view">The view.</param>
-    /// <param name="viewModelFactory">The view model factory.</param>
-    protected ParameterViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
-        : base(view, viewModelFactory)
-    {
-    }
-
     /// <inheritdoc />
     public IObservable<Unit> PushPage(
         INavigable navigableViewModel,
@@ -144,7 +139,7 @@ public abstract class ParameterViewStackServiceBase : ViewStackServiceBase, IPar
                 throw new ArgumentNullException(nameof(parameter));
             }
 
-            IViewModel poppedPage = TopPage().FirstOrDefaultAsync().Wait()!;
+            var poppedPage = TopPage().FirstOrDefaultAsync().Wait()!;
             var composite = new CompositeDisposable();
 
             View
@@ -161,7 +156,7 @@ public abstract class ParameterViewStackServiceBase : ViewStackServiceBase, IPar
                                 .DisposeWith(composite))
                         .InvokeViewModelAction<IDestructible>(x => x.Destroy());
 
-                    IViewModel topPage = TopPage().FirstOrDefaultAsync().Wait()!;
+                    var topPage = TopPage().FirstOrDefaultAsync().Wait()!;
                     if (topPage is INavigated navigated)
                     {
                         navigated

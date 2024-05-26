@@ -4,118 +4,66 @@
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Linq;
+using Microsoft.Maui.Controls;
+using Mopups.Pages;
 using ReactiveUI;
-using Rg.Plugins.Popup.Pages;
-using Xamarin.Forms;
 
-[assembly:SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1402:FileMayOnlyContainASingleType", Justification = "Contains generic.")]
+namespace Sextant.Plugins.Popup;
 
-namespace Sextant.Plugins.Popup
+/// <summary>
+/// Base Popup page for that implements <see cref="IViewFor"/>.
+/// </summary>
+public abstract class SextantPopupPage : PopupPage, IViewFor
 {
     /// <summary>
-    /// Base Popup page for that implements <see cref="IViewFor"/>.
+    /// The view model property.
     /// </summary>
-    /// <typeparam name="TViewModel">The view model type.</typeparam>
-    public abstract class SextantPopupPage<TViewModel> : SextantPopupPage, IViewFor<TViewModel>
-        where TViewModel : class, IViewModel
-    {
-        /// <summary>
-        /// The view model property.
-        /// </summary>
-        public static new readonly BindableProperty ViewModelProperty = BindableProperty.Create(
-            nameof(ViewModel),
-            typeof(TViewModel),
-            typeof(IViewFor<TViewModel>),
-            null,
-            BindingMode.OneWay,
-            null,
-            OnViewModelChanged);
-
-        /// <summary>
-        /// Gets or sets the ViewModel to display.
-        /// </summary>
-        public new TViewModel? ViewModel
-        {
-            get => (TViewModel?)GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the ViewModel corresponding to this specific View.
-        /// This should be a BindableProperty if you're using XAML.
-        /// </summary>
-        object? IViewFor.ViewModel
-        {
-            get => ViewModel;
-            set => ViewModel = (TViewModel?)value;
-        }
-
-        /// <inheritdoc/>
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-            ViewModel = (BindingContext as TViewModel)!;
-        }
-
-        private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue) => bindableObject.BindingContext = newValue;
-    }
+    public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
+        nameof(ViewModel),
+        typeof(object),
+        typeof(IViewFor<object>),
+        null,
+        BindingMode.OneWay,
+        null,
+        OnViewModelChanged);
 
     /// <summary>
-    /// Base Popup page for that implements <see cref="IViewFor"/>.
+    /// Initializes a new instance of the <see cref="SextantPopupPage"/> class.
     /// </summary>
-    public abstract class SextantPopupPage : PopupPage, IViewFor
+    protected SextantPopupPage() =>
+        BackgroundClick =
+            Observable.FromEvent<EventHandler, Unit>(
+                handler =>
+                {
+                    void EventHandler(object? sender, EventArgs args) => handler(Unit.Default);
+                    return EventHandler;
+                },
+                x => BackgroundClicked += x,
+                x => BackgroundClicked -= x);
+
+    /// <summary>
+    /// Gets the background click observable signal.
+    /// </summary>
+    /// <value>The background click.</value>
+    public IObservable<Unit> BackgroundClick { get; }
+
+    /// <summary>
+    /// Gets or sets the ViewModel to display.
+    /// </summary>
+    public object? ViewModel
     {
-        /// <summary>
-        /// The view model property.
-        /// </summary>
-        public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
-            nameof(ViewModel),
-            typeof(object),
-            typeof(IViewFor<object>),
-            null,
-            BindingMode.OneWay,
-            null,
-            OnViewModelChanged);
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SextantPopupPage"/> class.
-        /// </summary>
-        protected SextantPopupPage() =>
-            BackgroundClick =
-                Observable.FromEvent<EventHandler, Unit>(
-                    handler =>
-                    {
-                        void EventHandler(object? sender, EventArgs args) => handler(Unit.Default);
-                        return EventHandler;
-                    },
-                    x => BackgroundClicked += x,
-                    x => BackgroundClicked -= x);
-
-        /// <summary>
-        /// Gets the background click observable signal.
-        /// </summary>
-        /// <value>The background click.</value>
-        public IObservable<Unit> BackgroundClick { get; }
-
-        /// <summary>
-        /// Gets or sets the ViewModel to display.
-        /// </summary>
-        public object? ViewModel
-        {
-            get => GetValue(ViewModelProperty);
-            set => SetValue(ViewModelProperty, value);
-        }
-
-        /// <inheritdoc/>
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-            ViewModel = BindingContext;
-        }
-
-        private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue) => bindableObject.BindingContext = newValue;
+        get => GetValue(ViewModelProperty);
+        set => SetValue(ViewModelProperty, value);
     }
+
+    /// <inheritdoc/>
+    protected override void OnBindingContextChanged()
+    {
+        base.OnBindingContextChanged();
+        ViewModel = BindingContext;
+    }
+
+    private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue) => bindableObject.BindingContext = newValue;
 }

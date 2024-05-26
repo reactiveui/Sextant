@@ -23,6 +23,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <WarningsAsErrors>CS8600;CS8602;CS8603;CS8604;CS8605;CS8606;CS8607;CS8608;CS8609;CS8610;CS8611;CS8612;CS8613;CS8614;CS8615;CS8616;CS8617;CS8618;CS8619;CS8620;CS8621;CS8622;CS8623;CS8624;CS8625;CS8626;CS8627;CS8628;CS8629;CS8630;CS8634;CS8766;CS8767</WarningsAsErrors>
     <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <WarningsAsErrors>nullable</WarningsAsErrors>
@@ -36,15 +37,21 @@
   <ItemGroup Condition="'$(IsTestProject)' != 'true'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
+
+  <ItemGroup Condition="$(UseMaui) == 'true'">
+    <PackageReference Include="Microsoft.Maui.Controls" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" />
+  </ItemGroup>
+
   <ItemGroup Condition="$(IsTestProject)">
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Xunit.StaFact" />
-    <PackageReference Include="Xamarin.Forms.Mocks" />
     <PackageReference Include="DiffEngine" />
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="ReactiveUI.Testing" />
+    <PackageReference Include="Microsoft.Reactive.Testing" />
     <PackageReference Include="Verify.Xunit" />
     <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="NSubstitute" />

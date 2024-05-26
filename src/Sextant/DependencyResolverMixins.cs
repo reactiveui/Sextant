@@ -13,12 +13,7 @@ namespace Sextant;
 /// <summary>
 /// Extension methods associated with the IMutableDependencyResolver interface.
 /// </summary>
-#if WINDOWS_UWP
-public static partial class DependencyResolverMixins
-#else
-
 public static class DependencyResolverMixins
-#endif
 {
     /// <summary>
     /// Gets the navigation view key.
@@ -288,6 +283,11 @@ public static class DependencyResolverMixins
         where TView : class, IViewFor<TViewModel>
         where TViewModel : class, IViewModel
     {
+        if (resolver is null)
+        {
+            throw new ArgumentNullException(nameof(resolver));
+        }
+
         resolver.Register(viewFactory, typeof(IViewFor<TViewModel>));
         resolver.Register(viewModelFactory, typeof(TViewModel));
         return resolver;
@@ -306,8 +306,35 @@ public static class DependencyResolverMixins
         where TView : class, IViewFor<TViewModel>
         where TViewModel : class, IViewModel
     {
+        if (resolver is null)
+        {
+            throw new ArgumentNullException(nameof(resolver));
+        }
+
         resolver.Register(() => view, typeof(IViewFor<TViewModel>));
         resolver.Register(() => viewModel, typeof(TViewModel));
+        return resolver;
+    }
+
+    /// <summary>
+    /// Registers the view for navigation.
+    /// </summary>
+    /// <typeparam name="TView">The type of the view.</typeparam>
+    /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+    /// <param name="resolver">The resolver.</param>
+    /// <returns>The dependency resolver.</returns>
+    /// <exception cref="ArgumentNullException">resolver.</exception>
+    public static IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this IMutableDependencyResolver resolver)
+        where TView : class, IViewFor<TViewModel>, new()
+        where TViewModel : class, IViewModel, new()
+    {
+        if (resolver is null)
+        {
+            throw new ArgumentNullException(nameof(resolver));
+        }
+
+        resolver.Register<TView>(() => new());
+        resolver.Register<TViewModel>(() => new());
         return resolver;
     }
 }

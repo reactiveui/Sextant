@@ -1,15 +1,12 @@
-<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
-    <Nullable>enable</Nullable>
-    <AssemblyName>Sextant.Plugins.Popup</AssemblyName>
-    <PackageId>Sextant.Plugins.Popup</PackageId>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+    <UseMaui>true</UseMaui>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sextant.XamForms\Sextant.XamForms.csproj" />
+    <PackageReference Include="Mopups"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Rg.Plugins.Popup" />
+    <ProjectReference Include="..\Sextant.Maui\Sextant.Maui.csproj" />
   </ItemGroup>
 </Project>

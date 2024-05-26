@@ -12,265 +12,244 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Mopups.Events;
+using Mopups.Interfaces;
+using Mopups.Pages;
 using ReactiveUI;
-using Rg.Plugins.Popup.Contracts;
-using Rg.Plugins.Popup.Events;
-using Rg.Plugins.Popup.Pages;
 
-namespace Sextant.Plugins.Popup
+namespace Sextant.Plugins.Popup;
+
+/// <summary>
+/// Represents a popup view stack service implementation.
+/// </summary>
+public abstract class PopupViewStackServiceBase : ParameterViewStackServiceBase, IPopupViewStackService
 {
+    private readonly IPopupNavigation _popupNavigation;
+    private readonly IViewLocator _viewLocator;
+
     /// <summary>
-    /// Represents a popup view stack service implementation.
+    /// Initializes a new instance of the <see cref="PopupViewStackServiceBase"/> class.
     /// </summary>
-    public abstract class PopupViewStackServiceBase : ParameterViewStackServiceBase, IPopupViewStackService
+    /// <param name="view">The view.</param>
+    /// <param name="popupNavigation">The popup navigation.</param>
+    /// <param name="viewLocator">The view locator.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    protected PopupViewStackServiceBase(IView view, IPopupNavigation popupNavigation, IViewLocator viewLocator, IViewModelFactory viewModelFactory)
+        : base(view, viewModelFactory)
     {
-        private readonly IPopupNavigation _popupNavigation;
-        private readonly IViewLocator _viewLocator;
+        _popupNavigation = popupNavigation;
+        _viewLocator = viewLocator;
+        PopupSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopupViewStackServiceBase"/> class.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <param name="popupNavigation">The popup navigation.</param>
-        /// <param name="viewLocator">The view locator.</param>
-        /// <param name="viewModelFactory">The view model factory.</param>
-        protected PopupViewStackServiceBase(IView view, IPopupNavigation popupNavigation, IViewLocator viewLocator, IViewModelFactory viewModelFactory)
-            : base(view, viewModelFactory)
-        {
-            _popupNavigation = popupNavigation;
-            _viewLocator = viewLocator;
-            PopupSubject = new BehaviorSubject<IImmutableList<IViewModel>>(ImmutableList<IViewModel>.Empty);
+        Pushing = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
+            eventHandler =>
+            {
+                void Handler(object? sender, PopupNavigationEventArgs args) => eventHandler(args);
 
-            Pushing = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
-                eventHandler =>
-                {
-                    void Handler(object? sender, PopupNavigationEventArgs args) => eventHandler(args);
+                return Handler;
+            },
+            x => _popupNavigation.Pushing += x,
+            x => _popupNavigation.Pushing -= x)
+            .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
 
-                    return Handler;
-                },
-                x => _popupNavigation.Pushing += x,
-                x => _popupNavigation.Pushing -= x)
-                .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
+        Pushed = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
+            eventHandler =>
+            {
+                void Handler(object? sender, PopupNavigationEventArgs args)
+                    => eventHandler(args);
 
-            Pushed = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
-                eventHandler =>
-                {
-                    void Handler(object? sender, PopupNavigationEventArgs args)
-                        => eventHandler(args);
+                return Handler;
+            },
+            x => _popupNavigation.Pushed += x,
+            x => _popupNavigation.Pushed -= x)
+            .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
 
-                    return Handler;
-                },
-                x => _popupNavigation.Pushed += x,
-                x => _popupNavigation.Pushed -= x)
-                .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
+        Popping = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
+            eventHandler =>
+            {
+                void Handler(object? sender, PopupNavigationEventArgs args)
+                    => eventHandler(args);
 
-            Popping = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
-                eventHandler =>
-                {
-                    void Handler(object? sender, PopupNavigationEventArgs args)
-                        => eventHandler(args);
+                return Handler;
+            },
+            x => _popupNavigation.Popping += x,
+            x => _popupNavigation.Popping -= x)
+            .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
 
-                    return Handler;
-                },
-                x => _popupNavigation.Popping += x,
-                x => _popupNavigation.Popping -= x)
-                .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
+        Popped = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
+            eventHandler =>
+            {
+                void Handler(object? sender, PopupNavigationEventArgs args) => eventHandler(args);
 
-            Popped = Observable.FromEvent<EventHandler<PopupNavigationEventArgs>, PopupNavigationEventArgs>(
-                eventHandler =>
-                {
-                    void Handler(object? sender, PopupNavigationEventArgs args) => eventHandler(args);
+                return Handler;
+            },
+            x => _popupNavigation.Popped += x,
+            x => _popupNavigation.Popped -= x)
+            .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
 
-                    return Handler;
-                },
-                x => _popupNavigation.Popped += x,
-                x => _popupNavigation.Popped -= x)
-                .Select(x => new PopupNavigationEvent((IViewFor)x.Page, x.IsAnimated));
+        Popped
+            .Subscribe(popped => popped.ViewModel.InvokeViewModelAction<IDestructible>(x => x.Destroy()))
+            .DisposeWith(NavigationDisposables);
 
-            Popped
-                .Subscribe(popped => popped.ViewModel.InvokeViewModelAction<IDestructible>(x => x.Destroy()))
-                .DisposeWith(NavigationDisposables);
+        PopupSubject.DisposeWith(NavigationDisposables);
+    }
 
-            PopupSubject.DisposeWith(NavigationDisposables);
-        }
+    /// <inheritdoc/>
+    public IObservable<PopupNavigationEvent> Pushing { get; }
 
-        /// <inheritdoc/>
-        public IObservable<PopupNavigationEvent> Pushing { get; }
+    /// <inheritdoc/>
+    public IObservable<PopupNavigationEvent> Pushed { get; }
 
-        /// <inheritdoc/>
-        public IObservable<PopupNavigationEvent> Pushed { get; }
+    /// <inheritdoc/>
+    public IObservable<PopupNavigationEvent> Popping { get; }
 
-        /// <inheritdoc/>
-        public IObservable<PopupNavigationEvent> Popping { get; }
+    /// <inheritdoc/>
+    public IObservable<PopupNavigationEvent> Popped { get; }
 
-        /// <inheritdoc/>
-        public IObservable<PopupNavigationEvent> Popped { get; }
-
-        /// <inheritdoc/>
-        public IReadOnlyList<IViewModel> PopupStack =>
+    /// <inheritdoc/>
+    public IReadOnlyList<IViewModel> PopupStack =>
 #pragma warning disable 8619
-            _popupNavigation
-                .PopupStack
-                .Cast<IViewFor<IViewModel>>()
-                .Where(x => x is not null)
-                .Select(x => x.ViewModel)
-                .ToList();
+        _popupNavigation
+            .PopupStack
+            .Cast<IViewFor<IViewModel>>()
+            .Where(x => x is not null)
+            .Select(x => x.ViewModel)
+            .ToList();
 #pragma warning restore 8619
 
-        /// <summary>
-        /// Gets the popup subject that contains the stack history.
-        /// </summary>
-        protected BehaviorSubject<IImmutableList<IViewModel>> PopupSubject { get; }
+    /// <summary>
+    /// Gets the popup subject that contains the stack history.
+    /// </summary>
+    protected BehaviorSubject<IImmutableList<IViewModel>> PopupSubject { get; }
 
-        /// <inheritdoc/>
-        public IObservable<Unit> PushPopup(IViewModel viewModel, string? contract = null, bool animate = true)
-        {
-            if (viewModel is null)
+    /// <inheritdoc/>
+    public IObservable<Unit> PushPopup(IViewModel viewModel, string? contract = null, bool animate = true)
+    {
+        ArgumentNullException.ThrowIfNull(viewModel);
+
+        PopupPage popupPage = LocatePopupFor(viewModel, contract);
+
+        return Observable
+            .FromAsync(() => _popupNavigation.PushAsync(popupPage, animate))
+            .Do(_ =>
             {
-                throw new ArgumentNullException(nameof(viewModel));
-            }
+                AddToStackAndTick(PopupSubject, viewModel, false);
+                Logger.Debug($"Added page '{viewModel.Id}' (contract '{contract}') to stack.");
+            });
+    }
 
-            PopupPage popupPage = LocatePopupFor(viewModel, contract);
+    /// <inheritdoc/>
+    public IObservable<Unit> PushPopup<TViewModel>(string? contract = null, bool animate = true)
+        where TViewModel : IViewModel
+    {
+        var viewModel = Factory.Create<TViewModel>();
+        return PushPopup(viewModel, contract, animate);
+    }
 
-            return Observable
-                .FromAsync(() => _popupNavigation.PushAsync(popupPage, animate))
+    /// <inheritdoc/>
+    public IObservable<Unit> PushPopup(
+        INavigable viewModel,
+        INavigationParameter navigationParameter,
+        string? contract = null,
+        bool animate = true) =>
+        Observable.Create<Unit>(observer =>
+        {
+            ArgumentNullException.ThrowIfNull(viewModel);
+
+            ArgumentNullException.ThrowIfNull(navigationParameter);
+
+            var compositeDisposable = new CompositeDisposable();
+
+            Observable
+                .Start(() => LocatePopupFor(viewModel, contract), CurrentThreadScheduler.Instance)
+                .ObserveOn(CurrentThreadScheduler.Instance)
+                .Select(popup =>
+                {
+                    popup
+                        .ViewModel?
+                        .InvokeViewModelAction<INavigating>(x =>
+                            x.WhenNavigatingTo(navigationParameter)
+                                .Subscribe()
+                                .DisposeWith(compositeDisposable));
+                    return popup;
+                })
+                .Select(popup =>
+                    Observable
+                        .FromAsync(() => _popupNavigation.PushAsync(popup, animate))
+                        .Select(_ =>
+                            popup
+                                .ViewModel?
+                                .InvokeViewModelAction<INavigated>(x =>
+                                    x.WhenNavigatedTo(navigationParameter)
+                                        .Subscribe()
+                                        .DisposeWith(compositeDisposable))))
+                .Switch()
                 .Do(_ =>
                 {
                     AddToStackAndTick(PopupSubject, viewModel, false);
                     Logger.Debug($"Added page '{viewModel.Id}' (contract '{contract}') to stack.");
-                });
-        }
+                })
+                .Select(_ => Unit.Default)
+                .Subscribe(observer)
+                .DisposeWith(compositeDisposable);
 
-        /// <inheritdoc/>
-        public IObservable<Unit> PushPopup<TViewModel>(string? contract = null, bool animate = true)
-            where TViewModel : IViewModel
+            return Disposable.Create(() => compositeDisposable.Dispose());
+        });
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PushPopup<TViewModel>(
+        INavigationParameter navigationParameter,
+        string? contract = null,
+        bool animate = true)
+        where TViewModel : INavigable
+    {
+        var viewModel = Factory.Create<TViewModel>(contract);
+
+        return PushPopup(viewModel, navigationParameter, contract, animate);
+    }
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopPopup(bool animate = true) =>
+        Observable.FromAsync(() => _popupNavigation.PopAsync(animate));
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopAllPopups(bool animate = true) =>
+        Observable
+            .FromAsync(() => _popupNavigation.PopAllAsync(animate))
+            .Do(_ => PopRootAndTick(PopupSubject, NavigationDisposables));
+
+    /// <inheritdoc/>
+    public IObservable<Unit> RemovePopup(IViewModel viewModel, string? contract = null, bool animate = true)
+    {
+        ArgumentNullException.ThrowIfNull(viewModel);
+
+        PopupPage popupPage = LocatePopupFor(viewModel, contract);
+
+        return Observable.FromAsync(() => _popupNavigation.RemovePageAsync(popupPage, animate))
+                         .Do(_ => RemoveFromStackAndTick(PopupSubject, viewModel));
+    }
+
+    private static void RemoveFromStackAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, T item)
+    {
+        ArgumentNullException.ThrowIfNull(stackSubject);
+
+        var stack = stackSubject.Value;
+
+        stack = stack.Remove(item);
+
+        stackSubject.OnNext(stack);
+    }
+
+    private SextantPopupPage LocatePopupFor(IViewModel viewModel, string? contract)
+    {
+        var view = _viewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
+        if (view is not SextantPopupPage page)
         {
-            var viewModel = Factory.Create<TViewModel>();
-            return PushPopup(viewModel, contract, animate);
+            throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a {nameof(SextantPopupPage)}.");
         }
 
-        /// <inheritdoc/>
-        public IObservable<Unit> PushPopup(
-            INavigable viewModel,
-            INavigationParameter navigationParameter,
-            string? contract = null,
-            bool animate = true) =>
-            Observable.Create<Unit>(observer =>
-            {
-                if (viewModel == null)
-                {
-                    throw new ArgumentNullException(nameof(viewModel));
-                }
+        page.ViewModel = viewModel;
 
-                if (navigationParameter == null)
-                {
-                    throw new ArgumentNullException(nameof(navigationParameter));
-                }
-
-                var compositeDisposable = new CompositeDisposable();
-
-                Observable
-                    .Start(() => LocatePopupFor(viewModel, contract), CurrentThreadScheduler.Instance)
-                    .ObserveOn(CurrentThreadScheduler.Instance)
-                    .Select(popup =>
-                    {
-                        popup
-                            .ViewModel?
-                            .InvokeViewModelAction<INavigating>(x =>
-                                x.WhenNavigatingTo(navigationParameter)
-                                    .Subscribe()
-                                    .DisposeWith(compositeDisposable));
-                        return popup;
-                    })
-                    .Select(popup =>
-                        Observable
-                            .FromAsync(() => _popupNavigation.PushAsync(popup, animate))
-                            .Select(_ =>
-                                popup
-                                    .ViewModel?
-                                    .InvokeViewModelAction<INavigated>(x =>
-                                        x.WhenNavigatedTo(navigationParameter)
-                                            .Subscribe()
-                                            .DisposeWith(compositeDisposable))))
-                    .Switch()
-                    .Do(_ =>
-                    {
-                        AddToStackAndTick(PopupSubject, viewModel, false);
-                        Logger.Debug($"Added page '{viewModel.Id}' (contract '{contract}') to stack.");
-                    })
-                    .Select(_ => Unit.Default)
-                    .Subscribe(observer)
-                    .DisposeWith(compositeDisposable);
-
-                return Disposable.Create(() => compositeDisposable.Dispose());
-            });
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PushPopup<TViewModel>(
-            INavigationParameter navigationParameter,
-            string? contract = null,
-            bool animate = true)
-            where TViewModel : INavigable
-        {
-            var viewModel = Factory.Create<TViewModel>(contract);
-
-            return PushPopup(viewModel, navigationParameter, contract, animate);
-        }
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PopPopup(bool animate = true) =>
-            Observable.FromAsync(() => _popupNavigation.PopAsync(animate));
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PopAllPopups(bool animate = true) =>
-            Observable
-                .FromAsync(() => _popupNavigation.PopAllAsync(animate))
-                .Do(_ => PopRootAndTick(PopupSubject, NavigationDisposables));
-
-        /// <inheritdoc/>
-        public IObservable<Unit> RemovePopup(IViewModel viewModel, string? contract = null, bool animate = true)
-        {
-            if (viewModel is null)
-            {
-                throw new ArgumentNullException(nameof(viewModel));
-            }
-
-            PopupPage popupPage = LocatePopupFor(viewModel, contract);
-
-            return Observable.FromAsync(() => _popupNavigation.RemovePageAsync(popupPage, animate))
-                             .Do(_ => RemoveFromStackAndTick(PopupSubject, viewModel));
-        }
-
-        private static void RemoveFromStackAndTick<T>(BehaviorSubject<IImmutableList<T>> stackSubject, T item)
-        {
-            if (stackSubject is null)
-            {
-                throw new ArgumentNullException(nameof(stackSubject));
-            }
-
-            var stack = stackSubject.Value;
-
-            stack = stack.Remove(item);
-
-            stackSubject.OnNext(stack);
-        }
-
-        private SextantPopupPage LocatePopupFor(IViewModel viewModel, string? contract)
-        {
-            IViewFor? view = _viewLocator.ResolveView(viewModel, contract);
-            if (view is null)
-            {
-                throw new InvalidOperationException($"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
-            }
-
-            if (!(view is SextantPopupPage page))
-            {
-                throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a {nameof(SextantPopupPage)}.");
-            }
-
-            page.ViewModel = viewModel;
-
-            return page;
-        }
+        return page;
     }
 }

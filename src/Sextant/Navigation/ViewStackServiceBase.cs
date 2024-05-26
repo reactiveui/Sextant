@@ -140,7 +140,7 @@ public abstract class ViewStackServiceBase : IViewStackService, IDisposable, IEn
     public IObservable<Unit> PushModal<TViewModel>(string? contract = null, bool withNavigationPage = true)
         where TViewModel : IViewModel
     {
-        TViewModel viewmodel = Factory.Create<TViewModel>(contract);
+        var viewmodel = Factory.Create<TViewModel>(contract);
         return PushModal(viewmodel, contract, withNavigationPage);
     }
 
@@ -148,7 +148,7 @@ public abstract class ViewStackServiceBase : IViewStackService, IDisposable, IEn
     public IObservable<Unit> PushPage<TViewModel>(string? contract = null, bool resetStack = false, bool animate = true)
         where TViewModel : IViewModel
     {
-        TViewModel viewModel = Factory.Create<TViewModel>(contract);
+        var viewModel = Factory.Create<TViewModel>(contract);
 
         return PushPage(viewModel, contract, resetStack, animate);
     }
@@ -268,7 +268,7 @@ public abstract class ViewStackServiceBase : IViewStackService, IDisposable, IEn
                {
                    poppedStack = stack.RemoveRange(stack.IndexOf(stack[1]), stack.Count - 1);
 
-                   foreach (T popped in stack.RemoveRange(poppedStack).Reverse())
+                   foreach (var popped in stack.RemoveRange(poppedStack).Reverse())
                    {
                        if (popped is null)
                        {
