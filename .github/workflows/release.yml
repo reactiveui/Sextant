@@ -11,8 +11,7 @@ env:
 
 jobs:
   release:
-    permissions:
-      contents: read
+    permissions: write-all
     uses: reactiveui/actions-common/.github/workflows/workflow-common-release.yml@main
     with:
       productNamespacePrefix: "Sextant"
