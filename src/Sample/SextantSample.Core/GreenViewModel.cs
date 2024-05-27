@@ -15,9 +15,9 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// GreenViewModel.
 /// </summary>
-/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
-/// <seealso cref="Sextant.INavigable" />
-/// <seealso cref="Sextant.IDestructible" />
+/// <seealso cref="ViewModelBase" />
+/// <seealso cref="INavigable" />
+/// <seealso cref="IDestructible" />
 public class GreenViewModel : ViewModelBase, INavigable, IDestructible
 {
     /// <summary>
@@ -27,7 +27,7 @@ public class GreenViewModel : ViewModelBase, INavigable, IDestructible
     public GreenViewModel(IViewStackService viewStackService)
         : base(viewStackService) =>
         OpenModal = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PushModal(new FirstModalViewModel(viewStackService), string.Empty, false), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PushModal(new FirstModalViewModel(viewStackService), string.Empty, false), outputScheduler: RxApp.MainThreadScheduler);
 
     /// <summary>
     /// Gets the identifier.

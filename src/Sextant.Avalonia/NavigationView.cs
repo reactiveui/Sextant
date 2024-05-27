@@ -94,6 +94,11 @@ namespace Sextant.Avalonia
             bool resetStack,
             bool animate = true)
         {
+            if (viewModel == null)
+            {
+                throw new ArgumentNullException(nameof(viewModel));
+            }
+
             var view = LocateView(viewModel, contract);
             _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
             _pageNavigation.Push(view, resetStack);
@@ -122,6 +127,11 @@ namespace Sextant.Avalonia
             string? contract,
             bool withNavigationPage = true)
         {
+            if (modalViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(modalViewModel));
+            }
+
             var view = LocateView(modalViewModel, contract);
             _modalNavigation.Push(view);
             return Observable.Return(Unit.Default);

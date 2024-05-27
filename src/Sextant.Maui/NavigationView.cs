@@ -195,7 +195,7 @@ public class NavigationView : NavigationPage, IView, IEnableLogger
                         .ToObservable();
                 });
 
-    private static void SetPageTitle(Page page, string resourceKey) =>
+    private static void SetPageTitle(Page page, string? resourceKey) =>
 
         // var title = Localize.GetString(resourceKey);
         // TODO: ensure resourceKey isn't null and is localized.

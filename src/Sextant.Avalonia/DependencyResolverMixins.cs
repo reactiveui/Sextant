@@ -26,6 +26,11 @@ namespace Sextant.Avalonia
             Func<TView> navigationViewFactory)
             where TView : IView
         {
+            if (navigationViewFactory == null)
+            {
+                throw new ArgumentNullException(nameof(navigationViewFactory));
+            }
+
             var navigationView = navigationViewFactory();
             var viewStackService = new ViewStackService(navigationView);
             dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);

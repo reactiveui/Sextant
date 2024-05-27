@@ -79,7 +79,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushPage(null!, navigationParameter))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableViewModel");
@@ -99,7 +99,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushPage(viewModel, null!))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
@@ -199,7 +199,7 @@ namespace Sextant.Tests
             [InlineData("hello", true, false)]
             [InlineData("hello", false, true)]
             [InlineData("hello", false, false)]
-            public async Task Should_Call_View(string contract, bool reset, bool animate)
+            public async Task Should_Call_View(string? contract, bool reset, bool animate)
             {
                 // Given
                 var viewModel = Substitute.For<INavigable>();
@@ -243,7 +243,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushPage<NullViewModelMock>(navigationParameter))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableViewModel");
@@ -262,7 +262,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushPage<NavigableViewModelMock>(null!))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
@@ -282,7 +282,7 @@ namespace Sextant.Tests
             [InlineData("hello", true, false)]
             [InlineData("hello", false, true)]
             [InlineData("hello", false, false)]
-            public async Task Should_Call_View(string contract, bool reset, bool animate)
+            public async Task Should_Call_View(string? contract, bool reset, bool animate)
             {
                 // Given
                 var view = Substitute.For<IView>();
@@ -307,7 +307,7 @@ namespace Sextant.Tests
                 var factory = Substitute.For<IViewModelFactory>();
                 factory.Create<NavigableViewModelMock>().Returns(new NavigableViewModelMock());
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+                var sut = new ParameterViewStackServiceFixture().WithFactory(factory);
 
                 // When
                 await sut.PushPage<NavigableViewModelMock>(navigationParameter);
@@ -336,7 +336,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushModal(null!, navigationParameter))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableModal");
@@ -356,7 +356,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushModal(viewModel, null!))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
@@ -373,7 +373,7 @@ namespace Sextant.Tests
             [InlineData(null, true)]
             [InlineData("hello", true)]
             [InlineData("hello", false)]
-            public async Task Should_Call_View(string contract, bool withNavigation)
+            public async Task Should_Call_View(string? contract, bool withNavigation)
             {
                 // Given
                 var viewModel = Substitute.For<INavigable>();
@@ -477,7 +477,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushModal<NullViewModelMock>(navigationParameter))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("navigableModal");
@@ -496,7 +496,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PushModal<NavigableViewModelMock>(null!))
-                        .ConfigureAwait(false);
+                        .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
@@ -513,7 +513,7 @@ namespace Sextant.Tests
             [InlineData(null, true)]
             [InlineData("hello", true)]
             [InlineData("hello", false)]
-            public async Task Should_Call_View(string contract, bool withNavigation)
+            public async Task Should_Call_View(string? contract, bool withNavigation)
             {
                 // Given
                 var view = Substitute.For<IView>();
@@ -542,7 +542,7 @@ namespace Sextant.Tests
                 var factory = Substitute.For<IViewModelFactory>();
                 factory.Create<NavigableViewModelMock>(Arg.Any<string?>()).Returns(new NavigableViewModelMock());
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithFactory(factory);
+                var sut = new ParameterViewStackServiceFixture().WithFactory(factory);
 
                 // When
                 await sut.PushModal<NavigableViewModelMock>(navigationParameter, contract);
@@ -570,7 +570,7 @@ namespace Sextant.Tests
                 // When
                 var result =
                     await Record.ExceptionAsync(async () => await sut.PopPage(null!))
-                    .ConfigureAwait(false);
+                    .ConfigureAwait(true);
 
                 // Then
                 result.Should().BeOfType<ArgumentNullException>().Which.ParamName.Should().Be("parameter");
@@ -587,7 +587,7 @@ namespace Sextant.Tests
                 var viewModel = Substitute.For<INavigable>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
                 var view = Substitute.For<IView>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithView(view).WithPushed(viewModel);
+                var sut = new ParameterViewStackServiceFixture().WithView(view).WithPushed(viewModel);
 
                 // When
                 await sut.PopPage(navigationParameter);
@@ -672,7 +672,7 @@ namespace Sextant.Tests
                 // Given
                 var viewModel = Substitute.For<INavigable>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithPushed(viewModel);
+                var sut = new ParameterViewStackServiceFixture().WithPushed(viewModel);
 
                 // When
                 await sut.PopPage(navigationParameter);
@@ -691,7 +691,7 @@ namespace Sextant.Tests
                 // Given
                 var viewModel = Substitute.For<INavigable>();
                 var navigationParameter = Substitute.For<INavigationParameter>();
-                ParameterViewStackService sut = new ParameterViewStackServiceFixture().WithPushed(viewModel);
+                var sut = new ParameterViewStackServiceFixture().WithPushed(viewModel);
 
                 // When
                 await sut.PopPage(navigationParameter);

@@ -10,6 +10,7 @@ namespace Sextant;
 /// <summary>
 /// Interface representing a parameter passed during navigation.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "By Design.")]
 public interface INavigationParameter : IDictionary<string, object>
 {
     /// <summary>

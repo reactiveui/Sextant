@@ -10,7 +10,7 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// FirstModalNavigationViewModel.
 /// </summary>
-/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
+/// <seealso cref="ViewModelBase" />
 public class FirstModalNavigationViewModel(IViewStackService viewStackService) : ViewModelBase(viewStackService)
 {
     /// <summary>

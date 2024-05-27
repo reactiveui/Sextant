@@ -14,7 +14,7 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// SecondModalViewModel.
 /// </summary>
-/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
+/// <seealso cref="ViewModelBase" />
 public class SecondModalViewModel : ViewModelBase
 {
     /// <summary>
@@ -25,10 +25,10 @@ public class SecondModalViewModel : ViewModelBase
         : base(viewStackService)
     {
         PushPage = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
 
         PopModal = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PopModal(), outputScheduler: RxApp.MainThreadScheduler);
 
         PushPage.Subscribe(_ => Debug.WriteLine("PagePushed"));
         PopModal.Subscribe(_ => Debug.WriteLine("PagePopped"));

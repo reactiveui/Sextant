@@ -14,7 +14,7 @@ namespace SextantSample.ViewModels;
 /// <summary>
 /// HomeViewModel.
 /// </summary>
-/// <seealso cref="SextantSample.ViewModels.ViewModelBase" />
+/// <seealso cref="ViewModelBase" />
 public class HomeViewModel : ViewModelBase
 {
     /// <summary>
@@ -24,13 +24,13 @@ public class HomeViewModel : ViewModelBase
         : base(Locator.Current.GetService<IViewStackService>())
     {
         OpenModal = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PushModal(new FirstModalViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PushModal(new FirstModalViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
 
         PushPage = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxApp.MainThreadScheduler);
 
         PushGenericPage = ReactiveCommand
-            .CreateFromObservable(() => ViewStackService.PushPage<GreenViewModel>(), outputScheduler: RxApp.MainThreadScheduler);
+            .CreateFromObservable(() => ViewStackService!.PushPage<GreenViewModel>(), outputScheduler: RxApp.MainThreadScheduler);
 
         PushPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());
         PushGenericPage.ThrownExceptions.Subscribe(error => Interactions.ErrorMessage.Handle(error).Subscribe());

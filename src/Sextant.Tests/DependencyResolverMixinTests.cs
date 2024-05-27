@@ -67,7 +67,7 @@ namespace Sextant.Tests
             public void Should_Register_View()
             {
                 // Given
-                Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>();
+                Locator.CurrentMutable.RegisterViewForNavigation<PageView, NavigableViewModelMock>();
 
                 // When
                 var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
@@ -83,7 +83,8 @@ namespace Sextant.Tests
             public void Should_Register_View_Factory()
             {
                 // Given
-                Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>(() => new PageView());
+                Locator.CurrentMutable.RegisterViewForNavigation(() => new PageView(), () => new NavigableViewModelMock());
+                ////Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>(() => new PageView());
 
                 // When
                 var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();

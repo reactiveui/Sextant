@@ -19,6 +19,9 @@ namespace Sextant
         public static Splat.IMutableDependencyResolver RegisterView<TView, TViewModel>(this Splat.IMutableDependencyResolver dependencyResolver, System.Func<TView> viewFactory, string? contract = null)
             where TView :  class, ReactiveUI.IViewFor
             where TViewModel :  class, Sextant.IViewModel { }
+        public static Splat.IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this Splat.IMutableDependencyResolver resolver)
+            where TView :  class, ReactiveUI.IViewFor<TViewModel>, new ()
+            where TViewModel :  class, Sextant.IViewModel, new () { }
         public static Splat.IMutableDependencyResolver RegisterViewForNavigation<TView, TViewModel>(this Splat.IMutableDependencyResolver resolver, System.Func<TView> viewFactory, System.Func<TViewModel> viewModelFactory)
             where TView :  class, ReactiveUI.IViewFor<TViewModel>
             where TViewModel :  class, Sextant.IViewModel { }
@@ -60,8 +63,6 @@ namespace Sextant
         T GetValue<T>(string key);
         bool TryGetValue<T>(string key, out T value);
     }
-    [System.Obsolete("Please use the IViewModel interface.")]
-    public interface IPageViewModel : Sextant.IViewModel { }
     public interface IParameterViewStackService : Sextant.IViewStackService
     {
         System.IObservable<System.Reactive.Unit> PopPage(Sextant.INavigationParameter parameter, bool animate = true);
@@ -84,7 +85,7 @@ namespace Sextant
     }
     public interface IViewModel
     {
-        string Id { get; }
+        string? Id { get; }
     }
     public interface IViewModelFactory
     {
