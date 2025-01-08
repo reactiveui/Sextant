@@ -19,7 +19,7 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.112" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.1.0" />
@@ -31,7 +31,7 @@
     <PackageVersion Include="Mopups" Version="1.3.1" />
     <PackageVersion Include="Roslynator.Analyzers" Version="4.12.10" />
     <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.556" />
-    <PackageVersion Include="System.Collections.Immutable" Version="8.0.0" />
+    <PackageVersion Include="System.Collections.Immutable" Version="9.0.0" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
     <PackageVersion Include="Verify.Xunit" Version="26.6.0" />
     <PackageVersion Include="xunit" Version="2.9.2" />
