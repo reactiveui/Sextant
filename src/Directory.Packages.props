@@ -33,7 +33,7 @@
     <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.1" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
-    <PackageVersion Include="Verify.Xunit" Version="28.9.0" />
+    <PackageVersion Include="Verify.Xunit" Version="28.10.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.1" />
     <PackageVersion Include="xunit.runner.devices" Version="2.5.25" />
