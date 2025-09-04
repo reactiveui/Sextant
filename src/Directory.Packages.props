@@ -4,8 +4,8 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <AvaloniaVersion>11.1.3</AvaloniaVersion>
-    <ReactiveUIVersion>20.1.63</ReactiveUIVersion>
+    <AvaloniaVersion>11.3.5</AvaloniaVersion>
+    <ReactiveUIVersion>21.0.1</ReactiveUIVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
@@ -16,8 +16,8 @@
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="DiffEngine" Version="16.2.3" />
     <PackageVersion Include="FluentAssertions" Version="8.6.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-    <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.2" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="9.0.8" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.7.115" />

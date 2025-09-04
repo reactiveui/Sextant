@@ -1,4 +1,4 @@
-// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
+// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -10,65 +10,64 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-namespace Sextant.Mocks
+namespace Sextant.Mocks;
+
+/// <summary>
+/// Mock <see cref="IView"/> implementation.
+/// </summary>
+public class NavigationViewMock : IView, IDisposable
 {
+    private readonly Subject<IViewModel> _pagePoppedSubject = new();
+    private readonly Stack<IViewModel> _pageStack = new();
+
     /// <summary>
-    /// Mock <see cref="IView"/> implementation.
+    /// Initializes a new instance of the <see cref="NavigationViewMock"/> class.
     /// </summary>
-    public class NavigationViewMock : IView, IDisposable
+    public NavigationViewMock() => PagePopped = _pagePoppedSubject.AsObservable();
+
+    /// <inheritdoc/>
+    public IScheduler MainThreadScheduler { get; } = CurrentThreadScheduler.Instance;
+
+    /// <inheritdoc/>
+    public IObservable<IViewModel?> PagePopped { get; }
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopModal() => throw new NotImplementedException();
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopPage(bool animate = true) =>
+        Observable
+            .Return(Unit.Default)
+            .Do(_ => _pagePoppedSubject.OnNext(_pageStack.Pop()));
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopToRootPage(bool animate = true) => throw new NotImplementedException();
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) => throw new NotImplementedException();
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack, bool animate = true) =>
+        Observable
+            .Return(Unit.Default)
+            .Do(_ => _pageStack.Push(viewModel));
+
+    /// <inheritdoc/>
+    public void Dispose()
     {
-        private readonly Subject<IViewModel> _pagePoppedSubject = new();
-        private readonly Stack<IViewModel> _pageStack = new();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationViewMock"/> class.
-        /// </summary>
-        public NavigationViewMock() => PagePopped = _pagePoppedSubject.AsObservable();
-
-        /// <inheritdoc/>
-        public IScheduler MainThreadScheduler { get; } = CurrentThreadScheduler.Instance;
-
-        /// <inheritdoc/>
-        public IObservable<IViewModel?> PagePopped { get; }
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PopModal() => throw new NotImplementedException();
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PopPage(bool animate = true) =>
-            Observable
-                .Return(Unit.Default)
-                .Do(_ => _pagePoppedSubject.OnNext(_pageStack.Pop()));
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PopToRootPage(bool animate = true) => throw new NotImplementedException();
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) => throw new NotImplementedException();
-
-        /// <inheritdoc/>
-        public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack, bool animate = true) =>
-            Observable
-                .Return(Unit.Default)
-                .Do(_ => _pageStack.Push(viewModel));
-
-        /// <inheritdoc/>
-        public void Dispose()
+    /// <summary>
+    /// Releases unmanaged and - optionally - managed resources.
+    /// </summary>
+    /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases unmanaged and - optionally - managed resources.
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _pagePoppedSubject.Dispose();
-            }
+            _pagePoppedSubject.Dispose();
         }
     }
 }
