@@ -40,7 +40,7 @@
     <PackageVersion Include="Xunit.StaFact" Version="1.2.69" />
   </ItemGroup>
   <ItemGroup Condition="$(UseMaui) == 'true'">
-    <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-    <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.100" />
+    <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.100" />
   </ItemGroup>
 </Project>

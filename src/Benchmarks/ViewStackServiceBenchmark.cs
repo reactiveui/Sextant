@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
+﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -15,10 +15,12 @@ namespace Sextant.Benchmarks
     /// Benchmarks for the ViewStackService.
     /// </summary>
     [SimpleJob(runtimeMoniker: RuntimeMoniker.Net462)]
-    [SimpleJob(runtimeMoniker: RuntimeMoniker.Net80)]
+    [SimpleJob(runtimeMoniker: RuntimeMoniker.Net90)]
     [MemoryDiagnoser]
     [MarkdownExporterAttribute.GitHub]
+#pragma warning disable RCS1102 // Make class static
     public class ViewStackServiceBenchmark
+#pragma warning restore RCS1102 // Make class static
     {
         /// <summary>
         /// Benchmarks for the PopModal method.
@@ -31,19 +33,13 @@ namespace Sextant.Benchmarks
             /// Setup method for when running all bench marks.
             /// </summary>
             [GlobalSetup]
-            public void Setup()
-            {
-                _viewStackService = new ViewStackService(new BenchmarkView());
-            }
+            public void Setup() => _viewStackService = new ViewStackService(new BenchmarkView());
 
             /// <summary>
             /// Setup method for pushing a page to the stack.
             /// </summary>
             [IterationSetup]
-            public void BenchmarkSetup()
-            {
-                _viewStackService?.PushModal(new ViewModel());
-            }
+            public void BenchmarkSetup() => _viewStackService?.PushModal(new ViewModel());
 
             /// <summary>
             /// Benchmarks poping a modal from the view stack service.
@@ -71,19 +67,13 @@ namespace Sextant.Benchmarks
             /// Setup method for when running all bench marks.
             /// </summary>
             [GlobalSetup]
-            public void Setup()
-            {
-                _viewStackService = new ViewStackService(new BenchmarkView());
-            }
+            public void Setup() => _viewStackService = new ViewStackService(new BenchmarkView());
 
             /// <summary>
             /// Setup method for pushing a page to the stack.
             /// </summary>
             [IterationSetup]
-            public void BenchmarkSetup()
-            {
-                _viewStackService?.PushPage(new ViewModel());
-            }
+            public void BenchmarkSetup() => _viewStackService?.PushPage(new ViewModel());
 
             /// <summary>
             /// Benchmarks pushing a page onto the view stack service.
@@ -139,19 +129,13 @@ namespace Sextant.Benchmarks
             /// Setup method for when running all bench marks.
             /// </summary>
             [GlobalSetup]
-            public void Setup()
-            {
-                _viewStackService = new ViewStackService(new BenchmarkView());
-            }
+            public void Setup() => _viewStackService = new ViewStackService(new BenchmarkView());
 
             /// <summary>
             /// Setup method for pushing a page to the stack.
             /// </summary>
             [IterationSetup]
-            public void BenchmarkSetup()
-            {
-                _viewModel = new ViewModel();
-            }
+            public void BenchmarkSetup() => _viewModel = new ViewModel();
 
             /// <summary>
             /// Clean up method after pushing a page to the stack.
@@ -191,19 +175,13 @@ namespace Sextant.Benchmarks
             /// Setup method for when running all bench marks.
             /// </summary>
             [GlobalSetup]
-            public void Setup()
-            {
-                _viewStackService = new ViewStackService(new BenchmarkView());
-            }
+            public void Setup() => _viewStackService = new ViewStackService(new BenchmarkView());
 
             /// <summary>
             /// Setup method for pushing a page to the stack.
             /// </summary>
             [IterationSetup]
-            public void BenchmarkSetup()
-            {
-                _viewModel = new ViewModel();
-            }
+            public void BenchmarkSetup() => _viewModel = new ViewModel();
 
             /// <summary>
             /// Clean up method after pushing a page to the stack.
