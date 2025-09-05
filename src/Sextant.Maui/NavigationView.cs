@@ -181,13 +181,15 @@ public class NavigationView : NavigationPage, IView, IEnableLogger
                             return Navigation.PushAsync(page, false).ToObservable();
                         }
 
-                        // XF does not allow us to pop to a new root page. Instead, we need to inject the new root page and then pop to it.
-                        Navigation
-                            .InsertPageBefore(page, Navigation.NavigationStack[0]);
+                        // When resetting stack, completely clear navigation stack and push new page as root.
+                        // This ensures FlyoutPage and other special pages work correctly as the actual root.
+                        var pagesToRemove = Navigation.NavigationStack.ToList();
+                        foreach (var pageToRemove in pagesToRemove)
+                        {
+                            Navigation.RemovePage(pageToRemove);
+                        }
 
-                        return Navigation
-                            .PopToRootAsync(false)
-                            .ToObservable();
+                        return Navigation.PushAsync(page, false).ToObservable();
                     }
 
                     return Navigation
