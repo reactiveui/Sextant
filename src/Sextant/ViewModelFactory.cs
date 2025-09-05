@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
+﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
@@ -25,7 +25,7 @@ public static class ViewModelFactory
     {
         get
         {
-            var locator = Locator.Current.GetService<IViewModelFactory>();
+            var locator = AppLocator.Current.GetService<IViewModelFactory>();
             return locator switch
             {
                 null => throw new ViewModelFactoryNotFoundException("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken"),
