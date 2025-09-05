@@ -32,11 +32,12 @@ public sealed class ViewModelFactoryTests
         [Test]
         public void Should_Throw_If_Not_Registered()
         {
-            // Given, When
-            var result = Assert.Throws<ViewModelFactoryNotFoundException>(() => ViewModelFactory.Current);
-
-            // Then
-            Assert.That(result.Message, Is.EqualTo("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken"));
+            // Given, When, Then
+            var exception = Assert.Throws<ViewModelFactoryNotFoundException>(() =>
+            {
+                var _ = ViewModelFactory.Current;
+            });
+            Assert.That(exception!.Message, Is.EqualTo("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken"));
         }
 
         /// <summary>

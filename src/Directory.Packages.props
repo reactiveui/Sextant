@@ -34,6 +34,7 @@
     <PackageVersion Include="stylecop.analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="System.Collections.Immutable" Version="9.0.8" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
+    <PackageVersion Include="Verify.NUnit" Version="30.7.3" />
   </ItemGroup>
   <ItemGroup Condition="$(UseMaui) == 'true'">
     <PackageVersion Include="Microsoft.Maui.Controls" Version="9.0.100" />

@@ -15,6 +15,7 @@
     <PackageReference Include="ReactiveUI.Testing" />
     <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="DiffEngine" />
+    <PackageReference Include="Verify.NUnit" />
   </ItemGroup>
 
   <ItemGroup>

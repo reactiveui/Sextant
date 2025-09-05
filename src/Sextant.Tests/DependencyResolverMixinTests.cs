@@ -100,6 +100,7 @@ public sealed class DependencyResolverMixinTests
     /// Tests the register view for navigation method.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public sealed class TheRegisterViewForNavigationMethod
     {
         /// <summary>
