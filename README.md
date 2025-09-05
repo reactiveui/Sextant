@@ -7,196 +7,239 @@
 
 ## A ReactiveUI view model based navigation library
 
-Sextant was born from a fork of [Xamvvm](https://github.com/xamvvm/xamvvm) which is nice and simple MVVM Framework with a good navigation system. The problem is, I just wanted a simple navigation system to use with [ReactiveUI](https://github.com/reactiveui/ReactiveUI) without all the things that come along an MVVM framework. Plus, I wanted to make it more "Reactive Friendly".
+Sextant provides a simple, reactive, view model first navigation service for ReactiveUI applications. It originated from ideas in Kent Boogaart's “Custom routing in ReactiveUI” and has evolved to support modern platforms and the latest ReactiveUI/Splat patterns.
 
-Then a wild [Rodney Littles](https://github.com/rlittlesii) appears, and with him an implementation of this [AMAZING POST](https://kent-boogaart.com/blog/custom-routing-in-reactiveui) by [Kent](https://github.com/kentcb)
+Sextant focuses on:
+- ViewModel-first navigation with reactive APIs (IObservable<Unit>)
+- Lifecycle hooks for parameterized navigation (INavigable)
+- Uniform abstractions across platforms with pluggable IView/IViewLocator
 
-Sextant is in a very initial stage and in constant change, so please be pantience with use... because we will break things.
+## Packages
 
-This library is nothing more than me "standing on the shoulders of giants":
-[Kent](https://github.com/kentcb) for been the original and true creator of this, I pretty much just copied and pasted it :)
-[Geoffrey Huntley](https://github.com/ghuntley) maintainer on [ReactiveUI](https://github.com/reactiveui/ReactiveUI).
+Install the packages into your app and platform projects, depending on target UI stack.
 
-## NuGet Installation
+- Core (required): Sextant
+- .NET MAUI: Sextant.Maui (NavigationView + DI helpers)
+- Avalonia: Sextant.Avalonia (NavigationView + DI helpers)
+- Optional: Sextant.Plugins.Popup (MAUI, Mopups based modal plugin)
 
-Install the nuget package on your Forms project and ViewModels project.
+Minimum platform versions follow ReactiveUI platform minimums: https://reactiveui.net/docs/getting-started/minimum-versions#platform-minimums
 
-### GitHub
-Pre release packages are available at https://nuget.pkg.github.com/reactiveui/index.json
+## Bootstrapping with AppLocator (and AppBuilder)
 
-### NuGet
+ReactiveUI/Splat provide AppLocator (and AppBuilder) to configure dependency resolution for your app. Sextant integrates with AppLocator and auto-initializes when the resolver is ready.
 
-| Platform          | Sextant Package                  | NuGet                    |
-| ----------------- | -------------------------------- | ------------------------ |
-| UWP               | [Sextant][UwpDoc]                | [![CoreBadge]][Core]     |
-| Xamarin.Forms     | [Sextant.XamForms][XamDoc]       | [![XamBadge]][Xam]       |
-| Xamarin.Forms     | [Sextant.Plugins.Popup][XamDoc]   | [![PopupBadge]][Popup]   |
-| Xamarin.iOS       | [Sextant][IosDoc]                | [![CoreBadge]][Core]     |
-| Avalonia          | [Sextant.Avalonia][AvaloniaDoc]  | [![CoreBadge]][Avalonia] |
+At app startup, register your navigation view, view models, and view locator, then push the initial page.
 
-[Core]: https://www.nuget.org/packages/Sextant/
-[CoreBadge]: https://img.shields.io/nuget/v/Sextant.svg
-[CoreDoc]: https://reactiveui.net/docs/getting-started/installation/
-[IosDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-ios
-[UwpDoc]: https://reactiveui.net/docs/getting-started/installation/universal-windows-platform
-[AvaloniaDoc]: https://www.reactiveui.net/docs/getting-started/installation/avalonia
+### .NET MAUI quick start
 
-[Xam]: https://www.nuget.org/packages/Sextant.XamForms/
-[XamBadge]: https://img.shields.io/nuget/v/Sextant.XamForms.svg
-[Popup]: https://www.nuget.org/packages/Sextant.Plugins.Popup/
-[PopupBadge]: https://img.shields.io/nuget/v/Sextant.Plugins.Popup.svg
-[XamDoc]: https://reactiveui.net/docs/getting-started/installation/xamarin-forms
-[Avalonia]: https://www.nuget.org/packages/Sextant.Avalonia/
+- Ensure you’ve added ReactiveUI.Maui and Sextant.Maui.
+- Register views and services using AppLocator.
+- Set MainPage to the registered NavigationView.
 
-### Target Platform Versions
-
-##### Verify you have the [minimum version](https://reactiveui.net/docs/getting-started/minimum-versions#platform-minimums) for your target platform (i.e. Android, iOS, Tizen).
-
-## Register Components
-
-### Views
-
-Version 2.0 added new extensions methods for the `IMutableDepedencyResolver` that allow you to register an `IViewFor` to a View Model.
+Example (in App constructor or after DI setup):
 
 ```csharp
-Locator
-    .CurrentMutable
-    .RegisterNavigationView(() => new NavigationView(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current))
+using ReactiveUI;
+using ReactiveUI.Maui;
+using Sextant;
+using Sextant.Maui;
+using Splat;
+
+// Register all navigation components
+AppLocator.CurrentMutable
+    // IViewLocator should be registered in your app; many apps use ReactiveUI.ViewLocator.Current
+    .RegisterConstant(ReactiveUI.ViewLocator.Current, typeof(IViewLocator))
+    .RegisterNavigationView() // Sextant.Maui NavigationView
+    .RegisterViewModelFactory(() => new DefaultViewModelFactory())
     .RegisterParameterViewStackService()
-    .RegisterViewForNavigation(() => new PassPage(), () => new PassViewModel())
-    .RegisterViewForNavigation(() => new ReceivedPage(), () => new ReceivedViewModel());
-```
+    // Views and VMs for navigation
+    .RegisterViewForNavigation<HomeView, HomeViewModel>(() => new HomeView(), () => new HomeViewModel())
+    .RegisterViewForNavigation<DetailsView, DetailsViewModel>(() => new DetailsView(), () => new DetailsViewModel());
 
-Set the initial page:
-```csharp
-Locator
-    .Current
+// Push initial page
+AppLocator.Current
     .GetService<IParameterViewStackService>()
-    .PushPage<PassViewModel>()
+    .PushPage<HomeViewModel>(resetStack: true, animate: false)
     .Subscribe();
 
-MainPage = Locator.Current.GetNavigationView("NavigationView");
+// Hook MAUI MainPage to Sextant NavigationView
+MainPage = AppLocator.Current.GetNavigationView();
 ```
 
-## Use the Navigation Service
+Notes
+- If you don’t pass parameters, IViewStackService is sufficient. If you pass parameters or use INavigable lifecycle, prefer IParameterViewStackService.
+- Sextant.Maui exposes GetNavigationView() to fetch the registered NavigationView.
 
-After that all you have to do is call one of the methods inside your ViewModels:
+### Avalonia quick start
+
+Register navigation and show a window containing the NavigationView.
+
 ```csharp
-/// <summary>
-/// Pops the <see cref="IPageViewModel"/> off the stack.
-/// </summary>
-/// <param name="animate">if set to <c>true</c> [animate].</param>
-/// <returns></returns>
-IObservable<Unit> PopModal(bool animate = true);
+using Avalonia;
+using Avalonia.Controls;
+using ReactiveUI;
+using Sextant;
+using Sextant.Avalonia;
+using Splat;
 
-/// <summary>
-/// Pops the <see cref="IPageViewModel"/> off the stack.
-/// </summary>
-/// <param name="animate">if set to <c>true</c> [animate].</param>
-/// <returns></returns>
-IObservable<Unit> PopPage(bool animate = true);
-
-/// <summary>
-/// Pushes the <see cref="IPageViewModel"/> onto the stack.
-/// </summary>
-/// <param name="modal">The modal.</param>
-/// <param name="contract">The contract.</param>
-/// <returns></returns>
-IObservable<Unit> PushModal(IPageViewModel modal, string contract = null);
-
-/// <summary>
-/// Pushes the <see cref="IPageViewModel"/> onto the stack.
-/// </summary>
-/// <param name="page">The page.</param>
-/// <param name="contract">The contract.</param>
-/// <param name="resetStack">if set to <c>true</c> [reset stack].</param>
-/// <param name="animate">if set to <c>true</c> [animate].</param>
-/// <returns></returns>
-IObservable<Unit> PushPage(IPageViewModel page, string contract = null, bool resetStack = false, bool animate = true);
-```
-
-### Example
-```csharp
-public class ViewModel
+public static class Program
 {
-    private readonly IViewStackServicen _viewStackService; // or IParameterViewStackServicen
-
-    public ViewModel(IViewStackServicen viewStackService)
+    [STAThread]
+    public static void Main(string[] args)
     {
-        _viewStackService = viewStackService;
-
-        OpenModal = ReactiveCommand
-            // FirstModalViewModel must implement IViewModel or INavigable
-            .CreateFromObservable(() => viewStackService.PushModal<FirstModalViewModel>(),
-                outputScheduler: RxApp.MainThreadScheduler);
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
     }
 
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .UseReactiveUI();
+}
+
+public class App : Application
+{
+    public override void OnFrameworkInitializationCompleted()
+    {
+        // DI registrations
+        AppLocator.CurrentMutable
+            .RegisterConstant(ReactiveUI.ViewLocator.Current, typeof(IViewLocator))
+            .RegisterNavigationView(() => new Sextant.Avalonia.NavigationView())
+            .RegisterViewModelFactory(() => new DefaultViewModelFactory())
+            .RegisterViewForNavigation<HomeView, HomeViewModel>(() => new HomeView(), () => new HomeViewModel());
+
+        var viewStack = AppLocator.Current.GetService<IViewStackService>()!;
+        viewStack.PushPage<HomeViewModel>(resetStack: true).Subscribe();
+
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow = new Window { Content = AppLocator.Current.GetNavigationView() };
+        }
+
+        base.OnFrameworkInitializationCompleted();
+    }
+}
+```
+
+## Using the navigation services
+
+Sextant provides two main services:
+- IViewStackService – view model first navigation
+- IParameterViewStackService – navigation with parameters and lifecycle
+
+Common methods (both services)
+- IObservable<Unit> PushPage<TViewModel>(string? contract = null, bool resetStack = false, bool animate = true)
+- IObservable<Unit> PushPage(IViewModel viewModel, string? contract = null, bool resetStack = false, bool animate = true)
+- IObservable<Unit> PushModal<TViewModel>(string? contract = null, bool withNavigationPage = true)
+- IObservable<Unit> PushModal(IViewModel modal, string? contract = null, bool withNavigationPage = true)
+- IObservable<Unit> PopPage(bool animate = true)
+- IObservable<Unit> PopModal(bool animate = true)
+- IObservable<Unit> PopToRootPage(bool animate = true)
+- IObservable<IImmutableList<IViewModel>> PageStack / ModalStack
+- IObservable<IViewModel> TopPage() / TopModal()
+
+Parameter navigation (IParameterViewStackService)
+- IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true) where TViewModel : INavigable
+- IObservable<Unit> PushPage(INavigable vm, INavigationParameter parameter, string? contract = null, bool resetStack = false, bool animate = true)
+- IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract = null, bool withNavigationPage = true) where TViewModel : INavigable
+- IObservable<Unit> PushModal(INavigable modal, INavigationParameter parameter, string? contract = null, bool withNavigationPage = true)
+- IObservable<Unit> PopPage(INavigationParameter parameter, bool animate = true)
+
+## Parameters and lifecycle (INavigable)
+
+Implement INavigable on your view models to receive lifecycle notifications and parameters.
+
+```csharp
+using System;
+using System.Reactive;
+using Sextant;
+
+public sealed class DetailsViewModel : INavigable
+{
+    public string Id => nameof(DetailsViewModel);
+
+    public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter)
+    {
+        // Called before the page is pushed
+        return Observable.Return(Unit.Default);
+    }
+
+    public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter)
+    {
+        // Read parameters
+        parameter.TryGetValue("itemId", out string id);
+        return Observable.Return(Unit.Default);
+    }
+
+    public IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter)
+        => Observable.Return(Unit.Default);
+}
+```
+
+Passing parameters
+
+```csharp
+var param = new NavigationParameter { ["itemId"] = someId };
+_appLocator.GetService<IParameterViewStackService>()
+    .PushPage<DetailsViewModel>(param)
+    .Subscribe();
+```
+
+## View model usage example
+
+```csharp
+using System.Reactive;
+using ReactiveUI;
+using Sextant;
+
+public class HomeViewModel : ViewModelBase
+{
+    public HomeViewModel(IViewStackService nav)
+    {
+        OpenDetails = ReactiveCommand.CreateFromObservable(
+            () => nav.PushPage<DetailsViewModel>(),
+            outputScheduler: RxApp.MainThreadScheduler);
+
+        OpenModal = ReactiveCommand.CreateFromObservable(
+            () => nav.PushModal<AboutViewModel>(),
+            outputScheduler: RxApp.MainThreadScheduler);
+
+        Back = ReactiveCommand.CreateFromObservable(
+            () => nav.PopPage(),
+            outputScheduler: RxApp.MainThreadScheduler);
+    }
+
+    public ReactiveCommand<Unit, Unit> OpenDetails { get; }
     public ReactiveCommand<Unit, Unit> OpenModal { get; }
+    public ReactiveCommand<Unit, Unit> Back { get; }
+
+    public override string Id => nameof(HomeViewModel);
 }
 ```
 
-## Pass Parameters
+## Contracts and modal options
 
-Version 2.0 added support for passing parameters when navigating.
+- contract lets you register/resolve alternate views for the same ViewModel.
+- withNavigationPage (PushModal) wraps the modal in a navigation page on platforms that support it (e.g., MAUI).
+- resetStack replaces the navigation stack with the pushed page.
 
-### Example
+## Best practices
 
-```csharp
-public class ViewModel
-{
-    private readonly IParameterViewStackServicen _viewStackService;
-
-    public ViewModel(IParameterViewStackServicen viewStackService)
-    {
-        _viewStackService = viewStackService;
-
-        Navigate = ReactiveCommand
-            // NavigableViewModel must implement INavigable
-            .CreateFromObservable(() => viewStackService.PushModal<NavigableViewModel>(new NavigationParameter { { "parameter", parameter } }),
-                outputScheduler: RxApp.MainThreadScheduler);
-    }
-
-    public ReactiveCommand<Unit, Unit> Navigate { get; }
-}
-```
-
-The `INavigable` interface exposes view model lifecycle methods that can be subscribed to.  These methods unbox your parameter object. Implementing the interface allows you to assign values to the View Model during Navigation.
-
-```csharp
-public class NavigableViewModel : INavigable
-{
-        public string? _parameter;
-
-        public IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter)
-        {
-            return Observable.Return(Unit.Default)
-        }
-
-        public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter)
-        {
-            parameter.TryGetValue("parameter", out _parameter);
-            return Observable.Return(Unit.Default);
-        }
-
-        public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter)
-        {
-            return Observable.Return(Unit.Default);
-        }
-}
-```
+- Register IViewLocator. If you already use ReactiveUI’s default, register ReactiveUI.ViewLocator.Current as IViewLocator.
+- Use AppLocator.CurrentMutable to register views, services, and factories during boot.
+- Prefer IParameterViewStackService when passing data or using lifecycle hooks (INavigable).
+- Dispose resources in view models implementing IDestructible; Sextant calls Destroy() when a VM is popped.
+- Observe on RxApp.MainThreadScheduler when updating UI; Sextant uses IView.MainThreadScheduler internally.
 
 ## Samples
 
-- [Sample](https://github.com/reactiveui/Sextant/tree/main/Sample)
-- [Navigation Parameter Sample](https://github.com/reactiveui/ReactiveUI.Samples/tree/main/xamarin-forms/Navigation.Parameters)
+This repository contains MAUI and Avalonia samples demonstrating full setups (registration, navigation, parameters, and modal flows). Explore the Samples folder in the repo.
 
 ## Contribute
 
-Sextant is developed under an OSI-approved open source license, making it freely usable and distributable, even for commercial use. We ❤ the people who are involved in this project, and we’d love to have you on board, especially if you are just getting started or have never contributed to open-source before.
+Sextant is developed under an OSI-approved open source license, making it freely usable and distributable, even for commercial use. We appreciate contributions of all kinds: docs, samples, bug reports, and features.
 
-So here's to you, lovely person who wants to join us — this is how you can support us:
-
-* [Responding to questions on StackOverflow](https://stackoverflow.com/questions/tagged/sextant)
-* [Passing on knowledge and teaching the next generation of developers](http://ericsink.com/entries/dont_use_rxui.html)
-* Submitting documentation updates where you see fit or lacking.
-* Making contributions to the code base.
+- Answer questions on StackOverflow: https://stackoverflow.com/questions/tagged/sextant
+- Share knowledge and help new contributors
+- Submit documentation updates where needed
+- Make code contributions

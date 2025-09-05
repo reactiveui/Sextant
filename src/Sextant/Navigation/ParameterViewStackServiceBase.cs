@@ -98,7 +98,7 @@ public abstract class ParameterViewStackServiceBase(IView view, IViewModelFactor
                 .Do(_ =>
                 {
                     AddToStackAndTick(ModalSubject, navigableModal, false);
-                    Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
+                    Logger.Debug($"Added modal '{navigableModal.Id}' (contract '{contract}') to stack.");
 
                     navigableModal
                         .WhenNavigatedTo(parameter)

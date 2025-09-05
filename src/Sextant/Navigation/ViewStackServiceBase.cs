@@ -132,7 +132,7 @@ public abstract class ViewStackServiceBase : IViewStackService, IDisposable, IEn
             .Do(_ =>
             {
                 AddToStackAndTick(ModalSubject, modal, false);
-                Logger.Debug("Added modal '{modal.Id}' (contract '{contract}') to stack.");
+                Logger.Debug($"Added modal '{modal.Id}' (contract '{contract}') to stack.");
             });
     }
 
