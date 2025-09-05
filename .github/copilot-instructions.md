@@ -184,6 +184,10 @@ public partial class SextantNavigationService : IViewStackService
   dotnet format style --verify-no-changes
   ```
   Time: **2-5 seconds per command**.
+- **Note**: Formatting requires mobile workloads to be installed. If you get workload errors, install them first:
+  ```bash
+  dotnet workload restore
+  ```
 
 ### Code Analysis Validation
 - **Run analyzers** to check StyleCop and code quality compliance:
@@ -356,7 +360,8 @@ public partial class SextantNavigationService : IViewStackService
 5. **Navigation test failures**: May be platform-specific or require specific view setup
 
 ### Quick Fixes
-- **Format issues**: Run `dotnet format whitespace` and `dotnet format style`
+- **Format issues**: Run `dotnet format whitespace` and `dotnet format style` (requires workloads)
+- **Workload issues**: Install required workloads with `dotnet workload restore`
 - **StyleCop violations**: Check `.editorconfig` rules and `src/stylecop.json` configuration
 - **Analyzer warnings**: Build with `--verbosity normal` to see detailed analyzer messages
 - **Missing XML documentation**: All public APIs require XML doc comments per StyleCop rules
