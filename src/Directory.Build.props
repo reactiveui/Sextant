@@ -46,7 +46,6 @@
     <SextantAndroidTargets>net9.0-android</SextantAndroidTargets>
     <SextantWindowsTargets>net9.0-windows10.0.17763.0</SextantWindowsTargets>
     <SextantAppleTargets>net9.0-ios;net9.0-macos;net9.0-maccatalyst;net9.0-tvos</SextantAppleTargets>
-    <SextantTizenTargets>net9.0-tizen</SextantTizenTargets>
 
     <!-- MAUI specific targets (no netstandard) -->
     <SextantMauiCoreTargets>net9.0</SextantMauiCoreTargets>
@@ -68,15 +67,11 @@
     <!-- Apple (iOS/macOS/MacCatalyst/tvOS): on macOS and on Windows (Pair-to-Mac) -->
     <SextantFinalTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantFinalTargetFrameworks);$(SextantAppleTargets)</SextantFinalTargetFrameworks>
 
-    <!-- Tizen: include on Windows or MacOS -->
-    <SextantFinalTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX')) Or $([MSBuild]::IsOsPlatform('Windows'))">$(SextantFinalTargetFrameworks);$(SextantTizenTargets)</SextantFinalTargetFrameworks>
-
     <!-- MAUI specific composition (no netstandard) -->
     <SextantMauiTargetFrameworks>$(SextantMauiCoreTargets)</SextantMauiTargetFrameworks>
     <SextantMauiTargetFrameworks>$(SextantMauiTargetFrameworks);$(SextantAndroidTargets)</SextantMauiTargetFrameworks>
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(SextantMauiTargetFrameworks);$(SextantWindowsTargets);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
-    <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX')) Or $([MSBuild]::IsOsPlatform('Windows'))">$(SextantMauiTargetFrameworks);$(SextantTizenTargets)</SextantMauiTargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
