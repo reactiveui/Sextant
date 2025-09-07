@@ -37,10 +37,10 @@ public sealed class NavigationViewResetStackTests
     {
         Locator.CurrentMutable.InitializeSplat();
         Locator.CurrentMutable.InitializeReactiveUI();
-        
+
         _viewLocator = Substitute.For<IViewLocator>();
         _testViewModel = new TestViewModel();
-        
+
         // Return a new TestPage for each call to avoid "Page must not already have a parent" errors
         _viewLocator.ResolveView(Arg.Any<object>(), Arg.Any<string>()).Returns(callInfo => new TestPage());
     }
@@ -54,18 +54,18 @@ public sealed class NavigationViewResetStackTests
         // Given
         var initialPage = new TestPage();
         var navigationView = new NavigationView(CurrentThreadScheduler.Instance, CurrentThreadScheduler.Instance, _viewLocator, initialPage);
-        
+
         // Add some pages to the stack
         await navigationView.PushPage(_testViewModel, null, false, false).FirstAsync();
         await navigationView.PushPage(_testViewModel, null, false, false).FirstAsync();
-        
+
         // Verify stack has pages
         Assert.That(navigationView.Navigation.NavigationStack.Count, Is.EqualTo(3)); // root + 2 pushed pages
-        
+
         // When - push new page with resetStack=true
         var newViewModel = new TestViewModel();
         await navigationView.PushPage(newViewModel, null, true, false).FirstAsync();
-        
+
         // Then - navigation stack should only contain the new page
         Assert.Multiple(() =>
         {
@@ -83,13 +83,13 @@ public sealed class NavigationViewResetStackTests
     {
         // Given
         var navigationView = new NavigationView(CurrentThreadScheduler.Instance, CurrentThreadScheduler.Instance, _viewLocator);
-        
+
         // Verify stack is empty
         Assert.That(navigationView.Navigation.NavigationStack.Count, Is.EqualTo(0));
-        
+
         // When - push page with resetStack=true on empty stack
         await navigationView.PushPage(_testViewModel, null, true, false).FirstAsync();
-        
+
         // Then - page should be added normally
         Assert.Multiple(() =>
         {
@@ -108,17 +108,17 @@ public sealed class NavigationViewResetStackTests
         // Given
         var initialPage = new TestPage();
         var navigationView = new NavigationView(CurrentThreadScheduler.Instance, CurrentThreadScheduler.Instance, _viewLocator, initialPage);
-        
+
         // Add a page to the stack
         await navigationView.PushPage(_testViewModel, null, false, false).FirstAsync();
-        
+
         // Verify stack has pages
         Assert.That(navigationView.Navigation.NavigationStack.Count, Is.EqualTo(2)); // root + 1 pushed page
-        
+
         // When - push new page with resetStack=false
         var newViewModel = new TestViewModel();
         await navigationView.PushPage(newViewModel, null, false, false).FirstAsync();
-        
+
         // Then - navigation stack should contain all pages
         Assert.Multiple(() =>
         {
@@ -136,10 +136,10 @@ public sealed class NavigationViewResetStackTests
         // Given
         var navigationView = new NavigationView(CurrentThreadScheduler.Instance, CurrentThreadScheduler.Instance, _viewLocator);
         _testViewModel.Id = "TestPageTitle";
-        
+
         // When
         await navigationView.PushPage(_testViewModel, null, true, false).FirstAsync();
-        
+
         // Then
         var pushedPage = navigationView.Navigation.NavigationStack[0];
         Assert.That(pushedPage.Title, Is.EqualTo("TestPageTitle"));
@@ -154,10 +154,10 @@ public sealed class NavigationViewResetStackTests
         // Given
         var navigationView = new NavigationView(CurrentThreadScheduler.Instance, CurrentThreadScheduler.Instance, _viewLocator);
         const string contract = "TestContract";
-        
+
         // When
         await navigationView.PushPage(_testViewModel, contract, true, false).FirstAsync();
-        
+
         // Then
         _viewLocator.Received(1).ResolveView(_testViewModel, contract);
     }
@@ -170,10 +170,10 @@ public sealed class NavigationViewResetStackTests
     {
         // Given
         var navigationView = new NavigationView(CurrentThreadScheduler.Instance, CurrentThreadScheduler.Instance, _viewLocator);
-        
+
         // When
         await navigationView.PushPage(_testViewModel, null, true, false).FirstAsync();
-        
+
         // Then
         var pushedPage = navigationView.Navigation.NavigationStack[0];
         Assert.That(pushedPage.BindingContext, Is.EqualTo(_testViewModel));
