@@ -181,15 +181,29 @@ public class NavigationView : NavigationPage, IView, IEnableLogger
                             return Navigation.PushAsync(page, false).ToObservable();
                         }
 
-                        // When resetting stack, completely clear navigation stack and push new page as root.
-                        // This ensures FlyoutPage and other special pages work correctly as the actual root.
-                        var pagesToRemove = Navigation.NavigationStack.ToList();
-                        foreach (var pageToRemove in pagesToRemove)
+                        if (Navigation.NavigationStack.Count == 1)
                         {
-                            Navigation.RemovePage(pageToRemove);
+                            // If there's only the root page, we need to use a different approach.
+                            // We'll insert the new page before the root, then remove the root.
+                            Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
+                            var oldRoot = Navigation.NavigationStack[1]; // The old root is now at index 1
+                            Navigation.RemovePage(oldRoot);
+                            return Observable.Return(Unit.Default);
                         }
 
-                        return Navigation.PushAsync(page, false).ToObservable();
+                        // For multiple pages, first pop to root, then replace the root
+                        return Navigation.PopToRootAsync(false).ToObservable()
+                            .Do(_ =>
+                            {
+                                // Now there should only be the root page left
+                                if (Navigation.NavigationStack.Count == 1)
+                                {
+                                    Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
+                                    var oldRoot = Navigation.NavigationStack[1];
+                                    Navigation.RemovePage(oldRoot);
+                                }
+                            })
+                            .Select(_ => Unit.Default);
                     }
 
                     return Navigation
