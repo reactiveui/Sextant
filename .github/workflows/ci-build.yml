@@ -4,7 +4,6 @@ on:
   push:
     branches-ignore:
       - main
-  pull_request:
 
 # Needed so the reusable workflow can optionally delete the temp per-OS artifacts it creates.
 permissions:
