@@ -17,12 +17,14 @@ namespace Sextant.Tests;
 /// Test a <see cref="IDestructible"/> implementation.
 /// </summary>
 [TestFixture]
+[NonParallelizable]
 public sealed class DestructibleTests
 {
     /// <summary>
     /// Tests the destroy method.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public class TheDestroyMethod
     {
         /// <summary>

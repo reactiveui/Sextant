@@ -14,12 +14,14 @@ namespace Sextant.Tests;
 /// Tests the IMutableDependencyResolver extension class.
 /// </summary>
 [TestFixture]
+[NonParallelizable]
 public sealed class DependencyResolverMixinTests
 {
     /// <summary>
     /// Tests the register view model factory method.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public sealed class TheRegisterViewModelFactoryMethod
     {
         /// <summary>
@@ -69,6 +71,7 @@ public sealed class DependencyResolverMixinTests
     /// Tests the register view method.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public sealed class TheRegisterViewMethod
     {
         /// <summary>

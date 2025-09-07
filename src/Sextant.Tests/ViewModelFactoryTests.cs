@@ -12,12 +12,14 @@ namespace Sextant.Tests;
 /// Tests the <see cref="ViewModelFactory"/>.
 /// </summary>
 [TestFixture]
+[NonParallelizable]
 public sealed class ViewModelFactoryTests
 {
     /// <summary>
     /// Tests the currently registered view model factory parameter.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public class CurrentPropertyTests
     {
         /// <summary>
