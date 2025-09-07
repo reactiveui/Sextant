@@ -32,7 +32,6 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <NoWarn>$(NoWarn);CA1510;IDE0130</NoWarn>
   </PropertyGroup>
-
   <!-- =========================
        TFM Bucket Definitions  
        ========================= -->
@@ -79,6 +78,7 @@
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX')) Or $([MSBuild]::IsOsPlatform('Windows'))">$(SextantMauiTargetFrameworks);$(SextantTizenTargets)</SextantMauiTargetFrameworks>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
