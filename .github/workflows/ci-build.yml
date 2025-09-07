@@ -4,15 +4,18 @@ on:
   push:
     branches-ignore:
       - main
+  pull_request:
 
-env:
-  productNamespacePrefix: "Sextant"
+# Needed so the reusable workflow can optionally delete the temp per-OS artifacts it creates.
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   build:
-    permissions:
-      contents: read
     uses: reactiveui/actions-common/.github/workflows/workflow-common-setup-and-build.yml@main
     with:
-      productNamespacePrefix: "Sextant"
-      solutionFile: "Sextant.sln"
+      productNamespacePrefix: Sextant
+      solutionFile: Sextant.sln
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
