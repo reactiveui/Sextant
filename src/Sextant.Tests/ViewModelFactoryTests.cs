@@ -35,7 +35,7 @@ public sealed class ViewModelFactoryTests
             // Given, When, Then
             var exception = Assert.Throws<ViewModelFactoryNotFoundException>(() =>
             {
-                var _ = ViewModelFactory.Current;
+                var dummy = ViewModelFactory.Current;
             });
             Assert.That(exception!.Message, Is.EqualTo("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken"));
         }

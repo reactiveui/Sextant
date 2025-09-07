@@ -48,6 +48,7 @@ public sealed class NavigationViewResetStackTests
     /// <summary>
     /// Tests that resetStack=true completely clears the navigation stack when it's not empty.
     /// </summary>
+    /// <returns>A completion notification.</returns>
     [Test]
     public async Task PushPage_WithResetStackTrue_WhenStackNotEmpty_ShouldClearEntireStack()
     {
@@ -78,6 +79,7 @@ public sealed class NavigationViewResetStackTests
     /// <summary>
     /// Tests that resetStack=true works when navigation stack is empty.
     /// </summary>
+    /// <returns>A completion notification.</returns>
     [Test]
     public async Task PushPage_WithResetStackTrue_WhenStackEmpty_ShouldPushPageNormally()
     {
@@ -102,6 +104,7 @@ public sealed class NavigationViewResetStackTests
     /// <summary>
     /// Tests that resetStack=false preserves existing navigation behavior.
     /// </summary>
+    /// <returns>A completion notification.</returns>
     [Test]
     public async Task PushPage_WithResetStackFalse_ShouldPreserveExistingBehavior()
     {
@@ -130,6 +133,7 @@ public sealed class NavigationViewResetStackTests
     /// <summary>
     /// Tests that page titles are set correctly when using resetStack.
     /// </summary>
+    /// <returns>A completion notification.</returns>
     [Test]
     public async Task PushPage_WithResetStack_ShouldSetPageTitle()
     {
@@ -148,6 +152,7 @@ public sealed class NavigationViewResetStackTests
     /// <summary>
     /// Tests that view locator is called correctly when using resetStack.
     /// </summary>
+    /// <returns>A completion notification.</returns>
     [Test]
     public async Task PushPage_WithResetStack_ShouldCallViewLocatorCorrectly()
     {
@@ -165,6 +170,7 @@ public sealed class NavigationViewResetStackTests
     /// <summary>
     /// Tests that BindingContext is set correctly when using resetStack.
     /// </summary>
+    /// <returns>A completion notification.</returns>
     [Test]
     public async Task PushPage_WithResetStack_ShouldSetBindingContext()
     {
