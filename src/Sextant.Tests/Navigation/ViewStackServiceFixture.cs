@@ -14,6 +14,7 @@ namespace Sextant.Tests;
 /// <summary>
 /// A fixture for the view stack.
 /// </summary>
+[System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "CA1812:Avoid uninstantiated internal classes", Justification = "Used by test framework")]
 internal sealed class ViewStackServiceFixture : IBuilder
 {
     private IView _view;

@@ -3,44 +3,47 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using FluentAssertions;
+using NUnit.Framework;
 using Splat;
-using Xunit;
 
 namespace Sextant.Tests;
 
 /// <summary>
 /// Tests the <see cref="ViewModelFactory"/>.
 /// </summary>
+[TestFixture]
 public sealed class ViewModelFactoryTests
 {
     /// <summary>
     /// Tests the currently registered view model factory parameter.
     /// </summary>
+    [TestFixture]
     public class CurrentPropertyTests
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CurrentPropertyTests"/> class.
+        /// Sets up the test by unregistering all IViewModelFactory instances.
         /// </summary>
-        public CurrentPropertyTests() => Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
+        [SetUp]
+        public void SetUp() => Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
 
         /// <summary>
         /// Should throw if the IViewFactory is not registered.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Throw_If_Not_Registered()
         {
-            // Given, When
-            var result = Record.Exception(() => ViewModelFactory.Current);
-
-            // Then
-            result.Should().BeOfType<ViewModelFactoryNotFoundException>().Which.Message.Should().Be("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken");
+            // Given, When, Then
+            var exception = Assert.Throws<ViewModelFactoryNotFoundException>(() =>
+            {
+                var _ = ViewModelFactory.Current;
+            });
+            Assert.That(exception!.Message, Is.EqualTo("Could not find a default ViewModelFactory. This should never happen, your dependency resolver is broken"));
         }
 
         /// <summary>
         /// Should return the default view model factory.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Return_View_Model_Factory()
         {
             // Given, When
@@ -48,8 +51,11 @@ public sealed class ViewModelFactoryTests
             var viewModelFactory = ViewModelFactory.Current;
 
             // Then
-            viewModelFactory.Should().BeAssignableTo<IViewModelFactory>();
-            viewModelFactory.Should().BeOfType<DefaultViewModelFactory>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(viewModelFactory, Is.AssignableTo<IViewModelFactory>());
+                Assert.That(viewModelFactory, Is.TypeOf<DefaultViewModelFactory>());
+            });
         }
     }
 }
