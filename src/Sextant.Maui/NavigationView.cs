@@ -181,13 +181,29 @@ public class NavigationView : NavigationPage, IView, IEnableLogger
                             return Navigation.PushAsync(page, false).ToObservable();
                         }
 
-                        // XF does not allow us to pop to a new root page. Instead, we need to inject the new root page and then pop to it.
-                        Navigation
-                            .InsertPageBefore(page, Navigation.NavigationStack[0]);
+                        if (Navigation.NavigationStack.Count == 1)
+                        {
+                            // If there's only the root page, we need to use a different approach.
+                            // We'll insert the new page before the root, then remove the root.
+                            Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
+                            var oldRoot = Navigation.NavigationStack[1]; // The old root is now at index 1
+                            Navigation.RemovePage(oldRoot);
+                            return Observable.Return(Unit.Default);
+                        }
 
-                        return Navigation
-                            .PopToRootAsync(false)
-                            .ToObservable();
+                        // For multiple pages, first pop to root, then replace the root
+                        return Navigation.PopToRootAsync(false).ToObservable()
+                            .Do(_ =>
+                            {
+                                // Now there should only be the root page left
+                                if (Navigation.NavigationStack.Count == 1)
+                                {
+                                    Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
+                                    var oldRoot = Navigation.NavigationStack[1];
+                                    Navigation.RemovePage(oldRoot);
+                                }
+                            })
+                            .Select(_ => Unit.Default);
                     }
 
                     return Navigation
