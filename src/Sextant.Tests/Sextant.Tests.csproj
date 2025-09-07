@@ -12,7 +12,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
-    <Compile Remove="Navigation\NavigationViewResetStackTests.cs" />
     <ProjectReference Include="..\Sextant.Maui\Sextant.Maui.csproj" />
   </ItemGroup>
   
@@ -20,5 +19,7 @@
     <DefineConstants>$(DefineConstants);HAS_MAUI</DefineConstants>
   </PropertyGroup>
   
-  
+ <ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
+    <Compile Remove="Navigation\NavigationViewResetStackTests.cs" />
+  </ItemGroup>  
 </Project>
