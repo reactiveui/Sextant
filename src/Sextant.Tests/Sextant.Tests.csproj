@@ -1,26 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0;</TargetFrameworks>
+    <TargetFrameworks>$(SextantModernTargets)</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>    
     <Nullable>enable</Nullable>    
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NSubstitute" />
-    <PackageReference Include="Microsoft.Reactive.Testing" />
-    <PackageReference Include="ReactiveUI.Testing" />
-    <PackageReference Include="PublicApiGenerator" />
-    <PackageReference Include="DiffEngine" />
-    <PackageReference Include="Verify.NUnit" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
     <ProjectReference Include="..\Sextant.Maui\Sextant.Maui.csproj" />
   </ItemGroup>
+  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <DefineConstants>$(DefineConstants);HAS_MAUI</DefineConstants>
+  </PropertyGroup>
+  
+ <ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
+    <Compile Remove="Navigation\NavigationViewResetStackTests.cs" />
+  </ItemGroup>  
 </Project>

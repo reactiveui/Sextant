@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Import the main Directory.Build.props from src -->
+  <Import Project="../src/Directory.Build.props" />
+</Project>

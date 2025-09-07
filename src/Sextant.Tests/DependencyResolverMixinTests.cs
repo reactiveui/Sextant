@@ -14,14 +14,25 @@ namespace Sextant.Tests;
 /// Tests the IMutableDependencyResolver extension class.
 /// </summary>
 [TestFixture]
+[NonParallelizable]
 public sealed class DependencyResolverMixinTests
 {
     /// <summary>
     /// Tests the register view model factory method.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public sealed class TheRegisterViewModelFactoryMethod
     {
+        /// <summary>
+        /// Sets up the test by clearing the dependency resolver.
+        /// </summary>
+        [SetUp]
+        public void SetUp()
+        {
+            Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
+        }
+
         /// <summary>
         /// Should register the view model factory.
         /// </summary>
@@ -60,8 +71,18 @@ public sealed class DependencyResolverMixinTests
     /// Tests the register view method.
     /// </summary>
     [TestFixture]
+    [NonParallelizable]
     public sealed class TheRegisterViewMethod
     {
+        /// <summary>
+        /// Sets up the test by clearing the dependency resolver.
+        /// </summary>
+        [SetUp]
+        public void SetUp()
+        {
+            Locator.CurrentMutable.UnregisterAll<IViewFor<NavigableViewModelMock>>();
+        }
+
         /// <summary>
         /// Should register the view stack service.
         /// </summary>
@@ -103,6 +124,16 @@ public sealed class DependencyResolverMixinTests
     [NonParallelizable]
     public sealed class TheRegisterViewForNavigationMethod
     {
+        /// <summary>
+        /// Sets up the test by clearing the dependency resolver.
+        /// </summary>
+        [SetUp]
+        public void SetUp()
+        {
+            Locator.CurrentMutable.UnregisterAll<IViewFor<NavigableViewModelMock>>();
+            Locator.CurrentMutable.UnregisterAll<NavigableViewModelMock>();
+        }
+
         /// <summary>
         /// Should register the view for navigation.
         /// </summary>

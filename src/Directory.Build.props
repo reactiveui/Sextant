@@ -32,6 +32,48 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <NoWarn>$(NoWarn);CA1510;IDE0130</NoWarn>
   </PropertyGroup>
+  <!-- =========================
+       TFM Bucket Definitions  
+       ========================= -->
+  <PropertyGroup>
+    <!-- Modern .NET TFMs only (net8/net9) - for tests/benchmarks -->
+    <SextantModernTargets>net8.0;net9.0</SextantModernTargets>
+    
+    <!-- Core TFMs buildable on all OSes (netstandard + modern) - for libraries -->
+    <SextantCoreTargets>netstandard2.0;$(SextantModernTargets)</SextantCoreTargets>
+
+    <!-- MAUI/Platform TFMs -->
+    <SextantAndroidTargets>net9.0-android</SextantAndroidTargets>
+    <SextantWindowsTargets>net9.0-windows10.0.17763.0</SextantWindowsTargets>
+    <SextantAppleTargets>net9.0-ios;net9.0-macos;net9.0-maccatalyst;net9.0-tvos</SextantAppleTargets>
+
+    <!-- MAUI specific targets (no netstandard) -->
+    <SextantMauiCoreTargets>net9.0</SextantMauiCoreTargets>
+  </PropertyGroup>
+
+  <!-- =========================
+       OS-Aware Composition
+       ========================= -->
+  <PropertyGroup>
+    <!-- Base always-present for full framework support -->
+    <SextantFinalTargetFrameworks>$(SextantCoreTargets)</SextantFinalTargetFrameworks>
+
+    <!-- Android: allowed on any OS (workload-dependent; no OS gate needed) -->
+    <SextantFinalTargetFrameworks>$(SextantFinalTargetFrameworks);$(SextantAndroidTargets)</SextantFinalTargetFrameworks>
+
+    <!-- Windows MAUI/Desktop: only on Windows hosts, Windows can include "everything"-->
+    <SextantFinalTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(SextantFinalTargetFrameworks);$(SextantWindowsTargets);$(SextantAppleTargets)</SextantFinalTargetFrameworks>
+
+    <!-- Apple (iOS/macOS/MacCatalyst/tvOS): on macOS and on Windows (Pair-to-Mac) -->
+    <SextantFinalTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantFinalTargetFrameworks);$(SextantAppleTargets)</SextantFinalTargetFrameworks>
+
+    <!-- MAUI specific composition (no netstandard) -->
+    <SextantMauiTargetFrameworks>$(SextantMauiCoreTargets)</SextantMauiTargetFrameworks>
+    <SextantMauiTargetFrameworks>$(SextantMauiTargetFrameworks);$(SextantAndroidTargets)</SextantMauiTargetFrameworks>
+    <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(SextantMauiTargetFrameworks);$(SextantWindowsTargets);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
+    <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>

@@ -24,6 +24,7 @@ namespace Sextant.Tests.Navigation;
 /// Tests for NavigationView resetStack behavior.
 /// </summary>
 [TestFixture]
+[NonParallelizable]
 public sealed class NavigationViewResetStackTests
 {
     private IViewLocator _viewLocator = null!;
