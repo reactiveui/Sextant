@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NSubstitute" />
+    <PackageReference Include="Microsoft.Reactive.Testing" />
+    <PackageReference Include="ReactiveUI.Testing" />
+    <PackageReference Include="PublicApiGenerator" />
+    <PackageReference Include="DiffEngine" />
+    <PackageReference Include="Verify.NUnit" />
   </ItemGroup>
 
   <ItemGroup>

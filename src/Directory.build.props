@@ -46,14 +46,12 @@
 
   <ItemGroup Condition="$(IsTestProject)">
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="xunit" />
-    <PackageReference Include="xunit.runner.visualstudio" />
-    <PackageReference Include="Xunit.StaFact" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="DiffEngine" />
-    <PackageReference Include="FluentAssertions" />
     <PackageReference Include="ReactiveUI.Testing" />
     <PackageReference Include="Microsoft.Reactive.Testing" />
-    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="Verify.NUnit" />
     <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="NSubstitute" />
     <PackageReference Include="coverlet.msbuild">

@@ -3,28 +3,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using FluentAssertions;
+using NUnit.Framework;
 using ReactiveUI;
 using Sextant.Mocks;
 using Splat;
-using Xunit;
 
 namespace Sextant.Tests;
 
 /// <summary>
 /// Tests the IMutableDependencyResolver extension class.
 /// </summary>
+[TestFixture]
 public sealed class DependencyResolverMixinTests
 {
     /// <summary>
     /// Tests the register view model factory method.
     /// </summary>
+    [TestFixture]
     public sealed class TheRegisterViewModelFactoryMethod
     {
         /// <summary>
         /// Should register the view model factory.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_View_Model_Factory()
         {
             // Given
@@ -34,13 +35,13 @@ public sealed class DependencyResolverMixinTests
             var result = ViewModelFactory.Current;
 
             // Then
-            result.Should().BeOfType<DefaultViewModelFactory>();
+            Assert.That(result, Is.TypeOf<DefaultViewModelFactory>());
         }
 
         /// <summary>
         /// Should register the view model factory.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_View_Model_Factory_With_Factory()
         {
             // Given
@@ -51,19 +52,20 @@ public sealed class DependencyResolverMixinTests
             var result = ViewModelFactory.Current;
 
             // Then
-            result.Should().Be(viewModelFactory);
+            Assert.That(result, Is.EqualTo(viewModelFactory));
         }
     }
 
     /// <summary>
     /// Tests the register view method.
     /// </summary>
+    [TestFixture]
     public sealed class TheRegisterViewMethod
     {
         /// <summary>
         /// Should register the view stack service.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_View()
         {
             // Given
@@ -73,13 +75,13 @@ public sealed class DependencyResolverMixinTests
             var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
-            result.Should().BeOfType<PageView>();
+            Assert.That(result, Is.TypeOf<PageView>());
         }
 
         /// <summary>
         /// Should register the view stack service factory.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_View_Factory()
         {
             // Given
@@ -90,19 +92,21 @@ public sealed class DependencyResolverMixinTests
             var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
-            result.Should().BeOfType<PageView>();
+            Assert.That(result, Is.TypeOf<PageView>());
         }
     }
 
     /// <summary>
     /// Tests the register view for navigation method.
     /// </summary>
+    [TestFixture]
+    [NonParallelizable]
     public sealed class TheRegisterViewForNavigationMethod
     {
         /// <summary>
         /// Should register the view for navigation.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_View_Factory_For_Navigation()
         {
             // Given
@@ -112,13 +116,13 @@ public sealed class DependencyResolverMixinTests
             var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
-            result.Should().BeOfType<PageView>();
+            Assert.That(result, Is.TypeOf<PageView>());
         }
 
         /// <summary>
         /// Should register the view for navigation.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_ViewModel_Factory_For_Navigation()
         {
             // Given
@@ -128,13 +132,13 @@ public sealed class DependencyResolverMixinTests
             var result = Locator.Current.GetService<NavigableViewModelMock>();
 
             // Then
-            result.Should().NotBeNull();
+            Assert.That(result, Is.Not.Null);
         }
 
         /// <summary>
         /// Should register the view for navigation.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_View_For_Navigation()
         {
             // Given
@@ -144,13 +148,13 @@ public sealed class DependencyResolverMixinTests
             var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
-            result.Should().BeOfType<PageView>();
+            Assert.That(result, Is.TypeOf<PageView>());
         }
 
         /// <summary>
         /// Should register the view for navigation.
         /// </summary>
-        [Fact]
+        [Test]
         public void Should_Register_ViewModel_For_Navigation()
         {
             // Given
@@ -160,7 +164,7 @@ public sealed class DependencyResolverMixinTests
             var result = Locator.Current.GetService<NavigableViewModelMock>();
 
             // Then
-            result.Should().NotBeNull();
+            Assert.That(result, Is.Not.Null);
         }
     }
 }
