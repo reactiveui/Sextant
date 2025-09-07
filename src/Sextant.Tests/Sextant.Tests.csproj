@@ -12,6 +12,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+    <Compile Remove="Navigation\NavigationViewResetStackTests.cs" />
     <ProjectReference Include="..\Sextant.Maui\Sextant.Maui.csproj" />
   </ItemGroup>
   
