@@ -21,7 +21,5 @@
     <DefineConstants>$(DefineConstants);HAS_MAUI</DefineConstants>
   </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
-    <Compile Remove="Navigation\NavigationViewResetStackTests.cs" />
-  </ItemGroup>
+  
 </Project>
