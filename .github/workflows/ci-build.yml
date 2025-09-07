@@ -18,6 +18,5 @@ jobs:
       productNamespacePrefix: Sextant
       solutionFile: Sextant.sln
       installWorkloads: true
-      installTizenWorkload: true
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
