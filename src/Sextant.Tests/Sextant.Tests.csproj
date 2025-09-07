@@ -6,8 +6,6 @@
     <Nullable>enable</Nullable>    
   </PropertyGroup>
 
-  <!-- Test packages are included via Directory.Build.props for all test projects -->
-
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
