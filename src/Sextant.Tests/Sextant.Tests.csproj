@@ -1,22 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>$(SextantModernTargets)</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>    
     <Nullable>enable</Nullable>    
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NSubstitute" />
-    <PackageReference Include="Microsoft.Reactive.Testing" />
-    <PackageReference Include="ReactiveUI.Testing" />
-    <PackageReference Include="PublicApiGenerator" />
-    <PackageReference Include="DiffEngine" />
-    <PackageReference Include="Verify.NUnit" />
-  </ItemGroup>
+  <!-- Test packages are included via Directory.Build.props for all test projects -->
 
   <ItemGroup>
     <ProjectReference Include="..\Sextant.Mocks\Sextant.Mocks.csproj" />

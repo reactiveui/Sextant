@@ -35,6 +35,8 @@ Always reference these instructions first and fallback to search or bash command
   dotnet build Sextant.sln --configuration Release
   ```
   Build time: **2-5 minutes**. Set timeout to 10+ minutes for full solution builds.
+  
+  **Note**: The build system automatically selects appropriate target frameworks based on your OS. No manual TFM configuration needed.
 
 - Individual project builds (faster for development):
   ```bash
@@ -42,6 +44,11 @@ Always reference these instructions first and fallback to search or bash command
   dotnet build Sextant/Sextant.csproj --configuration Release
   dotnet build Sextant.Tests/Sextant.Tests.csproj --configuration Release
   ```
+
+- **Cross-platform considerations**: 
+  - Linux: Builds core .NET and Android targets
+  - Windows: Builds all targets including Windows and Apple (via Pair-to-Mac)
+  - macOS: Builds core .NET, Android, and Apple targets
 
 ### Testing
 - **Full test suite**:
@@ -272,6 +279,30 @@ public partial class SextantNavigationService : IViewStackService
 - **Test different navigation scenarios** (push/pop, modal, reset stack)
 
 ## Target Framework Support
+
+### Centralized Multi-TFM Build System
+Sextant uses a centralized, OS-aware build system defined in `src/Directory.Build.props` that automatically selects appropriate target frameworks based on the host operating system:
+
+#### TFM Property Groups
+- **`SextantModernTargets`**: `net8.0;net9.0` - Used by tests and benchmarks that don't need .NET Standard
+- **`SextantCoreTargets`**: `netstandard2.0;net8.0;net9.0` - Used by core libraries for broad compatibility
+- **`SextantMauiTargetFrameworks`**: OS-aware composition for MAUI projects including platform-specific targets
+
+#### OS-Aware Target Selection
+- **Linux builds**: Core targets + Android (`netstandard2.0;net8.0;net9.0;net9.0-android`)
+- **Windows builds**: Core + Android + Windows + Apple + Tizen (supports Pair-to-Mac for iOS development)
+- **macOS builds**: Core + Android + Apple + Tizen
+
+#### Project TFM Usage
+- **Core libraries** (Sextant, Sextant.Mocks): Use `$(SextantCoreTargets)` for maximum compatibility
+- **MAUI libraries** (Sextant.Maui, Sextant.Plugins.Popup): Use `$(SextantMauiTargetFrameworks)` for platform-specific support
+- **Tests/Benchmarks**: Use `$(SextantModernTargets)` since they don't need .NET Standard support
+
+#### Benefits
+- **Cross-platform builds**: No manual TFM editing needed across different operating systems
+- **Consistent targeting**: Centralized TFM management reduces configuration drift
+- **Build optimization**: Only compiles relevant targets for each OS, reducing build time
+- **Maintainability**: Easy to update TFMs across entire solution from single location
 
 ### Supported Frameworks
 - **netstandard2.0** - Broad compatibility with .NET Framework and older .NET Core

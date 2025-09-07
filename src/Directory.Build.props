@@ -37,8 +37,11 @@
        TFM Bucket Definitions  
        ========================= -->
   <PropertyGroup>
-    <!-- Core TFMs buildable on all OSes -->
-    <SextantCoreTargets>netstandard2.0;net8.0;net9.0</SextantCoreTargets>
+    <!-- Modern .NET TFMs only (net8/net9) - for tests/benchmarks -->
+    <SextantModernTargets>net8.0;net9.0</SextantModernTargets>
+    
+    <!-- Core TFMs buildable on all OSes (netstandard + modern) - for libraries -->
+    <SextantCoreTargets>netstandard2.0;$(SextantModernTargets)</SextantCoreTargets>
 
     <!-- MAUI/Platform TFMs -->
     <SextantAndroidTargets>net9.0-android</SextantAndroidTargets>
