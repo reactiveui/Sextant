@@ -23,7 +23,7 @@
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="NUnit" Version="4.4.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" />
-    <PackageVersion Include="PublicApiGenerator" Version="11.4.6" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.5.3" />
     <PackageVersion Include="ReactiveUI" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.Maui" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="ReactiveUI.Testing" Version="$(ReactiveUIVersion)" />
