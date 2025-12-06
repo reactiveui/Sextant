@@ -31,7 +31,7 @@ public sealed partial class NavigationView : ContentControl, IView
     /// </summary>
     public NavigationView()
     {
-        MainThreadScheduler = RxApp.MainThreadScheduler;
+        MainThreadScheduler = RxSchedulers.MainThreadScheduler;
         ViewLocator = ReactiveUI.ViewLocator.Current;
         Content = new Grid
         {

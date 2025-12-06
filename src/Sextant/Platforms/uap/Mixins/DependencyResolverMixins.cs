@@ -115,7 +115,7 @@ namespace Sextant
                 throw new ArgumentNullException(nameof(dependencyResolver));
             }
 
-            var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>();
+            var uwpViewTypeResolver = AppLocator.Current.GetService<ViewTypeResolver>();
             if (uwpViewTypeResolver is null)
             {
                 throw new InvalidOperationException("UWP view type resolver not registered.");

@@ -198,15 +198,15 @@ public class HomeViewModel : ViewModelBase
     {
         OpenDetails = ReactiveCommand.CreateFromObservable(
             () => nav.PushPage<DetailsViewModel>(),
-            outputScheduler: RxApp.MainThreadScheduler);
+            outputScheduler: RxSchedulers.MainThreadScheduler);
 
         OpenModal = ReactiveCommand.CreateFromObservable(
             () => nav.PushModal<AboutViewModel>(),
-            outputScheduler: RxApp.MainThreadScheduler);
+            outputScheduler: RxSchedulers.MainThreadScheduler);
 
         Back = ReactiveCommand.CreateFromObservable(
             () => nav.PopPage(),
-            outputScheduler: RxApp.MainThreadScheduler);
+            outputScheduler: RxSchedulers.MainThreadScheduler);
     }
 
     public ReactiveCommand<Unit, Unit> OpenDetails { get; }

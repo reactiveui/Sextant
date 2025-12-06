@@ -377,7 +377,7 @@ namespace Sextant
 
         private static Type LocatePageTypeFor(object viewModel, string? contract)
         {
-            var uwpViewTypeResolver = Locator.Current.GetService<ViewTypeResolver>(contract);
+            var uwpViewTypeResolver = AppLocator.Current.GetService<ViewTypeResolver>(contract);
 
             var viewType = uwpViewTypeResolver?.ResolveViewType(viewModel.GetType());
 
