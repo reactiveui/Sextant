@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-<<<<<<< Updated upstream
     <TargetFrameworks>$(SextantMauiTargetFrameworks)</TargetFrameworks>
-=======
-    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0;net10.0-windows10.0.19041.0</TargetFrameworks>
->>>>>>> Stashed changes
     <UseMaui>true</UseMaui>
   </PropertyGroup>
   <ItemGroup>
