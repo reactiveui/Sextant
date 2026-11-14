@@ -45,12 +45,12 @@ jobs:
       id-token: write
     steps:
       - name: Download signed packages
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
           name: signed-nuget
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
 
       - name: NuGet login (OIDC trusted publishing)
         id: nuget-login
