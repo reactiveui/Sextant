@@ -1,4 +1,4 @@
-name: CodeQL
+name: "CodeQL Advanced"
 
 on:
   push:
@@ -18,5 +18,9 @@ jobs:
   codeql:
     uses: reactiveui/actions-common/.github/workflows/workflow-common-codeql.yml@main
     with:
-      analyzeCSharp: false
+      srcFolder: src
+      solutionFile: Sextant.sln
+      installWorkloads: true
+      analyzeCSharp: true
       analyzeActions: true
+      analyzeJavaScript: false
