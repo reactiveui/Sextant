@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>$(SextantModernTargets)</TargetFrameworks>
     <IsPackable>false</IsPackable>
@@ -11,15 +11,11 @@
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">
     <ProjectReference Include="..\Sextant.Maui\Sextant.Maui.csproj" />
   </ItemGroup>
   
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net9.0'">
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">
     <DefineConstants>$(DefineConstants);HAS_MAUI</DefineConstants>
   </PropertyGroup>
-  
- <ItemGroup Condition="'$(TargetFramework)' != 'net9.0'">
-    <Compile Remove="Navigation\NavigationViewResetStackTests.cs" />
-  </ItemGroup>  
 </Project>

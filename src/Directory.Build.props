@@ -36,19 +36,19 @@
        TFM Bucket Definitions  
        ========================= -->
   <PropertyGroup>
-    <!-- Modern .NET TFMs only (net8/net9) - for tests/benchmarks -->
-    <SextantModernTargets>net8.0;net9.0;net10.0</SextantModernTargets>
+    <!-- Modern .NET TFMs only - for tests/benchmarks -->
+    <SextantModernTargets>net10.0;net11.0</SextantModernTargets>
     
     <!-- Core TFMs buildable on all OSes (netstandard + modern) - for libraries -->
     <SextantCoreTargets>netstandard2.0;$(SextantModernTargets)</SextantCoreTargets>
 
     <!-- MAUI/Platform TFMs -->
-    <SextantAndroidTargets>net9.0-android;net10.0-android</SextantAndroidTargets>
-    <SextantWindowsTargets>net9.0-windows10.0.19041.0;net10.0-windows10.0.19041.0</SextantWindowsTargets>
-    <SextantAppleTargets>net9.0-ios;net9.0-macos;net9.0-maccatalyst;net9.0-tvos;net10.0-ios;net10.0-macos;net10.0-maccatalyst;net10.0-tvos</SextantAppleTargets>
+    <SextantAndroidTargets>net10.0-android;net11.0-android</SextantAndroidTargets>
+    <SextantWindowsTargets>net10.0-windows10.0.19041.0;net11.0-windows10.0.19041.0</SextantWindowsTargets>
+    <SextantAppleTargets>net10.0-ios;net10.0-macos;net10.0-maccatalyst;net10.0-tvos;net11.0-ios;net11.0-macos;net11.0-maccatalyst;net11.0-tvos</SextantAppleTargets>
 
     <!-- MAUI specific targets (no netstandard) -->
-    <SextantMauiCoreTargets>net9.0;net10.0</SextantMauiCoreTargets>
+    <SextantMauiCoreTargets>net10.0;net11.0</SextantMauiCoreTargets>
   </PropertyGroup>
 
   <!-- =========================
@@ -74,6 +74,10 @@
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
@@ -83,7 +87,7 @@
 
   <ItemGroup Condition="$(UseMaui) == 'true'">
     <PackageReference Include="Microsoft.Maui.Controls" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Condition="$(TargetFramework.StartsWith('net10'))" />
   </ItemGroup>
 
   <ItemGroup Condition="$(IsTestProject)">
