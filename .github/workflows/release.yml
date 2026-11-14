@@ -50,7 +50,7 @@ jobs:
           name: signed-nuget
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6
 
       - name: NuGet login (OIDC trusted publishing)
         id: nuget-login
