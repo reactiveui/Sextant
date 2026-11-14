@@ -317,7 +317,7 @@ Sextant uses a centralized, OS-aware build system defined in `src/Directory.Buil
 - **net9.0-tvos** - tvOS platform support
 
 ### Windows-Specific Frameworks
-- **net462/net472** - .NET Framework support for legacy Windows apps
+- **net47/net472** - .NET Framework support for legacy Windows apps
 - **net8.0-windows10.0.17763.0/net9.0-windows10.0.17763.0** - Windows-specific APIs
 - **net8.0-windows10.0.19041.0/net9.0-windows10.0.19041.0** - Newer Windows APIs
 
