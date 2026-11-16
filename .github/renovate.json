@@ -1,4 +1,18 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["local>reactiveui/.github:renovate"]
+    "extends": ["local>reactiveui/.github:renovate"],
+    "packageRules": [
+        {
+            "description": "Include the Citrus controls in the shared Avalonia group.",
+            "matchManagers": ["nuget"],
+            "matchPackageNames": ["Citrus.Avalonia"],
+            "groupName": "Avalonia"
+        },
+        {
+            "description": "Include the test mocking library in the shared test tooling group.",
+            "matchManagers": ["nuget"],
+            "matchPackageNames": ["NSubstitute"],
+            "groupName": "test tooling"
+        }
+    ]
 }
