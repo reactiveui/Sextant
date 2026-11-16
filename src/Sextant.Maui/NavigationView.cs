@@ -42,22 +42,7 @@ public class NavigationView : NavigationPage, IView, IEnableLogger, IDisposable
     {
         MainThreadScheduler = mainScheduler;
         _viewLocator = viewLocator;
-        PagePopped = Observable.FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
-            handler =>
-        {
-            void Handler(object? sender, NavigationEventArgs args)
-            {
-                _ = sender;
-                if (args.Page.BindingContext is IViewModel viewModel)
-                {
-                    handler(viewModel);
-                }
-            }
-
-            return Handler;
-        },
-            x => Popped += x,
-            x => Popped -= x);
+        PagePopped = NavigationEvents.ObserveViewModelPops(handler => Popped += handler, handler => Popped -= handler);
         _popBehavior = new(_navigationSource.AsObservable());
         Behaviors.Add(_popBehavior);
     }
@@ -69,22 +54,7 @@ public class NavigationView : NavigationPage, IView, IEnableLogger, IDisposable
     {
         MainThreadScheduler = mainScheduler;
         _viewLocator = viewLocator;
-        PagePopped = Observable.FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
-            handler =>
-        {
-            void Handler(object? sender, NavigationEventArgs args)
-            {
-                _ = sender;
-                if (args.Page.BindingContext is IViewModel viewModel)
-                {
-                    handler(viewModel);
-                }
-            }
-
-            return Handler;
-        },
-            x => Popped += x,
-            x => Popped -= x);
+        PagePopped = NavigationEvents.ObserveViewModelPops(handler => Popped += handler, handler => Popped -= handler);
         _popBehavior = new(_navigationSource.AsObservable());
         Behaviors.Add(_popBehavior);
     }
@@ -136,39 +106,7 @@ public class NavigationView : NavigationPage, IView, IEnableLogger, IDisposable
         return page;
     },
         CurrentThreadScheduler.Instance).ObserveOn(CurrentThreadScheduler.Instance).SelectMany(page =>
-    {
-        if (resetStack)
-        {
-            if (Navigation.NavigationStack.Count == 0)
-            {
-                return Navigation.PushAsync(page, false).ToObservable();
-            }
-
-            if (Navigation.NavigationStack.Count == 1)
-            {
-                // If there's only the root page, we need to use a different approach.
-                // We'll insert the new page before the root, then remove the root.
-                Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
-                var oldRoot = Navigation.NavigationStack[1]; // The old root is now at index 1
-                Navigation.RemovePage(oldRoot);
-                return Observable.Return(Unit.Default);
-            }
-
-            // For multiple pages, first pop to root, then replace the root
-            return Navigation.PopToRootAsync(false).ToObservable().Do(_ =>
-            {
-                // Now there should only be the root page left
-                if (Navigation.NavigationStack.Count == 1)
-                {
-                    Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
-                    var oldRoot = Navigation.NavigationStack[1];
-                    Navigation.RemovePage(oldRoot);
-                }
-            }).Select(static _ => Unit.Default);
-        }
-
-        return Navigation.PushAsync(page, animate).ToObservable();
-    });
+NavigationOperations.PushPage(Navigation, page, resetStack, animate));
 
     /// <inheritdoc/>
     public void Dispose()

@@ -17,15 +17,7 @@ public class Sextant
 
     /// <summary>Registers the dependency resolver callback.</summary>
     static Sextant() =>
-        AppLocator.RegisterResolverCallbackChanged(static () =>
-        {
-            if (AppLocator.CurrentMutable is null)
-            {
-                return;
-            }
-
-            Instance.Initialize();
-        });
+        AppLocator.RegisterResolverCallbackChanged(static () => NavigationRegistration.Initialize(AppLocator.CurrentMutable));
 
     /// <summary>Gets the instance of <see cref="Sextant"/>.</summary>
     public static Sextant Instance => _sextant.Value;

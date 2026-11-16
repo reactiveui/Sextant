@@ -4,6 +4,8 @@
     <RootNamespace>Sextant.Avalonia</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Sextant.Tests" />
+    <InternalsVisibleTo Include="Sextant.State.Tests" />
     <PackageReference Include="Avalonia" />
     <PackageReference Include="ReactiveUI.Avalonia.Reactive" />
   </ItemGroup>

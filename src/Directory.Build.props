@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <Copyright>Copyright (c) .NET Foundation and Contributors</Copyright>
+    <Copyright>Copyright (c) ReactiveUI and Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/reactiveui/sextant/</PackageProjectUrl>
     <PackageIconUrl>https://github.com/reactiveui/styleguide/blob/master/logo_sextant/logo.png?raw=true</PackageIconUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Authors>.NET Foundation and Contributors</Authors>
+    <Authors>ReactiveUI and Contributors</Authors>
     <PackageTags>mvvm;reactiveui;Rx;Reactive Extensions;Observable;xamarin;xamarin ios;xamarin mac;android;monodroid;uwp;net461</PackageTags>
     <Description>A ReactiveUI navigation library for Xamarin.Forms</Description>
     <PackageReleaseNotes>https://github.com/reactiveui/sextant/releases</PackageReleaseNotes>
@@ -90,17 +90,18 @@
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Condition="$(TargetFramework.StartsWith('net10'))" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(IsTestProject)">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
-    <PackageReference Include="ReactiveUI.Testing.Reactive" />
-    <PackageReference Include="Microsoft.Reactive.Testing" />
-    <PackageReference Include="NSubstitute" />
-    <PackageReference Include="coverlet.msbuild">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+    <TUnitImplicitUsings>true</TUnitImplicitUsings>
+    <TUnitAssertionsImplicitUsings>true</TUnitAssertionsImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(IsTestProject)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)testconfig.json">
+      <Link>$(AssemblyName).testconfig.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="LICENSE" />
@@ -136,8 +137,5 @@
 
   <ItemGroup>
     <PackageReference Include="MinVer" PrivateAssets="all" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 </Project>

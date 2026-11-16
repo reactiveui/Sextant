@@ -18,7 +18,7 @@ public static class SextantExtensions
         {
             ArgumentNullException.ThrowIfNull(sextant);
 
-            _ = sextant.MutableLocator.RegisterViewStackService();
+            NavigationRegistration.Initialize(sextant.MutableLocator);
         }
     }
 }

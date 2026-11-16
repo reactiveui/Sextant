@@ -17,7 +17,7 @@ jobs:
     with:
       configuration: Release
       productNamespacePrefix: Sextant
-      solutionFile: Sextant.sln
+      solutionFile: Sextant.slnx
       installWorkloads: true
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

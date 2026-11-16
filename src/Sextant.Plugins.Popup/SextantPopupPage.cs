@@ -4,7 +4,6 @@
 
 using System;
 using System.Reactive;
-using System.Reactive.Linq;
 using Microsoft.Maui.Controls;
 using Mopups.Pages;
 
@@ -27,9 +26,9 @@ public class SextantPopupPage : PopupPage, IViewFor
     /// <summary>Initializes a new instance of the <see cref="SextantPopupPage"/> class.</summary>
     protected SextantPopupPage() =>
         BackgroundClick =
-            Observable.FromEventPattern(
+            PopupPageEvents.ObserveBackgroundClicks(
                 x => BackgroundClicked += x,
-                x => BackgroundClicked -= x).Select(static _ => Unit.Default);
+                x => BackgroundClicked -= x);
 
     /// <summary>Gets the background click observable signal.</summary>
     /// <value>The background click.</value>

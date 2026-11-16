@@ -19,7 +19,7 @@ jobs:
     uses: reactiveui/actions-common/.github/workflows/workflow-common-codeql.yml@main
     with:
       srcFolder: src
-      solutionFile: Sextant.sln
+      solutionFile: Sextant.slnx
       installWorkloads: true
       analyzeCSharp: true
       analyzeActions: true

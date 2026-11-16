@@ -1,0 +1,36 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Ad-Hoc" />
+    <BuildType Name="AppStore" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
+    <BuildType Name="Sample Release" />
+    <Platform Name="Any CPU" />
+    <Platform Name="iPhone" />
+    <Platform Name="iPhoneSimulator" />
+  </Configurations>
+  <Project Path="../Sextant.Avalonia/Sextant.Avalonia.csproj">
+    <BuildType Solution="Ad-Hoc|*" Project="Debug" />
+    <BuildType Solution="AppStore|*" Project="Debug" />
+    <BuildType Solution="Sample Release|*" Project="Debug" />
+  </Project>
+  <Project Path="../Sextant/Sextant.csproj">
+    <BuildType Solution="Ad-Hoc|Any CPU" Project="Release" />
+    <BuildType Solution="Ad-Hoc|iPhone" Project="Debug" />
+    <BuildType Solution="Ad-Hoc|iPhoneSimulator" Project="Release" />
+    <BuildType Solution="AppStore|Any CPU" Project="Release" />
+    <BuildType Solution="AppStore|iPhone" Project="Debug" />
+    <BuildType Solution="AppStore|iPhoneSimulator" Project="Release" />
+    <BuildType Solution="Sample Release|*" Project="Release" />
+  </Project>
+  <Project Path="SextantSample.Avalonia/SextantSample.Avalonia.csproj">
+    <BuildType Solution="Ad-Hoc|*" Project="Debug" />
+    <BuildType Solution="AppStore|*" Project="Debug" />
+    <BuildType Solution="Sample Release|*" Project="Debug" />
+  </Project>
+  <Project Path="SextantSample.Core/SextantSample.ViewModels.csproj">
+    <BuildType Solution="Ad-Hoc|*" Project="Release" />
+    <BuildType Solution="AppStore|*" Project="Release" />
+    <BuildType Solution="Sample Release|*" Project="Release" />
+  </Project>
+</Solution>

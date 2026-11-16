@@ -233,7 +233,7 @@ public class HomeViewModel : ViewModelBase
 
 ## Samples
 
-This repository contains MAUI and Avalonia samples demonstrating full setups (registration, navigation, parameters, and modal flows). Explore the Samples folder in the repo.
+This repository contains MAUI and Avalonia samples demonstrating full setups (registration, navigation, parameters, and modal flows). Explore the src/examples folder in the repo.
 
 ## Contribute
 

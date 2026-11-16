@@ -1,0 +1,18 @@
+{
+  "codeCoverage": {
+    "Configuration": {
+      "Format": "cobertura",
+      "IncludeTestAssembly": false,
+      "CodeCoverage": {
+        "SkipAutoProperties": true,
+        "Attributes": {
+          "Exclude": ["^System\\.CodeDom\\.Compiler\\.GeneratedCodeAttribute$"]
+        },
+        "ModulePaths": {
+          "Include": ["Sextant(\\..*)?\\.dll$"],
+          "Exclude": [".*Tests\\.dll$", ".*Mocks\\.dll$", ".*TestRunner.*"]
+        }
+      }
+    }
+  }
+}

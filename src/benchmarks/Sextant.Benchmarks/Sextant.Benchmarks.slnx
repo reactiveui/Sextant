@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="Sextant.Benchmarks.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="../../Sextant/Sextant.csproj" />
+  </Folder>
+</Solution>

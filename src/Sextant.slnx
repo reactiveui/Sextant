@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/tests/">
+    <Project Path="tests/Sextant.State.Tests/Sextant.State.Tests.csproj" />
+  </Folder>
+  <Project Path="Sextant.Avalonia/Sextant.Avalonia.csproj" />
+  <Project Path="Sextant.Maui/Sextant.Maui.csproj" />
+  <Project Path="Sextant.Plugins.Popup/Sextant.Plugins.Popup.csproj" />
+  <Project Path="Sextant/Sextant.csproj" />
+  <Project Path="tests/Sextant.Mocks/Sextant.Mocks.csproj" />
+  <Project Path="tests/Sextant.Tests/Sextant.Tests.csproj" />
+</Solution>

@@ -11,6 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Sextant.Tests" />
+    <InternalsVisibleTo Include="Sextant.Plugins.Popup" />
+    <InternalsVisibleTo Include="Sextant.State.Tests" />
     <PackageReference Include="ReactiveUI.Reactive" />
   </ItemGroup>
   

@@ -21,14 +21,15 @@ namespace Sextant;
 [System.Diagnostics.DebuggerDisplay("ViewStackServiceBase: {ModalStack}")]
 public class ViewStackServiceBase : IViewStackService, IDisposable, IEnableLogger
 {
-    /// <summary>Initializes a new instance of the <see cref = "ViewStackServiceBase"/> class.</summary>
-    /// <param name = "view">The view.</param>
-    /// <param name = "viewModelFactory">The view model factory.</param>
-    /// <exception cref = "ArgumentNullException">Thrown when <c>view</c> is <see langword="null"/>.</exception>
-    protected ViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
+    /// <summary>Initializes a new instance of the <see cref="ViewStackServiceBase"/> class.</summary>
+    /// <param name="view">The navigation view.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    /// <param name="logger">The logger, or null to resolve the application logger.</param>
+    /// <exception cref="ArgumentNullException">The view is null.</exception>
+    internal ViewStackServiceBase(IView view, IViewModelFactory viewModelFactory, IFullLogger? logger)
     {
-        Logger = this.Log();
         View = view ?? throw new ArgumentNullException(nameof(view));
+        Logger = logger ?? this.Log();
         Factory = viewModelFactory;
         ModalSubject = new(ImmutableList<IViewModel>.Empty);
         PageSubject = new(ImmutableList<IViewModel>.Empty);
@@ -43,6 +44,15 @@ public class ViewStackServiceBase : IViewStackService, IDisposable, IEnableLogge
         }).DisposeWith(NavigationDisposables);
         _ = ModalSubject.DisposeWith(NavigationDisposables);
         _ = PageSubject.DisposeWith(NavigationDisposables);
+    }
+
+    /// <summary>Initializes a new instance of the <see cref = "ViewStackServiceBase"/> class.</summary>
+    /// <param name = "view">The view.</param>
+    /// <param name = "viewModelFactory">The view model factory.</param>
+    /// <exception cref = "ArgumentNullException">Thrown when <c>view</c> is <see langword="null"/>.</exception>
+    protected ViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
+        : this(view, viewModelFactory, null)
+    {
     }
 
     /// <summary>Gets the modal navigation stack.</summary>

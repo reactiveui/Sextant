@@ -26,13 +26,14 @@ public class PopupViewStackServiceBase : ParameterViewStackServiceBase, IPopupVi
     /// <summary>Resolves popup pages for registered view models.</summary>
     private readonly IViewLocator _viewLocator;
 
-    /// <summary>Initializes a new instance of the <see cref = "PopupViewStackServiceBase"/> class.</summary>
-    /// <param name = "view">The view.</param>
-    /// <param name = "popupNavigation">The popup navigation.</param>
-    /// <param name = "viewLocator">The view locator.</param>
-    /// <param name = "viewModelFactory">The view model factory.</param>
-    protected PopupViewStackServiceBase(IView view, IPopupNavigation popupNavigation, IViewLocator viewLocator, IViewModelFactory viewModelFactory)
-        : base(view, viewModelFactory)
+    /// <summary>Initializes a new instance of the <see cref="PopupViewStackServiceBase"/> class.</summary>
+    /// <param name="view">The navigation view.</param>
+    /// <param name="popupNavigation">The popup provider.</param>
+    /// <param name="viewLocator">The view locator.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    /// <param name="logger">The logger, or null to resolve the application logger.</param>
+    internal PopupViewStackServiceBase(IView view, IPopupNavigation popupNavigation, IViewLocator viewLocator, IViewModelFactory viewModelFactory, Splat.IFullLogger? logger)
+        : base(view, viewModelFactory, logger)
     {
         _popupNavigation = popupNavigation;
         _viewLocator = viewLocator;
@@ -51,6 +52,16 @@ public class PopupViewStackServiceBase : ParameterViewStackServiceBase, IPopupVi
             x => _popupNavigation.Popped -= x).Select(static x => new PopupNavigationEvent((IViewFor)x.EventArgs.Page, x.EventArgs.IsAnimated));
         _ = Popped.Subscribe(static popped => popped.ViewModel.InvokeViewModelAction<IDestructible>(static x => x.Destroy())).DisposeWith(NavigationDisposables);
         _ = PopupSubject.DisposeWith(NavigationDisposables);
+    }
+
+    /// <summary>Initializes a new instance of the <see cref = "PopupViewStackServiceBase"/> class.</summary>
+    /// <param name = "view">The view.</param>
+    /// <param name = "popupNavigation">The popup navigation.</param>
+    /// <param name = "viewLocator">The view locator.</param>
+    /// <param name = "viewModelFactory">The view model factory.</param>
+    protected PopupViewStackServiceBase(IView view, IPopupNavigation popupNavigation, IViewLocator viewLocator, IViewModelFactory viewModelFactory)
+        : this(view, popupNavigation, viewLocator, viewModelFactory, null)
+    {
     }
 
     /// <inheritdoc/>

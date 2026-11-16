@@ -7,12 +7,6 @@
             "matchManagers": ["nuget"],
             "matchPackageNames": ["Citrus.Avalonia"],
             "groupName": "Avalonia"
-        },
-        {
-            "description": "Include the test mocking library in the shared test tooling group.",
-            "matchManagers": ["nuget"],
-            "matchPackageNames": ["NSubstitute"],
-            "groupName": "test tooling"
         }
     ]
 }

@@ -12,9 +12,11 @@ jobs:
   build:
     permissions:
       contents: read
+      actions: write
     uses: reactiveui/actions-common/.github/workflows/workflow-common-setup-and-build.yml@main
     with:
       productNamespacePrefix: "Sextant"
-      srcFolder: "src/Sample"
-      solutionFile: "SextantSample.sln"
+      srcFolder: "src/examples"
+      solutionFile: "SextantSample.slnx"
       installWorkloads: true
+      performTests: false

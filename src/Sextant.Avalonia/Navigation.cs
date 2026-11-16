@@ -16,7 +16,7 @@ namespace Sextant.Avalonia;
 public sealed partial class NavigationView
 {
     /// <summary>This class represents a single navigation layer.</summary>
-    private sealed class Navigation
+    internal sealed class Navigation
     {
         /// <summary>The ordered views in this navigation layer.</summary>
         private readonly ObservableCollection<IViewFor> _navigationStack = [];
@@ -25,7 +25,7 @@ public sealed partial class NavigationView
         private readonly IPageTransition? _transition;
 
         /// <summary>Initializes a new instance of the <see cref = "Navigation"/> class.</summary>
-        public Navigation()
+        internal Navigation()
         {
             CountChanged = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 handler => _navigationStack.CollectionChanged += handler,
@@ -35,27 +35,27 @@ public sealed partial class NavigationView
         }
 
         /// <summary>Gets a value indicating whether the control is visible.</summary>
-        public bool IsVisible => _navigationStack.Count > 1;
+        internal bool IsVisible => _navigationStack.Count > 1;
 
         /// <summary>Gets a the page count.</summary>
-        public IObservable<int> CountChanged { get; }
+        internal IObservable<int> CountChanged { get; }
 
         /// <summary>Gets the control responsible for rendering the current view.</summary>
-        public TransitioningContentControl Control { get; } = new();
+        internal TransitioningContentControl Control { get; } = new();
 
         /// <summary>Toggles the animations.</summary>
         /// <param name = "enable">Returns true if we are enabling the animations.</param>
-        public void ToggleAnimations(bool enable) => Control.PageTransition = enable ? _transition : null;
+        internal void ToggleAnimations(bool enable) => Control.PageTransition = enable ? _transition : null;
 
         /// <summary>Adds a view after the current page.</summary>
         /// <param name="view">The view to display.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Push(IViewFor view) => Push(view, false);
+        internal void Push(IViewFor view) => Push(view, false);
 
         /// <summary>Adds a <see cref = "IViewFor"/> to the navigation stack.</summary>
         /// <param name = "view">The view to add to the navigation stack.</param>
         /// <param name = "resetStack">Defines if we should reset the navigation stack.</param>
-        public void Push(IViewFor view, bool resetStack)
+        internal void Push(IViewFor view, bool resetStack)
         {
             if (resetStack)
             {
@@ -67,14 +67,14 @@ public sealed partial class NavigationView
         }
 
         /// <summary>Removes the last <see cref = "IViewFor"/> from the navigation stack.</summary>
-        public void Pop()
+        internal void Pop()
         {
             _navigationStack.RemoveAt(_navigationStack.Count - 1);
             Control.Content = _navigationStack.Count == 0 ? null : _navigationStack[_navigationStack.Count - 1];
         }
 
         /// <summary>Removes all pages except the first one <see cref = "IViewFor"/> from the navigation stack.</summary>
-        public void PopToRoot()
+        internal void PopToRoot()
         {
             var view = _navigationStack[0];
             _navigationStack.Clear();

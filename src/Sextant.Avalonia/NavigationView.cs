@@ -26,9 +26,17 @@ public sealed partial class NavigationView : ContentControl, IView
 
     /// <summary>Initializes a new instance of the <see cref = "NavigationView"/> class.</summary>
     public NavigationView()
+        : this(RxSchedulers.MainThreadScheduler, ReactiveUI.Binding.Reactive.ViewLocator.GetCurrent())
     {
-        MainThreadScheduler = RxSchedulers.MainThreadScheduler;
-        ViewLocator = ReactiveUI.Binding.Reactive.ViewLocator.GetCurrent();
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="NavigationView"/> class.</summary>
+    /// <param name="scheduler">The scheduler for navigation operations.</param>
+    /// <param name="viewLocator">The locator used to resolve views.</param>
+    internal NavigationView(IScheduler scheduler, IViewLocator viewLocator)
+    {
+        MainThreadScheduler = scheduler;
+        ViewLocator = viewLocator;
         Content = new Grid
         {
             Children =

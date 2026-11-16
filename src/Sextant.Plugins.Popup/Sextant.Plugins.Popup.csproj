@@ -4,6 +4,7 @@
     <UseMaui>true</UseMaui>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Sextant.Tests" />
     <PackageReference Include="Mopups"/>
   </ItemGroup>
   <ItemGroup>

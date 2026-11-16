@@ -11,13 +11,28 @@ using System.Runtime.CompilerServices;
 namespace Sextant;
 
 /// <summary>Abstract base class for view stack services.</summary>
-/// <param name = "view">The view.</param>
-/// <param name = "viewModelFactory">The view model factory.</param>
 /// <remarks>
 /// Initializes a new instance of the <see cref = "ParameterViewStackServiceBase"/> class.
 /// </remarks>
-public class ParameterViewStackServiceBase(IView view, IViewModelFactory viewModelFactory) : ViewStackServiceBase(view, viewModelFactory), IParameterViewStackService
+public class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterViewStackService
 {
+    /// <summary>Initializes a new instance of the <see cref="ParameterViewStackServiceBase"/> class.</summary>
+    /// <param name="view">The navigation view.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    public ParameterViewStackServiceBase(IView view, IViewModelFactory viewModelFactory)
+        : base(view, viewModelFactory)
+    {
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="ParameterViewStackServiceBase"/> class.</summary>
+    /// <param name="view">The navigation view.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    /// <param name="logger">The logger, or null to resolve the application logger.</param>
+    internal ParameterViewStackServiceBase(IView view, IViewModelFactory viewModelFactory, Splat.IFullLogger? logger)
+        : base(view, viewModelFactory, logger)
+    {
+    }
+
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string? contract, bool resetStack) =>

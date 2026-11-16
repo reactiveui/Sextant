@@ -5,6 +5,8 @@
     <UseMaui>true</UseMaui>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Sextant.Tests" />
+    <InternalsVisibleTo Include="Sextant.State.Tests" />
     <PackageReference Include="ReactiveUI.Maui.Reactive" />
   </ItemGroup>
   <ItemGroup>

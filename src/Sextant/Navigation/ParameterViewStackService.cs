@@ -5,19 +5,34 @@
 namespace Sextant;
 
 /// <summary><see cref="IViewStackService"/> implementation that passes <see cref="INavigationParameter"/> when navigating.</summary>
-/// <param name="view">The view.</param>
-/// <param name="viewModelFactory">The view model factory.</param>
 /// <remarks>
 /// Initializes a new instance of the <see cref="ParameterViewStackService"/> class.
 /// </remarks>
 /// <seealso cref="ViewStackServiceBase" />
 /// <seealso cref="IViewStackService" />
-public sealed class ParameterViewStackService(IView view, IViewModelFactory viewModelFactory) : ParameterViewStackServiceBase(view, viewModelFactory)
+public sealed class ParameterViewStackService : ParameterViewStackServiceBase
 {
+    /// <summary>Initializes a new instance of the <see cref="ParameterViewStackService"/> class.</summary>
+    /// <param name="view">The navigation view.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    public ParameterViewStackService(IView view, IViewModelFactory viewModelFactory)
+        : base(view, viewModelFactory)
+    {
+    }
+
     /// <summary>Initializes a new instance of the <see cref="ParameterViewStackService"/> class.</summary>
     /// <param name="view">The view.</param>
     public ParameterViewStackService(IView view)
         : this(view, new DefaultViewModelFactory())
+    {
+    }
+
+    /// <summary>Initializes a new instance of the <see cref="ParameterViewStackService"/> class.</summary>
+    /// <param name="view">The navigation view.</param>
+    /// <param name="viewModelFactory">The view model factory.</param>
+    /// <param name="logger">The navigation logger.</param>
+    internal ParameterViewStackService(IView view, IViewModelFactory viewModelFactory, Splat.IFullLogger logger)
+        : base(view, viewModelFactory, logger)
     {
     }
 }

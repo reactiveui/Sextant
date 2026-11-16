@@ -29,6 +29,19 @@ public static class SubscribeSafeExtensions
             [CallerMemberName] string? callerMemberName = null,
             [CallerFilePath] string? callerFilePath = null,
             [CallerLineNumber] int callerLineNumber = 0) =>
+            SubscribeSafeCore(observable, callerMemberName, callerFilePath, callerLineNumber, Debugger.Break);
+    }
+
+    /// <summary>Reports unhandled observable errors before invoking the debugger callback.</summary>
+    /// <typeparam name="T">The sequence element type.</typeparam>
+    /// <param name="observable">The sequence to subscribe to.</param>
+    /// <param name="callerMemberName">The originating member.</param>
+    /// <param name="callerFilePath">The originating file.</param>
+    /// <param name="callerLineNumber">The originating line.</param>
+    /// <param name="breakIntoDebugger">The debugger callback.</param>
+    /// <returns>The subscription.</returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static IDisposable SubscribeSafeCore<T>(IObservable<T> observable, string? callerMemberName, string? callerFilePath, int callerLineNumber, Action breakIntoDebugger) =>
             observable
                 .Subscribe(
                     static _ => { },
@@ -42,7 +55,6 @@ public static class SubscribeSafeExtensions
                             callerFilePath,
                             callerLineNumber);
 
-                        Debugger.Break();
+                        breakIntoDebugger();
                     });
-    }
 }
