@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+  </PropertyGroup>
+  <!-- These libraries have no Windows resources; MakePri.exe cannot run on non-Windows hosts. -->
+  <PropertyGroup Condition="'$(UseMaui)' == 'true' and '$(OutputType)' == 'Library' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and !$([MSBuild]::IsOsPlatform('Windows'))">
+    <AppxGeneratePriEnabled>false</AppxGeneratePriEnabled>
+  </PropertyGroup>
+</Project>

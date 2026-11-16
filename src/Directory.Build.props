@@ -39,9 +39,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <SextantMauiTargetFrameworks>$(SextantCoreTargets);$(SextantAndroidTargets)</SextantMauiTargetFrameworks>
-    <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(SextantMauiTargetFrameworks);$(SextantWindowsTargets);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
-    <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
+    <SextantMauiTargetFrameworks>$(SextantCoreTargets);$(SextantAndroidTargets);$(SextantWindowsTargets)</SextantMauiTargetFrameworks>
+    <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows')) or $([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
