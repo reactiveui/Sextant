@@ -4,78 +4,44 @@
     <Copyright>Copyright (c) ReactiveUI and Contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/reactiveui/sextant/</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/reactiveui/styleguide/blob/master/logo_sextant/logo.png?raw=true</PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>ReactiveUI and Contributors</Authors>
-    <PackageTags>mvvm;reactiveui;Rx;Reactive Extensions;Observable;xamarin;xamarin ios;xamarin mac;android;monodroid;uwp;net461</PackageTags>
-    <Description>A ReactiveUI navigation library for Xamarin.Forms</Description>
+    <PackageTags>mvvm;reactiveui;rx;reactive extensions;observable;navigation;avalonia;maui;android;ios;macos;windows</PackageTags>
+    <Description>ReactiveUI navigation for Avalonia and .NET MAUI applications.</Description>
     <PackageReleaseNotes>https://github.com/reactiveui/sextant/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/reactiveui/sextant</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
-    <DebugType>Embedded</DebugType>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <IsTestProject Condition="'$(IsTestProject)' == ''">$(MSBuildProjectName.EndsWith('.Tests'))</IsTestProject>
+    <DebugType>embedded</DebugType>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <!-- Optional: Include PDB in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <WarningsAsErrors>CS8600;CS8602;CS8603;CS8604;CS8605;CS8606;CS8607;CS8608;CS8609;CS8610;CS8611;CS8612;CS8613;CS8614;CS8615;CS8616;CS8617;CS8618;CS8619;CS8620;CS8621;CS8622;CS8623;CS8624;CS8625;CS8626;CS8627;CS8628;CS8629;CS8630;CS8634;CS8766;CS8767</WarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnableNETAnalyzers>True</EnableNETAnalyzers>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
-    <WarningsAsErrors>nullable</WarningsAsErrors>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors>nullable;CS4014</WarningsAsErrors>
     <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
-  <!-- =========================
-       TFM Bucket Definitions  
-       ========================= -->
-  <PropertyGroup>
-    <!-- Modern .NET TFMs only - for tests/benchmarks -->
-    <SextantModernTargets>net10.0;net11.0</SextantModernTargets>
-    
-    <!-- Core TFMs buildable on all OSes (netstandard + modern) - for libraries -->
-    <SextantCoreTargets>$(SextantModernTargets)</SextantCoreTargets>
 
-    <!-- MAUI/Platform TFMs -->
+  <PropertyGroup>
+    <SextantModernTargets>net10.0;net11.0</SextantModernTargets>
+    <SextantCoreTargets>$(SextantModernTargets)</SextantCoreTargets>
     <SextantAndroidTargets>net10.0-android;net11.0-android</SextantAndroidTargets>
     <SextantWindowsTargets>net10.0-windows10.0.19041.0;net11.0-windows10.0.19041.0</SextantWindowsTargets>
     <SextantAppleTargets>net10.0-ios;net10.0-macos;net10.0-maccatalyst;net10.0-tvos;net11.0-ios;net11.0-macos;net11.0-maccatalyst;net11.0-tvos</SextantAppleTargets>
-
-    <!-- MAUI specific targets (no netstandard) -->
-    <SextantMauiCoreTargets>net10.0;net11.0</SextantMauiCoreTargets>
   </PropertyGroup>
 
-  <!-- =========================
-       OS-Aware Composition
-       ========================= -->
   <PropertyGroup>
-    <!-- Base always-present for full framework support -->
-    <SextantFinalTargetFrameworks>$(SextantCoreTargets)</SextantFinalTargetFrameworks>
-
-    <!-- Android: allowed on any OS (workload-dependent; no OS gate needed) -->
-    <SextantFinalTargetFrameworks>$(SextantFinalTargetFrameworks);$(SextantAndroidTargets)</SextantFinalTargetFrameworks>
-
-    <!-- Windows MAUI/Desktop: only on Windows hosts, Windows can include "everything"-->
-    <SextantFinalTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(SextantFinalTargetFrameworks);$(SextantWindowsTargets);$(SextantAppleTargets)</SextantFinalTargetFrameworks>
-
-    <!-- Apple (iOS/macOS/MacCatalyst/tvOS): on macOS and on Windows (Pair-to-Mac) -->
-    <SextantFinalTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantFinalTargetFrameworks);$(SextantAppleTargets)</SextantFinalTargetFrameworks>
-
-    <!-- MAUI specific composition (no netstandard) -->
-    <SextantMauiTargetFrameworks>$(SextantMauiCoreTargets)</SextantMauiTargetFrameworks>
-    <SextantMauiTargetFrameworks>$(SextantMauiTargetFrameworks);$(SextantAndroidTargets)</SextantMauiTargetFrameworks>
+    <SextantMauiTargetFrameworks>$(SextantCoreTargets);$(SextantAndroidTargets)</SextantMauiTargetFrameworks>
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('Windows'))">$(SextantMauiTargetFrameworks);$(SextantWindowsTargets);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
     <SextantMauiTargetFrameworks Condition="$([MSBuild]::IsOsPlatform('OSX'))">$(SextantMauiTargetFrameworks);$(SextantAppleTargets)</SextantMauiTargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -91,6 +57,7 @@
   </ItemGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <EnableVSTestReferences>false</EnableVSTestReferences>
     <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     <TUnitImplicitUsings>true</TUnitImplicitUsings>
     <TUnitAssertionsImplicitUsings>true</TUnitAssertionsImplicitUsings>
@@ -104,6 +71,7 @@
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\images\logo.png" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\LICENSE" Pack="true" PackagePath="LICENSE" />
     <None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
@@ -125,9 +93,6 @@
     <Using Include="ReactiveUI.Binding.Reactive" />
     <Using Include="ReactiveUI.Binding.Reactive.ObservableForProperty" />
   </ItemGroup>
-  <!-- MinVer (versioning) — replaces Nerdbank.GitVersioning. Floor at 4.1
-       so untagged builds produce 4.1.x-alpha.0.<height> until a v4.1.x
-       (or later) tag is reachable. -->
   <PropertyGroup>
     <MinVerAutoIncrement>minor</MinVerAutoIncrement>
     <MinVerDefaultPreReleaseIdentifiers>alpha.0</MinVerDefaultPreReleaseIdentifiers>

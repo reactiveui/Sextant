@@ -9,6 +9,7 @@
     <RoslynCommonAnalyzersVersion>5.2.0</RoslynCommonAnalyzersVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
     <PackageVersion Include="ReactiveUI.Avalonia.Reactive" Version="12.1.7" />
