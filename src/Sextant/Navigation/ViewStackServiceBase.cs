@@ -149,6 +149,21 @@ public class ViewStackServiceBase : IViewStackService, IDisposable, IEnableLogge
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal<TViewModel>(string? contract)
+        where TViewModel : IViewModel => PushModal<TViewModel>(contract, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal<TViewModel>()
+        where TViewModel : IViewModel => PushModal<TViewModel>(null, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal<TViewModel>(string? contract, bool withNavigationPage)
+        where TViewModel : IViewModel => PushModal(Factory.Create<TViewModel>(contract), contract, withNavigationPage);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IObservable<Unit> PushPage(Type viewModelType, string? contract, bool resetStack) => PushPage(viewModelType, contract, resetStack, true);
 
     /// <inheritdoc/>
@@ -204,6 +219,26 @@ public class ViewStackServiceBase : IViewStackService, IDisposable, IEnableLogge
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IObservable<Unit> PushPage(INavigable page, string? contract, bool resetStack, bool animate) => PushPage((IViewModel)page, contract, resetStack, animate);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(string? contract, bool resetStack)
+        where TViewModel : IViewModel => PushPage<TViewModel>(contract, resetStack, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(string? contract)
+        where TViewModel : IViewModel => PushPage<TViewModel>(contract, false, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>()
+        where TViewModel : IViewModel => PushPage<TViewModel>(null, false, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(string? contract, bool resetStack, bool animate)
+        where TViewModel : IViewModel => PushPage(Factory.Create<TViewModel>(contract), contract, resetStack, animate);
 
     /// <summary>Returns the top modal from the current modal stack.</summary>
     /// <returns>An observable that signals the top modal view model.</returns>

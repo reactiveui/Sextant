@@ -1,3 +1,6 @@
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sextant.Plugins.Popup")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sextant.State.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sextant.Tests")]
 namespace Sextant
 {
     public class DefaultViewModelFactory : Sextant.IViewModelFactory
@@ -6,6 +9,10 @@ namespace Sextant
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public Sextant.IViewModel Create(System.Type viewModelType) { }
         public Sextant.IViewModel Create(System.Type viewModelType, string? contract) { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public TViewModel Create<TViewModel>() where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public TViewModel Create<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
     }
     public static class DependencyResolverMixins
     {
@@ -58,6 +65,9 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PushModal(System.Type viewModelType, Sextant.INavigationParameter parameter, string? contract) { }
         System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable navigableModal, Sextant.INavigationParameter parameter, string? contract, bool withNavigationPage) { }
         System.IObservable<System.Reactive.Unit> PushModal(System.Type viewModelType, Sextant.INavigationParameter parameter, string? contract, bool withNavigationPage) { }
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter) where TViewModel : Sextant.INavigable { }
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract) where TViewModel : Sextant.INavigable { }
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract, bool withNavigationPage) where TViewModel : Sextant.INavigable { }
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter) { }
         System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, Sextant.INavigationParameter parameter) { }
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter, string? contract) { }
@@ -66,6 +76,10 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, Sextant.INavigationParameter parameter, string? contract, bool resetStack) { }
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter, string? contract, bool resetStack, bool animate) { }
         System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, Sextant.INavigationParameter parameter, string? contract, bool resetStack, bool animate) { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter) where TViewModel : Sextant.INavigable { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string? contract) where TViewModel : Sextant.INavigable { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string? contract, bool resetStack) where TViewModel : Sextant.INavigable { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string? contract, bool resetStack, bool animate) where TViewModel : Sextant.INavigable { }
     }
     public interface IView
     {
@@ -89,6 +103,8 @@ namespace Sextant
     {
         Sextant.IViewModel Create(System.Type viewModelType) { }
         Sextant.IViewModel Create(System.Type viewModelType, string? contract) { }
+        TViewModel Create<TViewModel>() where TViewModel : Sextant.IViewModel { }
+        TViewModel Create<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
     }
     public interface IViewStackService
     {
@@ -107,6 +123,9 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PushModal(System.Type viewModelType, string? contract) { }
         System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string? contract, bool withNavigationPage) { }
         System.IObservable<System.Reactive.Unit> PushModal(System.Type viewModelType, string? contract, bool withNavigationPage) { }
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>() where TViewModel : Sextant.IViewModel { }
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
+        System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(string? contract, bool withNavigationPage) where TViewModel : Sextant.IViewModel { }
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable page) { }
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel page) { }
         System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType) { }
@@ -119,6 +138,10 @@ namespace Sextant
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable page, string? contract, bool resetStack, bool animate) { }
         System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel page, string? contract, bool resetStack, bool animate) { }
         System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, string? contract, bool resetStack, bool animate) { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>() where TViewModel : Sextant.IViewModel { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string? contract, bool resetStack) where TViewModel : Sextant.IViewModel { }
+        System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string? contract, bool resetStack, bool animate) where TViewModel : Sextant.IViewModel { }
         System.IObservable<Sextant.IViewModel> TopModal() { }
         System.IObservable<Sextant.IViewModel> TopPage() { }
     }
@@ -152,6 +175,12 @@ namespace Sextant
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.INavigable navigableModal, Sextant.INavigationParameter parameter, string? contract, bool withNavigationPage) { }
         public System.IObservable<System.Reactive.Unit> PushModal(System.Type viewModelType, Sextant.INavigationParameter parameter, string? contract, bool withNavigationPage) { }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter) where TViewModel : Sextant.INavigable { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract) where TViewModel : Sextant.INavigable { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(Sextant.INavigationParameter parameter, string? contract, bool withNavigationPage) where TViewModel : Sextant.INavigable { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter) { }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, Sextant.INavigationParameter parameter) { }
@@ -166,6 +195,14 @@ namespace Sextant
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable navigableViewModel, Sextant.INavigationParameter parameter, string? contract, bool resetStack, bool animate) { }
         public System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, Sextant.INavigationParameter parameter, string? contract, bool resetStack, bool animate) { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter) where TViewModel : Sextant.INavigable { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string? contract) where TViewModel : Sextant.INavigable { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string? contract, bool resetStack) where TViewModel : Sextant.INavigable { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(Sextant.INavigationParameter parameter, string? contract, bool resetStack, bool animate) where TViewModel : Sextant.INavigable { }
     }
     [System.Diagnostics.DebuggerDisplay("Sextant: {MutableLocator}")]
     public class Sextant
@@ -240,6 +277,12 @@ namespace Sextant
         public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modal, string? contract, bool withNavigationPage) { }
         public System.IObservable<System.Reactive.Unit> PushModal(System.Type viewModelType, string? contract, bool withNavigationPage) { }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>() where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushModal<TViewModel>(string? contract, bool withNavigationPage) where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable page) { }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel page) { }
@@ -261,6 +304,14 @@ namespace Sextant
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.INavigable page, string? contract, bool resetStack, bool animate) { }
         public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel page, string? contract, bool resetStack, bool animate) { }
         public System.IObservable<System.Reactive.Unit> PushPage(System.Type viewModelType, string? contract, bool resetStack, bool animate) { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>() where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string? contract, bool resetStack) where TViewModel : Sextant.IViewModel { }
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public System.IObservable<System.Reactive.Unit> PushPage<TViewModel>(string? contract, bool resetStack, bool animate) where TViewModel : Sextant.IViewModel { }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
         public System.IObservable<Sextant.IViewModel> TopModal() { }
         [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

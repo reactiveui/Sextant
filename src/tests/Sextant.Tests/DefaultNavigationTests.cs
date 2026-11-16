@@ -96,6 +96,19 @@ public sealed class DefaultNavigationTests
     /// <summary>Checks the PushModal interface overload and its resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushModalDefault5()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        await ((IParameterViewStackService)sut).PushModal<NavigableViewModelMock>(Contract);
+        await Assert.That(await sut.TopModal()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushModal interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushModalDefault6()
     {
         using var view = new NavigationViewMock();
@@ -103,6 +116,19 @@ public sealed class DefaultNavigationTests
         using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
         var sut = new DefaultNavigationService(service);
         await ((IParameterViewStackService)sut).PushModal(typeof(NavigableViewModelMock));
+        await Assert.That(await sut.TopModal()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushModal interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPushModalDefault6()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        await ((IParameterViewStackService)sut).PushModal<NavigableViewModelMock>();
         await Assert.That(await sut.TopModal()).IsSameReferenceAs(model);
     }
 
@@ -122,6 +148,19 @@ public sealed class DefaultNavigationTests
     /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushPageDefault7()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        await ((IParameterViewStackService)sut).PushPage<NavigableViewModelMock>(Contract, false);
+        await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushPageDefault8()
     {
         using var view = new NavigationViewMock();
@@ -135,6 +174,19 @@ public sealed class DefaultNavigationTests
     /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushPageDefault8()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        await ((IParameterViewStackService)sut).PushPage<NavigableViewModelMock>(Contract);
+        await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushPageDefault9()
     {
         using var view = new NavigationViewMock();
@@ -142,6 +194,19 @@ public sealed class DefaultNavigationTests
         using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
         var sut = new DefaultNavigationService(service);
         await ((IParameterViewStackService)sut).PushPage(typeof(NavigableViewModelMock));
+        await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPushPageDefault9()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        await ((IParameterViewStackService)sut).PushPage<NavigableViewModelMock>();
         await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
     }
 
@@ -282,6 +347,20 @@ public sealed class DefaultNavigationTests
     /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushPageDefault19()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IParameterViewStackService)sut).PushPage<NavigableViewModelMock>(parameter, Contract, false);
+        await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushPageDefault20()
     {
         using var view = new NavigationViewMock();
@@ -296,6 +375,20 @@ public sealed class DefaultNavigationTests
     /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushPageDefault20()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IParameterViewStackService)sut).PushPage<NavigableViewModelMock>(parameter, Contract);
+        await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushPageDefault21()
     {
         using var view = new NavigationViewMock();
@@ -304,6 +397,20 @@ public sealed class DefaultNavigationTests
         var sut = new DefaultNavigationService(service);
         var parameter = new NavigationParameter();
         await ((IParameterViewStackService)sut).PushPage(typeof(NavigableViewModelMock), parameter);
+        await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushPage interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPushPageDefault21()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IParameterViewStackService)sut).PushPage<NavigableViewModelMock>(parameter);
         await Assert.That(await sut.TopPage()).IsSameReferenceAs(model);
     }
 
@@ -352,6 +459,20 @@ public sealed class DefaultNavigationTests
     /// <summary>Checks the PushModal interface overload and its resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushModalDefault24()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IParameterViewStackService)sut).PushModal<NavigableViewModelMock>(parameter, Contract);
+        await Assert.That(await sut.TopModal()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushModal interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushModalDefault25()
     {
         using var view = new NavigationViewMock();
@@ -360,6 +481,20 @@ public sealed class DefaultNavigationTests
         var sut = new DefaultNavigationService(service);
         var parameter = new NavigationParameter();
         await ((IParameterViewStackService)sut).PushModal(typeof(NavigableViewModelMock), parameter);
+        await Assert.That(await sut.TopModal()).IsSameReferenceAs(model);
+    }
+
+    /// <summary>Checks the PushModal interface overload and its resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPushModalDefault25()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IParameterViewStackService)sut).PushModal<NavigableViewModelMock>(parameter);
         await Assert.That(await sut.TopModal()).IsSameReferenceAs(model);
     }
 

@@ -175,6 +175,36 @@ public class PopupViewStackServiceBase : ParameterViewStackServiceBase, IPopupVi
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPopup<TViewModel>(string? contract)
+        where TViewModel : IViewModel => PushPopup<TViewModel>(contract, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPopup<TViewModel>()
+        where TViewModel : IViewModel => PushPopup<TViewModel>(null, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPopup<TViewModel>(string? contract, bool animate)
+        where TViewModel : IViewModel => PushPopup(Factory.Create<TViewModel>(contract), contract, animate);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPopup<TViewModel>(INavigationParameter navigationParameter, string? contract)
+        where TViewModel : INavigable => PushPopup<TViewModel>(navigationParameter, contract, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPopup<TViewModel>(INavigationParameter navigationParameter)
+        where TViewModel : INavigable => PushPopup<TViewModel>(navigationParameter, null, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPopup<TViewModel>(INavigationParameter navigationParameter, string? contract, bool animate)
+        where TViewModel : INavigable => PushPopup(Factory.Create<TViewModel>(contract), navigationParameter, contract, animate);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IObservable<Unit> PopPopup() => PopPopup(true);
 
     /// <inheritdoc/>

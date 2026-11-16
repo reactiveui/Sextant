@@ -10,7 +10,18 @@ namespace Sextant.Mocks;
 /// <param name="model">The view model returned by the factory.</param>
 internal sealed class ViewModelFactoryMock(IViewModel? model = null) : IViewModelFactory
 {
+    /// <summary>Gets the view model type requested by navigation.</summary>
+    internal Type? RequestedType { get; private set; }
+
+    /// <summary>Gets the registration contract requested by navigation.</summary>
+    internal string? RequestedContract { get; private set; }
+
     /// <inheritdoc />
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IViewModel Create(Type viewModelType, string? contract) => model ?? throw new InvalidOperationException("No view model was supplied to the test factory.");
+    public IViewModel Create(Type viewModelType, string? contract)
+    {
+        RequestedType = viewModelType;
+        RequestedContract = contract;
+        return model ?? throw new InvalidOperationException("No view model was supplied to the test factory.");
+    }
 }

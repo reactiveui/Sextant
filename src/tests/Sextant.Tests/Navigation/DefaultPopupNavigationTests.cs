@@ -64,6 +64,22 @@ public sealed class DefaultPopupNavigationTests
     /// <summary>Checks the PushPopup interface overload.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushPopupDefault2()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        var page = new SextantPopupPage<IViewModel>();
+        var locator = new PlatformViewLocator { Factory = () => page };
+        var navigation = new PopupNavigationMock();
+        using var service = new PopupViewStackService(view, navigation, locator, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultPopupNavigationService(service);
+        await ((IPopupViewStackService)sut).PushPopup<NavigableViewModelMock>(Contract);
+        await Assert.That(sut.PopupStack.Count).IsEqualTo(1);
+    }
+
+    /// <summary>Checks the PushPopup interface overload.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushPopupDefault3()
     {
         using var view = new NavigationViewMock();
@@ -74,6 +90,22 @@ public sealed class DefaultPopupNavigationTests
         using var service = new PopupViewStackService(view, navigation, locator, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
         var sut = new DefaultPopupNavigationService(service);
         await ((IPopupViewStackService)sut).PushPopup(typeof(NavigableViewModelMock));
+        await Assert.That(sut.PopupStack.Count).IsEqualTo(1);
+    }
+
+    /// <summary>Checks the PushPopup interface overload.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPushPopupDefault3()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        var page = new SextantPopupPage<IViewModel>();
+        var locator = new PlatformViewLocator { Factory = () => page };
+        var navigation = new PopupNavigationMock();
+        using var service = new PopupViewStackService(view, navigation, locator, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultPopupNavigationService(service);
+        await ((IPopupViewStackService)sut).PushPopup<NavigableViewModelMock>();
         await Assert.That(sut.PopupStack.Count).IsEqualTo(1);
     }
 
@@ -131,6 +163,23 @@ public sealed class DefaultPopupNavigationTests
     /// <summary>Checks the PushPopup interface overload.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
+    public async Task GenericPushPopupDefault6()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        var page = new SextantPopupPage<IViewModel>();
+        var locator = new PlatformViewLocator { Factory = () => page };
+        var navigation = new PopupNavigationMock();
+        using var service = new PopupViewStackService(view, navigation, locator, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultPopupNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IPopupViewStackService)sut).PushPopup<NavigableViewModelMock>(parameter, Contract);
+        await Assert.That(sut.PopupStack.Count).IsEqualTo(1);
+    }
+
+    /// <summary>Checks the PushPopup interface overload.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
     public async Task PushPopupDefault7()
     {
         using var view = new NavigationViewMock();
@@ -142,6 +191,23 @@ public sealed class DefaultPopupNavigationTests
         var sut = new DefaultPopupNavigationService(service);
         var parameter = new NavigationParameter();
         await ((IPopupViewStackService)sut).PushPopup(typeof(NavigableViewModelMock), parameter);
+        await Assert.That(sut.PopupStack.Count).IsEqualTo(1);
+    }
+
+    /// <summary>Checks the PushPopup interface overload.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPushPopupDefault7()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        var page = new SextantPopupPage<IViewModel>();
+        var locator = new PlatformViewLocator { Factory = () => page };
+        var navigation = new PopupNavigationMock();
+        using var service = new PopupViewStackService(view, navigation, locator, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var sut = new DefaultPopupNavigationService(service);
+        var parameter = new NavigationParameter();
+        await ((IPopupViewStackService)sut).PushPopup<NavigableViewModelMock>(parameter);
         await Assert.That(sut.PopupStack.Count).IsEqualTo(1);
     }
 

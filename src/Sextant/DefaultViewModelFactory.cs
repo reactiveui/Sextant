@@ -25,4 +25,14 @@ public class DefaultViewModelFactory : IViewModelFactory
             _ => viewModel
         };
     }
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public TViewModel Create<TViewModel>()
+        where TViewModel : IViewModel => (TViewModel)Create(typeof(TViewModel));
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public TViewModel Create<TViewModel>(string? contract)
+        where TViewModel : IViewModel => (TViewModel)Create(typeof(TViewModel), contract);
 }

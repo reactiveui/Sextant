@@ -30,6 +30,31 @@ public sealed class StackServiceTests
     /// <summary>The number of parameterized modal pushes.</summary>
     private const int ParameterModalCount = 6;
 
+    /// <summary>Checks typed factory results and contract forwarding through generic navigation.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericNavigationForwardsTheSelectedTypeAndContract()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        var factory = new ViewModelFactoryMock(model);
+        IViewModelFactory factoryContract = factory;
+        var defaultModel = factoryContract.Create<NavigableViewModelMock>();
+        var contractedModel = factoryContract.Create<NavigableViewModelMock>(ModalContract);
+        await Assert.That(defaultModel).IsSameReferenceAs(model);
+        await Assert.That(contractedModel).IsSameReferenceAs(model);
+        await Assert.That(factory.RequestedType).IsEqualTo(typeof(NavigableViewModelMock));
+        await Assert.That(factory.RequestedContract).IsEqualTo(ModalContract);
+        using var service = new ParameterViewStackService(view, factory, new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        await service.PushPage<NavigableViewModelMock>(ModalContract);
+        await Assert.That(await service.TopPage()).IsSameReferenceAs(model);
+        await Assert.That(factory.RequestedContract).IsEqualTo(ModalContract);
+        await service.PushModal<NavigableViewModelMock>(new NavigationParameter(), ModalContract);
+        await Assert.That(await service.TopModal()).IsSameReferenceAs(model);
+        await Assert.That(factory.RequestedType).IsEqualTo(typeof(NavigableViewModelMock));
+        await Assert.That(factory.RequestedContract).IsEqualTo(ModalContract);
+    }
+
     /// <summary>Checks every page overload against the resulting stack.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
@@ -60,6 +85,36 @@ public sealed class StackServiceTests
         await Assert.That(() => service.PushPage((IViewModel)null!)).Throws<ArgumentNullException>();
     }
 
+    /// <summary>Checks every page overload against the resulting stack.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPageOverloadsPreserveModelsAndResetTheStack()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        await service.PushPage((IViewModel)model);
+        await service.PushPage((IViewModel)model, "page");
+        await service.PushPage((IViewModel)model, "page", false);
+        await service.PushPage((IViewModel)model, "page", true, false);
+        await Assert.That((await service.PageStack.FirstAsync()).Count).IsEqualTo(1);
+        await service.PushPage(model);
+        await service.PushPage(model, "page");
+        await service.PushPage(model, "page", false);
+        await service.PushPage(model, "page", false, false);
+        await service.PushPage<NavigableViewModelMock>();
+        await service.PushPage<NavigableViewModelMock>("page");
+        await service.PushPage<NavigableViewModelMock>("page", false);
+        await service.PushPage<NavigableViewModelMock>("page", false, false);
+        await Assert.That((await service.PageStack.FirstAsync()).Count).IsEqualTo(PageOverloadCount);
+        await Assert.That(await service.TopPage()).IsSameReferenceAs(model);
+        await service.PopToRootPage();
+        await Assert.That((await service.PageStack.FirstAsync()).Count).IsEqualTo(1);
+        await service.PopPage();
+        await Assert.That((await service.PageStack.FirstAsync()).Count).IsEqualTo(0);
+        await Assert.That(() => service.PushPage((IViewModel)null!)).Throws<ArgumentNullException>();
+    }
+
     /// <summary>Checks modal overloads and destruction.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
@@ -73,6 +128,29 @@ public sealed class StackServiceTests
         await service.PushModal(typeof(NavigableViewModelMock));
         await service.PushModal(typeof(NavigableViewModelMock), ModalContract);
         await service.PushModal(typeof(NavigableViewModelMock), ModalContract, false);
+        var destructible = new LifecycleModel();
+        await service.PushModal(destructible, null, false);
+        await Assert.That(await service.TopModal()).IsSameReferenceAs(destructible);
+        await service.PopModal();
+        await Assert.That(destructible.DestroyCount).IsEqualTo(1);
+        await service.PopModal(false);
+        await Assert.That((await service.ModalStack.FirstAsync()).Count).IsEqualTo(RemainingModalCount);
+        await Assert.That(() => service.PushModal((IViewModel)null!)).Throws<ArgumentNullException>();
+    }
+
+    /// <summary>Checks modal overloads and destruction.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericModalOverloadsPreserveModelsAndDestroyRemovedModels()
+    {
+        using var view = new NavigationViewMock();
+        using var model = new NavigableViewModelMock();
+        using var service = new ViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        await service.PushModal(model);
+        await service.PushModal(model, ModalContract);
+        await service.PushModal<NavigableViewModelMock>();
+        await service.PushModal<NavigableViewModelMock>(ModalContract);
+        await service.PushModal<NavigableViewModelMock>(ModalContract, false);
         var destructible = new LifecycleModel();
         await service.PushModal(destructible, null, false);
         await Assert.That(await service.TopModal()).IsSameReferenceAs(destructible);
@@ -118,6 +196,49 @@ public sealed class StackServiceTests
         await service.PushModal(typeof(LifecycleModel), parameter);
         await service.PushModal(typeof(LifecycleModel), parameter, "page");
         await service.PushModal(typeof(LifecycleModel), parameter, "page", false);
+        await Assert.That((await service.ModalStack.FirstAsync()).Count).IsEqualTo(ParameterModalCount);
+        await Assert.That(async () => await service.PushPage((INavigable)null!, parameter)).Throws<ArgumentNullException>();
+        await Assert.That(async () => await service.PushPage(model, (INavigationParameter)null!)).Throws<ArgumentNullException>();
+        await Assert.That(async () => await service.PushModal((INavigable)null!, parameter)).Throws<ArgumentNullException>();
+        await Assert.That(async () => await service.PushModal(model, (INavigationParameter)null!)).Throws<ArgumentNullException>();
+        await Assert.That(async () => await service.PopPage((INavigationParameter)null!)).Throws<ArgumentNullException>();
+    }
+
+    /// <summary>Checks parameter overloads and both remaining-page lifecycle paths.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericParameterOverloadsDeliverLifecycleNotifications()
+    {
+        using var view = new NavigationViewMock();
+        var model = new LifecycleModel();
+        using var service = new ParameterViewStackService(view, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        var parameter = new NavigationParameter();
+        await service.PushPage(model, parameter);
+        await service.PushPage(model, parameter, "page");
+        await service.PushPage(model, parameter, "page", false);
+        await service.PushPage(model, parameter, "page", false, false);
+        await service.PushPage<LifecycleModel>(parameter);
+        await service.PushPage<LifecycleModel>(parameter, "page");
+        await service.PushPage<LifecycleModel>(parameter, "page", false);
+        await service.PushPage<LifecycleModel>(parameter, "page", false, false);
+        await Assert.That(model.NavigatingCount).IsEqualTo(ParameterPageCount);
+        await Assert.That(model.NavigatedCount).IsEqualTo(ParameterPageCount);
+        await service.PopPage(parameter);
+        await Assert.That(model.FromCount).IsEqualTo(1);
+        await Assert.That(model.NavigatedCount).IsEqualTo(ParameterPageCount + 1);
+        await service.PushPage(model, parameter, null, true, false);
+        await service.PopPage(parameter, false);
+        await Assert.That((await service.PageStack.FirstAsync()).Count).IsEqualTo(0);
+        await service.PushPage(new PlainModel());
+        await service.PushPage(model, parameter);
+        await service.PopPage(parameter);
+        await service.PopPage(parameter);
+        await service.PushModal(model, parameter);
+        await service.PushModal(model, parameter, "page");
+        await service.PushModal(model, parameter, "page", false);
+        await service.PushModal<LifecycleModel>(parameter);
+        await service.PushModal<LifecycleModel>(parameter, "page");
+        await service.PushModal<LifecycleModel>(parameter, "page", false);
         await Assert.That((await service.ModalStack.FirstAsync()).Count).IsEqualTo(ParameterModalCount);
         await Assert.That(async () => await service.PushPage((INavigable)null!, parameter)).Throws<ArgumentNullException>();
         await Assert.That(async () => await service.PushPage(model, (INavigationParameter)null!)).Throws<ArgumentNullException>();

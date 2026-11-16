@@ -30,6 +30,12 @@ public interface IPopupViewStackService : Sextant.IParameterViewStackService
     System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, string? contract, bool animate) { }
     System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
     System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
+    System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>() where TViewModel : Sextant.IViewModel { }
+    System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter) where TViewModel : Sextant.INavigable { }
+    System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
+    System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter, string? contract) where TViewModel : Sextant.INavigable { }
+    System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(string? contract, bool animate) where TViewModel : Sextant.IViewModel { }
+    System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter, string? contract, bool animate) where TViewModel : Sextant.INavigable { }
     System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel) { }
     System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract) { }
     System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract, bool animate) { }
@@ -84,6 +90,18 @@ public class PopupViewStackServiceBase : Sextant.ParameterViewStackServiceBase, 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
     public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>() where TViewModel : Sextant.IViewModel { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter) where TViewModel : Sextant.INavigable { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(string? contract) where TViewModel : Sextant.IViewModel { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter, string? contract) where TViewModel : Sextant.INavigable { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(string? contract, bool animate) where TViewModel : Sextant.IViewModel { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup<TViewModel>(Sextant.INavigationParameter navigationParameter, string? contract, bool animate) where TViewModel : Sextant.INavigable { }
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     public System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel) { }
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]

@@ -16,4 +16,19 @@ public interface IViewModelFactory
     /// <param name="contract">The registration contract, or null for the default registration.</param>
     /// <returns>The registered view model.</returns>
     IViewModel Create(Type viewModelType, string? contract);
+
+    /// <summary>Resolves the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <returns>The registered view model.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    TViewModel Create<TViewModel>()
+        where TViewModel : IViewModel => (TViewModel)Create(typeof(TViewModel));
+
+    /// <summary>Resolves the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <returns>The registered view model.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    TViewModel Create<TViewModel>(string? contract)
+        where TViewModel : IViewModel => (TViewModel)Create(typeof(TViewModel), contract);
 }

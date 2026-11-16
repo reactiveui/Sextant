@@ -18,7 +18,7 @@ public class HomeViewModel : ViewModelBase
     {
         OpenModal = ReactiveCommand.CreateFromObservable(() => ViewStackService!.PushModal(new FirstModalViewModel(ViewStackService)), outputScheduler: RxSchedulers.MainThreadScheduler);
         PushPage = ReactiveCommand.CreateFromObservable(() => ViewStackService!.PushPage(new RedViewModel(ViewStackService)), outputScheduler: RxSchedulers.MainThreadScheduler);
-        PushGenericPage = ReactiveCommand.CreateFromObservable(() => ViewStackService!.PushPage(typeof(GreenViewModel)), outputScheduler: RxSchedulers.MainThreadScheduler);
+        PushGenericPage = ReactiveCommand.CreateFromObservable(() => ViewStackService!.PushPage<GreenViewModel>(), outputScheduler: RxSchedulers.MainThreadScheduler);
         _ = PushPage.ThrownExceptions.Subscribe(static error => Interactions.ErrorMessage.WhenHandled(error).Subscribe());
         _ = PushGenericPage.ThrownExceptions.Subscribe(static error => Interactions.ErrorMessage.WhenHandled(error).Subscribe());
         _ = OpenModal.ThrownExceptions.Subscribe(static error => Interactions.ErrorMessage.WhenHandled(error).Subscribe());

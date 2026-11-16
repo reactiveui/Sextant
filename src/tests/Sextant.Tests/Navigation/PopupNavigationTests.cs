@@ -71,6 +71,58 @@ public sealed class PopupNavigationTests
         await Assert.That(service.PopupStack.Count).IsEqualTo(0);
     }
 
+    /// <summary>Checks popup overloads and all four navigation events.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericPopupOverloadsResolvePagesAndPublishEvents()
+    {
+        using var view = new NavigationViewMock();
+        var model = new PopupModel();
+        var page = new SextantPopupPage<IViewModel>();
+        var locator = new PlatformViewLocator { Factory = () => page };
+        var navigation = new PopupNavigationMock();
+        using var service = new PopupViewStackService(view, navigation, locator, new ViewModelFactoryMock(model), new Splat.WrappingFullLogger(new Splat.NullLogger()));
+        List<PopupNavigationEvent> pushing = [];
+        List<PopupNavigationEvent> pushed = [];
+        List<PopupNavigationEvent> popping = [];
+        List<PopupNavigationEvent> popped = [];
+        using var pushingSubscription = service.Pushing.Subscribe(pushing.Add);
+        using var pushedSubscription = service.Pushed.Subscribe(pushed.Add);
+        using var poppingSubscription = service.Popping.Subscribe(popping.Add);
+        using var poppedSubscription = service.Popped.Subscribe(popped.Add);
+        await service.PushPopup(model);
+        await service.PushPopup(model, Contract);
+        await service.PushPopup(model, Contract, false);
+        await service.PushPopup<PopupModel>();
+        await service.PushPopup<PopupModel>(Contract);
+        await service.PushPopup<PopupModel>(Contract, false);
+        var parameter = new NavigationParameter();
+        await service.PushPopup(model, parameter);
+        await service.PushPopup(model, parameter, Contract);
+        await service.PushPopup(model, parameter, Contract, false);
+        await service.PushPopup<PopupModel>(parameter);
+        await service.PushPopup<PopupModel>(parameter, Contract);
+        await service.PushPopup<PopupModel>(parameter, Contract, false);
+        await Assert.That(service.PopupStack.Count).IsEqualTo(PushOverloadCount);
+        await Assert.That(pushing.Count).IsEqualTo(PushOverloadCount);
+        await Assert.That(pushed.Count).IsEqualTo(PushOverloadCount);
+        await Assert.That(pushed[0].ViewModel).IsSameReferenceAs(model);
+        await Assert.That(pushed[0].IsAnimated).IsTrue();
+        await Assert.That(pushed[^1].IsAnimated).IsFalse();
+        await service.PopPopup();
+        await service.PopPopup(false);
+        await service.RemovePopup(model);
+        await service.RemovePopup(model, Contract);
+        await service.RemovePopup(model, Contract, false);
+        await Assert.That(popping.Count).IsEqualTo(PushOverloadCount - service.PopupStack.Count);
+        await Assert.That(popped.Count).IsEqualTo(model.DestroyCount);
+        await service.PopAllPopups();
+        await Assert.That(service.PopupStack.Count).IsEqualTo(0);
+        await service.PushPopup(model);
+        await service.PopAllPopups(false);
+        await Assert.That(service.PopupStack.Count).IsEqualTo(0);
+    }
+
     /// <summary>Checks invalid popup registrations and non-view-model stack entries.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]

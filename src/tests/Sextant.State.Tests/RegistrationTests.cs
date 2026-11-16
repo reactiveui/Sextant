@@ -11,6 +11,12 @@ namespace Sextant.Tests;
 /// <summary>Checks registration resolution and failure paths.</summary>
 public sealed class RegistrationTests
 {
+    /// <summary>The contract for factory registrations.</summary>
+    private const string FactoryContract = "contract";
+
+    /// <summary>The contract for instance registrations.</summary>
+    private const string InstanceContract = "instance";
+
     /// <summary>Checks that popup navigation resolves the application logger through its public constructor.</summary>
     /// <returns>The asynchronous test.</returns>
     [Test]
@@ -31,15 +37,38 @@ public sealed class RegistrationTests
         using var model = new NavigableViewModelMock();
         var resolver = AppLocator.CurrentMutable;
         _ = resolver.RegisterViewModel(() => model);
-        _ = resolver.RegisterViewModel(() => model, "contract");
+        _ = resolver.RegisterViewModel(() => model, FactoryContract);
         var factory = new DefaultViewModelFactory();
         await Assert.That(factory.Create(typeof(NavigableViewModelMock))).IsSameReferenceAs(model);
-        await Assert.That(factory.Create(typeof(NavigableViewModelMock), "contract")).IsSameReferenceAs(model);
+        await Assert.That(factory.Create(typeof(NavigableViewModelMock), FactoryContract)).IsSameReferenceAs(model);
         _ = resolver.RegisterViewModel(model);
-        _ = resolver.RegisterViewModel(model, "instance");
+        _ = resolver.RegisterViewModel(model, InstanceContract);
         await Assert.That(factory.Create(typeof(NavigableViewModelMock))).IsSameReferenceAs(model);
-        await Assert.That(factory.Create(typeof(NavigableViewModelMock), "instance")).IsSameReferenceAs(model);
+        await Assert.That(factory.Create(typeof(NavigableViewModelMock), InstanceContract)).IsSameReferenceAs(model);
         await Assert.That(() => factory.Create(typeof(NavigableViewModelMock), "missing")).Throws<InvalidOperationException>();
+        await Assert.That(() => factory.Create(null!)).Throws<ArgumentNullException>();
+        var inner = new InvalidOperationException("inner");
+        await Assert.That(new ViewModelFactoryNotFoundException("outer", inner).InnerException).IsSameReferenceAs(inner);
+        await Assert.That(new ViewModelFactoryNotFoundException().Message).IsNotNull();
+    }
+
+    /// <summary>Checks default and contracted view model factories.</summary>
+    /// <returns>The asynchronous test.</returns>
+    [Test]
+    public async Task GenericFactoryResolvesInstancesAndFactories()
+    {
+        using var model = new NavigableViewModelMock();
+        var resolver = AppLocator.CurrentMutable;
+        _ = resolver.RegisterViewModel(() => model);
+        _ = resolver.RegisterViewModel(() => model, FactoryContract);
+        var factory = new DefaultViewModelFactory();
+        await Assert.That(factory.Create<NavigableViewModelMock>()).IsSameReferenceAs(model);
+        await Assert.That(factory.Create<NavigableViewModelMock>(FactoryContract)).IsSameReferenceAs(model);
+        _ = resolver.RegisterViewModel(model);
+        _ = resolver.RegisterViewModel(model, InstanceContract);
+        await Assert.That(factory.Create<NavigableViewModelMock>()).IsSameReferenceAs(model);
+        await Assert.That(factory.Create<NavigableViewModelMock>(InstanceContract)).IsSameReferenceAs(model);
+        await Assert.That(() => factory.Create<NavigableViewModelMock>("missing")).Throws<InvalidOperationException>();
         await Assert.That(() => factory.Create(null!)).Throws<ArgumentNullException>();
         var inner = new InvalidOperationException("inner");
         await Assert.That(new ViewModelFactoryNotFoundException("outer", inner).InnerException).IsSameReferenceAs(inner);

@@ -104,6 +104,57 @@ public interface IPopupViewStackService : IParameterViewStackService
     /// <returns>A sequence that signals when the navigation operation completes.</returns>
     IObservable<Unit> PushPopup(Type viewModelType, INavigationParameter navigationParameter, string? contract, bool animate);
 
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPopup<TViewModel>(string? contract)
+        where TViewModel : IViewModel => PushPopup<TViewModel>(contract, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPopup<TViewModel>()
+        where TViewModel : IViewModel => PushPopup<TViewModel>(null, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <param name = "animate">True to animate the navigation transition.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPopup<TViewModel>(string? contract, bool animate)
+        where TViewModel : IViewModel => PushPopup(typeof(TViewModel), contract, animate);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "navigationParameter">The parameters passed to navigation lifecycle callbacks.</param>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPopup<TViewModel>(INavigationParameter navigationParameter, string? contract)
+        where TViewModel : INavigable => PushPopup<TViewModel>(navigationParameter, contract, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "navigationParameter">The parameters passed to navigation lifecycle callbacks.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPopup<TViewModel>(INavigationParameter navigationParameter)
+        where TViewModel : INavigable => PushPopup<TViewModel>(navigationParameter, null, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "navigationParameter">The parameters passed to navigation lifecycle callbacks.</param>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <param name = "animate">True to animate the navigation transition.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPopup<TViewModel>(INavigationParameter navigationParameter, string? contract, bool animate)
+        where TViewModel : INavigable => PushPopup(typeof(TViewModel), navigationParameter, contract, animate);
+
     /// <summary>Closes the top popup.</summary>
     /// <returns>A sequence that signals when the navigation operation completes.</returns>
     IObservable<Unit> PopPopup() => PopPopup(true);

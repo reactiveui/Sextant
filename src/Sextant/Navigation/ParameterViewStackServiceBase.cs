@@ -86,6 +86,26 @@ public class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterVie
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract, bool resetStack)
+        where TViewModel : INavigable => PushPage<TViewModel>(parameter, contract, resetStack, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract)
+        where TViewModel : INavigable => PushPage<TViewModel>(parameter, contract, false, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter)
+        where TViewModel : INavigable => PushPage<TViewModel>(parameter, null, false, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage<TViewModel>(INavigationParameter parameter, string? contract, bool resetStack, bool animate)
+        where TViewModel : INavigable => PushPage(Factory.Create<TViewModel>(contract), parameter, contract, resetStack, animate);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract) => PushModal(navigableModal, parameter, contract, true);
 
     /// <inheritdoc/>
@@ -125,6 +145,21 @@ public class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterVie
         var viewModel = (INavigable)Factory.Create(viewModelType, contract);
         return PushModal(viewModel, parameter, contract, withNavigationPage);
     }
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract)
+        where TViewModel : INavigable => PushModal<TViewModel>(parameter, contract, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter)
+        where TViewModel : INavigable => PushModal<TViewModel>(parameter, null, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal<TViewModel>(INavigationParameter parameter, string? contract, bool withNavigationPage)
+        where TViewModel : INavigable => PushModal(Factory.Create<TViewModel>(contract), parameter, contract, withNavigationPage);
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

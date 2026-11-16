@@ -82,6 +82,30 @@ public interface IViewStackService
     /// <returns>A sequence that signals when the navigation operation completes.</returns>
     IObservable<Unit> PushModal(Type viewModelType, string? contract, bool withNavigationPage);
 
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushModal<TViewModel>(string? contract)
+        where TViewModel : IViewModel => PushModal<TViewModel>(contract, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushModal<TViewModel>()
+        where TViewModel : IViewModel => PushModal<TViewModel>(null, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <param name = "withNavigationPage">True to wrap the modal in a navigation page.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushModal<TViewModel>(string? contract, bool withNavigationPage)
+        where TViewModel : IViewModel => PushModal(typeof(TViewModel), contract, withNavigationPage);
+
     /// <summary>Adds a page to the navigation stack, resolving its view from the registered contract.</summary>
     /// <param name="viewModelType">The registered view model type to resolve.</param>
     /// <param name="contract">The registration contract, or null for the default registration.</param>
@@ -159,6 +183,40 @@ public interface IViewStackService
     /// <param name = "animate">if set to <c>true</c> [animate].</param>
     /// <returns>An observable that signals when the push has been completed.</returns>
     IObservable<Unit> PushPage(INavigable page, string? contract, bool resetStack, bool animate);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <param name = "resetStack">True to replace the page stack.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPage<TViewModel>(string? contract, bool resetStack)
+        where TViewModel : IViewModel => PushPage<TViewModel>(contract, resetStack, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPage<TViewModel>(string? contract)
+        where TViewModel : IViewModel => PushPage<TViewModel>(contract, false, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPage<TViewModel>()
+        where TViewModel : IViewModel => PushPage<TViewModel>(null, false, true);
+
+    /// <summary>Resolves and presents the registered view model.</summary>
+    /// <typeparam name = "TViewModel">The registered view model type.</typeparam>
+    /// <param name = "contract">The registration contract, or null for the default registration.</param>
+    /// <param name = "resetStack">True to replace the page stack.</param>
+    /// <param name = "animate">True to animate the navigation transition.</param>
+    /// <returns>A sequence that signals when navigation completes.</returns>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "SST2307", Justification = "Callers explicitly select the view model type; generic constraints validate it at compile time.")]
+    IObservable<Unit> PushPage<TViewModel>(string? contract, bool resetStack, bool animate)
+        where TViewModel : IViewModel => PushPage(typeof(TViewModel), contract, resetStack, animate);
 
     /// <summary>Returns the top page from the current navigation stack.</summary>
     /// <returns>An observable that signals the top page of the stack.</returns>
