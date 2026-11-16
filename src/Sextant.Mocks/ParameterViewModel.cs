@@ -1,55 +1,54 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using ReactiveUI;
+using System.Runtime.CompilerServices;
 
 namespace Sextant.Mocks;
 
-/// <summary>
-/// View model to test passing parameters.
-/// </summary>
+/// <summary>View model to test passing parameters.</summary>
 /// <seealso cref="IViewModel" />
-public class ParameterViewModel : ReactiveObject, INavigable, IDestructible
+[System.Diagnostics.DebuggerDisplay("ParameterViewModel: {Id}")]
+public sealed class ParameterViewModel : ReactiveObject, INavigable, IDestructible, IDisposable
 {
-    private string? _text;
-    private int _meaning;
-
     /// <inheritdoc />
     public string Id { get; } = nameof(ParameterViewModel);
 
-    /// <summary>
-    /// Gets or sets the text.
-    /// </summary>
-    public string? Text { get => _text; set => this.RaiseAndSetIfChanged(ref _text, value); }
+    /// <summary>Gets or sets the text.</summary>
+    public string? Text { get => field; set => this.RaiseAndSetIfChanged(ref field, value); }
 
-    /// <summary>
-    /// Gets or sets the meaning.
-    /// </summary>
-    public int Meaning { get => _meaning; set => this.RaiseAndSetIfChanged(ref _meaning, value); }
+    /// <summary>Gets or sets the meaning.</summary>
+    public int Meaning { get => field; set => this.RaiseAndSetIfChanged(ref field, value); }
 
-    /// <summary>
-    /// Gets the disposable.
-    /// </summary>
+    /// <summary>Gets the disposable.</summary>
     public CompositeDisposable Disposable { get; } = new();
 
     /// <inheritdoc />
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public IObservable<Unit> WhenNavigatedTo(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
 
     /// <inheritdoc />
-    public IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> WhenNavigatedFrom(INavigationParameter parameter) => WhenNavigatedTo(parameter);
 
     /// <inheritdoc />
-    public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter) => Observable.Return(Unit.Default).Do(_ => Unwrap(parameter));
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> WhenNavigatingTo(INavigationParameter parameter) => WhenNavigatedFrom(parameter);
 
     /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Destroy() => Disposable.Dispose();
 
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Dispose() => Destroy();
+
+    /// <summary>Reads the greeting and meaning supplied by the navigation caller.</summary>
+    /// <param name="parameter">The navigation payload containing hello and life entries.</param>
     private void Unwrap(INavigationParameter parameter)
     {
         // Note: normally you should check parameter.ContainsKey() before accessing the dictionary.

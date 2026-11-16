@@ -1,10 +1,10 @@
-﻿using Foundation;
+using Foundation;
 
-namespace SextantSample.Maui
-{
-    [Register("AppDelegate")]
+namespace SextantSample.Maui;
+    /// <summary>Creates the MAUI application on Apple platforms.</summary>
+[Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate
     {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        /// <inheritdoc />
+protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
-}

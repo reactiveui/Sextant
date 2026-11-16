@@ -1,0 +1,111 @@
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui", AssemblyName="Microsoft.Maui")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Controls", AssemblyName="Microsoft.Maui.Controls")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Controls.Shapes", AssemblyName="Microsoft.Maui.Controls")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Controls.Xaml", AssemblyName="Microsoft.Maui.Controls.Xaml")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Graphics", AssemblyName="Microsoft.Maui.Graphics")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "http://schemas.microsoft.com/dotnet/2021/maui")]
+[assembly: Microsoft.Maui.Controls.XmlnsPrefix("http://schemas.microsoft.com/dotnet/maui/global", "global")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("Windows10.0.19041.0")]
+namespace Sextant.Plugins.Popup;
+
+public interface IPopupViewStackService : Sextant.IParameterViewStackService
+{
+    System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popped { get; }
+    System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popping { get; }
+    System.Collections.Generic.IReadOnlyList<Sextant.IViewModel> PopupStack { get; }
+    System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushed { get; }
+    System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushing { get; }
+    System.IObservable<System.Reactive.Unit> PopAllPopups() { }
+    System.IObservable<System.Reactive.Unit> PopAllPopups(bool animate) { }
+    System.IObservable<System.Reactive.Unit> PopPopup() { }
+    System.IObservable<System.Reactive.Unit> PopPopup(bool animate) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel, string? contract) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, string? contract) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel, string? contract, bool animate) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter, string? contract) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, string? contract, bool animate) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
+    System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
+    System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel) { }
+    System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract) { }
+    System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract, bool animate) { }
+}
+[System.Diagnostics.DebuggerDisplay("PopupNavigationEvent: {ViewModel}")]
+public class PopupNavigationEvent
+{
+    public PopupNavigationEvent(ReactiveUI.Binding.Reactive.IViewFor page, bool isAnimated) { }
+    public bool IsAnimated { get; }
+    public Sextant.IViewModel ViewModel { get; }
+}
+public sealed class PopupViewStackService : Sextant.Plugins.Popup.PopupViewStackServiceBase
+{
+    public PopupViewStackService(Sextant.IView view, Mopups.Interfaces.IPopupNavigation popupNavigation, ReactiveUI.Binding.Reactive.IViewLocator viewLocator, Sextant.IViewModelFactory viewModelFactory) { }
+}
+[System.Diagnostics.DebuggerDisplay("PopupViewStackServiceBase: {Pushing}")]
+public class PopupViewStackServiceBase : Sextant.ParameterViewStackServiceBase, Sextant.Plugins.Popup.IPopupViewStackService
+{
+    protected PopupViewStackServiceBase(Sextant.IView view, Mopups.Interfaces.IPopupNavigation popupNavigation, ReactiveUI.Binding.Reactive.IViewLocator viewLocator, Sextant.IViewModelFactory viewModelFactory) { }
+    public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popped { get; }
+    public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Popping { get; }
+    public System.Collections.Generic.IReadOnlyList<Sextant.IViewModel> PopupStack { get; }
+    protected System.Reactive.Subjects.BehaviorSubject<System.Collections.Immutable.IImmutableList<Sextant.IViewModel>> PopupSubject { get; }
+    public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushed { get; }
+    public System.IObservable<Sextant.Plugins.Popup.PopupNavigationEvent> Pushing { get; }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopAllPopups() { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopAllPopups(bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopPopup() { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopPopup(bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel, string? contract) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, string? contract) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract) { }
+    public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.IViewModel viewModel, string? contract, bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter, string? contract) { }
+    public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, string? contract, bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPopup(Sextant.INavigable viewModel, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
+    public System.IObservable<System.Reactive.Unit> PushPopup(System.Type viewModelType, Sextant.INavigationParameter navigationParameter, string? contract, bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract) { }
+    public System.IObservable<System.Reactive.Unit> RemovePopup(Sextant.IViewModel viewModel, string? contract, bool animate) { }
+}
+[System.Diagnostics.DebuggerDisplay("SextantPopupPage: {BackgroundClick}")]
+public class SextantPopupPage : Mopups.Pages.PopupPage, ReactiveUI.Binding.Reactive.IViewFor
+{
+    protected SextantPopupPage() { }
+    public static readonly Microsoft.Maui.Controls.BindableProperty ViewModelProperty;
+    public System.IObservable<System.Reactive.Unit> BackgroundClick { get; }
+    public object? ViewModel { get; set; }
+    protected override void OnBindingContextChanged() { }
+}
+[System.Diagnostics.DebuggerDisplay("SextantPopupPage: {ViewModel}")]
+public class SextantPopupPage<TViewModel> : Sextant.Plugins.Popup.SextantPopupPage, ReactiveUI.Binding.Reactive.IViewFor<TViewModel> where TViewModel : class, Sextant.IViewModel
+{
+    public SextantPopupPage() { }
+    public static readonly Microsoft.Maui.Controls.BindableProperty ViewModelProperty;
+    object? ReactiveUI.Binding.Reactive.IViewFor.ViewModel { get; set; }
+    public TViewModel? ViewModel { get; set; }
+    protected override void OnBindingContextChanged() { }
+}

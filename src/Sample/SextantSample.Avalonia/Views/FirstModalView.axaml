@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SextantSample.ViewModels;assembly=SextantSample.ViewModels"
+             d:DataContext="{d:DesignInstance viewModels:FirstModalViewModel, IsDesignTimeCreatable=False}"
+             x:Class="SextantSample.Avalonia.Views.FirstModalView"
+             x:DataType="viewModels:FirstModalViewModel"
+             mc:Ignorable="d" Background="#000000">
+    <StackPanel>
+        <Button Content="Second Modal" Command="{Binding OpenModal}" />
+        <Button Content="Pop Modal" Command="{Binding PopModal}" />
+    </StackPanel>
+</UserControl>

@@ -5,7 +5,12 @@
     <UseMaui>true</UseMaui>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ReactiveUI.Maui" />
+    <PackageReference Include="ReactiveUI.Maui.Reactive" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Microsoft.Maui" />
+    <Using Include="Microsoft.Maui.Controls" />
+    <Using Include="Splat" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />

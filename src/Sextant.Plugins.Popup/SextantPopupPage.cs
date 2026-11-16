@@ -1,6 +1,5 @@
-// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
@@ -8,18 +7,14 @@ using System.Reactive;
 using System.Reactive.Linq;
 using Microsoft.Maui.Controls;
 using Mopups.Pages;
-using ReactiveUI;
 
 namespace Sextant.Plugins.Popup;
 
-/// <summary>
-/// Base Popup page for that implements <see cref="IViewFor"/>.
-/// </summary>
-public abstract class SextantPopupPage : PopupPage, IViewFor
+/// <summary>Base Popup page for that implements <see cref="IViewFor"/>.</summary>
+[System.Diagnostics.DebuggerDisplay("SextantPopupPage: {BackgroundClick}")]
+public class SextantPopupPage : PopupPage, IViewFor
 {
-    /// <summary>
-    /// The view model property.
-    /// </summary>
+    /// <summary>The view model property.</summary>
     public static readonly BindableProperty ViewModelProperty = BindableProperty.Create(
         nameof(ViewModel),
         typeof(object),
@@ -27,31 +22,20 @@ public abstract class SextantPopupPage : PopupPage, IViewFor
         null,
         BindingMode.OneWay,
         null,
-        OnViewModelChanged);
+        static (bindable, _, value) => bindable.BindingContext = value);
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SextantPopupPage"/> class.
-    /// </summary>
+    /// <summary>Initializes a new instance of the <see cref="SextantPopupPage"/> class.</summary>
     protected SextantPopupPage() =>
         BackgroundClick =
-            Observable.FromEvent<EventHandler, Unit>(
-                handler =>
-                {
-                    void EventHandler(object? sender, EventArgs args) => handler(Unit.Default);
-                    return EventHandler;
-                },
+            Observable.FromEventPattern(
                 x => BackgroundClicked += x,
-                x => BackgroundClicked -= x);
+                x => BackgroundClicked -= x).Select(static _ => Unit.Default);
 
-    /// <summary>
-    /// Gets the background click observable signal.
-    /// </summary>
+    /// <summary>Gets the background click observable signal.</summary>
     /// <value>The background click.</value>
     public IObservable<Unit> BackgroundClick { get; }
 
-    /// <summary>
-    /// Gets or sets the ViewModel to display.
-    /// </summary>
+    /// <summary>Gets or sets the ViewModel to display.</summary>
     public object? ViewModel
     {
         get => GetValue(ViewModelProperty);
@@ -64,6 +48,4 @@ public abstract class SextantPopupPage : PopupPage, IViewFor
         base.OnBindingContextChanged();
         ViewModel = BindingContext;
     }
-
-    private static void OnViewModelChanged(BindableObject bindableObject, object oldValue, object newValue) => bindableObject.BindingContext = newValue;
 }

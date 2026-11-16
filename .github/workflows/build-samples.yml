@@ -17,3 +17,4 @@ jobs:
       productNamespacePrefix: "Sextant"
       srcFolder: "src/Sample"
       solutionFile: "SextantSample.sln"
+      installWorkloads: true

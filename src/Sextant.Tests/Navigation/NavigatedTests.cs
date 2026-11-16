@@ -1,6 +1,5 @@
-// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
@@ -10,21 +9,23 @@ using Sextant.Mocks;
 
 namespace Sextant.Tests;
 
-/// <summary>
-/// Test a <see cref="INavigated"/> implementation.
-/// </summary>
-[TestFixture]
-public sealed class NavigatedTests
+/// <summary>Groups the NavigatedTests navigation checks.</summary>
+public static class NavigatedTests
 {
-    /// <summary>
-    /// Tests the WhenNavigatedTo method.
-    /// </summary>
+    /// <summary>The navigation text key.</summary>
+    private const string GreetingKey = "hello";
+
+    /// <summary>The expected navigation text.</summary>
+    private const string GreetingValue = "world";
+
+    /// <summary>The expected numeric navigation value.</summary>
+    private const int ExpectedMeaning = 42;
+
+    /// <summary>Tests the WhenNavigatedTo method.</summary>
     [TestFixture]
     public sealed class TheWhenNavigatedToMethod
     {
-        /// <summary>
-        /// Should unwrap the parameters.
-        /// </summary>
+        /// <summary>Should unwrap the parameters.</summary>
         [Test]
         public void Should_Unwrap_Parameters()
         {
@@ -32,35 +33,31 @@ public sealed class NavigatedTests
             ParameterViewModel sut = new();
 
             // When
-            sut.WhenNavigatedTo(new NavigationParameter { { "hello", "world" }, { "life", 42 } }).Subscribe();
+            _ = sut.WhenNavigatedTo(new NavigationParameter { { GreetingKey, GreetingValue }, { "life", ExpectedMeaning } }).Subscribe();
 
             // Then
             Assert.Multiple(() =>
             {
-                Assert.That(sut.Text, Is.EqualTo("world"));
-                Assert.That(sut.Meaning, Is.EqualTo(42));
+                Assert.That(sut.Text, Is.EqualTo(GreetingValue));
+                Assert.That(sut.Meaning, Is.EqualTo(ExpectedMeaning));
             });
         }
 
-        /// <summary>
-        /// Should return null if no values are provided for the parameter.
-        /// </summary>
+        /// <summary>Should return null if no values are provided for the parameter.</summary>
         [Test]
         public void Should_Return_Null_If_No_Values_Provided()
         {
             // Given
-            ParameterViewModel sut = new();
+            using ParameterViewModel sut = new();
 
             // When
-            sut.WhenNavigatedTo(new NavigationParameter());
+            _ = sut.WhenNavigatedTo(new NavigationParameter());
 
             // Then
             Assert.That(sut.Text, Is.Null);
         }
 
-        /// <summary>
-        /// Should not throw if key not found.
-        /// </summary>
+        /// <summary>Should not throw if key not found.</summary>
         [Test]
         public void Should_Throw_If_Key_Not_Found()
         {
@@ -68,19 +65,15 @@ public sealed class NavigatedTests
             ParameterViewModel sut = new();
 
             // When & Then
-            Assert.Throws<KeyNotFoundException>(() => sut.WhenNavigatedTo(new NavigationParameter { { "hello", "world" } }).Subscribe());
+            _ = Assert.Throws<KeyNotFoundException>(() => sut.WhenNavigatedTo(new NavigationParameter { { GreetingKey, GreetingValue } }).Subscribe());
         }
     }
 
-    /// <summary>
-    /// Tests the WhenNavigatedTo method.
-    /// </summary>
+    /// <summary>Tests the WhenNavigatedTo method.</summary>
     [TestFixture]
     public sealed class TheWhenNavigatedFromMethod
     {
-        /// <summary>
-        /// Should unwrap the parameters.
-        /// </summary>
+        /// <summary>Should unwrap the parameters.</summary>
         [Test]
         public void Should_Unwrap_Parameters()
         {
@@ -88,19 +81,17 @@ public sealed class NavigatedTests
             ParameterViewModel sut = new();
 
             // When
-            sut.WhenNavigatedFrom(new NavigationParameter { { "hello", "world" }, { "life", 42 } }).Subscribe();
+            _ = sut.WhenNavigatedFrom(new NavigationParameter { { GreetingKey, GreetingValue }, { "life", ExpectedMeaning } }).Subscribe();
 
             // Then
             Assert.Multiple(() =>
             {
-                Assert.That(sut.Text, Is.EqualTo("world"));
-                Assert.That(sut.Meaning, Is.EqualTo(42));
+                Assert.That(sut.Text, Is.EqualTo(GreetingValue));
+                Assert.That(sut.Meaning, Is.EqualTo(ExpectedMeaning));
             });
         }
 
-        /// <summary>
-        /// Should not throw if key not found.
-        /// </summary>
+        /// <summary>Should not throw if key not found.</summary>
         [Test]
         public void Should_Throw_If_Key_Not_Found()
         {
@@ -108,7 +99,7 @@ public sealed class NavigatedTests
             ParameterViewModel sut = new();
 
             // When & Then
-            Assert.Throws<KeyNotFoundException>(() => sut.WhenNavigatedFrom(new NavigationParameter { { "hello", "world" } }).Subscribe());
+            _ = Assert.Throws<KeyNotFoundException>(() => sut.WhenNavigatedFrom(new NavigationParameter { { GreetingKey, GreetingValue } }).Subscribe());
         }
     }
 }

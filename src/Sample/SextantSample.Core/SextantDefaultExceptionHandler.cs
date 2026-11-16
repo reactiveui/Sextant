@@ -1,23 +1,17 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
 using System.Diagnostics;
 using System.Reactive.Concurrency;
-using ReactiveUI;
 
 namespace SextantSample.ViewModels;
 
-/// <summary>
-/// SextantDefaultExceptionHandler.
-/// </summary>
+/// <summary>Reports unhandled command exceptions on the main thread.</summary>
 public class SextantDefaultExceptionHandler : IObserver<Exception>
 {
-    /// <summary>
-    /// Called when [next].
-    /// </summary>
+    /// <summary>Called when [next].</summary>
     /// <param name="value">The ex.</param>
     public void OnNext(Exception value)
     {
@@ -26,12 +20,10 @@ public class SextantDefaultExceptionHandler : IObserver<Exception>
             Debugger.Break();
         }
 
-        RxApp.MainThreadScheduler.Schedule(() => throw value);
+        _ = RxSchedulers.MainThreadScheduler.Schedule(() => throw value);
     }
 
-    /// <summary>
-    /// Called when [error].
-    /// </summary>
+    /// <summary>Called when [error].</summary>
     /// <param name="error">The ex.</param>
     public void OnError(Exception error)
     {
@@ -40,19 +32,10 @@ public class SextantDefaultExceptionHandler : IObserver<Exception>
             Debugger.Break();
         }
 
-        RxApp.MainThreadScheduler.Schedule(() => throw error);
+        OnNext(error);
     }
 
-    /// <summary>
-    /// Notifies the observer that the provider has finished sending push-based notifications.
-    /// </summary>
-    public void OnCompleted()
-    {
-        if (Debugger.IsAttached)
-        {
-            Debugger.Break();
-        }
-
-        RxApp.MainThreadScheduler.Schedule(() => throw new NotImplementedException());
-    }
+    /// <summary>Notifies the observer that the provider has finished sending push-based notifications.</summary>
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public void OnCompleted() => Debug.WriteLine("Exception stream completed.");
 }

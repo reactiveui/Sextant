@@ -28,6 +28,7 @@ jobs:
     uses: reactiveui/actions-common/.github/workflows/workflow-common-release.yml@main
     with:
       solutionFile: Sextant.sln
+      installWorkloads: true
       minverMinimumMajorMinor: '4.1'
       bump: ${{ inputs.bump }}
       sourceRef: ${{ inputs.sourceRef }}

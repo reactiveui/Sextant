@@ -1,38 +1,38 @@
-﻿using Microsoft.Extensions.Logging;
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for full license information.
+namespace SextantSample.Maui;
 
-namespace SextantSample.Maui
+/// <summary>Configures the MAUI sample and its navigation services.</summary>
+public static class MauiProgram
 {
-    public static class MauiProgram
+    /// <summary>Creates the sample application.</summary>
+    /// <returns>The configured MAUI application.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when <c>AppLocator.Current.GetService&lt;IViewStackService&gt;()</c> is <see langword="null"/>.</exception>
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
+        var builder = MauiApp.CreateBuilder();
+        _ = builder.UseMauiApp<App>().ConfigureFonts(static fonts =>
         {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
-            RxApp.DefaultExceptionHandler = new SextantDefaultExceptionHandler();
-            var resolver = Locator.CurrentMutable;
-            resolver.InitializeSplat();
-            resolver.InitializeReactiveUI();
-            ////Instance.InitializeMaui();
-            Locator
-                .CurrentMutable
-                .RegisterViewForNavigation<HomeView, HomeViewModel>()
-                .RegisterViewForNavigation<FirstModalView, FirstModalViewModel>(() => new(), () => new(Locator.Current.GetService<IViewStackService>()))
-                .RegisterViewForNavigation<SecondModalView, SecondModalViewModel>(() => new(), () => new(Locator.Current.GetService<IViewStackService>()))
-                .RegisterViewForNavigation<RedView, RedViewModel>(() => new(), () => new(Locator.Current.GetService<IViewStackService>()))
-                .RegisterViewForNavigation<GreenView, GreenViewModel>(() => new(), () => new(Locator.Current.GetService<IViewStackService>()))
-                .RegisterNavigationView(() => new BlueNavigationView());
-
+            _ = fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular").AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+        });
+        _ = RxAppBuilder.CreateReactiveUIBuilder()
+            .WithMaui()
+            .WithExceptionHandler(new SextantDefaultExceptionHandler())
+            .WithCoreServices()
+            .BuildApp();
+        _ = AppLocator.CurrentMutable.RegisterNavigationView(static () => new BlueNavigationView());
+        var navigation = AppLocator.Current.GetService<IViewStackService>()
+            ?? throw new InvalidOperationException("The navigation service was not registered.");
+        _ = AppLocator.CurrentMutable
+            .RegisterViewForNavigation(static () => new HomeView(), static () => new HomeViewModel())
+            .RegisterViewForNavigation(static () => new FirstModalView(), () => new FirstModalViewModel(navigation))
+            .RegisterViewForNavigation(static () => new SecondModalView(), () => new SecondModalViewModel(navigation))
+            .RegisterViewForNavigation(static () => new RedView(), () => new RedViewModel(navigation))
+            .RegisterViewForNavigation(static () => new GreenView(), () => new GreenViewModel(navigation));
 #if DEBUG
-            builder.Logging.AddDebug();
+        _ = builder.Logging.AddDebug();
 #endif
-
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }

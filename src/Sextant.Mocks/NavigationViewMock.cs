@@ -1,28 +1,30 @@
-// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.CompilerServices;
 
 namespace Sextant.Mocks;
 
-/// <summary>
-/// Mock <see cref="IView"/> implementation.
-/// </summary>
+/// <summary>Mock <see cref = "IView"/> implementation.</summary>
+[System.Diagnostics.DebuggerDisplay("NavigationViewMock: {MainThreadScheduler}")]
 public class NavigationViewMock : IView, IDisposable
 {
+    /// <summary>Notifies the service when a page leaves the stack.</summary>
     private readonly Subject<IViewModel> _pagePoppedSubject = new();
+
+    /// <summary>The page history used by mock navigation.</summary>
     private readonly Stack<IViewModel> _pageStack = new();
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NavigationViewMock"/> class.
-    /// </summary>
+    /// <summary>The modal history used by mock navigation.</summary>
+    private readonly Stack<IViewModel> _modalStack = new();
+
+    /// <summary>Initializes a new instance of the <see cref = "NavigationViewMock"/> class.</summary>
     public NavigationViewMock() => PagePopped = _pagePoppedSubject.AsObservable();
 
     /// <inheritdoc/>
@@ -32,25 +34,55 @@ public class NavigationViewMock : IView, IDisposable
     public IObservable<IViewModel?> PagePopped { get; }
 
     /// <inheritdoc/>
-    public IObservable<Unit> PopModal() => throw new NotImplementedException();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopModal() => Observable.Return(Unit.Default).Do(unit => { _ = _modalStack.Pop(); });
 
     /// <inheritdoc/>
-    public IObservable<Unit> PopPage(bool animate = true) =>
-        Observable
-            .Return(Unit.Default)
-            .Do(_ => _pagePoppedSubject.OnNext(_pageStack.Pop()));
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopPage() => PopPage(true);
 
     /// <inheritdoc/>
-    public IObservable<Unit> PopToRootPage(bool animate = true) => throw new NotImplementedException();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopPage(bool animate) => Observable.Return(Unit.Default).Do(_ => _pagePoppedSubject.OnNext(_pageStack.Pop()));
 
     /// <inheritdoc/>
-    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) => throw new NotImplementedException();
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopToRootPage() => PopToRootPage(true);
 
     /// <inheritdoc/>
-    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack, bool animate = true) =>
-        Observable
-            .Return(Unit.Default)
-            .Do(_ => _pageStack.Push(viewModel));
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopToRootPage(bool animate) => Observable.Return(Unit.Default).Do(unit =>
+    {
+        while (_pageStack.Count > 1)
+        {
+            _pagePoppedSubject.OnNext(_pageStack.Pop());
+        }
+    });
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract) => PushModal(modalViewModel, contract, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage) =>
+        Observable.Return(Unit.Default).Do(unit => _modalStack.Push(modalViewModel));
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack) => PushPage(viewModel, contract, resetStack, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack, bool animate) => Observable.Return(Unit.Default).Do(unit =>
+    {
+        if (resetStack)
+        {
+            _pageStack.Clear();
+        }
+
+        _pageStack.Push(viewModel);
+    });
 
     /// <inheritdoc/>
     public void Dispose()
@@ -59,10 +91,8 @@ public class NavigationViewMock : IView, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    /// Releases unmanaged and - optionally - managed resources.
-    /// </summary>
-    /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+    /// <summary>Releases unmanaged and - optionally - managed resources.</summary>
+    /// <param name = "disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)

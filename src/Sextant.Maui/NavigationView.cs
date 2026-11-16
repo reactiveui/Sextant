@@ -1,234 +1,216 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using System;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Sextant.Maui;
 
-/// <summary>
-/// The main navigation view.
-/// </summary>
-public class NavigationView : NavigationPage, IView, IEnableLogger
+/// <summary>The main navigation view.</summary>
+[System.Diagnostics.DebuggerDisplay("NavigationView: {MainThreadScheduler}")]
+public class NavigationView : NavigationPage, IView, IEnableLogger, IDisposable
 {
-    private readonly ISubject<NavigationSource> _navigationSource =
-        new BehaviorSubject<NavigationSource>(NavigationSource.Device);
+    /// <summary>Distinguishes programmatic navigation from device back actions.</summary>
+    private readonly BehaviorSubject<NavigationSource> _navigationSource = new(NavigationSource.Device);
 
-    private readonly IScheduler _backgroundScheduler;
+    /// <summary>Resolves registered views for navigation.</summary>
     private readonly IViewLocator _viewLocator;
-    private readonly IFullLogger _logger;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NavigationView"/> class.
-    /// </summary>
+    /// <summary>The owned behavior that observes device back actions.</summary>
+    private readonly NavigationPageSystemPopBehavior _popBehavior;
+
+    /// <summary>Ensures navigation subscriptions are released once.</summary>
+    private int _disposed;
+
+    /// <summary>Initializes a new instance of the <see cref = "NavigationView"/> class.</summary>
     public NavigationView()
-        : this(RxApp.MainThreadScheduler, RxApp.TaskpoolScheduler, ViewLocator.Current)
+        : this(RxSchedulers.MainThreadScheduler, ReactiveUI.Binding.Reactive.ViewLocator.GetCurrent())
     {
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NavigationView"/> class.
-    /// </summary>
-    /// <param name="mainScheduler">The main scheduler to scheduler UI tasks on.</param>
-    /// <param name="backgroundScheduler">The background scheduler.</param>
-    /// <param name="viewLocator">The view locator which will find views associated with view models.</param>
-    /// <param name="rootPage">The starting root page.</param>
-    public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator, Page rootPage)
+    /// <summary>Initializes a new instance of the <see cref = "NavigationView"/> class.</summary>
+    /// <param name = "mainScheduler">The main scheduler to scheduler UI tasks on.</param>
+    /// <param name = "viewLocator">The view locator which will find views associated with view models.</param>
+    /// <param name = "rootPage">The starting root page.</param>
+    public NavigationView(IScheduler mainScheduler, IViewLocator viewLocator, Page rootPage)
         : base(rootPage)
     {
-        _backgroundScheduler = backgroundScheduler;
         MainThreadScheduler = mainScheduler;
         _viewLocator = viewLocator;
-        _logger = this.Log();
+        PagePopped = Observable.FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
+            handler =>
+        {
+            void Handler(object? sender, NavigationEventArgs args)
+            {
+                _ = sender;
+                if (args.Page.BindingContext is IViewModel viewModel)
+                {
+                    handler(viewModel);
+                }
+            }
 
-        PagePopped =
-            Observable
-                .FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
-                    handler =>
-                    {
-                        void Handler(object? sender, NavigationEventArgs args)
-                        {
-                            if (args.Page.BindingContext is IViewModel viewModel)
-                            {
-                                handler(viewModel);
-                            }
-                        }
-
-                        return Handler;
-                    },
-                    x => Popped += x,
-                    x => Popped -= x);
-
-        Behaviors.Add(new NavigationPageSystemPopBehavior(_navigationSource.AsObservable()));
+            return Handler;
+        },
+            x => Popped += x,
+            x => Popped -= x);
+        _popBehavior = new(_navigationSource.AsObservable());
+        Behaviors.Add(_popBehavior);
     }
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NavigationView"/> class.
-    /// </summary>
-    /// <param name="mainScheduler">The main scheduler to scheduler UI tasks on.</param>
-    /// <param name="backgroundScheduler">The background scheduler.</param>
-    /// <param name="viewLocator">The view locator which will find views associated with view models.</param>
-    public NavigationView(IScheduler mainScheduler, IScheduler backgroundScheduler, IViewLocator viewLocator)
+    /// <summary>Initializes a new instance of the <see cref = "NavigationView"/> class.</summary>
+    /// <param name = "mainScheduler">The main scheduler to scheduler UI tasks on.</param>
+    /// <param name = "viewLocator">The view locator which will find views associated with view models.</param>
+    public NavigationView(IScheduler mainScheduler, IViewLocator viewLocator)
     {
         MainThreadScheduler = mainScheduler;
-        _backgroundScheduler = backgroundScheduler;
         _viewLocator = viewLocator;
-        _logger = this.Log();
+        PagePopped = Observable.FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
+            handler =>
+        {
+            void Handler(object? sender, NavigationEventArgs args)
+            {
+                _ = sender;
+                if (args.Page.BindingContext is IViewModel viewModel)
+                {
+                    handler(viewModel);
+                }
+            }
 
-        PagePopped =
-            Observable
-                .FromEvent<EventHandler<NavigationEventArgs>, IViewModel>(
-                    handler =>
-                    {
-                        void Handler(object? sender, NavigationEventArgs args)
-                        {
-                            if (args.Page.BindingContext is IViewModel viewModel)
-                            {
-                                handler(viewModel);
-                            }
-                        }
-
-                        return Handler;
-                    },
-                    x => Popped += x,
-                    x => Popped -= x);
-
-        Behaviors.Add(new NavigationPageSystemPopBehavior(_navigationSource.AsObservable()));
+            return Handler;
+        },
+            x => Popped += x,
+            x => Popped -= x);
+        _popBehavior = new(_navigationSource.AsObservable());
+        Behaviors.Add(_popBehavior);
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IScheduler MainThreadScheduler { get; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IObservable<IViewModel> PagePopped { get; }
 
-    /// <inheritdoc />
-    public IObservable<Unit> PopModal() =>
-        Navigation
-            .PopModalAsync()
-            .ToObservable()
-            .Select(_ => Unit.Default)
-            .ObserveOn(MainThreadScheduler); // XF completes the pop operation on a background thread :/
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopModal() => Navigation.PopModalAsync().ToObservable()
+        .Select(static _ => Unit.Default).ObserveOn(MainThreadScheduler);
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IObservable<Unit> PopPage(bool animate)
     {
         _navigationSource.OnNext(NavigationSource.NavigationService);
-
-        return Navigation
-            .PopAsync(animate)
-            .ToObservable()
-            .Select(_ => Unit.Default)
-            .ObserveOn(MainThreadScheduler)
-            .Finally(() => _navigationSource.OnNext(NavigationSource.Device));
+        return Navigation.PopAsync(animate).ToObservable().Select(static _ => Unit.Default).ObserveOn(MainThreadScheduler).Finally(() => _navigationSource.OnNext(NavigationSource.Device));
     }
 
-    /// <inheritdoc />
-    public IObservable<Unit> PopToRootPage(bool animate) =>
-        Navigation
-            .PopToRootAsync(animate)
-            .ToObservable()
-            .Select(_ => Unit.Default)
-            .ObserveOn(MainThreadScheduler);
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopToRootPage(bool animate) => Navigation.PopToRootAsync(animate).ToObservable().Select(static _ => Unit.Default).ObserveOn(MainThreadScheduler);
 
-    /// <inheritdoc />
-    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage = true) =>
-        Observable
-            .Start(
-                () =>
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract) => PushModal(modalViewModel, contract, true);
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage) => Observable.Start(
+        () =>
+    {
+        var page = LocatePageFor(modalViewModel, contract);
+        SetPageTitle(page, modalViewModel.Id);
+        return withNavigationPage ? new NavigationPage(page) : page;
+    },
+        CurrentThreadScheduler.Instance).ObserveOn(CurrentThreadScheduler.Instance).SelectMany(page => Navigation.PushModalAsync(page).ToObservable());
+
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack, bool animate) => Observable.Start(
+        () =>
+    {
+        var page = LocatePageFor(viewModel, contract);
+        SetPageTitle(page, viewModel.Id);
+        return page;
+    },
+        CurrentThreadScheduler.Instance).ObserveOn(CurrentThreadScheduler.Instance).SelectMany(page =>
+    {
+        if (resetStack)
+        {
+            if (Navigation.NavigationStack.Count == 0)
+            {
+                return Navigation.PushAsync(page, false).ToObservable();
+            }
+
+            if (Navigation.NavigationStack.Count == 1)
+            {
+                // If there's only the root page, we need to use a different approach.
+                // We'll insert the new page before the root, then remove the root.
+                Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
+                var oldRoot = Navigation.NavigationStack[1]; // The old root is now at index 1
+                Navigation.RemovePage(oldRoot);
+                return Observable.Return(Unit.Default);
+            }
+
+            // For multiple pages, first pop to root, then replace the root
+            return Navigation.PopToRootAsync(false).ToObservable().Do(_ =>
+            {
+                // Now there should only be the root page left
+                if (Navigation.NavigationStack.Count == 1)
                 {
-                    var page = LocatePageFor(modalViewModel, contract);
-                    SetPageTitle(page, modalViewModel.Id);
-                    return withNavigationPage ? new NavigationPage(page) : page;
-                },
-                CurrentThreadScheduler.Instance)
-            .ObserveOn(CurrentThreadScheduler.Instance)
-            .SelectMany(
-                page =>
-                    Navigation
-                        .PushModalAsync(page)
-                        .ToObservable());
+                    Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
+                    var oldRoot = Navigation.NavigationStack[1];
+                    Navigation.RemovePage(oldRoot);
+                }
+            }).Select(static _ => Unit.Default);
+        }
 
-    /// <inheritdoc />
-    public IObservable<Unit> PushPage(
-        IViewModel viewModel,
-        string? contract,
-        bool resetStack,
-        bool animate) =>
-        Observable
-            .Start(
-                () =>
-                {
-                    var page = LocatePageFor(viewModel, contract);
-                    SetPageTitle(page, viewModel.Id);
-                    return page;
-                },
-                CurrentThreadScheduler.Instance)
-            .ObserveOn(CurrentThreadScheduler.Instance)
-            .SelectMany(
-                page =>
-                {
-                    if (resetStack)
-                    {
-                        if (Navigation.NavigationStack.Count == 0)
-                        {
-                            return Navigation.PushAsync(page, false).ToObservable();
-                        }
+        return Navigation.PushAsync(page, animate).ToObservable();
+    });
 
-                        if (Navigation.NavigationStack.Count == 1)
-                        {
-                            // If there's only the root page, we need to use a different approach.
-                            // We'll insert the new page before the root, then remove the root.
-                            Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
-                            var oldRoot = Navigation.NavigationStack[1]; // The old root is now at index 1
-                            Navigation.RemovePage(oldRoot);
-                            return Observable.Return(Unit.Default);
-                        }
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
-                        // For multiple pages, first pop to root, then replace the root
-                        return Navigation.PopToRootAsync(false).ToObservable()
-                            .Do(_ =>
-                            {
-                                // Now there should only be the root page left
-                                if (Navigation.NavigationStack.Count == 1)
-                                {
-                                    Navigation.InsertPageBefore(page, Navigation.NavigationStack[0]);
-                                    var oldRoot = Navigation.NavigationStack[1];
-                                    Navigation.RemovePage(oldRoot);
-                                }
-                            })
-                            .Select(_ => Unit.Default);
-                    }
+    /// <summary>Releases navigation notifications and the owned pop behavior.</summary>
+    /// <param name="disposing">True to release managed navigation resources.</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposing || Interlocked.Exchange(ref _disposed, 1) != 0)
+        {
+            return;
+        }
 
-                    return Navigation
-                        .PushAsync(page, animate)
-                        .ToObservable();
-                });
+        _popBehavior.Dispose();
+        _ = Behaviors.Remove(_popBehavior);
+        _navigationSource.Dispose();
+    }
 
-    private static void SetPageTitle(Page page, string? resourceKey) =>
+    /// <summary>Sets the page title from its view model identifier.</summary>
+    /// <param name="page">The page to label.</param>
+    /// <param name="resourceKey">The view model identifier.</param>
+    private static void SetPageTitle(Page page, string? resourceKey) => page.Title = resourceKey;
 
-        // var title = Localize.GetString(resourceKey);
-        // TODO: ensure resourceKey isn't null and is localized.
-        page.Title = resourceKey;
-
+    /// <summary>Resolves and initializes the MAUI page for a view model.</summary>
+    /// <param name="viewModel">The view model to display.</param>
+    /// <param name="contract">The optional view registration contract.</param>
+    /// <returns>The initialized page.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when <c>_viewLocator.ResolveView(viewModel, contract)</c> is <see langword="null"/>.</exception>
     private Page LocatePageFor(object viewModel, string? contract)
     {
         var view = _viewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException(
-                $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
+            $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
         if (view is not Page page)
         {
-            throw new InvalidOperationException(
-                $"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
+            throw new InvalidOperationException($"Resolved view '{view.GetType().FullName}' for type '{viewModel.GetType().FullName}', contract '{contract}' is not a Page.");
         }
 
         view.ViewModel = viewModel;
-
         return page;
     }
 }

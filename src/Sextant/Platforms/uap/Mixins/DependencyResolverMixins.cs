@@ -1,8 +1,7 @@
-﻿// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
+// Copyright (c) 2021 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Concurrency;
@@ -19,7 +18,7 @@ namespace Sextant
         /// <summary>
         /// Initializes the sextant.
         /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name = "dependencyResolver">The dependency resolver.</param>
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver)
         {
@@ -30,9 +29,9 @@ namespace Sextant
         /// <summary>
         /// Initializes sextant.
         /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="mainThreadScheduler">The main scheduler.</param>
-        /// <param name="backgroundScheduler">The background scheduler.</param>
+        /// <param name = "dependencyResolver">The dependency resolver.</param>
+        /// <param name = "mainThreadScheduler">The main scheduler.</param>
+        /// <param name = "backgroundScheduler">The background scheduler.</param>
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterNavigationView(this IMutableDependencyResolver dependencyResolver, IScheduler mainThreadScheduler, IScheduler backgroundScheduler)
         {
@@ -43,9 +42,9 @@ namespace Sextant
         /// <summary>
         /// Registers a value for navigation.
         /// </summary>
-        /// <typeparam name="TView">The type of view to register.</typeparam>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="navigationViewFactory">The navigation view factory.</param>
+        /// <typeparam name = "TView">The type of view to register.</typeparam>
+        /// <param name = "dependencyResolver">The dependency resolver.</param>
+        /// <param name = "navigationViewFactory">The navigation view factory.</param>
         /// <returns>The dependencyResolver.</returns>
         [SuppressMessage("Design", "CA2000: Dispose ViewStackService", Justification = "Long lived object.")]
         public static IMutableDependencyResolver RegisterNavigationView<TView>(this IMutableDependencyResolver dependencyResolver, Func<TView> navigationViewFactory)
@@ -63,27 +62,24 @@ namespace Sextant
 
             var navigationView = navigationViewFactory();
             var viewStackService = new ViewStackService(navigationView);
-
             dependencyResolver.RegisterLazySingleton<IViewStackService>(() => viewStackService);
             dependencyResolver.RegisterLazySingleton<IView>(() => navigationView, NavigationView);
             return dependencyResolver;
         }
 
+        /// <inheritdoc/>
+        public static NavigationView? GetNavigationView(this IReadonlyDependencyResolver dependencyResolver) => GetNavigationView(dependencyResolver, null);
         /// <summary>
         /// Gets the navigation view.
         /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="contract">The contract.</param>
+        /// <param name = "dependencyResolver">The dependency resolver.</param>
+        /// <param name = "contract">The contract.</param>
         /// <returns>The navigation view.</returns>
-        public static NavigationView? GetNavigationView(
-            this IReadonlyDependencyResolver dependencyResolver,
-            string? contract = null) =>
-            dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
-
+        public static NavigationView? GetNavigationView(this IReadonlyDependencyResolver dependencyResolver, string? contract) => dependencyResolver.GetService<IView>(contract ?? NavigationView) as NavigationView;
         /// <summary>
         /// Initializes UWP-specific view locator.
         /// </summary>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name = "dependencyResolver">The dependency resolver.</param>
         /// <returns>The dependencyResolver.</returns>
         public static IMutableDependencyResolver RegisterUWPViewLocator(this IMutableDependencyResolver dependencyResolver)
         {
@@ -96,17 +92,21 @@ namespace Sextant
             return dependencyResolver;
         }
 
+        /// <inheritdoc/>
+        public static IMutableDependencyResolver RegisterViewUWP<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver)
+            where TView : IViewFor<TViewModel>, new()
+            where TViewModel : class, IViewModel => RegisterViewUWP<TView, TViewModel>(dependencyResolver, null);
         /// <summary>
         /// Register view for viewmodel, but only return view type for UWP frame.
         /// </summary>
-        /// <typeparam name="TView">The view type.</typeparam>
-        /// <typeparam name="TViewModel">The viewmodel type.</typeparam>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
-        /// <param name="contract">The contract.</param>
+        /// <typeparam name = "TView">The view type.</typeparam>
+        /// <typeparam name = "TViewModel">The viewmodel type.</typeparam>
+        /// <param name = "dependencyResolver">The dependency resolver.</param>
+        /// <param name = "contract">The contract.</param>
         /// <returns>
         /// The dependencyResolver.
         /// </returns>
-        public static IMutableDependencyResolver RegisterViewUWP<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string? contract = null)
+        public static IMutableDependencyResolver RegisterViewUWP<TView, TViewModel>(this IMutableDependencyResolver dependencyResolver, string? contract)
             where TView : IViewFor<TViewModel>, new()
             where TViewModel : class, IViewModel
         {
@@ -126,14 +126,17 @@ namespace Sextant
             return dependencyResolver;
         }
 
+        /// <inheritdoc/>
+        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver)
+            where TViewModel : class => ResolveView<TViewModel>(dependencyResolver, null);
         /// <summary>
         /// Helper method to get view type for viewmodel.
         /// </summary>
-        /// <typeparam name="TViewModel">The viewmodel Type.</typeparam>
-        /// <param name="dependencyResolver">The dependencyResolver.</param>
-        /// <param name="contract">The contract.</param>
+        /// <typeparam name = "TViewModel">The viewmodel Type.</typeparam>
+        /// <param name = "dependencyResolver">The dependencyResolver.</param>
+        /// <param name = "contract">The contract.</param>
         /// <returns>The view Type again.</returns>
-        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, string? contract = null)
+        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, string? contract)
             where TViewModel : class
         {
             if (dependencyResolver is null)
@@ -145,15 +148,18 @@ namespace Sextant
             return uwpViewTypeResolver?.ResolveViewType<TViewModel>();
         }
 
+        /// <inheritdoc/>
+        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, TViewModel viewModel)
+            where TViewModel : class, IViewModel => ResolveView<TViewModel>(dependencyResolver, viewModel, null);
         /// <summary>
         /// Helper method to get view type for viewmodel.
         /// </summary>
-        /// <typeparam name="TViewModel">The viewmodel Type.</typeparam>
-        /// <param name="dependencyResolver">The dependencyResolver.</param>
-        /// <param name="viewModel">The viewmodel.</param>
-        /// <param name="contract">The contract.</param>
+        /// <typeparam name = "TViewModel">The viewmodel Type.</typeparam>
+        /// <param name = "dependencyResolver">The dependencyResolver.</param>
+        /// <param name = "viewModel">The viewmodel.</param>
+        /// <param name = "contract">The contract.</param>
         /// <returns>The view Type again.</returns>
-        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, TViewModel viewModel, string? contract = null)
+        public static Type? ResolveView<TViewModel>(this IReadonlyDependencyResolver dependencyResolver, TViewModel viewModel, string? contract)
             where TViewModel : class, IViewModel
         {
             if (dependencyResolver is null)

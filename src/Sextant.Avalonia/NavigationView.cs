@@ -1,83 +1,59 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using System;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
-
+using System.Runtime.CompilerServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Styling;
-
-using ReactiveUI;
 
 namespace Sextant.Avalonia;
 
-/// <summary>
-/// The <see cref="IView"/> implementation for Avalonia.
-/// </summary>
+/// <summary>The <see cref = "IView"/> implementation for Avalonia.</summary>
 public sealed partial class NavigationView : ContentControl, IView
 {
+    /// <summary>The layer index used to display modals above pages.</summary>
+    private const int ModalLayer = 2;
+
+    /// <summary>The modal view layer.</summary>
     private readonly Navigation _modalNavigation = new();
+
+    /// <summary>The page view layer.</summary>
     private readonly Navigation _pageNavigation = new();
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="NavigationView"/> class.
-    /// </summary>
+    /// <summary>Initializes a new instance of the <see cref = "NavigationView"/> class.</summary>
     public NavigationView()
     {
         MainThreadScheduler = RxSchedulers.MainThreadScheduler;
-        ViewLocator = ReactiveUI.ViewLocator.Current;
+        ViewLocator = ReactiveUI.Binding.Reactive.ViewLocator.GetCurrent();
         Content = new Grid
         {
             Children =
             {
+                new Grid { ZIndex = 1, Children = { _pageNavigation.Control, }, },
                 new Grid
                 {
-                    ZIndex = 1,
-                    Children =
-                    {
-                        _pageNavigation.Control
-                    }
+                    ZIndex = ModalLayer,
+                    Children = { _modalNavigation.Control, },
+                    [!Panel.BackgroundProperty] = _modalNavigation.CountChanged.Select(static count => count > 0 ? new SolidColorBrush(Colors.Transparent) : null).ToBinding(),
                 },
-                new Grid
-                {
-                    ZIndex = 2,
-                    Children =
-                    {
-                        _modalNavigation.Control
-                    },
-                    [!Panel.BackgroundProperty] =
-                        _modalNavigation
-                            .CountChanged
-                            .Select(count => count > 0 ? new SolidColorBrush(Colors.Transparent) : null)
-                            .ToBinding()
-                }
-            }
+            },
         };
     }
 
-    /// <summary>
-    /// Gets or sets the scheduler used by the <see cref="NavigationView"/>.
-    /// </summary>
+    /// <summary>Gets or sets the scheduler used by the <see cref = "NavigationView"/>.</summary>
     public IScheduler MainThreadScheduler { get; set; }
 
-    /// <summary>
-    /// Gets or sets the scheduler used by the <see cref="NavigationView"/>.
-    /// </summary>
+    /// <summary>Gets or sets the scheduler used by the <see cref = "NavigationView"/>.</summary>
     public IViewLocator ViewLocator { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IObservable<IViewModel> PagePopped { get; } = Observable.Never<IViewModel>();
 
-    /// <summary>
-    /// Gets the type by which the element is styled.
-    /// </summary>
+    /// <summary>Gets the type by which the element is styled.</summary>
     /// <remarks>
     /// Usually controls are styled by their own type, but there are instances where you want
     /// an element to be styled by its base type, e.g. creating SpecialButton that
@@ -87,68 +63,73 @@ public sealed partial class NavigationView : ContentControl, IView
     /// </remarks>
     protected override Type StyleKeyOverride => typeof(ContentControl);
 
-    /// <inheritdoc />
-    public IObservable<Unit> PushPage(
-        IViewModel viewModel,
-        string? contract,
-        bool resetStack,
-        bool animate = true)
-    {
-        if (viewModel == null)
-        {
-            throw new ArgumentNullException(nameof(viewModel));
-        }
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack) => PushPage(viewModel, contract, resetStack, true);
 
+    /// <inheritdoc/>
+    public IObservable<Unit> PushPage(IViewModel viewModel, string? contract, bool resetStack, bool animate)
+    {
+        ArgumentNullException.ThrowIfNull(viewModel);
         var view = LocateView(viewModel, contract);
-        _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
+        _pageNavigation.ToggleAnimations(animate && !_modalNavigation.IsVisible);
         _pageNavigation.Push(view, resetStack);
         return Observable.Return(Unit.Default);
     }
 
-    /// <inheritdoc />
-    public IObservable<Unit> PopPage(bool animate = true)
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopPage() => PopPage(true);
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopPage(bool animate)
     {
-        _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
+        _pageNavigation.ToggleAnimations(animate && !_modalNavigation.IsVisible);
         _pageNavigation.Pop();
         return Observable.Return(Unit.Default);
     }
 
-    /// <inheritdoc />
-    public IObservable<Unit> PopToRootPage(bool animate = true)
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PopToRootPage() => PopToRootPage(true);
+
+    /// <inheritdoc/>
+    public IObservable<Unit> PopToRootPage(bool animate)
     {
-        _pageNavigation.ToggleAnimations(!_modalNavigation.IsVisible);
+        _pageNavigation.ToggleAnimations(animate && !_modalNavigation.IsVisible);
         _pageNavigation.PopToRoot();
         return Observable.Return(Unit.Default);
     }
 
-    /// <inheritdoc />
-    public IObservable<Unit> PushModal(
-        IViewModel modalViewModel,
-        string? contract,
-        bool withNavigationPage = true)
-    {
-        if (modalViewModel == null)
-        {
-            throw new ArgumentNullException(nameof(modalViewModel));
-        }
+    /// <inheritdoc/>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract) => PushModal(modalViewModel, contract, true);
 
+    /// <inheritdoc/>
+    public IObservable<Unit> PushModal(IViewModel modalViewModel, string? contract, bool withNavigationPage)
+    {
+        ArgumentNullException.ThrowIfNull(modalViewModel);
         var view = LocateView(modalViewModel, contract);
         _modalNavigation.Push(view);
         return Observable.Return(Unit.Default);
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IObservable<Unit> PopModal()
     {
         _modalNavigation.Pop();
         return Observable.Return(Unit.Default);
     }
 
+    /// <summary>Resolves and initializes a view for the requested view model.</summary>
+    /// <param name="viewModel">The view model to display.</param>
+    /// <param name="contract">The optional view registration contract.</param>
+    /// <returns>The view associated with the view model.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when <c>ViewLocator.ResolveView(viewModel, contract)</c> is <see langword="null"/>.</exception>
     private IViewFor LocateView(IViewModel viewModel, string? contract)
     {
         var view = ViewLocator.ResolveView(viewModel, contract) ?? throw new InvalidOperationException(
-                $"No view could be located for type '{viewModel.GetType().FullName}', " +
-                $"contract '{contract}'. Be sure Splat has an appropriate registration.");
+            $"No view could be located for type '{viewModel.GetType().FullName}', contract '{contract}'. Be sure Splat has an appropriate registration.");
         view.ViewModel = viewModel;
         return view;
     }

@@ -1,0 +1,37 @@
+namespace Sextant.Avalonia;
+
+public static class DependencyResolverMixins
+{
+    extension(Splat.IMutableDependencyResolver dependencyResolver)
+    {
+        public Splat.IMutableDependencyResolver RegisterNavigationView<TView>(System.Func<TView> navigationViewFactory) where TView : Sextant.IView { }
+    }
+    extension(Splat.IReadonlyDependencyResolver dependencyResolver)
+    {
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public Sextant.IView GetNavigationView() { }
+        public Sextant.IView GetNavigationView(string? contract) { }
+    }
+}
+[System.Diagnostics.DebuggerDisplay("NavigationView: {ToString(),nq}")]
+public sealed class NavigationView : Avalonia.Controls.ContentControl, Sextant.IView
+{
+    public NavigationView() { }
+    public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; set; }
+    public System.IObservable<Sextant.IViewModel> PagePopped { get; }
+    protected override System.Type StyleKeyOverride { get; }
+    public ReactiveUI.Binding.Reactive.IViewLocator ViewLocator { get; set; }
+    public System.IObservable<System.Reactive.Unit> PopModal() { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopPage() { }
+    public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopToRootPage() { }
+    public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string? contract) { }
+    public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string? contract, bool withNavigationPage) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string? contract, bool resetStack) { }
+    public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string? contract, bool resetStack, bool animate) { }
+}

@@ -1,201 +1,155 @@
-// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using NUnit.Framework;
-using ReactiveUI;
 using Sextant.Mocks;
 using Splat;
 
 namespace Sextant.Tests;
 
-/// <summary>
-/// Tests the IMutableDependencyResolver extension class.
-/// </summary>
-[TestFixture]
-[NonParallelizable]
-public sealed class DependencyResolverMixinTests
+/// <summary>Groups the DependencyResolverMixinTests navigation checks.</summary>
+public static class DependencyResolverMixinTests
 {
-    /// <summary>
-    /// Tests the register view model factory method.
-    /// </summary>
+    /// <summary>Tests the register view model factory method.</summary>
     [TestFixture]
     [NonParallelizable]
     public sealed class TheRegisterViewModelFactoryMethod
     {
-        /// <summary>
-        /// Sets up the test by clearing the dependency resolver.
-        /// </summary>
+        /// <summary>Sets up the test by clearing the dependency resolver.</summary>
         [SetUp]
-        public void SetUp()
-        {
-            Locator.CurrentMutable.UnregisterAll<IViewModelFactory>();
-        }
+        public void SetUp() => AppLocator.CurrentMutable.UnregisterAll<IViewModelFactory>();
 
-        /// <summary>
-        /// Should register the view model factory.
-        /// </summary>
+        /// <summary>Should register the view model factory.</summary>
         [Test]
         public void Should_Register_View_Model_Factory()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewModelFactory();
-
-            // When
-            var result = ViewModelFactory.Current;
+            _ = AppLocator.CurrentMutable.RegisterViewModelFactory();
 
             // Then
-            Assert.That(result, Is.TypeOf<DefaultViewModelFactory>());
+            Assert.That(ViewModelFactory.Current, Is.TypeOf<DefaultViewModelFactory>());
         }
 
-        /// <summary>
-        /// Should register the view model factory.
-        /// </summary>
+        /// <summary>Should register the view model factory.</summary>
         [Test]
         public void Should_Register_View_Model_Factory_With_Factory()
         {
             // Given
             var viewModelFactory = new DefaultViewModelFactory();
-            Locator.CurrentMutable.RegisterViewModelFactory(() => viewModelFactory);
-
-            // When
-            var result = ViewModelFactory.Current;
+            _ = AppLocator.CurrentMutable.RegisterViewModelFactory(() => viewModelFactory);
 
             // Then
-            Assert.That(result, Is.EqualTo(viewModelFactory));
+            Assert.That(ViewModelFactory.Current, Is.EqualTo(viewModelFactory));
         }
     }
 
-    /// <summary>
-    /// Tests the register view method.
-    /// </summary>
+    /// <summary>Tests the register view method.</summary>
     [TestFixture]
     [NonParallelizable]
     public sealed class TheRegisterViewMethod
     {
-        /// <summary>
-        /// Sets up the test by clearing the dependency resolver.
-        /// </summary>
+        /// <summary>Sets up the test by clearing the dependency resolver.</summary>
         [SetUp]
-        public void SetUp()
-        {
-            Locator.CurrentMutable.UnregisterAll<IViewFor<NavigableViewModelMock>>();
-        }
+        public void SetUp() => AppLocator.CurrentMutable.UnregisterAll<IViewFor<NavigableViewModelMock>>();
 
-        /// <summary>
-        /// Should register the view stack service.
-        /// </summary>
+        /// <summary>Should register the view stack service.</summary>
         [Test]
         public void Should_Register_View()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewForNavigation<PageView, NavigableViewModelMock>();
+            _ = AppLocator.CurrentMutable.RegisterViewForNavigation(static () => new PageView(), static () => new NavigableViewModelMock());
 
             // When
-            var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
+            var result = AppLocator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
             Assert.That(result, Is.TypeOf<PageView>());
         }
 
-        /// <summary>
-        /// Should register the view stack service factory.
-        /// </summary>
+        /// <summary>Should register the view stack service factory.</summary>
         [Test]
         public void Should_Register_View_Factory()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewForNavigation(() => new PageView(), () => new NavigableViewModelMock());
-            ////Locator.CurrentMutable.RegisterView<PageView, NavigableViewModelMock>(() => new PageView());
+            var view = new PageView();
+            _ = AppLocator.CurrentMutable.RegisterViewForNavigation(() => view, static () => new NavigableViewModelMock());
 
             // When
-            var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
+            var result = AppLocator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
-            Assert.That(result, Is.TypeOf<PageView>());
+            Assert.That(result, Is.SameAs(view));
         }
     }
 
-    /// <summary>
-    /// Tests the register view for navigation method.
-    /// </summary>
+    /// <summary>Tests the register view for navigation method.</summary>
     [TestFixture]
     [NonParallelizable]
     public sealed class TheRegisterViewForNavigationMethod
     {
-        /// <summary>
-        /// Sets up the test by clearing the dependency resolver.
-        /// </summary>
+        /// <summary>Sets up the test by clearing the dependency resolver.</summary>
         [SetUp]
         public void SetUp()
         {
-            Locator.CurrentMutable.UnregisterAll<IViewFor<NavigableViewModelMock>>();
-            Locator.CurrentMutable.UnregisterAll<NavigableViewModelMock>();
+            AppLocator.CurrentMutable.UnregisterAll<IViewFor<NavigableViewModelMock>>();
+            AppLocator.CurrentMutable.UnregisterAll<NavigableViewModelMock>();
         }
 
-        /// <summary>
-        /// Should register the view for navigation.
-        /// </summary>
+        /// <summary>Should register the view for navigation.</summary>
         [Test]
         public void Should_Register_View_Factory_For_Navigation()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewForNavigation(() => new PageView(), () => new NavigableViewModelMock());
+            _ = AppLocator.CurrentMutable.RegisterViewForNavigation(static () => new PageView(), static () => new NavigableViewModelMock());
 
             // When
-            var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
+            var result = AppLocator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
             Assert.That(result, Is.TypeOf<PageView>());
         }
 
-        /// <summary>
-        /// Should register the view for navigation.
-        /// </summary>
+        /// <summary>Should register the view for navigation.</summary>
         [Test]
         public void Should_Register_ViewModel_Factory_For_Navigation()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewForNavigation(() => new PageView(), () => new NavigableViewModelMock());
+            _ = AppLocator.CurrentMutable.RegisterViewForNavigation(static () => new PageView(), static () => new NavigableViewModelMock());
 
             // When
-            var result = Locator.Current.GetService<NavigableViewModelMock>();
+            var result = AppLocator.Current.GetService<NavigableViewModelMock>();
 
             // Then
             Assert.That(result, Is.Not.Null);
         }
 
-        /// <summary>
-        /// Should register the view for navigation.
-        /// </summary>
+        /// <summary>Should register the view for navigation.</summary>
         [Test]
         public void Should_Register_View_For_Navigation()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewForNavigation(new PageView(), new NavigableViewModelMock());
+            _ = AppLocator.CurrentMutable.RegisterViewForNavigation(new PageView(), new NavigableViewModelMock());
 
             // When
-            var result = Locator.Current.GetService<IViewFor<NavigableViewModelMock>>();
+            var result = AppLocator.Current.GetService<IViewFor<NavigableViewModelMock>>();
 
             // Then
             Assert.That(result, Is.TypeOf<PageView>());
         }
 
-        /// <summary>
-        /// Should register the view for navigation.
-        /// </summary>
+        /// <summary>Should register the view for navigation.</summary>
         [Test]
         public void Should_Register_ViewModel_For_Navigation()
         {
             // Given
-            Locator.CurrentMutable.RegisterViewForNavigation(() => new PageView(), () => new NavigableViewModelMock());
+            var viewModel = new NavigableViewModelMock();
+            _ = AppLocator.CurrentMutable.RegisterViewForNavigation(new PageView(), viewModel);
 
             // When
-            var result = Locator.Current.GetService<NavigableViewModelMock>();
+            var result = AppLocator.Current.GetService<NavigableViewModelMock>();
 
             // Then
-            Assert.That(result, Is.Not.Null);
+            Assert.That(result, Is.SameAs(viewModel));
         }
     }
 }

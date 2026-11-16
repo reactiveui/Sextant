@@ -1,81 +1,61 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.Collections.Specialized;
 using System.Reactive.Linq;
-
+using System.Runtime.CompilerServices;
 using Avalonia.Animation;
 using Avalonia.Controls;
 
-using DynamicData.Aggregation;
-using DynamicData.Binding;
-
-using ReactiveUI;
-
 namespace Sextant.Avalonia;
 
-/// <summary>
-/// A view used within navigation in Sextant with Avalonia.
-/// </summary>
+/// <summary>A view used within navigation in Sextant with Avalonia.</summary>
+[System.Diagnostics.DebuggerDisplay("NavigationView: {ToString(),nq}")]
 public sealed partial class NavigationView
 {
-    /// <summary>
-    /// This class represents a single navigation layer.
-    /// </summary>
-    private class Navigation
+    /// <summary>This class represents a single navigation layer.</summary>
+    private sealed class Navigation
     {
-        private readonly ObservableCollection<IViewFor> _navigationStack = new ObservableCollection<IViewFor>();
+        /// <summary>The ordered views in this navigation layer.</summary>
+        private readonly ObservableCollection<IViewFor> _navigationStack = [];
+
+        /// <summary>The transition restored when animations are enabled.</summary>
         private readonly IPageTransition? _transition;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Navigation"/> class.
-        /// </summary>
+        /// <summary>Initializes a new instance of the <see cref = "Navigation"/> class.</summary>
         public Navigation()
         {
-            var navigationStackObservable = _navigationStack
-                .ToObservableChangeSet()
-                .Publish()
-                .RefCount();
-
-            navigationStackObservable
-                .Select(_ => _navigationStack.LastOrDefault())
-                .Subscribe(page => Control.Content = page);
-
-            CountChanged = navigationStackObservable.Count().AsObservable();
+            CountChanged = Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
+                handler => _navigationStack.CollectionChanged += handler,
+                handler => _navigationStack.CollectionChanged -= handler)
+                .Select(_ => _navigationStack.Count).StartWith(0);
             _transition = Control.PageTransition;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the control is visible.
-        /// </summary>
+        /// <summary>Gets a value indicating whether the control is visible.</summary>
         public bool IsVisible => _navigationStack.Count > 1;
 
-        /// <summary>
-        /// Gets a the page count.
-        /// </summary>
+        /// <summary>Gets a the page count.</summary>
         public IObservable<int> CountChanged { get; }
 
-        /// <summary>
-        /// Gets the control responsible for rendering the current view.
-        /// </summary>
+        /// <summary>Gets the control responsible for rendering the current view.</summary>
         public TransitioningContentControl Control { get; } = new();
 
-        /// <summary>
-        /// Toggles the animations.
-        /// </summary>
-        /// <param name="enable">Returns true if we are enabling the animations.</param>
+        /// <summary>Toggles the animations.</summary>
+        /// <param name = "enable">Returns true if we are enabling the animations.</param>
         public void ToggleAnimations(bool enable) => Control.PageTransition = enable ? _transition : null;
 
-        /// <summary>
-        /// Adds a <see cref="IViewFor"/> to the navigation stack.
-        /// </summary>
-        /// <param name="view">The view to add to the navigation stack.</param>
-        /// <param name="resetStack">Defines if we should reset the navigation stack.</param>
-        public void Push(IViewFor view, bool resetStack = false)
+        /// <summary>Adds a view after the current page.</summary>
+        /// <param name="view">The view to display.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void Push(IViewFor view) => Push(view, false);
+
+        /// <summary>Adds a <see cref = "IViewFor"/> to the navigation stack.</summary>
+        /// <param name = "view">The view to add to the navigation stack.</param>
+        /// <param name = "resetStack">Defines if we should reset the navigation stack.</param>
+        public void Push(IViewFor view, bool resetStack)
         {
             if (resetStack)
             {
@@ -83,25 +63,23 @@ public sealed partial class NavigationView
             }
 
             _navigationStack.Add(view);
+            Control.Content = view;
         }
 
-        /// <summary>
-        /// Removes the last <see cref="IViewFor"/> from the navigation stack.
-        /// </summary>
+        /// <summary>Removes the last <see cref = "IViewFor"/> from the navigation stack.</summary>
         public void Pop()
         {
-            var indexToRemove = _navigationStack.Count - 1;
-            _navigationStack.RemoveAt(indexToRemove);
+            _navigationStack.RemoveAt(_navigationStack.Count - 1);
+            Control.Content = _navigationStack.Count == 0 ? null : _navigationStack[_navigationStack.Count - 1];
         }
 
-        /// <summary>
-        /// Removes all pages except the first one <see cref="IViewFor"/> from the navigation stack.
-        /// </summary>
+        /// <summary>Removes all pages except the first one <see cref = "IViewFor"/> from the navigation stack.</summary>
         public void PopToRoot()
         {
             var view = _navigationStack[0];
             _navigationStack.Clear();
             _navigationStack.Add(view);
+            Control.Content = view;
         }
     }
 }

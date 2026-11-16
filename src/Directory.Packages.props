@@ -4,45 +4,46 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <PropertyGroup>
-    <AvaloniaVersion>11.3.9</AvaloniaVersion>
-    <ReactiveUIVersion>22.3.1</ReactiveUIVersion>
+    <AvaloniaVersion>12.1.6</AvaloniaVersion>
+    <ReactiveUIVersion>27.0.0</ReactiveUIVersion>
+    <RoslynCommonAnalyzersVersion>5.2.0</RoslynCommonAnalyzersVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
     <PackageVersion Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
-    <PackageVersion Include="ReactiveUI.Avalonia" Version="11.3.8" />
+    <PackageVersion Include="ReactiveUI.Avalonia.Reactive" Version="12.1.7" />
     <PackageVersion Include="Citrus.Avalonia" Version="2.1.1" />
-    <PackageVersion Include="MessageBox.Avalonia" Version="12.0.0" />
-    <PackageVersion Include="coverlet.msbuild" Version="10.1.0" />
-    <PackageVersion Include="DiffEngine" Version="20.9.0" />
+    <PackageVersion Include="MessageBox.Avalonia" Version="12.1.0" />
+    <PackageVersion Include="coverlet.msbuild" Version="10.1.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
     <PackageVersion Include="Microsoft.Reactive.Testing" Version="7.0.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="11.0.100" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.15" />
     <PackageVersion Include="MinVer" Version="8.0.0" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="NUnit" Version="5.0.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="6.3.1" />
-    <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
-    <PackageVersion Include="ReactiveUI" Version="$(ReactiveUIVersion)" />
-    <PackageVersion Include="ReactiveUI.Maui" Version="$(ReactiveUIVersion)" />
-    <PackageVersion Include="ReactiveUI.Testing" Version="$(ReactiveUIVersion)" />
-    <PackageVersion Include="ReactiveUI.XamForms" Version="$(ReactiveUIVersion)" />
-    <PackageVersion Include="ReactiveUI.WPF" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="PublicApiSharp.Analyzers" Version="2.2.0" />
+    <PackageVersion Include="ReactiveUI.Reactive" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="ReactiveUI.Maui.Reactive" Version="$(ReactiveUIVersion)" />
+    <PackageVersion Include="ReactiveUI.Testing.Reactive" Version="$(ReactiveUIVersion)" />
     <PackageVersion Include="Mopups" Version="1.3.4" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="5.0.1" />
-    <PackageVersion Include="stylecop.analyzers" Version="1.3.180" />
-    <PackageVersion Include="System.Collections.Immutable" Version="10.0.15" />
-    <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
-    <PackageVersion Include="Verify.NUnit" Version="31.16.3" />
+    <PackageVersion Include="StyleSharp.Analyzers" Version="$(RoslynCommonAnalyzersVersion)" />
+    <PackageVersion Include="PerformanceSharp.Analyzers" Version="$(RoslynCommonAnalyzersVersion)" />
+    <PackageVersion Include="SecuritySharp.Analyzers" Version="$(RoslynCommonAnalyzersVersion)" />
   </ItemGroup>
   <Choose>
     <When Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net11.0'))">
+      <ItemGroup>
+        <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="11.0.0" />
+      </ItemGroup>
       <ItemGroup Condition="$(UseMaui) == 'true'">
         <PackageVersion Include="Microsoft.Maui.Controls" Version="11.0.10" />
       </ItemGroup>
     </When>
     <When Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net10.0'))">
+      <ItemGroup>
+        <PackageVersion Include="Microsoft.Extensions.Logging.Debug" Version="10.0.15" />
+      </ItemGroup>
       <ItemGroup Condition="$(UseMaui) == 'true'">
         <PackageVersion Include="Microsoft.Maui.Controls" Version="10.0.130" />
         <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="10.0.130" />

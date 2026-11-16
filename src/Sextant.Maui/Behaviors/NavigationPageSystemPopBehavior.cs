@@ -1,62 +1,56 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
-using System.Reactive.Disposables;
 using System.Reactive.Disposables.Fluent;
 using System.Reactive.Linq;
 
 namespace Sextant.Maui;
 
-/// <summary>
-/// Represents a <see cref="BehaviorBase{T}"/> that intercepts the backwards navigation.
-/// </summary>
+/// <summary>Represents a <see cref="BehaviorBase{T}"/> that intercepts the backwards navigation.</summary>
+/// <param name="navigationSource">A value indicating whether the back button was pressed.</param>
 /// <remarks>
 /// Initializes a new instance of the <see cref="NavigationPageSystemPopBehavior"/> class.
 /// </remarks>
-/// <param name="navigationSource">A value indicating whether the back button was pressed.</param>
 public sealed class NavigationPageSystemPopBehavior(IObservable<NavigationSource> navigationSource) : BehaviorBase<NavigationPage>
 {
     /// <inheritdoc/>
     protected override void OnAttachedTo(NavigationPage bindable)
     {
-        Observable
+        _ = Observable
             .FromEvent<EventHandler<NavigationEventArgs>, NavigationEventArgs>(
                 handler =>
                 {
-                    void Handler(object sender, NavigationEventArgs args) => handler(args);
+                    void Handler(object sender, NavigationEventArgs args)
+                    {
+                        _ = sender;
+                        handler(args);
+                    }
                     return Handler!;
                 },
                 x => bindable.Popped += x,
                 x => bindable.Popped -= x)
-            .WithLatestFrom(navigationSource, (navigated, navigationSource) => (navigated, navigationSource))
-            .Where(result => result.navigationSource == NavigationSource.Device)
-            .Select(x => x.navigated)
+            .WithLatestFrom(navigationSource, static (navigated, navigationSource) => (navigated, navigationSource))
+            .Where(static result => result.navigationSource == NavigationSource.Device)
+            .Select(static x => x.navigated)
             .Subscribe(navigated =>
             {
                 INavigationParameter navigationParameter = new NavigationParameter();
 
-                navigated
-                    .Page
-                    .BindingContext
-                    .InvokeViewModelAction<INavigated>(x =>
-                        x.WhenNavigatedFrom(navigationParameter)
-                            .Subscribe()
-                            .DisposeWith(BehaviorDisposable));
+                if (navigated.Page.BindingContext is INavigated previous)
+                {
+                    _ = previous.WhenNavigatedFrom(navigationParameter).Subscribe().DisposeWith(BehaviorDisposable);
+                }
 
-                bindable
-                    .CurrentPage
-                    .BindingContext
-                    .InvokeViewModelAction<INavigated>(x =>
-                        x.WhenNavigatedTo(navigationParameter)
-                            .Subscribe()
-                            .DisposeWith(BehaviorDisposable));
+                if (bindable.CurrentPage?.BindingContext is INavigated current)
+                {
+                    _ = current.WhenNavigatedTo(navigationParameter).Subscribe().DisposeWith(BehaviorDisposable);
+                }
 
-                navigated
-                    .Page
-                    .BindingContext
-                    .InvokeViewModelAction<IDestructible>(x => x.Destroy());
+                if (navigated.Page.BindingContext is IDestructible destructible)
+                {
+                    destructible.Destroy();
+                }
             })
             .DisposeWith(BehaviorDisposable);
 

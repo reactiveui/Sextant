@@ -2,11 +2,12 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace SextantSample.Maui
-{
-    internal class Program : MauiApplication
+namespace SextantSample.Maui;
+    /// <summary>Starts the native application host.</summary>
+internal class Program : MauiApplication
     {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+        /// <inheritdoc />
+protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
         static void Main(string[] args)
         {
@@ -14,4 +15,3 @@ namespace SextantSample.Maui
             app.Run(args);
         }
     }
-}

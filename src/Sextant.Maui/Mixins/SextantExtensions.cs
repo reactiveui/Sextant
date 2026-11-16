@@ -1,31 +1,27 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 namespace Sextant.Maui;
 
-/// <summary>
-/// Extension methods interact with <see cref="Sextant"/>.
-/// </summary>
+/// <summary>Extension methods interact with <see cref="Sextant"/>.</summary>
 public static class SextantExtensions
 {
-    /// <summary>
-    /// Initializes the sextant.
-    /// </summary>
-    /// <param name="sextant">The sextant.</param>
-    public static void InitializeMaui(this Sextant sextant)
+    /// <summary>Extension members for <c>Sextant</c>.</summary>
+    /// <param name="sextant">The Sextant instance to configure.</param>
+    extension(Sextant sextant)
     {
-        if (sextant is null)
+        /// <summary>Initializes the sextant.</summary>
+        public void InitializeMaui()
         {
-            throw new ArgumentNullException(nameof(sextant));
-        }
+            ArgumentNullException.ThrowIfNull(sextant);
 
-        sextant
-            .MutableLocator
-            .RegisterNavigationView()
-            .RegisterViewStackService()
-            .RegisterParameterViewStackService()
-            .RegisterViewModelFactory(() => new DefaultViewModelFactory());
+            _ = sextant
+                .MutableLocator
+                .RegisterNavigationView()
+                .RegisterViewStackService()
+                .RegisterParameterViewStackService()
+                .RegisterViewModelFactory(static () => new DefaultViewModelFactory());
+        }
     }
 }

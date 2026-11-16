@@ -1,40 +1,33 @@
-// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
+// Copyright (c) 2019-2026 ReactiveUI and Contributors. All rights reserved.
+// ReactiveUI and Contributors licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
 
 using System;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 
 namespace Sextant;
 
-/// <summary>
-/// Class of extension method for object life cycle in Sextant.
-/// </summary>
+/// <summary>Class of extension method for object life cycle in Sextant.</summary>
 public static class ViewModelActionExtensions
 {
-    /// <summary>
-    /// This is a thing I lifted from Prism.
-    /// </summary>
-    /// <param name="viewModel">The view model.</param>
-    /// <param name="action">An action.</param>
-    /// <typeparam name="T">A type.</typeparam>
-    /// <returns>The object.</returns>
-    public static object InvokeViewModelAction<T>(this object viewModel, Action<T> action)
-        where T : class
+    /// <summary>Navigation lifecycle actions for view models.</summary>
+    /// <param name="viewModel">The view model to notify when it implements the requested lifecycle.</param>
+    extension(IViewModel viewModel)
     {
-        if (action is null)
+        /// <summary>Invokes an action when the view model implements the requested lifecycle.</summary>
+        /// <typeparam name="T">A type.</typeparam>
+        /// <param name="action">An action.</param>
+        /// <returns>The object.</returns>
+        public IViewModel InvokeViewModelAction<T>(Action<T> action)
+            where T : class
         {
-            throw new ArgumentNullException(nameof(action));
-        }
+            ArgumentNullException.ThrowIfNull(action);
 
-        if (viewModel is T viewModelAsT)
-        {
-            action(viewModelAsT);
-        }
+            if (viewModel is T viewModelAsT)
+            {
+                action(viewModelAsT);
+            }
 
-        return viewModel;
+            return viewModel;
+        }
     }
 }

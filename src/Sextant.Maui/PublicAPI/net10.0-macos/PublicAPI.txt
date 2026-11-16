@@ -1,0 +1,75 @@
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui", AssemblyName="Microsoft.Maui")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Controls", AssemblyName="Microsoft.Maui.Controls")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Controls.Shapes", AssemblyName="Microsoft.Maui.Controls")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Controls.Xaml", AssemblyName="Microsoft.Maui.Controls.Xaml")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "Microsoft.Maui.Graphics", AssemblyName="Microsoft.Maui.Graphics")]
+[assembly: Microsoft.Maui.Controls.XmlnsDefinition("http://schemas.microsoft.com/dotnet/maui/global", "http://schemas.microsoft.com/dotnet/2021/maui")]
+[assembly: Microsoft.Maui.Controls.XmlnsPrefix("http://schemas.microsoft.com/dotnet/maui/global", "global")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatform("macOS26.0")]
+namespace Sextant.Maui;
+
+[System.Diagnostics.DebuggerDisplay("BehaviorBase: {BehaviorDisposable}")]
+public class BehaviorBase<T> : Microsoft.Maui.Controls.Behavior<T>, System.IDisposable where T : Microsoft.Maui.Controls.BindableObject
+{
+    public BehaviorBase() { }
+    protected System.Reactive.Disposables.CompositeDisposable BehaviorDisposable { get; }
+    public void Dispose() { }
+    protected virtual void Dispose(bool disposing) { }
+    protected override void OnAttachedTo(T bindable) { }
+    protected override void OnDetachingFrom(T bindable) { }
+}
+public static class DependencyResolverMixins
+{
+    public static string NavigationView { get; }
+    extension(Splat.IMutableDependencyResolver dependencyResolver)
+    {
+        public Splat.IMutableDependencyResolver RegisterNavigationView() { }
+        public Splat.IMutableDependencyResolver RegisterNavigationView(System.Reactive.Concurrency.IScheduler mainThreadScheduler) { }
+        public Splat.IMutableDependencyResolver RegisterNavigationView<TView>(System.Func<TView> navigationViewFactory) where TView : Sextant.IView { }
+    }
+    extension(Splat.IReadonlyDependencyResolver dependencyResolver)
+    {
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        public Sextant.Maui.NavigationView? GetNavigationView() { }
+        public Sextant.Maui.NavigationView? GetNavigationView(string? contract) { }
+    }
+}
+public sealed class NavigationPageSystemPopBehavior : Sextant.Maui.BehaviorBase<Microsoft.Maui.Controls.NavigationPage>
+{
+    public NavigationPageSystemPopBehavior(System.IObservable<Sextant.Maui.NavigationSource> navigationSource) { }
+    protected override void OnAttachedTo(Microsoft.Maui.Controls.NavigationPage bindable) { }
+}
+public enum NavigationSource
+{
+    Device = 0,
+    NavigationService = 1,
+}
+[System.Diagnostics.DebuggerDisplay("NavigationView: {MainThreadScheduler}")]
+public class NavigationView : Microsoft.Maui.Controls.NavigationPage, Sextant.IView, Splat.IEnableLogger, System.IDisposable
+{
+    public NavigationView() { }
+    public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, ReactiveUI.Binding.Reactive.IViewLocator viewLocator) { }
+    public NavigationView(System.Reactive.Concurrency.IScheduler mainScheduler, ReactiveUI.Binding.Reactive.IViewLocator viewLocator, Microsoft.Maui.Controls.Page rootPage) { }
+    public System.Reactive.Concurrency.IScheduler MainThreadScheduler { get; }
+    public System.IObservable<Sextant.IViewModel> PagePopped { get; }
+    public void Dispose() { }
+    protected virtual void Dispose(bool disposing) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopModal() { }
+    public System.IObservable<System.Reactive.Unit> PopPage(bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PopToRootPage(bool animate) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string? contract) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushModal(Sextant.IViewModel modalViewModel, string? contract, bool withNavigationPage) { }
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public System.IObservable<System.Reactive.Unit> PushPage(Sextant.IViewModel viewModel, string? contract, bool resetStack, bool animate) { }
+}
+public static class SextantExtensions
+{
+    extension(Sextant.Sextant sextant)
+    {
+        public void InitializeMaui() { }
+    }
+}

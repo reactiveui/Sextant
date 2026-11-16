@@ -1,8 +1,7 @@
-﻿// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
+// Copyright (c) 2025 .NET Foundation and Contributors. All rights reserved.
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for full license information.
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -15,20 +14,18 @@ namespace Sextant.Benchmarks
     /// <summary>
     /// A view locator that holds everything in a static dictionary.
     /// </summary>
-    /// <seealso cref="IViewLocator" />
+    /// <seealso cref = "IViewLocator"/>
     public class InMemoryViewLocator : IViewLocator
     {
         private static readonly Dictionary<Type, IViewFor> _views = [];
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="InMemoryViewLocator"/> class.
+        /// Initializes a new instance of the <see cref = "InMemoryViewLocator"/> class.
         /// </summary>
-        /// <param name="viewModelToViewFunc">The method which will convert a ViewModel name into a View.</param>
+        /// <param name = "viewModelToViewFunc">The method which will convert a ViewModel name into a View.</param>
         [SuppressMessage("Globalization", "CA1307: operator could change based on locale settings", Justification = "Replace() does not have third parameter on all platforms")]
         public InMemoryViewLocator(Func<string, string>? viewModelToViewFunc = null)
         {
             _views.Add(typeof(TestView), new TestView());
-
             ViewModelToViewFunc = viewModelToViewFunc ?? (vm => vm.Replace("ViewModel", "View"));
         }
 
@@ -42,37 +39,35 @@ namespace Sextant.Benchmarks
         /// </para>
         /// <para>
         /// Note that the name returned by the function is a starting point for view resolution. Variants on the name will be resolved according to the rules
-        /// set out by the <see cref="ResolveView{T}"/> method.
+        /// set out by the <see cref = "ResolveView{T}"/> method.
         /// </para>
         /// </remarks>
         public Func<string, string> ViewModelToViewFunc { get; set; }
 
-        /// <inheritdoc />
-        public IViewFor? ResolveView<T>(T? viewModel, string? contract = null)
+        /// <inheritdoc/>
+        public IViewFor? ResolveView<T>(T? viewModel) => ResolveView<T>(viewModel, null);
+        /// <inheritdoc/>
+        public IViewFor? ResolveView<T>(T? viewModel, string? contract)
         {
             var view = AttemptViewResolutionFor(viewModel?.GetType(), contract);
-
             if (view != null)
             {
                 return view;
             }
 
             view = AttemptViewResolutionFor(typeof(T), contract);
-
             if (view != null)
             {
                 return view;
             }
 
             view = AttemptViewResolutionFor(ToggleViewModelType(viewModel?.GetType()), contract);
-
             if (view != null)
             {
                 return view;
             }
 
             view = AttemptViewResolutionFor(ToggleViewModelType(typeof(T)), contract);
-
             if (view != null)
             {
                 return view;
@@ -85,7 +80,6 @@ namespace Sextant.Benchmarks
         private static Type? ToggleViewModelType(Type? viewModelType)
         {
             var viewModelTypeName = viewModelType?.AssemblyQualifiedName;
-
             if (viewModelType?.GetTypeInfo().IsInterface == true)
             {
                 if (viewModelType!.Name.StartsWith("I", StringComparison.InvariantCulture))
@@ -127,7 +121,6 @@ namespace Sextant.Benchmarks
             var viewModelTypeName = viewModelType.AssemblyQualifiedName;
             var proposedViewTypeName = ViewModelToViewFunc(viewModelTypeName!);
             var view = AttemptViewResolution(proposedViewTypeName, contract);
-
             if (view != null)
             {
                 return view;
@@ -159,14 +152,11 @@ namespace Sextant.Benchmarks
                 }
 
                 this.Log().Debug($"Resolved service type '{viewType.FullName}'");
-
                 return view;
             }
             catch (Exception ex)
             {
-                this
-                    .Log()
-                    .Error(ex, $"Exception occurred whilst attempting to resolve type {viewTypeName} into a view.");
+                this.Log().Error(ex, $"Exception occurred whilst attempting to resolve type {viewTypeName} into a view.");
                 throw;
             }
         }

@@ -4,10 +4,8 @@
     <RootNamespace>Sextant.Avalonia</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="ReactiveUI" />
     <PackageReference Include="Avalonia" />
-    <PackageReference Include="Avalonia.Desktop" />
-    <PackageReference Include="ReactiveUI.Avalonia" />
+    <PackageReference Include="ReactiveUI.Avalonia.Reactive" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sextant\Sextant.csproj" />
