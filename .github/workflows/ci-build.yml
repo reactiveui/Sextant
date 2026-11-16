@@ -19,5 +19,8 @@ jobs:
       productNamespacePrefix: Sextant
       solutionFile: Sextant.slnx
       installWorkloads: true
+      testProjects: |
+        tests/Sextant.Tests/Sextant.Tests.csproj
+        tests/Sextant.State.Tests/Sextant.State.Tests.csproj
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

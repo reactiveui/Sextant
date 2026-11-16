@@ -5,7 +5,6 @@
 namespace Sextant.Mocks;
 
 /// <summary>A mock of a page view.</summary>
-/// <seealso cref="ReactiveUI.IViewFor{PageViewModelMock}" />
 [System.Diagnostics.DebuggerDisplay("PageView: {ViewModel}")]
 public class PageView : IViewFor<NavigableViewModelMock>
 {
