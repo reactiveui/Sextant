@@ -15,7 +15,7 @@
     <PackageVersion Include="ReactiveUI.Avalonia.Reactive" Version="12.1.7" />
     <PackageVersion Include="Citrus.Avalonia" Version="2.1.1" />
     <PackageVersion Include="MessageBox.Avalonia" Version="12.1.0" />
-    <PackageVersion Include="TUnit" Version="1.85.0" />
+    <PackageVersion Include="TUnit" Version="1.87.0" />
     <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="11.0.100" />
     <PackageVersion Include="MinVer" Version="8.0.0" />
