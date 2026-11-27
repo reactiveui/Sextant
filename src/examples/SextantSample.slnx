@@ -1,14 +1,10 @@
 <Solution>
-  <Configurations>
-    <Platform Name="x64" />
-  </Configurations>
   <Folder Name="/Libs/">
     <Project Path="../Sextant.Maui/Sextant.Maui.csproj" />
     <Project Path="../Sextant/Sextant.csproj" />
   </Folder>
   <Project Path="SextantSample.Core/SextantSample.ViewModels.csproj" />
   <Project Path="SextantSample.Maui/SextantSample.Maui.csproj">
-    <Platform Project="x64" />
     <Deploy Solution="Debug|*" />
   </Project>
 </Solution>
