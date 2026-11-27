@@ -48,22 +48,29 @@ public class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterVie
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string? contract, bool resetStack, bool animate) => Observable.Create<Unit>(observer =>
+    public IObservable<Unit> PushPage(INavigable navigableViewModel, INavigationParameter parameter, string? contract, bool resetStack, bool animate)
     {
         ArgumentNullException.ThrowIfNull(navigableViewModel);
         ArgumentNullException.ThrowIfNull(parameter);
-        var composite = new CompositeDisposable();
-        _ = navigableViewModel.WhenNavigatingTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(unit =>
-            Logger.Debug($"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}")).DisposeWith(composite);
-        _ = View.PushPage(navigableViewModel, contract, resetStack, animate).Do(unit =>
+
+        // The view model's callbacks and the platform push run on the main thread, because a callback that sets a
+        // property updates the controls bound to it. A platform push can finish on another thread, so the stack update
+        // and WhenNavigatedTo move back to the main thread too.
+        return Observable.Create<Unit>(observer =>
         {
-            AddToStackAndTick(PageSubject, navigableViewModel, resetStack);
-            Logger.Debug($"Added page '{navigableViewModel.Id}' (contract '{contract}') to stack.");
-            _ = navigableViewModel.WhenNavigatedTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigated =>
-                Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}")).DisposeWith(composite);
-        }).Subscribe(observer).DisposeWith(composite);
-        return Disposable.Create(composite, static disposable => disposable.Dispose());
-    });
+            var composite = new CompositeDisposable();
+            _ = navigableViewModel.WhenNavigatingTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(unit =>
+                Logger.Debug($"Called `WhenNavigatingTo` on '{navigableViewModel.Id}' passing parameter {parameter}")).DisposeWith(composite);
+            _ = View.PushPage(navigableViewModel, contract, resetStack, animate).ObserveOn(View.MainThreadScheduler).Do(unit =>
+            {
+                AddToStackAndTick(PageSubject, navigableViewModel, resetStack);
+                Logger.Debug($"Added page '{navigableViewModel.Id}' (contract '{contract}') to stack.");
+                _ = navigableViewModel.WhenNavigatedTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigated =>
+                    Logger.Debug($"Called `WhenNavigatedTo` on '{navigableViewModel.Id}' passing parameter {parameter}")).DisposeWith(composite);
+            }).Subscribe(observer).DisposeWith(composite);
+            return Disposable.Create(composite, static disposable => disposable.Dispose());
+        }).SubscribeOn(View.MainThreadScheduler);
+    }
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -114,22 +121,27 @@ public class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterVie
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract, bool withNavigationPage) => Observable.Create<Unit>(observer =>
+    public IObservable<Unit> PushModal(INavigable navigableModal, INavigationParameter parameter, string? contract, bool withNavigationPage)
     {
         ArgumentNullException.ThrowIfNull(navigableModal);
         ArgumentNullException.ThrowIfNull(parameter);
-        var composite = new CompositeDisposable();
-        _ = navigableModal.WhenNavigatingTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigating =>
-            Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}")).DisposeWith(composite);
-        _ = View.PushModal(navigableModal, contract, withNavigationPage).Do(unit =>
+
+        // Runs on the main thread for the same reason as PushPage.
+        return Observable.Create<Unit>(observer =>
         {
-            AddToStackAndTick(ModalSubject, navigableModal, false);
-            Logger.Debug($"Added modal '{navigableModal.Id}' (contract '{contract}') to stack.");
-            _ = navigableModal.WhenNavigatedTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigated =>
-                Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}")).DisposeWith(composite);
-        }).Subscribe(observer).DisposeWith(composite);
-        return Disposable.Create(composite, static disposable => disposable.Dispose());
-    });
+            var composite = new CompositeDisposable();
+            _ = navigableModal.WhenNavigatingTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigating =>
+                Logger.Debug($"Called `WhenNavigatingTo` on '{navigableModal.Id}' passing parameter {parameter}")).DisposeWith(composite);
+            _ = View.PushModal(navigableModal, contract, withNavigationPage).ObserveOn(View.MainThreadScheduler).Do(unit =>
+            {
+                AddToStackAndTick(ModalSubject, navigableModal, false);
+                Logger.Debug($"Added modal '{navigableModal.Id}' (contract '{contract}') to stack.");
+                _ = navigableModal.WhenNavigatedTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigated =>
+                    Logger.Debug($"Called `WhenNavigatedTo` on '{navigableModal.Id}' passing parameter {parameter}")).DisposeWith(composite);
+            }).Subscribe(observer).DisposeWith(composite);
+            return Disposable.Create(composite, static disposable => disposable.Dispose());
+        }).SubscribeOn(View.MainThreadScheduler);
+    }
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -167,25 +179,31 @@ public class ParameterViewStackServiceBase : ViewStackServiceBase, IParameterVie
 
     /// <inheritdoc/>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IObservable<Unit> PopPage(INavigationParameter parameter, bool animate) => Observable.Create<Unit>(observer =>
+    public IObservable<Unit> PopPage(INavigationParameter parameter, bool animate)
     {
         ArgumentNullException.ThrowIfNull(parameter);
-        var stack = PageSubject.Value;
-        var poppedPage = stack[stack.Count - 1];
-        var composite = new CompositeDisposable();
-        _ = View.PopPage(animate).Do(unit =>
+
+        // Runs on the main thread for the same reason as PushPage: WhenNavigatedFrom, Destroy and WhenNavigatedTo all
+        // reach the view models after a platform pop that can finish on another thread.
+        return Observable.Create<Unit>(observer =>
         {
-            _ = poppedPage.InvokeViewModelAction<INavigable>(x =>
-                x.WhenNavigatedFrom(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigatedFrom =>
-                    Logger.Debug($"Called `WhenNavigatedFrom` on '{poppedPage.Id}' passing parameter {parameter}"))
-                    .DisposeWith(composite)).InvokeViewModelAction<IDestructible>(static x => x.Destroy());
-            var remaining = PageSubject.Value;
-            if (remaining.Count > 0 && remaining[remaining.Count - 1] is INavigated navigated)
+            var stack = PageSubject.Value;
+            var poppedPage = stack[stack.Count - 1];
+            var composite = new CompositeDisposable();
+            _ = View.PopPage(animate).ObserveOn(View.MainThreadScheduler).Do(unit =>
             {
-                _ = navigated.WhenNavigatedTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigatedTo =>
-                    Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}")).DisposeWith(composite);
-            }
-        }).Subscribe(observer).DisposeWith(composite);
-        return Disposable.Create(composite, static disposable => disposable.Dispose());
-    });
+                _ = poppedPage.InvokeViewModelAction<INavigable>(x =>
+                    x.WhenNavigatedFrom(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigatedFrom =>
+                        Logger.Debug($"Called `WhenNavigatedFrom` on '{poppedPage.Id}' passing parameter {parameter}"))
+                        .DisposeWith(composite)).InvokeViewModelAction<IDestructible>(static x => x.Destroy());
+                var remaining = PageSubject.Value;
+                if (remaining.Count > 0 && remaining[remaining.Count - 1] is INavigated navigated)
+                {
+                    _ = navigated.WhenNavigatedTo(parameter).ObserveOn(View.MainThreadScheduler).Subscribe(navigatedTo =>
+                        Logger.Debug($"Called `WhenNavigatedTo` passing parameter {parameter}")).DisposeWith(composite);
+                }
+            }).Subscribe(observer).DisposeWith(composite);
+            return Disposable.Create(composite, static disposable => disposable.Dispose());
+        }).SubscribeOn(View.MainThreadScheduler);
+    }
 }
