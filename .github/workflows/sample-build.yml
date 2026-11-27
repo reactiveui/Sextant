@@ -1,0 +1,64 @@
+name: Sample Build
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+env:
+  productNamespacePrefix: "Sextant"
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      actions: write
+    uses: reactiveui/actions-common/.github/workflows/workflow-common-setup-and-build.yml@main
+    with:
+      productNamespacePrefix: "Sextant"
+      srcFolder: "src/examples"
+      # The MAUI sample builds in its own job below, because each .NET version's Apple SDK needs its own Xcode.
+      solutionFile: "SextantSample.Avalonia.slnx"
+      performTests: false
+
+  maui:
+    name: MAUI sample ${{ matrix.framework }}-${{ matrix.platform.target }}
+    permissions:
+      contents: read
+    runs-on: ${{ matrix.framework == 'net10.0' && matrix.platform.os == 'xcode-27' && 'macos-26' || matrix.platform.os }}
+    env:
+      # Match the Apple SDKs bundled with the latest .NET 10 and .NET 11 workloads.
+      DEVELOPER_DIR: ${{ matrix.platform.os == 'xcode-27' && (matrix.framework == 'net10.0' && '/Applications/Xcode_26.0.1.app/Contents/Developer' || '/Applications/Xcode_27.2.app/Contents/Developer') || '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [net10.0, net11.0]
+        platform:
+          - os: ubuntu-latest
+            target: android
+            arguments: ''
+          - os: windows-latest
+            target: windows10.0.19041.0
+            arguments: ''
+          - os: xcode-27
+            target: ios
+            arguments: '-p:RuntimeIdentifier=iossimulator-arm64 -p:EnableCodeSigning=false'
+          - os: xcode-27
+            target: maccatalyst
+            arguments: '-p:EnableCodeSigning=false'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Setup .NET Environment
+        uses: reactiveui/actions-common/.github/actions/dotnet-environment@main
+        with:
+          dotnet-versions: 11.0.x
+          solution-file: examples/SextantSample.Maui/SextantSample.Maui.csproj
+          install-workloads: 'true'
+          stamp-version: 'false'
+      - name: Install the iOS 26.0 simulator runtime
+        if: matrix.framework == 'net10.0' && matrix.platform.target == 'ios'
+        run: xcodebuild -downloadPlatform iOS -buildVersion 26.0 -architectureVariant arm64
+      - name: Build
+        working-directory: src
+        run: dotnet build examples/SextantSample.Maui/SextantSample.Maui.csproj --configuration Release --framework ${{ matrix.framework }}-${{ matrix.platform.target }} ${{ matrix.platform.arguments }}
