@@ -1,9 +1,17 @@
-## Sextant
+<div align="center">
 
-[![NuGet Stats](https://img.shields.io/nuget/v/sextant.svg)](https://www.nuget.org/packages/sextant) ![Build](https://github.com/reactiveui/Sextant/workflows/Build/badge.svg) [![Code Coverage](https://codecov.io/gh/reactiveui/sextant/branch/main/graph/badge.svg)](https://codecov.io/gh/reactiveui/sextant)
-[![](https://img.shields.io/nuget/dt/sextant.svg) ](https://www.nuget.org/packages/sextant) [![](https://img.shields.io/badge/chat-slack-blue.svg)](https://reactiveui.net/slack)
+<a href="https://github.com/reactiveui/Sextant"><img src="https://raw.githubusercontent.com/reactiveui/styleguide/master/logo_sextant/logo.png" alt="Sextant" width="128"></a>
 
-<p align="left"><img src="https://github.com/reactiveui/styleguide/blob/master/logo_sextant/vertical.png?raw=true" alt="Sextant" height="180px"></p>
+# Sextant
+
+[![Build](https://img.shields.io/github/actions/workflow/status/reactiveui/Sextant/ci-build.yml?branch=main&label=build&logo=githubactions&logoColor=white)](https://github.com/reactiveui/Sextant/actions/workflows/ci-build.yml)
+[![NuGet](https://img.shields.io/nuget/v/Sextant?label=nuget&logo=nuget&logoColor=white&color=004880)](https://www.nuget.org/packages/Sextant)
+[![Downloads](https://img.shields.io/nuget/dt/Sextant?label=downloads&logo=nuget&logoColor=white&color=004880)](https://www.nuget.org/packages/Sextant)
+[![Coverage](https://img.shields.io/codecov/c/github/reactiveui/Sextant?label=coverage&logo=codecov&logoColor=white)](https://codecov.io/gh/reactiveui/Sextant)
+[![License](https://img.shields.io/github/license/reactiveui/Sextant?color=blue)](https://github.com/reactiveui/Sextant/blob/main/LICENSE)
+[![Discussions](https://img.shields.io/badge/discussions-ask%20a%20question-8A2BE2?logo=github&logoColor=white)](https://github.com/reactiveui/Sextant/discussions)
+
+</div>
 
 ## A ReactiveUI view model based navigation library
 
@@ -237,12 +245,28 @@ This repository contains MAUI and Avalonia samples demonstrating full setups (re
 
 ## Contribute
 
-Sextant is developed under an OSI-approved open source license, making it freely usable and distributable, even for commercial use. We appreciate contributions of all kinds: docs, samples, bug reports, and features.
+Sextant is part of [ReactiveUI](https://github.com/reactiveui) and is released under the [MIT license](https://github.com/reactiveui/Sextant/blob/main/LICENSE). We welcome contributions of every size, from bug reports and documentation to features and tests.
 
-- Answer questions on StackOverflow: https://stackoverflow.com/questions/tagged/sextant
-- Share knowledge and help new contributors
-- Submit documentation updates where needed
-- Make code contributions
+- **Questions:** ask in [GitHub Discussions](https://github.com/reactiveui/Sextant/discussions).
+- **Bugs and feature requests:** open a [GitHub issue](https://github.com/reactiveui/Sextant/issues/new/choose).
+- **Larger changes:** open an issue or discussion first, so we can agree on the approach before you start.
+- **Contributor guide:** read [reactiveui.net/contribute](https://www.reactiveui.net/contribute/) for [building and testing](https://www.reactiveui.net/contribute/building-and-testing/) and [pull requests](https://www.reactiveui.net/contribute/pull-requests/).
+
+### Coding standards
+
+Every pull request must meet these standards. The build checks most of them.
+
+- Follow the [ReactiveUI C# style guide](https://www.reactiveui.net/contribute/software-style-guide/code-style/).
+- The repository's `.editorconfig` and the StyleSharp, PerformanceSharp and SecuritySharp analyzers run on every build. Fix each finding in the code. Do not suppress it or relax the `.editorconfig`.
+- Add tests for every bug fix and new feature.
+- Document public APIs with XML documentation comments.
+- Write commit messages in the [Conventional Commits](https://www.reactiveui.net/contribute/software-style-guide/commit-message-convention/) format.
+- Follow the [Code of Conduct](https://github.com/reactiveui/.github/blob/main/CODE_OF_CONDUCT.md).
+
+### Support the project
+
+- Sponsor the maintainers on GitHub Sponsors: [reactivemarbles](https://github.com/sponsors/reactivemarbles), [glennawatson](https://github.com/sponsors/glennawatson) and [chrispulman](https://github.com/sponsors/chrispulman).
+- Ask your employer to support open source, for example with the [balanced employee IP agreement](https://github.com/github/balanced-employee-ip-agreement).
 
 ## Sponsors
 
