@@ -11,6 +11,7 @@
             <Button x:Name="FirstModalButton" Text="First Modal" />
             <Button x:Name="PushPage" Text="Push Red Page" />
             <Button x:Name="PushGenericPage" Text="Push Green Page" />
+            <Button x:Name="DeliveryNoteButton" Text="Show delivery note" />
         </StackLayout>
     </ContentPage.Content>
 </rxui:ReactiveContentPage>
